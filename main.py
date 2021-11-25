@@ -7,7 +7,6 @@ import disnake
 from disnake.ext import commands
 
 import utils
-from .cogs.welcome import Verifiy
 
 TOKEN = os.getenv('BOT_TOKEN')
 
