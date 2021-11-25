@@ -76,7 +76,7 @@ class Moderation(commands.Cog):
         if 913315033134542889 in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is already an admin!')
         admin_role = guild.get_role(913315033134542889)
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + admin_role)
+        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
 
     @owner_make.command(name='moderator', aliases=('mod',))
@@ -91,7 +91,7 @@ class Moderation(commands.Cog):
         if 913315033684008971 in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is already a moderator!')
         mod_role = guild.get_role(913315033684008971)
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + mod_role)
+        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
 
     @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
