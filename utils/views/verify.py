@@ -17,6 +17,8 @@ __all__ = (
 
 
 async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
+    user_id = user_id or ctx.author.id
+
     if not isinstance(ctx.channel, disnake.DMChannel):
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474):
             bot.verifying.pop(bot.verifying.index(user_id))
@@ -25,8 +27,6 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             view = utils.ConfirmView
     else:
         view = utils.ConfirmViewDMS
-
-    user_id = user_id or ctx.author.id
 
     data = await utils.Intro.find_one({'_id': user_id})
     to_update = False
@@ -211,5 +211,5 @@ class Verify(View):
         self.bot.verifying.append(inter.author.id)
         try:
             await create_intro(ctx, self.bot, inter.author.id)
-        except IndexError:
+        except (IndexError, ValueError):
             pass
