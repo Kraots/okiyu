@@ -23,5 +23,7 @@ class Intro(Document):
     likes = StrField(required=True)
     dislikes = StrField(required=True)
 
+    message_id = IntField(required=True)
+
     class Meta:
         collection_name = 'Intros'

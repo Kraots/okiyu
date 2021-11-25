@@ -7,6 +7,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
+from .cogs.welcome import Verifiy
 
 TOKEN = os.getenv('BOT_TOKEN')
 
@@ -21,6 +22,7 @@ class Ukiyo(commands.Bot):
                 roles=False, everyone=False, users=True
             )
         )
+        self.added_cogs = False
         self.reraise = utils.reraise
         self.execs = {}
 
@@ -62,6 +64,9 @@ class Ukiyo(commands.Bot):
         if not hasattr(self, '_owner_id'):
             app = await self.application_info()
             self._owner_id = app.owner.id
+
+        # if self.added_views is False:
+        #     await self.add_view(Verifiy(self), message_id=123)
 
     async def process_commands(self, message):
         ctx = await self.get_context(message, cls=utils.Context)
