@@ -1,7 +1,12 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import disnake
 from disnake.ui import View, button
 
-from main import Ukiyo
+if TYPE_CHECKING:
+    from main import Ukiyo
 
 
 class Verifiy(View):
