@@ -16,6 +16,7 @@ class Verifiy(View):
 
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
+        await inter.response.defer()
         msg = await inter.author.send('Starting the intro creation process...')
         ctx = await self.bot.get_context(msg)
         cmd = self.bot.get_command('intro')
