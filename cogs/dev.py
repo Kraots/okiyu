@@ -89,7 +89,7 @@ class Developer(commands.Cog):
             "_author": ctx.author,
             "_guild": ctx.guild,
             "_message": ctx.message,
-            "colours": utils.colours
+            "utils": utils
         }
         start = time.perf_counter()
 
