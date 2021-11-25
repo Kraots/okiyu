@@ -1,5 +1,6 @@
 disnake
 disnake-jishaku
+disnake-ext-menus
 regex
 pymongo
 umongo[motor]

@@ -6,22 +6,14 @@ from disnake.ext import commands
 import utils
 from utils.context import Context
 
-from main import ViHillCorner
+from main import Ukiyo
 
 
 class Cogs(commands.Cog):
     """Commands to reload cogs."""
 
-    def __init__(self, bot: ViHillCorner):
+    def __init__(self, bot: Ukiyo):
         self.bot = bot
-        self.prefix = '!'
-
-    async def cog_check(self, ctx: Context):
-        return ctx.prefix == self.prefix
-
-    @property
-    def display_emoji(self) -> str:
-        return '⚒️'
 
     @commands.group(invoke_without_command=True, case_insensitive=True, hidden=True)
     @commands.is_owner()
@@ -122,5 +114,5 @@ class Cogs(commands.Cog):
         await ctx.reply(embed=em)
 
 
-def setup(bot):
+def setup(bot: Ukiyo):
     bot.add_cog(Cogs(bot))

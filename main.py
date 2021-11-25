@@ -21,6 +21,8 @@ class Ukiyo(commands.Bot):
                 roles=False, everyone=False, users=True
             )
         )
+        self.reraise = utils.reraise
+        self.execs = {}
 
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'
@@ -69,7 +71,7 @@ class Ukiyo(commands.Bot):
         self,
         channel: disnake.TextChannel,
         *,
-        name: str = "ViHill Corner",
+        name: str = "Ukiyo",
         avatar: disnake.Asset = None,
     ) -> disnake.Webhook:
         """Returns the general bot hook or creates one."""
