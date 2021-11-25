@@ -1,23 +1,9 @@
 import disnake
 from disnake.ext import commands
-from disnake.ui import View, button
 
 import utils
-from .intros import Intros
 
 from main import Ukiyo
-
-
-class Verifiy(View):
-    def __init__(self, bot: Ukiyo):
-        super().__init__(timeout=None)
-        self.bot = bot
-
-    @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
-    async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
-        msg = await inter.author.send('Starting the intro creation process...')
-        ctx = await self.bot.get_context(msg)
-        await Intros.create_intro(ctx, self.bot)
 
 
 class Welcome(commands.Cog):
