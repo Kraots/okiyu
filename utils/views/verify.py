@@ -21,7 +21,10 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
 
     if not isinstance(ctx.channel, disnake.DMChannel):
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474):
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return
         else:
             view = utils.ConfirmView
@@ -36,7 +39,10 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         view.message = await ctx.send('You already have an intro, do you want to edit it?', view=view)
         await view.wait()
         if view.response is False:
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return
 
     def check(m):
@@ -49,7 +55,10 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         _name = await bot.wait_for('message', timeout=180.0, check=check)
         name = _name.content
         if len(name) > 100:
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return await _name.reply('Name too long. Type `!intro` to redo.')
 
         await _name.reply('What\'s your age?')
@@ -60,12 +69,18 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             except ValueError:
                 await ctx.send('Must be a number.')
             except TimeoutError:
-                bot.verifying.pop(bot.verifying.index(user_id))
+                try:
+                    bot.verifying.pop(bot.verifying.index(user_id))
+                except (IndexError, ValueError):
+                    pass
                 return await ctx.reply('Ran out of time.')
             else:
                 if age < 13 or age > 19:
                     await ctx.send('Sorry! This dating server is only for people between the ages of 13-19.')
-                    bot.verifying.pop(bot.verifying.index(user_id))
+                    try:
+                        bot.verifying.pop(bot.verifying.index(user_id))
+                    except (IndexError, ValueError):
+                        pass
                     return await ctx.author.kick(reason='User does not match age limits.')
                 else:
                     break
@@ -74,14 +89,20 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         _gender = await bot.wait_for('message', timeout=180.0, check=check)
         gender = _gender.content
         if len(gender) > 100:
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return await _gender.reply('Gender too long. Type `!intro` to redo.')
 
         await _gender.reply('Where are you from?')
         _location = await bot.wait_for('message', timeout=180.0, check=check)
         location = _location.content
         if len(location) > 100:
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return await _location.reply('Location too long. Type `!intro` to redo.')
 
         await _location.reply('Dms? `open` | `closed` | `ask`')
@@ -106,7 +127,10 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         _sexuality = await bot.wait_for('message', timeout=180.0, check=check)
         sexuality = _sexuality.content
         if len(sexuality) > 100:
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return await ctx.reply('Sexuality too long. Type `!intro` to redo.')
 
         await _sexuality.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
@@ -122,7 +146,10 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         _likes = await bot.wait_for('message', timeout=180.0, check=check)
         likes = _likes.content
         if len(likes) > 1024:
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return await _likes.reply('You like too many things. Please don\'t go above 1024 '
                                       'characters next time. Type `!intro` to redo.')
 
@@ -130,11 +157,17 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         _dislikes = await bot.wait_for('message', timeout=180.0, check=check)
         dislikes = _dislikes.content
         if len(dislikes) > 1024:
-            bot.verifying.pop(bot.verifying.index(user_id))
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return await _likes.reply('You dislike too many things. Please don\'t go above 1024 '
                                       'characters next time. Type `!intro` to redo.')
     except TimeoutError:
-        bot.verifying.pop(bot.verifying.index(user_id))
+        try:
+            bot.verifying.pop(bot.verifying.index(user_id))
+        except (IndexError, ValueError):
+            pass
         return await ctx.reply('Ran out of time.')
     else:
         usr = guild.get_member(user_id)
@@ -209,7 +242,4 @@ class Verify(View):
         if inter.author.id in self.bot.verifying:
             return await inter.followup.send('Please complete your current verification before proceeding again!')
         self.bot.verifying.append(inter.author.id)
-        try:
-            await create_intro(ctx, self.bot, inter.author.id)
-        except (IndexError, ValueError):
-            pass
+        await create_intro(ctx, self.bot, inter.author.id)
