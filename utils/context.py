@@ -1,6 +1,8 @@
 import disnake
 from disnake.ext import commands
 
+__all__ = ('Context',)
+
 
 class Context(commands.Context):
     def __init__(self, **kwargs):
