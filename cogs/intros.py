@@ -16,7 +16,7 @@ class Intros(commands.Cog):
         self.bot = bot
 
     @staticmethod
-    async def create_intro(ctx: Context, bot: Ukiyo):
+    async def create_intro(ctx: Context, bot: Ukiyo, usr_id: int = None):
         if not isinstance(ctx.channel, disnake.DMChannel):
             if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474):
                 return
@@ -25,7 +25,9 @@ class Intros(commands.Cog):
         else:
             view = ConfirmView
 
-        data = await Intro.find_one({'_id': ctx.author.id})
+        user_id = usr_id or ctx.author.id
+
+        data = await Intro.find_one({'_id': user_id})
         to_update = False
         if data:
             to_update = True
@@ -36,7 +38,7 @@ class Intros(commands.Cog):
                 return
 
         def check(m):
-            return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
+            return m.channel.id == ctx.channel.id and m.author.id == user_id
         guild = bot.get_guild(913310006814859334)
         intro_channel = guild.get_channel(913331578606854184)
 
@@ -141,7 +143,7 @@ class Intros(commands.Cog):
 
             if to_update is False:
                 await Intro(
-                    id=ctx.author.id,
+                    id=user_id,
                     name=name,
                     age=age,
                     gender=gender,

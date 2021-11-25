@@ -7,9 +7,10 @@ from disnake.ui import View, button
 
 if TYPE_CHECKING:
     from main import Ukiyo
+    from cogs.intros import Intros
 
 
-class Verifiy(View):
+class Verify(View):
     def __init__(self, bot: Ukiyo):
         super().__init__(timeout=None)
         self.bot = bot
@@ -19,8 +20,4 @@ class Verifiy(View):
         await inter.response.defer()
         msg = await inter.author.send('Starting the intro creation process...')
         ctx = await self.bot.get_context(msg)
-        cmd = self.bot.get_command('intro')
-        try:
-            await cmd.invoke(ctx)
-        except Exception as e:
-            return await self.bot.owner.send(e)
+        await Intros.create_intro(ctx, self.bot, inter.author.id)
