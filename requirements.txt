@@ -1,0 +1,5 @@
+disnake
+disnake-jishaku
+regex
+pymongo
+umongo[motor]

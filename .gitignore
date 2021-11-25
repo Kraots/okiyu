@@ -1,0 +1,4 @@
+*.pyc
+bot.py
+.env
+*.png
