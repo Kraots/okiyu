@@ -21,7 +21,7 @@ class Moderation(commands.Cog):
         await ctx.message.delete()
         purged = await ctx.channel.purge(limit=amount)
         msg = await ctx.send(f'> <:agree:913517732249612348> Deleted `{len(purged):,}` messages')
-        await asyncio.sleep(3.0)
+        await asyncio.sleep(5.0)
         try:
             await msg.delete()
         except disnake.HTTPException:
