@@ -5,9 +5,10 @@ import inspect
 import disnake
 from disnake.ext import commands
 
+import utils
 from utils.paginator import RoboPages
 
-from . import menus
+from disnake.ext import menus
 
 
 class GroupHelpPageSource(menus.ListPageSource):
@@ -19,7 +20,7 @@ class GroupHelpPageSource(menus.ListPageSource):
         self.description = ', '.join(self.group.aliases) if aliases else self.group.description
 
     async def format_page(self, menu, commands):
-        embed = disnake.Embed(title=self.title, description=self.description)
+        embed = disnake.Embed(title=self.title, description=self.description, color=utils.blurple)
 
         for command in commands:
             if command.signature:
@@ -123,7 +124,7 @@ class FrontPageSource(menus.PageSource):
         return self
 
     def format_page(self, menu: HelpMenu, page):
-        embed = disnake.Embed(title='Bot Help')
+        embed = disnake.Embed(title='Bot Help', color=utils.blurple)
         embed.description = inspect.cleandoc(
             f"""
             Hello! Welcome to the help page.
@@ -225,7 +226,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
 
     async def send_command_help(self, command):
         # No pagination necessary for a single command.
-        embed = disnake.Embed()
+        embed = disnake.Embed(color=utils.blurple)
         self.common_command_formatting(embed, command)
         await self.context.send(embed=embed)
 
