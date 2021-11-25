@@ -33,6 +33,8 @@ class Intros(commands.Cog):
         member = member or ctx.author
         data: Intro = await Intro.find_one({'_id': member.id})
         if data is None:
+            if member.id == self.bot._owner_id:
+                return await ctx.reply('User is mysterious.')
             if member == ctx.author:
                 return await ctx.reply(
                     'You don\'t have an intro. Please contact a staff member to unverify you! This is a bug.'
