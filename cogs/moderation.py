@@ -76,7 +76,7 @@ class Moderation(commands.Cog):
         if 913315033134542889 not in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is already an admin!')
         admin_role = guild.get_role(913315033134542889)
-        await member.add_roles(admin_role)
+        await member.edit(roles=[r for r in member.roles if not r.id == 913315033684008971] + admin_role)
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
 
     @owner_make.command(name='moderator')
@@ -91,7 +91,7 @@ class Moderation(commands.Cog):
         if 913315033684008971 not in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is already a moderator!')
         mod_role = guild.get_role(913315033684008971)
-        await member.add_roles(mod_role)
+        await member.edit(roles=[r for r in member.roles if not r.id == 913315033134542889] + mod_role)
         await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
 
     @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
@@ -109,11 +109,9 @@ class Moderation(commands.Cog):
         if ctx.author.top_role >= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
-        guild = self.bot.get_guild(913310006814859334)
         if 913315033134542889 not in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is not a moderator!')
-        admin_role = guild.get_role(913315033134542889)
-        await member.add_roles(admin_role)
+        await member.edit(roles=[r for r in member.roles if not r.id == 913315033134542889])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
 
     @owner_remove.command(name='moderator')
@@ -124,11 +122,9 @@ class Moderation(commands.Cog):
         if ctx.author.top_role >= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
-        guild = self.bot.get_guild(913310006814859334)
         if 913315033684008971 not in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is not a moderator!')
-        mod_role = guild.get_role(913315033684008971)
-        await member.add_roles(mod_role)
+        await member.edit(roles=[r for r in member.roles if not r.id == 913315033684008971])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
 
 
