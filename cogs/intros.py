@@ -63,6 +63,8 @@ class Intros(commands.Cog):
 
         guild = self.bot.get_guild(750160850077089853)
         unverified_role = guild.get_role(913329062347423775)
+        data = await Intro.find_one({'_id': member.id})
+        await data.delete()
         await member.edit(roles=[unverified_role])
 
 
