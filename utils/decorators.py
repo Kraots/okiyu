@@ -29,17 +29,21 @@ def is_owner(*, owner_only: bool = True):
     return commands.check(pred)
 
 
+def _is_admin_or_owner(ctx):
+    res = _is_owner(ctx)
+    if res is False:
+        if 913315033134542889 in (role.id for role in ctx.author.roles):
+            return True
+    else:
+        return res
+    return False
+
+
 def is_admin():
     """A special check for checking if the author is an admin."""
 
     async def pred(ctx: Context):
-        res = _is_owner(ctx)
-        if res is False:
-            if 913315033134542889 in (role.id for role in ctx.author.roles):
-                return True
-        else:
-            return res
-        return False
+        return _is_admin_or_owner(ctx)
     return commands.check(pred)
 
 
@@ -47,7 +51,7 @@ def is_mod():
     """A special check for checking if the author is a moderator."""
 
     async def pred(ctx: Context):
-        res = _is_owner(ctx)
+        res = _is_admin_or_owner(ctx)
         if res is False:
             if 913315033684008971 in (role.id for role in ctx.author.roles):
                 return True
