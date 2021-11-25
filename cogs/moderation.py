@@ -10,8 +10,13 @@ from main import Ukiyo
 
 
 class Moderation(commands.Cog):
+    """Moderator related commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+
+    @property
+    def display_emoji(self) -> str:
+        return '⚙️'
 
     @commands.command(name='purge', aliases=('clear',))
     @is_mod()

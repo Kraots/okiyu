@@ -63,6 +63,7 @@ class QuitButton(disnake.ui.View):
 
 
 class Developer(commands.Cog):
+    """Dev only commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
@@ -70,6 +71,10 @@ class Developer(commands.Cog):
         if ctx.author.id != self.bot._owner_id:
             raise commands.NotOwner
         return True
+
+    @property
+    def display_emoji(self) -> str:
+        return '⚒️'
 
     @commands.command(name='eval', aliases=['e'])
     async def _eval(self, ctx: Context, *, content=None):
