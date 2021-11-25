@@ -35,7 +35,7 @@ class Intros(commands.Cog):
         def check(m):
             return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
         guild = bot.get_guild(913310006814859334)
-        intro_channel = guild.get_channel(913310006814859334)
+        intro_channel = guild.get_channel(913331578606854184)
 
         await ctx.reply('What\'s your name?')
         try:
@@ -90,7 +90,13 @@ class Intros(commands.Cog):
                 else:
                     break
 
-            await _looking.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
+            await _looking.reply('What\'s your sexuality?')
+            _sexuality = await bot.wait_for('message', timeout=180.0, check=check)
+            sexuality = _sexuality.content
+            if len(sexuality) > 100:
+                return await ctx.reply('Sexuality too long. Type `!intro` to redo.')
+
+            await _sexuality.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
             while True:
                 _status = await bot.wait_for('message', timeout=180.0, check=check)
                 status = _status.content
@@ -139,7 +145,7 @@ class Intros(commands.Cog):
             em.add_field(name='Likes', value=likes)
             em.add_field(name='Dislikes', value=dislikes)
             await intro_channel.send(embed=em)
-            await ctx.author.send(
+            await ctx.reply(
                 f'Successfully {"edited" if to_update else "created"} your intro. You can see it in {intro_channel.mention}'
             )
 
