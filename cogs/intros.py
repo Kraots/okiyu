@@ -128,6 +128,7 @@ class Intros(commands.Cog):
                 location=location,
                 dms=dms,
                 looking=looking,
+                sexuality=sexuality,
                 status=status,
                 likes=likes,
                 dislikes=dislikes
