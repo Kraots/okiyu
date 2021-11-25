@@ -1,6 +1,12 @@
+aiohttp
+regex
+python-dateutil
+aiodns
+dnspython
+PyNaCl
+psutil
 disnake
 disnake-jishaku
 disnake-ext-menus
-regex
 pymongo
 umongo[motor]
