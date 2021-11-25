@@ -32,7 +32,7 @@ class Moderation(commands.Cog):
     async def _ban(self, ctx: Context, member: Union[disnake.Member, disnake.User], *, reason: str):
         """Bans a user."""
 
-        if ctx.author.top_role >= member.top_role:
+        if ctx.author.top_role <= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         try:
@@ -47,7 +47,7 @@ class Moderation(commands.Cog):
     async def _kick(self, ctx: Context, member: Union[disnake.Member, disnake.User], *, reason: str):
         """Kicks a user."""
 
-        if ctx.author.top_role >= member.top_role:
+        if ctx.author.top_role <= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         try:
@@ -69,7 +69,7 @@ class Moderation(commands.Cog):
     async def owner_make_admin(self, ctx: Context, *, member: disnake.Member):
         """Make somebody an admin."""
 
-        if ctx.author.top_role >= member.top_role:
+        if ctx.author.top_role <= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         guild = self.bot.get_guild(913310006814859334)
@@ -84,7 +84,7 @@ class Moderation(commands.Cog):
     async def owner_make_mod(self, ctx: Context, *, member: disnake.Member):
         """Make somebody a moderator."""
 
-        if ctx.author.top_role >= member.top_role:
+        if ctx.author.top_role <= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         guild = self.bot.get_guild(913310006814859334)
@@ -106,7 +106,7 @@ class Moderation(commands.Cog):
     async def owner_remove_admin(self, ctx: Context, *, member: disnake.Member):
         """Remove an admin."""
 
-        if ctx.author.top_role >= member.top_role:
+        if ctx.author.top_role <= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         if 913315033134542889 not in (r.id for r in member.roles):
@@ -119,7 +119,7 @@ class Moderation(commands.Cog):
     async def owner_remove_mod(self, ctx: Context, *, member: disnake.Member):
         """Remove a moderator."""
 
-        if ctx.author.top_role >= member.top_role:
+        if ctx.author.top_role <= member.top_role:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         if 913315033684008971 not in (r.id for r in member.roles):
