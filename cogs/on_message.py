@@ -11,7 +11,7 @@ from main import Ukiyo
 
 async def send_webhook(em: disnake.Embed, view: disnake.ui.View, bot: Ukiyo):
     webhook = await bot.get_webhook(
-        bot.get_channel(750432155179679815),
+        bot.get_channel(913332431417925634),
         avatar=await bot.user.display_avatar.read()
     )
     await webhook.send(embed=em, view=view)
