@@ -124,6 +124,7 @@ class Intros(commands.Cog):
             await Intro(
                 id=ctx.author.id,
                 name=name,
+                age=age,
                 gender=gender,
                 location=location,
                 dms=dms,
@@ -138,10 +139,12 @@ class Intros(commands.Cog):
             em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
             em.set_thumbnail(url=ctx.author.display_avatar)
             em.add_field(name='Name', value=name)
+            em.add_field(name='Age', value=age)
             em.add_field(name='Gender', value=gender)
             em.add_field(name='Location', value=location)
             em.add_field(name='DMs', value=dms)
             em.add_field(name='Looking', value=looking)
+            em.add_field(name='Sexuality', value=sexuality)
             em.add_field(name='Relationship Status', value=status)
             em.add_field(name='Likes', value=likes)
             em.add_field(name='Dislikes', value=dislikes)
@@ -173,13 +176,14 @@ class Intros(commands.Cog):
                 )
 
         em = disnake.Embed()
-        em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
         em.set_thumbnail(url=ctx.author.display_avatar)
         em.add_field(name='Name', value=data.name)
+        em.add_field(name='Age', value=data.age)
         em.add_field(name='Gender', value=data.gender)
         em.add_field(name='Location', value=data.location)
         em.add_field(name='DMs', value=data.dms)
         em.add_field(name='Looking', value=data.looking)
+        em.add_field(name='Sexuality', value=data.sexuality)
         em.add_field(name='Relationship Status', value=data.status)
         em.add_field(name='Likes', value=data.likes)
         em.add_field(name='Dislikes', value=data.dislikes)
