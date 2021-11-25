@@ -64,7 +64,7 @@ class Intros(commands.Cog):
         """Unverify a member if their intro is a troll or if you
         consider that their intro is inappropriate."""
 
-        if member.top_role <= ctx.author.top_role:
+        if member.top_role >= ctx.author.top_role:
             return await ctx.reply('You cannot unverify somebody that is a higher or equal role than you.')
 
         guild = self.bot.get_guild(913310006814859334)
