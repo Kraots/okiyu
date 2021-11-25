@@ -190,6 +190,9 @@ class Verify(View):
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
         await inter.response.defer()
-        msg = await inter.author.send('Starting the intro creation process...')
+        try:
+            msg = await inter.author.send('Starting the intro creation process...')
+        except disnake.Forbidden:
+            return await inter.followup.send('You have your dms off! Please enable them!!', ephemeral=True)
         ctx = await self.bot.get_context(msg)
         await create_intro(ctx, self.bot, inter.author.id)
