@@ -126,9 +126,10 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
     except TimeoutError:
         return await ctx.reply('Ran out of time.')
     else:
+        usr = guild.get_member(user_id)
         em = disnake.Embed()
-        em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
-        em.set_thumbnail(url=ctx.author.display_avatar)
+        em.set_author(name=usr, icon_url=usr.display_avatar)
+        em.set_thumbnail(url=usr.display_avatar)
         em.add_field(name='Name', value=name)
         em.add_field(name='Age', value=age)
         em.add_field(name='Gender', value=gender)
@@ -143,7 +144,6 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
 
         if to_update is False:
             unverified_role = guild.get_role(913329062347423775)
-            usr = guild.get_member(user_id)
             await usr.remove_roles(unverified_role)
             await utils.Intro(
                 id=user_id,
