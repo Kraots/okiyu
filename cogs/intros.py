@@ -19,7 +19,10 @@ class Intros(commands.Cog):
     async def intro(self, ctx: Context):
         """Create/Edit your intro."""
 
-        await create_intro(ctx, self.bot)
+        try:
+            await create_intro(ctx, self.bot)
+        except IndexError:
+            pass
 
     @commands.command(aliases=('wi',))
     async def whois(self, ctx: Context, *, member: disnake.Member = None):
