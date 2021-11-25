@@ -1,8 +1,6 @@
 import disnake
 from disnake.ui import View, button
 
-from .._intro import create_intro
-
 from main import Ukiyo
 
 
@@ -15,4 +13,5 @@ class Verifiy(View):
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
         msg = await inter.author.send('Starting the intro creation process...')
         ctx = await self.bot.get_context(msg)
-        await create_intro(ctx, self.bot)
+        cmd = self.bot.get_command('intro')
+        await cmd.invoke(ctx)
