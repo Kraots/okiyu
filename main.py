@@ -21,7 +21,7 @@ class Ukiyo(commands.Bot):
                 roles=False, everyone=False, users=True
             )
         )
-        self.added_cogs = False
+        self.added_views = False
         self.reraise = utils.reraise
         self.execs = {}
         self.verifying = []
@@ -65,8 +65,9 @@ class Ukiyo(commands.Bot):
             app = await self.application_info()
             self._owner_id = app.owner.id
 
-        # if self.added_views is False:
-        #     await self.add_view(Verifiy(self), message_id=123)
+        if self.added_views is False:
+            await self.add_view(utils.Verify(self), message_id=913512065799421953)
+            self.added_views = True
 
     async def process_commands(self, message):
         ctx = await self.get_context(message, cls=utils.Context)
