@@ -18,6 +18,7 @@ class Intro(Document):
 
     looking = StrField(required=True)
     status = StrField(required=True)
+    sexuality = StrField(required=True)
     likes = StrField(required=True)
     dislikes = StrField(required=True)
 
