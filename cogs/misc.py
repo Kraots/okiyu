@@ -10,16 +10,21 @@ from main import Ukiyo
 
 
 class Misc(commands.Cog):
+    """Miscellaneous commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+
+    @property
+    def display_emoji(self) -> str:
+        return '🔧'
 
     @commands.command()
     async def ping(self, ctx: Context):
         """See the bot's ping."""
 
-        ping = disnake.Embed(title="Pong!", description="_Pinging..._")
+        ping = disnake.Embed(title="Pong!", description="_Pinging..._", color=utils.blurple)
         start = time.time() * 1000
-        msg = await ctx.send(embed=ping, color=utils.blurple)
+        msg = await ctx.send(embed=ping)
         end = time.time() * 1000
         ping = disnake.Embed(
             title="Pong!",

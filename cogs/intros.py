@@ -12,8 +12,13 @@ from main import Ukiyo
 
 
 class Intros(commands.Cog):
+    """Intro related commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+
+    @property
+    def display_emoji(self) -> str:
+        return '🙌'
 
     @commands.command()
     async def intro(self, ctx: Context):
