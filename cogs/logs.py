@@ -5,7 +5,7 @@ import datetime
 import disnake
 from disnake.ext import commands, tasks
 
-from utils import time
+import utils
 
 from main import Ukiyo
 
@@ -14,7 +14,7 @@ from main import Ukiyo
 async def send_webhook(em: disnake.Embed, bot: Ukiyo):
     webhook = await bot.get_webhook(
         bot.get_channel(913332408537976892),
-        avatar=await bot.user.display_avatar.read()
+        avatar=bot.user.display_avatar
     )
     if isinstance(em, disnake.Embed):
         await webhook.send(embed=em)
@@ -104,7 +104,7 @@ class Logs(commands.Cog):
         em.set_author(name=member, icon_url=member.display_avatar)
         em.set_thumbnail(url=member.display_avatar)
         em.set_footer(text=f'Member ID: {member.id}')
-        em.add_field(name='Account Creation', value=str(time.human_timedelta(member.created_at.replace(tzinfo=None))))
+        em.add_field(name='Account Creation', value=str(utils.human_timedelta(member.created_at)))
 
         self.embeds.append(em)
 
