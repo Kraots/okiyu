@@ -67,6 +67,12 @@ class Intros(commands.Cog):
         await data.delete()
         await member.edit(roles=[unverified_role])
 
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: disnake.Member):
+        data = Intro.find_one({'_id': member.id})
+        if data:
+            await data.delete()
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Intros(bot))
