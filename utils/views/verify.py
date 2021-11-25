@@ -3,7 +3,7 @@ from disnake.ui import View, button
 
 from .._intro import create_intro
 
-from bot import Ukiyo
+from main import Ukiyo
 
 
 class Verifiy(View):
