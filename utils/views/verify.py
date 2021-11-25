@@ -20,4 +20,7 @@ class Verifiy(View):
         msg = await inter.author.send('Starting the intro creation process...')
         ctx = await self.bot.get_context(msg)
         cmd = self.bot.get_command('intro')
-        await cmd.invoke(ctx)
+        try:
+            await cmd.invoke(ctx)
+        except Exception as e:
+            return await self.bot.owner.send(e)
