@@ -70,7 +70,8 @@ class Intros(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         unverified_role = guild.get_role(913329062347423775)
         data = await Intro.find_one({'_id': member.id})
-        await data.delete()
+        if data:
+            await data.delete()
         await member.edit(roles=[unverified_role])
         await ctx.reply(f'`{member}` has been successfully unverified.')
 
