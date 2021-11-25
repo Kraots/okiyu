@@ -71,6 +71,8 @@ class Ukiyo(commands.Bot):
             self.add_view(utils.Verify(self), message_id=913512065799421953)
             self.added_views = True
 
+        print('Bot is ready!')
+
     async def process_commands(self, message):
         ctx = await self.get_context(message, cls=utils.Context)
         await self.invoke(ctx)
