@@ -21,7 +21,7 @@ class Intros(commands.Cog):
 
         try:
             await create_intro(ctx, self.bot)
-        except IndexError:
+        except (IndexError, ValueError):
             pass
 
     @commands.command(aliases=('wi',))
