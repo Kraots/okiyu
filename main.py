@@ -24,6 +24,7 @@ class Ukiyo(commands.Bot):
         self.added_cogs = False
         self.reraise = utils.reraise
         self.execs = {}
+        self.verifying = []
 
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'
