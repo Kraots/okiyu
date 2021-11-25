@@ -7,6 +7,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
+from utils.HelpCommand import PaginatedHelpCommand
 
 TOKEN = os.getenv('BOT_TOKEN')
 
@@ -14,6 +15,7 @@ TOKEN = os.getenv('BOT_TOKEN')
 class Ukiyo(commands.Bot):
     def __init__(self):
         super().__init__(
+            help_command=PaginatedHelpCommand(),
             command_prefix='!',
             case_insensitive=True,
             intents=disnake.Intents.all(),
