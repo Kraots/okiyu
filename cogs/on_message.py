@@ -26,7 +26,7 @@ class OnMessage(commands.Cog):
         if message.author.bot:
             return
 
-        if message.author.id == 374622847672254466:
+        if message.author.id == self.bot._owner_id:
             return
 
         else:
@@ -60,7 +60,7 @@ class OnMessage(commands.Cog):
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
         if before.author.bot:
             return
-        if before.author.id == 374622847672254466:
+        if before.author.id == self.bot._owner_id:
             return
         else:
             em = disnake.Embed(
