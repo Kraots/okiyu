@@ -32,6 +32,9 @@ class Moderation(commands.Cog):
     async def _ban(self, ctx: Context, member: Union[disnake.Member, disnake.User], *, reason: str):
         """Bans a user."""
 
+        if ctx.author.top_role >= member.top_role:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
         try:
             await member.send('> Hello! Sadly, have been **banned** from `Ukiyo`. Goodbye 👋')
         except disnake.Forbidden:
@@ -44,6 +47,9 @@ class Moderation(commands.Cog):
     async def _kick(self, ctx: Context, member: Union[disnake.Member, disnake.User], *, reason: str):
         """Kicks a user."""
 
+        if ctx.author.top_role >= member.top_role:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
         try:
             await member.send('> Hello! Sadly, have been **kicked** from `Ukiyo`. Goodbye 👋')
         except disnake.Forbidden:
@@ -52,7 +58,7 @@ class Moderation(commands.Cog):
         await ctx.send(f'> 👌 Kicked {member} for **{reason}**')
 
     @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
-    @is_owner()
+    @is_admin()
     async def owner_make(self, ctx: Context):
         """Shows this help."""
 
@@ -63,20 +69,67 @@ class Moderation(commands.Cog):
     async def owner_make_admin(self, ctx: Context, *, member: disnake.Member):
         """Make somebody an admin."""
 
+        if ctx.author.top_role >= member.top_role:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
         guild = self.bot.get_guild(913310006814859334)
+        if 913315033134542889 not in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is already an admin!')
         admin_role = guild.get_role(913315033134542889)
         await member.add_roles(admin_role)
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
 
     @owner_make.command(name='moderator')
-    @is_mod()
+    @is_admin()
     async def owner_make_mod(self, ctx: Context, *, member: disnake.Member):
         """Make somebody a moderator."""
 
+        if ctx.author.top_role >= member.top_role:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
         guild = self.bot.get_guild(913310006814859334)
+        if 913315033684008971 not in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is already a moderator!')
         mod_role = guild.get_role(913315033684008971)
         await member.add_roles(mod_role)
         await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
+
+    @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
+    @is_admin()
+    async def owner_remove(self, ctx: Context):
+        """Shows this help."""
+
+        await ctx.send_help('remove')
+
+    @owner_remove.command(name='admin')
+    @is_owner()
+    async def owner_remove_admin(self, ctx: Context, *, member: disnake.Member):
+        """Remove an admin."""
+
+        if ctx.author.top_role >= member.top_role:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        guild = self.bot.get_guild(913310006814859334)
+        if 913315033134542889 not in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is not a moderator!')
+        admin_role = guild.get_role(913315033134542889)
+        await member.add_roles(admin_role)
+        await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
+
+    @owner_remove.command(name='moderator')
+    @is_admin()
+    async def owner_remove_mod(self, ctx: Context, *, member: disnake.Member):
+        """Remove a moderator."""
+
+        if ctx.author.top_role >= member.top_role:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        guild = self.bot.get_guild(913310006814859334)
+        if 913315033684008971 not in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is not a moderator!')
+        mod_role = guild.get_role(913315033684008971)
+        await member.add_roles(mod_role)
+        await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
 
 
 def setup(bot: Ukiyo):
