@@ -25,7 +25,7 @@ def is_owner(*, owner_only: bool = True):
     """
 
     async def pred(ctx: Context):
-        return await _is_owner(ctx, owner_only=owner_only)
+        return _is_owner(ctx, owner_only=owner_only)
     return commands.check(pred)
 
 
@@ -33,7 +33,7 @@ def is_admin():
     """A special check for checking if the author is an admin."""
 
     async def pred(ctx: Context):
-        res = await _is_owner(ctx)
+        res = _is_owner(ctx)
         if res is False:
             if 913315033134542889 in (role.id for role in ctx.author.id):
                 return True
@@ -47,7 +47,7 @@ def is_mod():
     """A special check for checking if the author is a moderator."""
 
     async def pred(ctx: Context):
-        res = await _is_owner(ctx)
+        res = _is_owner(ctx)
         if res is False:
             if 913315033684008971 in (role.id for role in ctx.author.id):
                 return True
