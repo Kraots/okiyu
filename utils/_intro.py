@@ -7,7 +7,7 @@ from . import (
     Intro
 )
 
-from bot import Ukiyo
+from main import Ukiyo
 
 
 async def create_intro(ctx: Context, bot: Ukiyo):
