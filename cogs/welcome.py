@@ -3,6 +3,7 @@ from disnake.ext import commands
 from disnake.ui import View, button
 
 import utils
+from .intros import Intros
 
 from main import Ukiyo
 
@@ -14,9 +15,9 @@ class Verifiy(View):
 
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
-        guild = self.bot.get_guild(913310006814859334)
-        unverified_role = guild.get_role(913329062347423775)
-        unverified_channel = guild.get_channel(913329436953296917)
+        msg = await inter.author.send('Starting the intro creation process...')
+        ctx = await self.bot.get_context(msg)
+        await Intros.create_intro(ctx, self.bot)
 
 
 class Welcome(commands.Cog):
@@ -27,13 +28,13 @@ class Welcome(commands.Cog):
     async def on_member_join(self, member: disnake.Member):
         guild = self.bot.get_guild(913310006814859334)
 
-        unverified_role = guild.get_role(913329062347423775)
-        await member.add_roles(unverified_role)
-
         if member.bot:
             bot_role = guild.get_role(913459676962770944)
             await member.add_roles(bot_role, reason='Bot Account.')
             return
+
+        unverified_role = guild.get_role(913329062347423775)
+        await member.add_roles(unverified_role)
 
         welcome_channel = guild.get_channel(913331535170637825)
         member_count = len([m for m in guild.members if not m.bot])

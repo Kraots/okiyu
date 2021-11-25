@@ -121,33 +121,6 @@ class Intros(commands.Cog):
         except TimeoutError:
             return await ctx.reply('Ran out of time.')
         else:
-            if to_update is False:
-                await Intro(
-                    id=ctx.author.id,
-                    name=name,
-                    age=age,
-                    gender=gender,
-                    location=location,
-                    dms=dms,
-                    looking=looking,
-                    sexuality=sexuality,
-                    status=status,
-                    likes=likes,
-                    dislikes=dislikes
-                ).commit()
-            else:
-                data.name = name
-                data.age = age
-                data.gender = gender
-                data.location = location
-                data.dms = dms
-                data.looking = looking
-                data.sexuality = sexuality
-                data.status = status
-                data.likes = likes
-                data.dislikes = dislikes
-                await data.commit(replace=True)
-
             em = disnake.Embed()
             em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
             em.set_thumbnail(url=ctx.author.display_avatar)
@@ -161,7 +134,41 @@ class Intros(commands.Cog):
             em.add_field(name='Relationship Status', value=status)
             em.add_field(name='Likes', value=likes)
             em.add_field(name='Dislikes', value=dislikes)
-            await intro_channel.send(embed=em)
+            msg = await intro_channel.send(embed=em)
+
+            if to_update is False:
+                await Intro(
+                    id=ctx.author.id,
+                    name=name,
+                    age=age,
+                    gender=gender,
+                    location=location,
+                    dms=dms,
+                    looking=looking,
+                    sexuality=sexuality,
+                    status=status,
+                    likes=likes,
+                    dislikes=dislikes,
+                    message_id=msg.id
+                ).commit()
+            else:
+                old_msg = await intro_channel.fetch_message(data.message_id)
+                if old_msg:
+                    await old_msg.delete()
+
+                data.name = name
+                data.age = age
+                data.gender = gender
+                data.location = location
+                data.dms = dms
+                data.looking = looking
+                data.sexuality = sexuality
+                data.status = status
+                data.likes = likes
+                data.dislikes = dislikes
+                data.message_id = msg.id
+                await data.commit(replace=True)
+
             await ctx.reply(
                 f'Successfully {"edited" if to_update else "created"} your intro. You can see it in {intro_channel.mention}'
             )
