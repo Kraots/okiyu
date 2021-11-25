@@ -121,19 +121,32 @@ class Intros(commands.Cog):
         except TimeoutError:
             return await ctx.reply('Ran out of time.')
         else:
-            await Intro(
-                id=ctx.author.id,
-                name=name,
-                age=age,
-                gender=gender,
-                location=location,
-                dms=dms,
-                looking=looking,
-                sexuality=sexuality,
-                status=status,
-                likes=likes,
-                dislikes=dislikes
-            ).commit()
+            if to_update is False:
+                await Intro(
+                    id=ctx.author.id,
+                    name=name,
+                    age=age,
+                    gender=gender,
+                    location=location,
+                    dms=dms,
+                    looking=looking,
+                    sexuality=sexuality,
+                    status=status,
+                    likes=likes,
+                    dislikes=dislikes
+                ).commit()
+            else:
+                data.name = name
+                data.age = age
+                data.gender = gender
+                data.location = location
+                data.dms = dms
+                data.looking = looking
+                data.sexuality = sexuality
+                data.status = status
+                data.likes = likes
+                data.dislikes = dislikes
+                await data.commit(replace=True)
 
             em = disnake.Embed()
             em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
