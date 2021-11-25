@@ -62,7 +62,7 @@ class Intros(commands.Cog):
         if member.top_role >= ctx.author.top_role:
             return await ctx.reply('You cannot unverify somebody that is a higher or equal role than you.')
 
-        guild = self.bot.get_guild(750160850077089853)
+        guild = self.bot.get_guild(913310006814859334)
         unverified_role = guild.get_role(913329062347423775)
         data = await Intro.find_one({'_id': member.id})
         await data.delete()
