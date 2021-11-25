@@ -36,7 +36,7 @@ class Welcome(commands.Cog):
         )
         welcome.set_thumbnail(url=member.display_avatar)
         welcome.set_footer(text=f"Created: {format_date(member.created_at.replace(tzinfo=None))}", icon_url=member.display_avatar)
-        msg = f'Hey {member.mention}, welcome to **ViHill Corner!** \nYou are our **{member_count}** member.\n\n\n'
+        msg = f'Hey {member.mention}, welcome to **ViHill Corner!** \nYou are our **{member_count}** member.\n\n\n_ _'
         await welcome_channel.send(msg, embed=welcome)
 
 
