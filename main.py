@@ -66,7 +66,7 @@ class Ukiyo(commands.Bot):
             self._owner_id = app.owner.id
 
         if self.added_views is False:
-            await self.add_view(utils.Verify(self), message_id=913512065799421953)
+            self.add_view(utils.Verify(self), message_id=913512065799421953)
             self.added_views = True
 
     async def process_commands(self, message):
