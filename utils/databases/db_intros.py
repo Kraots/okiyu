@@ -12,6 +12,7 @@ class Intro(Document):
     id = IntField(attribute='_id', required=True)
 
     name = StrField(required=True)
+    age = IntField(required=True)
     gender = StrField(required=True)
     location = StrField(required=True)
     dms = StrField(required=True)
