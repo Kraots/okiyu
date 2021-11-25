@@ -73,13 +73,13 @@ class Moderation(commands.Cog):
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         guild = self.bot.get_guild(913310006814859334)
-        if 913315033134542889 not in (r.id for r in member.roles):
+        if 913315033134542889 in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is already an admin!')
         admin_role = guild.get_role(913315033134542889)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + admin_role)
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
 
-    @owner_make.command(name='moderator')
+    @owner_make.command(name='moderator', aliases=('mod',))
     @is_admin()
     async def owner_make_mod(self, ctx: Context, *, member: disnake.Member):
         """Make somebody a moderator."""
@@ -88,7 +88,7 @@ class Moderation(commands.Cog):
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
         guild = self.bot.get_guild(913310006814859334)
-        if 913315033684008971 not in (r.id for r in member.roles):
+        if 913315033684008971 in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is already a moderator!')
         mod_role = guild.get_role(913315033684008971)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + mod_role)
