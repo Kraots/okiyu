@@ -12,7 +12,7 @@ from main import Ukiyo
 async def send_webhook(em: disnake.Embed, view: disnake.ui.View, bot: Ukiyo):
     webhook = await bot.get_webhook(
         bot.get_channel(913332431417925634),
-        avatar=await bot.user.display_avatar.read()
+        avatar=bot.user.display_avatar
     )
     await webhook.send(embed=em, view=view)
 
@@ -54,7 +54,8 @@ class OnMessage(commands.Cog):
                 btn.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
                 await send_webhook(em, btn, self.bot)
             except Exception as e:
-                await self.bot._owner.send(e)
+                ctx = await self.bot.get_context(message)
+                await self.bot.reraise(ctx, e)
 
     @commands.Cog.listener('on_message_edit')
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
@@ -84,7 +85,8 @@ class OnMessage(commands.Cog):
                 btn.add_item(disnake.ui.Button(label='Jump!', url=after.jump_url))
                 await send_webhook(em, btn, self.bot)
             except Exception as e:
-                await self.bot._owner.send(e)
+                ctx = await self.bot.get_context(after)
+                await self.bot.reraise(ctx, e)
 
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
