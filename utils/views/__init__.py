@@ -1,1 +1,1 @@
-from .verify import Verifiy  # noqa
+from .verify import Verify  # noqa
