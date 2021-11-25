@@ -47,6 +47,12 @@ class Misc(commands.Cog):
         uptime.set_footer(text=f'Bot made by: {self.bot._owner}', icon_url=self.bot.user.display_avatar)
         await ctx.send(embed=uptime)
 
+    @commands.command(name='invite', aliases=('inv',))
+    async def _invite(self, ctx: Context):
+        """Sends an invite that never expires."""
+
+        await ctx.send('https://discord.gg/zsWcnGYQ8A')
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
