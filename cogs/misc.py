@@ -51,7 +51,7 @@ class Misc(commands.Cog):
     async def _invite(self, ctx: Context):
         """Sends an invite that never expires."""
 
-        await ctx.send('https://discord.gg/zsWcnGYQ8A')
+        await ctx.send('https://discord.gg/fQ6Nb4ac9x')
 
 
 def setup(bot: Ukiyo):
