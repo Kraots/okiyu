@@ -111,7 +111,7 @@ class Moderation(commands.Cog):
 
         if 913315033134542889 not in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is not a moderator!')
-        await member.edit(roles=[r for r in member.roles if r.id not in (913315033134542889, 913315033684008971)])
+        await member.edit(roles=[r for r in member.roles if r.id == 913315033134542889])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
 
     @owner_remove.command(name='moderator')
@@ -124,7 +124,7 @@ class Moderation(commands.Cog):
 
         if 913315033684008971 not in (r.id for r in member.roles):
             return await ctx.reply(f'`{member}` is not a moderator!')
-        await member.edit(roles=[r for r in member.roles if r.id not in (913315033134542889, 913315033684008971)])
+        await member.edit(roles=[r for r in member.roles if r.id == 913315033684008971])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
 
 
