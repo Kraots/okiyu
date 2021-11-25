@@ -22,9 +22,9 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             bot.verifying.pop(bot.verifying.index(user_id))
             return
         else:
-            view = utils.ConfirmViewDMS
+            view = utils.ConfirmView
     else:
-        view = utils.ConfirmView
+        view = utils.ConfirmViewDMS
 
     user_id = user_id or ctx.author.id
 
