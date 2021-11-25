@@ -7,6 +7,16 @@ from disnake.ext import menus
 
 from utils import Context
 
+__all__ = (
+    'RoboPages',
+    'FieldPageSource',
+    'TextPageSource',
+    'TextPage',
+    'SimplePageSource',
+    'SimplePages',
+    'EmbedPaginator',
+)
+
 
 class RoboPages(disnake.ui.View):
     def __init__(
