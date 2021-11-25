@@ -128,6 +128,20 @@ class Developer(commands.Cog):
         else:
             self.bot.execs[ctx.author.id][ctx.command.name] = msg
 
+    @commands.command()
+    async def shutdown(self, ctx: Context):
+        """Closes the bot."""
+
+        await ctx.message.add_reaction('<:agree:797537027469082627>')
+        await self.bot.close()
+
+    @commands.command()
+    async def restart(self, ctx: Context):
+        """Restarts the bot."""
+
+        await ctx.send("*Restarting...*")
+        restart_program()
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Developer(bot))
