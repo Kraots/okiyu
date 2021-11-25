@@ -38,7 +38,8 @@ class Intros(commands.Cog):
                 )
 
         em = disnake.Embed()
-        em.set_thumbnail(url=ctx.author.display_avatar)
+        em.set_author(name=member, icon_url=member.display_avatar)
+        em.set_thumbnail(url=member.display_avatar)
         em.add_field(name='Name', value=data.name)
         em.add_field(name='Age', value=data.age)
         em.add_field(name='Gender', value=data.gender)
