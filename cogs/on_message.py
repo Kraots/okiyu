@@ -176,7 +176,7 @@ class OnMessage(commands.Cog):
 
                             try:
                                 await message.author.send(
-                                    f'Hello, you have been muted in `Ukiyo` by **{self.bot.user.id}** for **{_data.arg}** '
+                                    f'Hello, you have been muted in `Ukiyo` by **{self.bot.user}** for **{_data.arg}** '
                                     f'until {utils.format_dt(_data.dt, "F")} (`{utils.human_timedelta(_data.dt, suffix=False)}`)'
                                 )
                             except disnake.Forbidden:
