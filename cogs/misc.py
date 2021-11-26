@@ -80,16 +80,6 @@ class Misc(commands.Cog):
 
         await ctx.send(embed=ad, reference=ctx.replied_reference)
 
-    @commands.command(aliases=('rad',))
-    async def rawad(self, ctx: Context):
-        """See the server's ad but in raw format."""
-
-        await ctx.message.delete()
-        ad = disnake.Embed(color=utils.blurple, title='Here\'s the raw ad version of the server:', description=f'``​`{SERVER_AD}``​`')
-        ad.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
-
-        await ctx.send(embed=ad, reference=ctx.replied_reference)
-
     @commands.group(
         name='rules', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('rule',)
     )
