@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-import asyncio
 import string
+import asyncio
+import functools
 from pathlib import Path
 from traceback import format_exception
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, Callable
 
 import disnake
 from disnake.ext import commands
@@ -22,6 +23,7 @@ __all__ = (
     'ConfirmViewDMS',
     'check_bad_word',
     'check_username',
+    'run_in_executor',
 )
 
 allowed_letters = tuple(list(string.ascii_lowercase) + list(string.digits) + list(string.punctuation) + ['♡', ' ', '\\'])
@@ -277,3 +279,15 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str
                 return True
             else:
                 return False
+
+
+def run_in_executor(func: Callable):
+    """Decorator that runs the sync function in the executor."""
+
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        loop = asyncio.get_event_loop()
+        to_run = functools.partial(func, *args, **kwargs)
+        return await loop.run_in_executor(None, to_run)
+
+    return wrapper
