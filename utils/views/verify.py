@@ -172,8 +172,10 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             pass
         return await ctx.reply('Ran out of time.')
     else:
+        role = guild.get_role(random.choice(utils.all_colour_roles))
         usr = guild.get_member(user_id)
-        em = disnake.Embed()
+        colour = role.color if to_update is False else usr.color
+        em = disnake.Embed(colour=colour)
         em.set_author(name=usr, icon_url=usr.display_avatar)
         em.set_thumbnail(url=usr.display_avatar)
         em.add_field(name='Name', value=name)
@@ -189,7 +191,6 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         msg = await intro_channel.send(embed=em)
 
         if to_update is False:
-            role = guild.get_role(random.choice(utils.all_colour_roles))
             await usr.edit(roles=[role])
             await utils.Intro(
                 id=user_id,
