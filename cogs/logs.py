@@ -27,6 +27,7 @@ async def send_webhook(em: disnake.Embed, bot: Ukiyo):
             if count == 10:
                 await webhook.send(embeds=embeds)
                 count = 0
+                embeds = []
         else:
             if count != 0:
                 await webhook.send(embeds=embeds)
@@ -42,7 +43,10 @@ class Logs(commands.Cog):
     @tasks.loop(seconds=15.0)
     async def send_embeds(self):
         if len(self.embeds) != 0:
-            await send_webhook(self.embeds, self.bot)
+            try:
+                await send_webhook(self.embeds, self.bot)
+            except Exception:
+                pass
             self.embeds = []
 
     @commands.Cog.listener()
