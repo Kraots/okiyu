@@ -177,7 +177,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         em.add_field(name='Name', value=name)
         em.add_field(name='Age', value=age)
         em.add_field(name='Gender', value=gender)
-        em.add_field(name='Location', value=location)
+        em.add_field(name='Location', value=location, inline=False)
         em.add_field(name='DMs', value=dms)
         em.add_field(name='Looking', value=looking)
         em.add_field(name='Sexuality', value=sexuality)
