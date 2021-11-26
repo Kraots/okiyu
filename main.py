@@ -79,6 +79,7 @@ class Ukiyo(commands.Bot):
             self.add_view(utils.GenderButtonRoles(), message_id=913788066114719785)
             self.add_view(utils.AgeButtonRoles(), message_id=913788068031496192)
             self.add_view(utils.SexualityButtonRoles(), message_id=913788069373681685)
+            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=913790418959876097)
             self.added_views = True
 
         print('Bot is ready!')
