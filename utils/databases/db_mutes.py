@@ -12,6 +12,7 @@ class Mutes(Document):
     id = IntField(attribute='_id', required=True)
     muted_by = IntField(required=True)
     muted_until = DateTimeField(required=True)
+    reason = StrField(required=True)
 
     is_owner = BooleanField(default=False)
     is_admin = BooleanField(default=False)

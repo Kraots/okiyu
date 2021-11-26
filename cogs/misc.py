@@ -60,7 +60,7 @@ class Misc(commands.Cog):
         """Sends the server's rules. If ``rule`` is given, it will only send that rule."""
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
-        if not rules:
+        if rules is None:
             return await ctx.reply('There are currently no rules set. Please contact an admin about this!')
         em = disnake.Embed(title='Rules', color=utils.blurple)
 
@@ -87,7 +87,7 @@ class Misc(commands.Cog):
         """Adds a rule to the server's rules."""
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
-        if not rules:
+        if rules is None:
             await Rules(
                 id=self.bot._owner_id,
                 rules=[rule]
@@ -104,7 +104,7 @@ class Misc(commands.Cog):
         """Removes a rule from the server's rules by its number."""
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
-        if not rules:
+        if rules is None:
             return await ctx.reply('There are currently no rules set.')
         else:
             if rule <= 0:
@@ -123,7 +123,7 @@ class Misc(commands.Cog):
         """Deletes all the rules."""
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
-        if not rules:
+        if rules is None:
             return await ctx.reply('There are currently no rules set.')
         else:
             await rules.delete()
