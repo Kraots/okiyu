@@ -170,11 +170,11 @@ class Moderation(commands.Cog):
             muted_by=ctx.author.id,
             muted_until=time
         )
-        if 913310292505686046 in member.roles:  # Checks for owner
+        if 913310292505686046 in (r.id for r in member.roles):  # Checks for owner
             data.is_owner = True
-        elif 913315033134542889 in member.roles:  # Checks for admin
+        elif 913315033134542889 in (r.id for r in member.roles):  # Checks for admin
             data.is_admin = True
-        elif 913315033684008971 in member.roles:  # Checks for mod
+        elif 913315033684008971 in (r.id for r in member.roles):  # Checks for mod
             data.is_mod = True
         await data.commit()
 
