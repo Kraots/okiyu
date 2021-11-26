@@ -43,6 +43,14 @@ class Intros(commands.Cog):
                 return await ctx.reply(
                     f'`{member}` doesn\'t have an intro. Please contact a staff member to unverify them! This is a bug.'
                 )
+        guild = self.bot.get_guild(913310006814859334)
+        intro_channel = guild.get_channel(913331578606854184)
+        msg = await intro_channel.fetch_message(data.message_id)
+        if msg:
+            view = disnake.ui.View()
+            view.add_item(disnake.ui.Button(label='Jump!', url=msg.jump_url))
+        else:
+            view = None
 
         em = disnake.Embed(colour=member.color)
         em.set_author(name=member, icon_url=member.display_avatar)
@@ -58,7 +66,7 @@ class Intros(commands.Cog):
         em.add_field(name='Likes', value=data.likes)
         em.add_field(name='Dislikes', value=data.dislikes)
         em.set_footer(text=f'Requested by: {ctx.author}')
-        await ctx.reply(embed=em)
+        await ctx.reply(embed=em, view=view)
 
     @commands.command(name='unverify')
     @is_mod()
