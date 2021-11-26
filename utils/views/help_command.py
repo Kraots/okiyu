@@ -159,7 +159,6 @@ class PaginatedHelpCommand(commands.HelpCommand):
     def __init__(self):
         super().__init__(
             command_attrs={
-                'cooldown': commands.CooldownMapping.from_cooldown(1, 3.0, commands.BucketType.member),
                 'help': 'Shows help about the bot, a command, or a category',
             }
         )
