@@ -17,6 +17,7 @@ class Mutes(Document):
     is_owner = BooleanField(default=False)
     is_admin = BooleanField(default=False)
     is_mod = BooleanField(default=False)
+    bot = BooleanField(default=False)
 
     class Meta:
         collection_name = 'Mutes'
