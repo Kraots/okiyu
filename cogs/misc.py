@@ -67,7 +67,7 @@ class Misc(commands.Cog):
                 if em.description == disnake.embeds.EmptyEmbed:
                     em.description = f'{index + 1}. {rule}'
                 else:
-                    em.description += f'\n{index + 1}. {rule}'
+                    em.description += f'\n\n`{index + 1}.` {rule}'
         else:
             if rule <= 0:
                 return await ctx.reply('Rule cannot be equal or less than `0`')
