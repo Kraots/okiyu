@@ -201,7 +201,7 @@ class Moderation(commands.Cog):
         except disnake.Forbidden:
             pass
         await ctx.reply(
-            f'> 👌📨 Applied mute to {member.mention} for **{reason}** '
+            f'> 👌 📨 Applied mute to {member.mention} for **{reason}** '
             f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
         )
 
