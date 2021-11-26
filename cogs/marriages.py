@@ -71,7 +71,7 @@ class Marriages(commands.Cog):
             guild = self.bot.get_guild(913310006814859334)
             usr = guild.get_member(data.married_to)
 
-            view = self.bot.confirm_view(ctx, f'{ctx.author.mention} Did not react in time.')
+            view = utils.ConfirmView(ctx, f'{ctx.author.mention} Did not react in time.')
             view.message = msg = await ctx.send(f'Are you sure you want to divorce {usr.mention}?', view=view)
             await view.wait()
             if view.response is True:
