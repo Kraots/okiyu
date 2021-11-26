@@ -38,7 +38,6 @@ class Levels(commands.Cog):
             if data is None:
                 return await ctx.reply('User not in the database!')
 
-            total_xp = data.xp
             rank = 0
             rankings: list[Level] = await Level.find().sort('xp', -1).to_list(100000)
             for _rank in rankings:
@@ -46,12 +45,24 @@ class Levels(commands.Cog):
                 if data.id == _rank.id:
                     break
 
-            lvl = int(-0.5 + 0.02 * (25 * 25 + 50 * total_xp) ** 0.5)
-            if lvl == 0:
-                lvl = 1
-            current_xp = 50 * (lvl - 1) * lvl
-            if current_xp == 0:
-                current_xp = total_xp
+            lvl = 0
+            xp = data.xp
+            while True:
+                if xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
+                    break
+                lvl += 1
+            xp -= ((50 * ((lvl - 1)**2)) + (50 * (lvl - 1)))
+            if xp < 0:
+                lvl = lvl - 1
+                xp = data.xp
+                xp -= ((50 * ((lvl - 1)**2)) + (50 * (lvl - 1)))
+            if str(xp).endswith(".0"):
+                x = str(xp).replace(".0", "")
+                x = int(x)
+            else:
+                x = int(xp)
+
+            current_xp = x
             needed_xp = int(200 * ((1 / 2) * lvl))
             percent = round(float(current_xp * 100 / needed_xp), 2)
             guild = self.bot.get_guild(913310006814859334)
@@ -67,13 +78,13 @@ class Levels(commands.Cog):
         """Set the level for somebody."""
 
         member = member or ctx.author
-        if level <= 0:
-            return await ctx.reply('Level cannot be less or equal than `0`')
+        if level < 0:
+            return await ctx.reply('Level cannot be less than `0`')
 
-        total_xp = 50 * (level - 1) * level
+        xp = ((50 * ((level - 1)**2)) + (50 * (level - 1)))
         data: Level = await Level.find_one({'_id': member.id})
         if data is not None:
-            data.xp = total_xp
+            data.xp = xp
             await data.commit()
             return await ctx.reply(f'Successfully set `{member}` to level **{level}**')
         await ctx.reply('Member not in the database.')
@@ -90,7 +101,11 @@ class Levels(commands.Cog):
             async for res in Level.find().sort('xp', -1):
                 res: Level
                 index += 1
-                lvl = int(-0.5 + 0.02 * (25 * 25 + 50 * res.xp) ** 0.5)
+                lvl = 0
+                while True:
+                    if res.xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
+                        break
+                    lvl += 1
                 user = guild.get_member(res.id)
                 if index in (1, 2, 3):
                     place = top_3_emojis[index]
