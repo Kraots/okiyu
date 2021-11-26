@@ -244,10 +244,8 @@ class Moderation(commands.Cog):
         it will only show for that member, including the reason they got muted.
         """
 
-        in_dm = False
         if isinstance(ctx.channel, disnake.DMChannel):
-            member = None
-            in_dm = True
+            member = ctx.author
 
         guild = self.bot.get_guild(913310006814859334)
         if member is None:
@@ -259,10 +257,10 @@ class Moderation(commands.Cog):
                 key = guild.get_member(mute.id)
                 if key is None:
                     key = f'[LEFT] {mute.id}'
-                value = f'Muted By: {guild.get_member(mute.muted_by)}\n' \
-                        f'Reason: {mute.reason}\n' \
-                        f'Expires At: {format_dt(mute.muted_until, "F")}\n' \
-                        f'Left: {human_timedelta(mute.muted_until, suffix=False)}\n\n'
+                value = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
+                        f'**Reason:** {mute.reason}\n' \
+                        f'**Expires At:** {format_dt(mute.muted_until, "F")}\n' \
+                        f'**Left:** `{human_timedelta(mute.muted_until, suffix=False)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
             if len(entries) == 0:
                 return await ctx.reply('There are no current mutes.')
@@ -273,20 +271,18 @@ class Moderation(commands.Cog):
             paginator = RoboPages(source, ctx=ctx, compact=True)
             await paginator.start()
         else:
-            if in_dm is True:
-                member = ctx.author
             mute: Mutes = await Mutes.find_one({'_id': member.id})
             if mute is None:
                 if member == ctx.author:
                     return await ctx.reply('You are not muted.')
                 else:
                     return await ctx.reply(f'`{member}` is not muted.')
-            em = disnake.Embed()
+            em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=member, icon_url=member.display_avatar)
-            em.description = f'Muted By: {guild.get_member(mute.muted_by)}\n' \
-                             f'Reason: {mute.reason}\n' \
-                             f'Expires At: {format_dt(mute.muted_until, "F")}\n' \
-                             f'Left: {human_timedelta(mute.muted_until, suffix=False)}'
+            em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
+                             f'**Reason:** {mute.reason}\n' \
+                             f'**Expires At:** {format_dt(mute.muted_until, "F")}\n' \
+                             f'**Left:** `{human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.reply(embed=em)
 
