@@ -160,7 +160,7 @@ class OnMessage(commands.Cog):
                                 muted_by=self.bot.user.id,
                                 muted_until=_data.dt,
                                 reason=_data.arg,
-                                bot=True
+                                filter=True
                             )
                             if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
                                 data.is_owner = True
