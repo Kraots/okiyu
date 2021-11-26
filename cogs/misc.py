@@ -69,6 +69,8 @@ class Misc(commands.Cog):
                 else:
                     em.description += f'\n{index}. {rule}'
         else:
+            if rule <= 0:
+                return await ctx.reply('Rule cannot be equal or less than `0`')
             try:
                 rules.rules[rule - 1]
             except IndexError:
@@ -99,7 +101,12 @@ class Misc(commands.Cog):
         if not rules:
             return await ctx.reply('There are currently no rules set.')
         else:
-            rules.rules.pop(rule - 1)
+            if rule <= 0:
+                return await ctx.reply('Rule cannot be equal or less than `0`')
+            try:
+                rules.rules.pop(rule - 1)
+            except IndexError:
+                return await ctx.reply('Rule does not exist!')
             await rules.commit()
 
         await ctx.reply(f'> 👌 `{rule}` successfully **removed** to the rules.')
