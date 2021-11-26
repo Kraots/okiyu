@@ -79,11 +79,13 @@ class Marriages(commands.Cog):
                 await data.delete()
                 await mem.delete()
 
-                e = f'You divorced {usr.mention} :cry:'
+                e = f'You divorced {usr.mention} that you have been married ' \
+                    f'since {utils.format_dt(data.married_since, "F")} ' \
+                    f'(`{utils.human_timedelta(data.married_since)}`)'
                 return await msg.edit(content=e, view=view)
 
             elif view.response is False:
-                e = 'You did not divorce that person :D'
+                e = f'You did not divorce {usr.mention}'
                 return await msg.edit(content=e, view=view)
 
     @commands.command()
