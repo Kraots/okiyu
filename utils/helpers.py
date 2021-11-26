@@ -217,7 +217,7 @@ class ConfirmViewDMS(disnake.ui.View):
 
 
 async def check_username(bot: Ukiyo, *, member: disnake.Member = None, to_check: str = None) -> Optional[bool]:
-    if member.id == bot._owner_id or member.bot:
+    if member and member.id == bot._owner_id or member.bot:
         return
     name = to_check or member.display_name.lower()
     count = 0
@@ -230,7 +230,7 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, to_check:
         else:
             break
     else:
-        if to_check is not None:
+        if to_check is not None and member is not None:
             if count < 4:
                 usr: utils.InvalidName = await utils.InvalidName.find_one({'_id': member.id})
                 if usr is not None:
