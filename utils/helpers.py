@@ -4,8 +4,6 @@ from traceback import format_exception
 import disnake
 from disnake.ext import commands
 
-from . import colours
-
 __all__ = (
     'time_phaser',
     'clean_code',
@@ -85,19 +83,13 @@ async def reraise(ctx, error):
     else:
         get_error = "".join(format_exception(error, error, error.__traceback__))
         em = disnake.Embed(description=f'```py\n{get_error}\n```')
-        if ctx.guild.id == 750160850077089853:
+        if ctx.guild.id == 913310006814859334:
             await ctx.bot._owner.send(
-                content=f"**An error occured with the command `{ctx.command}`, "
+                content=f"**An error occurred with the command `{ctx.command}`, "
                         "here is the error:**",
                 embed=em
             )
-            em = disnake.Embed(
-                title='Oops... An error has occured.',
-                description='An error has occured while invoking this command and '
-                            'has been sent to my master for a fix.',
-                color=colours.red
-            )
-            await ctx.send(embed=em)
+            await ctx.send('> <:disagree:913517714696454184> An error occurred')
         else:
             await ctx.send(embed=em)
 
