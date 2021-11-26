@@ -7,7 +7,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
-from utils.HelpCommand import PaginatedHelpCommand
+from utils.views.help_command import PaginatedHelpCommand
 
 TOKEN = os.getenv('BOT_TOKEN')
 
@@ -21,7 +21,8 @@ class Ukiyo(commands.Bot):
             intents=disnake.Intents.all(),
             allowed_mentions=disnake.AllowedMentions(
                 roles=False, everyone=False, users=True
-            )
+            ),
+            test_guilds=[913310006814859334]
         )
         self.added_views = False
         self.reraise = utils.reraise
