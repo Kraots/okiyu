@@ -64,14 +64,14 @@ class Moderation(commands.Cog):
 
     @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
     @is_admin()
-    async def owner_make(self, ctx: Context):
+    async def staff_make(self, ctx: Context):
         """Shows this help."""
 
         await ctx.send_help('make')
 
-    @owner_make.command(name='admin')
+    @staff_make.command(name='admin')
     @is_owner()
-    async def owner_make_admin(self, ctx: Context, *, member: disnake.Member):
+    async def staff_make_admin(self, ctx: Context, *, member: disnake.Member):
         """Make somebody an admin."""
 
         if ctx.author.top_role <= member.top_role:
@@ -84,9 +84,9 @@ class Moderation(commands.Cog):
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
 
-    @owner_make.command(name='moderator', aliases=('mod',))
+    @staff_make.command(name='moderator', aliases=('mod',))
     @is_admin()
-    async def owner_make_mod(self, ctx: Context, *, member: disnake.Member):
+    async def staff_make_mod(self, ctx: Context, *, member: disnake.Member):
         """Make somebody a moderator."""
 
         if ctx.author.top_role <= member.top_role:
@@ -101,14 +101,14 @@ class Moderation(commands.Cog):
 
     @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
     @is_admin()
-    async def owner_remove(self, ctx: Context):
+    async def staff_remove(self, ctx: Context):
         """Shows this help."""
 
         await ctx.send_help('remove')
 
-    @owner_remove.command(name='admin')
+    @staff_remove.command(name='admin')
     @is_owner()
-    async def owner_remove_admin(self, ctx: Context, *, member: disnake.Member):
+    async def staff_remove_admin(self, ctx: Context, *, member: disnake.Member):
         """Remove an admin."""
 
         if ctx.author.top_role <= member.top_role:
@@ -119,9 +119,9 @@ class Moderation(commands.Cog):
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
 
-    @owner_remove.command(name='moderator', aliases=('mod',))
+    @staff_remove.command(name='moderator', aliases=('mod',))
     @is_admin()
-    async def owner_remove_mod(self, ctx: Context, *, member: disnake.Member):
+    async def staff_remove_mod(self, ctx: Context, *, member: disnake.Member):
         """Remove a moderator."""
 
         if ctx.author.top_role <= member.top_role:
