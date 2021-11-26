@@ -10,7 +10,7 @@ from main import Ukiyo
 
 
 class Moderation(commands.Cog):
-    """Moderator related commands."""
+    """Staff related commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
