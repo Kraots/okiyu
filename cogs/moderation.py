@@ -216,7 +216,7 @@ class Moderation(commands.Cog):
 
         guild = self.bot.get_guild(913310006814859334)
         muted_by = guild.get_member(data.muted_by)
-        if data.bot is False:
+        if data.filter is False:
             if ctx.author.id not in (muted_by, self.bot._owner_id):
                 if muted_by.top_role > ctx.author.top_role:
                     return await ctx.reply(
