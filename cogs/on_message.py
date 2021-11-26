@@ -112,7 +112,7 @@ class OnMessage(commands.Cog):
     @commands.Cog.listener('on_message')
     async def check_for_invalid_name(self, message: disnake.Message):
         if message.guild:
-            await utils.check_username(message.author, self.bot)
+            await utils.check_username(self.bot, member=message.author)
 
 
 def setup(bot: Ukiyo):
