@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import string
+from pathlib import Path
 from traceback import format_exception
 from typing import TYPE_CHECKING, Optional
 
@@ -19,10 +20,12 @@ __all__ = (
     'reraise',
     'ConfirmView',
     'ConfirmViewDMS',
+    'check_bad_word',
     'check_username',
 )
 
 allowed_letters = tuple(list(string.ascii_lowercase) + list(string.digits) + list(string.punctuation) + ['♡', ' ', '\\'])
+BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
 
 
 def time_phaser(seconds):
@@ -216,11 +219,25 @@ class ConfirmViewDMS(disnake.ui.View):
         self.stop()
 
 
-async def check_username(bot: Ukiyo, *, member: disnake.Member = None, to_check: str = None) -> Optional[bool]:
+def check_bad_word(word: str = None) -> bool:
+    """
+    If the return type is of bool ``True`` then it means that the word is a bad word, otherwise it's safe.
+    """
+
+    if word in BAD_WORDS:
+        return True
+    return False
+
+
+async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str = None) -> Optional[bool]:
+    """
+    If the return type is of bool ``True`` then it means that the word is invalid, otherwise it's good.
+    """
+
     if member:
         if member.id == bot._owner_id or member.bot:
             return
-    name = to_check or member.display_name.lower()
+    name = word or member.display_name.lower()
     count = 0
     for letter in name:
         if count < 4:
@@ -231,7 +248,7 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, to_check:
         else:
             break
     else:
-        if to_check is not None and member is not None:
+        if word is not None and member is not None:
             if count < 4:
                 usr: utils.InvalidName = await utils.InvalidName.find_one({'_id': member.id})
                 if usr is not None:
@@ -253,6 +270,6 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, to_check:
                 )
         else:
             if count < 4:
-                return False
-            else:
                 return True
+            else:
+                return False

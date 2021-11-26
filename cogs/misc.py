@@ -136,8 +136,8 @@ class Misc(commands.Cog):
     async def change_nick(self, ctx: Context, *, new_nickname: str):
         """Change your nickname to your desired one."""
 
-        res = await utils.check_username(self.bot, to_check=new_nickname)
-        if res is False:
+        res = await utils.check_username(self.bot, word=new_nickname)
+        if res is True:
             return await ctx.reply('That nickname is not pingable!')
         await ctx.author.edit(nick=new_nickname)
         await ctx.reply(f'I have changed your nickname to `{new_nickname}`')
@@ -146,8 +146,8 @@ class Misc(commands.Cog):
     async def remove_nick(self, ctx: Context):
         """Removes your nickname."""
 
-        res = await utils.check_username(self.bot, to_check=ctx.author.display_name)
-        if res is False:
+        res = await utils.check_username(self.bot, word=ctx.author.display_name)
+        if res is True:
             return await ctx.reply('Cannot remove your nickname because your username is unpingable.')
         await ctx.author.edit(nick=None)
         await ctx.reply('I have removed your nickname.')
