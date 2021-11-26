@@ -36,7 +36,7 @@ class Moderation(commands.Cog):
 
     @property
     def display_emoji(self) -> str:
-        return '⚙️'
+        return '🛠️'
 
     @commands.command(name='purge', aliases=('clear',))
     @is_mod()

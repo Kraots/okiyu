@@ -11,6 +11,10 @@ class Levels(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
+    @property
+    def display_emoji(self) -> disnake.PartialEmoji:
+        return disnake.PartialEmoji(name='super_mario_green_shroom', id=913886905182064690)
+
     @commands.Cog.listener('on_message')
     async def update_data(self, message: disnake.Message):
         if not message.author.bot and message.guild:
@@ -245,6 +249,12 @@ class Levels(commands.Cog):
             return await msg.edit(
                 content=f"Command to reset the message count for user `{member}` has been cancelled.",
             )
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: disnake.Member):
+        data = await Level.find_one({'_id': member.id})
+        if data:
+            await data.delete()
 
 
 def setup(bot: Ukiyo):

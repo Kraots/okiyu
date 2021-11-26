@@ -8,6 +8,7 @@ from .db_rules import Rules
 from .db_mutes import Mutes
 from .db_levels import Level
 from .db_invalid_names import InvalidName
+from .db_marriage import Marriage
 
 __all__ = (
     'Intro',
@@ -15,4 +16,5 @@ __all__ = (
     'Mutes',
     'Level',
     'InvalidName',
+    'Marriage',
 )
