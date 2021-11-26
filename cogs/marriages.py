@@ -9,7 +9,7 @@ from utils import Context, Marriage
 from main import Ukiyo
 
 
-class Marriages(commands.Bot):
+class Marriages(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
