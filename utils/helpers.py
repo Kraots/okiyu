@@ -217,8 +217,9 @@ class ConfirmViewDMS(disnake.ui.View):
 
 
 async def check_username(bot: Ukiyo, *, member: disnake.Member = None, to_check: str = None) -> Optional[bool]:
-    if member and member.id == bot._owner_id or member.bot:
-        return
+    if member:
+        if member.id == bot._owner_id or member.bot:
+            return
     name = to_check or member.display_name.lower()
     count = 0
     for letter in name:
