@@ -331,7 +331,7 @@ class Moderation(commands.Cog):
     @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
     @is_admin()
     async def staff_make(self, ctx: Context):
-        """Shows this help."""
+        """Shows the help for the `!make` command, used to add more staff members."""
 
         await ctx.send_help('make')
 
@@ -368,7 +368,7 @@ class Moderation(commands.Cog):
     @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
     @is_admin()
     async def staff_remove(self, ctx: Context):
-        """Shows this help."""
+        """Shows the help for the `!remove` command, used to remove a staff member from their position."""
 
         await ctx.send_help('remove')
 
