@@ -130,6 +130,28 @@ class Misc(commands.Cog):
 
         await ctx.reply('> 👌 successfully **cleared** to the rules.')
 
+    @commands.group(
+        name='nick', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('nickname',)
+    )
+    async def change_nick(self, ctx: Context, *, new_nickname: str):
+        """Change your nickname to your desired one."""
+
+        res = await utils.check_username(self.bot, to_check=new_nickname)
+        if res is False:
+            return await ctx.reply('That nickname is not pingable!')
+        await ctx.author.edit(nick=new_nickname)
+        await ctx.reply(f'I have changed your nickname to `{new_nickname}`')
+
+    @change_nick.command(name='reset', aliases=('remove',))
+    async def remove_nick(self, ctx: Context):
+        """Removes your nickname."""
+
+        res = await utils.check_username(self.bot, to_check=ctx.author.display_name)
+        if res is False:
+            return await ctx.reply('Cannot remove your nickname because your username is unpingable.')
+        await ctx.author.edit(nick=None)
+        await ctx.reply('I have removed your nickname.')
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
