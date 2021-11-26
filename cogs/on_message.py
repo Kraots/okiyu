@@ -142,8 +142,6 @@ class OnMessage(commands.Cog):
                 for word in message.content.split():
                     if utils.check_bad_word(word) is True:
                         ctx = await self.bot.get_context(message)
-                        time = get_mute_time(message.author.id)
-                        _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} [BAD WORD FILTER]')
                         await message.delete()
 
                         usr = self.bad_words_filter.get(message.author.id)
@@ -153,6 +151,8 @@ class OnMessage(commands.Cog):
                         else:
                             self.bad_words_filter[message.author.id] += 1
                         if usr >= 4:
+                            time = get_mute_time(message.author.id)
+                            _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} [BAD WORD FILTER]')
                             guild = self.bot.get_guild(913310006814859334)
                             muted_role = guild.get_role(913376647422545951)
                             data = utils.Mutes(
