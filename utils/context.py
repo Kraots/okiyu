@@ -12,6 +12,14 @@ class Context(commands.Context):
     def session(self):
         return self.bot.session
 
+    @property
+    def agree(self) -> disnake.PartialEmoji:
+        return disnake.PartialEmoji(name='agree', id=913517732249612348)
+
+    @property
+    def disagree(self) -> disnake.PartialEmoji:
+        return disnake.PartialEmoji(name='disagree', id=913517714696454184)
+
     @disnake.utils.cached_property
     def replied_reference(self):
         ref = self.message.reference

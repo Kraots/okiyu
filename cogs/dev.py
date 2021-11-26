@@ -137,7 +137,7 @@ class Developer(commands.Cog):
     async def shutdown(self, ctx: Context):
         """Closes the bot."""
 
-        await ctx.message.add_reaction('<:agree:797537027469082627>')
+        await ctx.message.add_reaction(ctx.agree)
         await self.bot.close()
 
     @commands.command()
