@@ -195,13 +195,13 @@ class Moderation(commands.Cog):
         try:
             await member.send(
                 f'Hello, you have been muted in `Ukiyo` by **{ctx.author}** for **{reason}** '
-                f'until {format_dt(time, "D")} (`{human_timedelta(time, suffix=False)}`)'
+                f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
             )
         except disnake.Forbidden:
             pass
         await ctx.reply(
             f'> 👌📨 Applied mute to {member.mention} for **{reason}** '
-            f'until {format_dt(time, "D")} (`{human_timedelta(time, suffix=False)}`)'
+            f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
         )
 
     @commands.command(name='unmute')
