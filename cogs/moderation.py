@@ -173,10 +173,10 @@ class Moderation(commands.Cog):
         if 913310292505686046 in member.roles:  # Checks for owner role
             data.is_owner = True
             is_staff = True
-        if 913315033134542889 in member.roles:  # Checks for admin role
+        elif 913315033134542889 in member.roles:  # Checks for admin role
             data.is_admin = True
             is_staff = True
-        if 913315033684008971 in member.roles:  # Checks for mod role
+        elif 913315033684008971 in member.roles:  # Checks for mod role
             data.is_mod = True
             is_staff = True
         await data.commit()
