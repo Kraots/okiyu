@@ -65,14 +65,14 @@ class Misc(commands.Cog):
         if rule is None:
             for index, rule in enumerate(rules.rules):
                 if em.description == disnake.embeds.EmptyEmbed:
-                    em.description = f'{index}. {rule}'
+                    em.description = f'{index + 1}. {rule}'
                 else:
-                    em.description += f'\n{index}. {rule}'
+                    em.description += f'\n{index + 1}. {rule}'
         else:
             if rule <= 0:
                 return await ctx.reply('Rule cannot be equal or less than `0`')
             try:
-                rules.rules[rule - 1]
+                em.description = rules.rules[rule - 1]
             except IndexError:
                 return await ctx.reply('Rule does not exist!')
 
