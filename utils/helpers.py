@@ -247,6 +247,10 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str
                 count += 1
         else:
             break
+    if count < 4:
+        for word in name.split():
+            if check_bad_word(word) is True:
+                count = 0
     else:
         if word is not None and member is not None:
             if count < 4:
@@ -255,7 +259,7 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str
                     new_nick = f'UnpingableName{usr.pos}'
                     await member.edit(nick=new_nick, reason='username not pingalbe or too short')
                     return await member.send(
-                        f'Your name has too few pingable letters or is too short so I changed it to `{new_nick}`\n'
+                        f'Your name has too few pingable letters, is a bad word or is too short so I changed it to `{new_nick}`\n'
                         'You can always change your nickname by using the command `!nick new_nick` in <#913330644875104306>'
                     )
                 kraots: utils.InvalidName = await utils.InvalidName.find_one({'_id': bot._owner_id})
