@@ -13,10 +13,10 @@ class Levels(commands.Cog):
 
     @commands.Cog.listener('on_message')
     async def update_data(self, message: disnake.Message):
-        if not message.author.bot:
+        if not message.author.bot and message.guild:
             data: Level = await Level.find_one({'_id': message.author.id})
             if data is None:
-                return await Level(id=message.author.id, xp=100, messages_count=1).commit()
+                return await Level(id=message.author.id, xp=5, messages_count=1).commit()
             if message.author.id == self.bot._owner_id:
                 data.xp += 30
             else:
@@ -47,11 +47,15 @@ class Levels(commands.Cog):
                     break
 
             lvl = int(-0.5 + 0.02 * (25 * 25 + 50 * total_xp) ** 0.5)
+            if lvl == 0:
+                lvl = 1
             current_xp = 50 * (lvl - 1) * lvl
+            if current_xp == 0:
+                current_xp = total_xp
             needed_xp = int(200 * ((1 / 2) * lvl))
             percent = round(float(current_xp * 100 / needed_xp), 2)
             guild = self.bot.get_guild(913310006814859334)
-            members_count = [m for m in guild.members if not m.bot]
+            members_count = len([m for m in guild.members if not m.bot])
 
             rank_card = await utils.create_rank_card(
                 member, lvl, rank, members_count, current_xp, needed_xp, percent
@@ -66,7 +70,7 @@ class Levels(commands.Cog):
         if level <= 0:
             return await ctx.reply('Level cannot be less or equal than `0`')
 
-        total_xp = 50 * (level - 1) * 335
+        total_xp = 50 * (level - 1) * level
         data: Level = await Level.find_one({'_id': member.id})
         if data is not None:
             data.xp = total_xp
