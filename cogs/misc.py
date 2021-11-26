@@ -58,7 +58,8 @@ class Misc(commands.Cog):
         """See how long the bot has been online for."""
 
         uptime = disnake.Embed(
-            description=f"Bot has been online for: `{utils.human_timedelta(dt=self.bot.uptime, suffix=False)}`",
+            description=f"Bot has been online since {utils.format_dt(self.bot.uptime, 'F')} "
+                        f"(`{utils.human_timedelta(dt=self.bot.uptime, suffix=False)}`)",
             color=utils.blurple
         )
         uptime.set_footer(text=f'Bot made by: {self.bot._owner}')
