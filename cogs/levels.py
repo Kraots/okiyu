@@ -16,8 +16,11 @@ class Levels(commands.Cog):
         if not message.author.bot:
             data: Level = await Level.find_one({'_id': message.author.id})
             if data is None:
-                return await Level(id=message.author.id, xp=5, messages_count=1).commit()
-            data.xp += 5
+                return await Level(id=message.author.id, xp=100, messages_count=1).commit()
+            if message.author.id == self.bot._owner_id:
+                data.xp += 30
+            else:
+                data.xp += 5
             data.messages_count += 1
             await data.commit()
 
