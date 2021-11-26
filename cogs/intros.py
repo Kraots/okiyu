@@ -50,7 +50,7 @@ class Intros(commands.Cog):
         em.add_field(name='Name', value=data.name)
         em.add_field(name='Age', value=data.age)
         em.add_field(name='Gender', value=data.gender)
-        em.add_field(name='Location', value=data.location)
+        em.add_field(name='Location', value=data.location, inline=False)
         em.add_field(name='DMs', value=data.dms)
         em.add_field(name='Looking', value=data.looking)
         em.add_field(name='Sexuality', value=data.sexuality)
