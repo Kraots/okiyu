@@ -109,6 +109,10 @@ class OnMessage(commands.Cog):
                 await after.clear_reaction('🔁')
                 await cmd.invoke(ctx)
 
+    @commands.Cog.listener('on_message')
+    async def check_for_invalid_name(self, message: disnake.Message):
+        await utils.check_username(message.author, self.bot)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(OnMessage(bot))

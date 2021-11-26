@@ -1,8 +1,17 @@
+from __future__ import annotations
+
 import asyncio
+import string
+from typing import TYPE_CHECKING
 from traceback import format_exception
 
 import disnake
 from disnake.ext import commands
+
+import utils
+
+if TYPE_CHECKING:
+    from main import Ukiyo
 
 __all__ = (
     'time_phaser',
@@ -10,7 +19,10 @@ __all__ = (
     'reraise',
     'ConfirmView',
     'ConfirmViewDMS',
+    'check_username',
 )
+
+allowed_letters = tuple(list(string.ascii_lowercase) + list(string.digits) + list(string.punctuation) + ['♡', ' ', '\\'])
 
 
 def time_phaser(seconds):
@@ -202,3 +214,38 @@ class ConfirmViewDMS(disnake.ui.View):
                 item.style = disnake.ButtonStyle.blurple
         await self.message.edit(view=self)
         self.stop()
+
+
+async def check_username(member: disnake.Member, bot: Ukiyo):
+    if member.id == bot._owner_id or member.bot:
+        return
+    name = member.display_name.lower()
+    count = 0
+    for letter in name:
+        if count < 4:
+            if letter not in allowed_letters:
+                count = 0
+            else:
+                count += 1
+        else:
+            break
+    else:
+        if count < 4:
+            usr: utils.InvalidName = await utils.InvalidName.find_one({'_id': member.id})
+            if usr is not None:
+                new_nick = f'UnpingableName{usr.pos}'
+                await member.edit(nick=new_nick, reason='username not pingalbe or too short')
+                return await member.send(
+                    f'Your name has too few pingable letters or is too short so I changed it to `{new_nick}`\n'
+                    'You can always change your nickname by using the command `!nick new_nick` in <#913330644875104306>'
+                )
+            kraots: utils.InvalidName = await utils.InvalidName.find_one({'_id': bot._owner_id})
+            kraots.last_pos += 1
+            await kraots.commit()
+            await utils.InvalidName(id=member.id, pos=kraots.last_pos).commit()
+            new_nick = f'UnpingableName{kraots.last_pos}'
+            await member.edit(nick=new_nick, reason='username not pingalbe or too short')
+            return await member.send(
+                f'Your name has too few pingable letters or is too short so I changed it to `{new_nick}`\n'
+                'You can always change your nickname by using the command `!nick new_nick` in <#913330644875104306>'
+            )
