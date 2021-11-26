@@ -14,11 +14,11 @@ class Context(commands.Context):
 
     @property
     def agree(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='agree', id=913517732249612348)
+        return disnake.PartialEmoji(name='agree', id=913895978535374898)
 
     @property
     def disagree(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='disagree', id=913517714696454184)
+        return disnake.PartialEmoji(name='disagree', id=913895999125196860)
 
     @disnake.utils.cached_property
     def replied_reference(self):
