@@ -21,8 +21,12 @@ roles = {
     'ukiyo:colour_roles:Broom': 913316658519609394
 }
 
+__all__ = (
+    'ColourButtonRoles',
+)
 
-class ButtonRoles(disnake.ui.View):
+
+class ColourButtonRoles(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 

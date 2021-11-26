@@ -7,3 +7,4 @@ from .formats import *  # noqa
 from .time import *  # noqa
 from .databases import *  # noqa
 from .views import *  # noqa
+from .ColourButtons import *  # noqa
