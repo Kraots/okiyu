@@ -73,6 +73,10 @@ class Intros(commands.Cog):
         unverified_role = guild.get_role(913329062347423775)
         data = await Intro.find_one({'_id': member.id})
         if data:
+            intro_channel = guild.get_channel(913331578606854184)
+            msg = await intro_channel.fetch_message(data.message_id)
+            if msg:
+                await msg.delete()
             await data.delete()
         await member.edit(roles=[unverified_role])
         await ctx.reply(f'`{member}` has been successfully unverified.')
@@ -81,6 +85,10 @@ class Intros(commands.Cog):
     async def on_member_remove(self, member: disnake.Member):
         data = await Intro.find_one({'_id': member.id})
         if data:
+            intro_channel = guild.get_channel(913331578606854184)
+            msg = await intro_channel.fetch_message(data.message_id)
+            if msg:
+                await msg.delete()
             await data.delete()
 
 
