@@ -216,12 +216,13 @@ class Moderation(commands.Cog):
 
         guild = self.bot.get_guild(913310006814859334)
         muted_by = guild.get_member(data.muted_by)
-        if ctx.author.id not in (muted_by, self.bot._owner_id):
-            if muted_by.top_role > ctx.author.top_role:
-                return await ctx.reply(
-                    f'{member.mention} was muted by `{muted_by}` which is in a higher role hierarcy than you. '
-                    'Only staff members of the same role or above can unmute that person.'
-                )
+        if data.bot is False:
+            if ctx.author.id not in (muted_by, self.bot._owner_id):
+                if muted_by.top_role > ctx.author.top_role:
+                    return await ctx.reply(
+                        f'{member.mention} was muted by `{muted_by}` which is in a higher role hierarcy than you. '
+                        'Only staff members of the same role or above can unmute that person.'
+                    )
 
         new_roles = [role for role in member.roles if role.id != 913376647422545951]
         if data.is_owner is True:
