@@ -29,14 +29,16 @@ class Welcome(commands.Cog):
             return f'{dt:%Y-%m-%d %H:%M} ({utils.human_timedelta(dt, accuracy=3)})'
 
         welcome = disnake.Embed(
-            description="\n\n***Please read the rules at*** <#750160850303582236>\n***You can always get a colour from*** <#779388444304211991>\n"
-                        "***For bot commands please use*** <#750160851822182486>\n\n"
+            description="\n\n***Please read the rules at*** <#913331459673178122>\n"
+                        "***You can always get a colour from*** <#913331502761271296>\n"
+                        "***Don't forget to get your roles from*** <#913336089492717618>"
+                        "***For bot commands please use*** <#913330644875104306>\n\n"
                         "Enjoy your stay and don't forget to do your intro by typing `!intro` in a bots channel ^-^\n\n",
             color=utils.pastel
         )
         welcome.set_thumbnail(url=member.display_avatar)
-        welcome.set_footer(text=f"Created: {format_date(member.created_at.replace(tzinfo=None))}", icon_url=member.display_avatar)
-        msg = f'Hey {member.mention}, welcome to **ViHill Corner!** \nYou are our **{member_count}** member.\n\n\n_ _'
+        welcome.set_footer(text=f"Created: {format_date(member.created_at)}", icon_url=member.display_avatar)
+        msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{member_count}** member.\n\n\n_ _'
         await welcome_channel.send(msg, embed=welcome)
 
 
