@@ -87,16 +87,21 @@ class Marriages(commands.Cog):
                 return await msg.edit(content=e, view=view)
 
     @commands.command()
-    async def marriedsince(self, ctx: Context):
-        """See the date and how much it's been since you married your partner if you have one."""
+    async def marriedwho(self, ctx: Context, *, member: disnake.Member = None):
+        """See who, the date and how much it's been since the member/you married their/your partner if they/you have one."""
 
+        member = member or ctx.author
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
         if data is None:
             return await ctx.reply('You are not married to anyone.')
         guild = self.bot.get_guild(913310006814859334)
         mem = guild.get_member(data.married_to)
-        em = disnake.Embed(title=f'Married to {mem.display_name}')
-        em.description = f'You\'re married to {mem.mention} '\
+        em = disnake.Embed(title=f'Married to {mem.display_name}', colour=utils.blurple)
+        if member == ctx.author:
+            i = 'You\'re married to'
+        else:
+            i = f'{member.mention} is married to'
+        em.description = f'{i} {mem.mention} ' \
                          f'since {utils.format_dt(data.married_since, "F")} ' \
                          f'(`{utils.human_timedelta(data.married_since)}`)'
         await ctx.reply(embed=em)
