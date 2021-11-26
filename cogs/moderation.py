@@ -241,6 +241,7 @@ class Moderation(commands.Cog):
 
     @tasks.loop(seconds=15.0)
     async def check_mutes(self):
+        await self.bot.wait_until_ready()
         mutes: list[Mutes] = await Mutes.find().sort('muted_until', 1).to_list(5)
         for mute in mutes:
             if datetime.utcnow() >= mute.muted_until:
