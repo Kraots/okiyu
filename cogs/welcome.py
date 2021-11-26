@@ -41,6 +41,11 @@ class Welcome(commands.Cog):
         msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{member_count}** member.\n\n\n_ _'
         await welcome_channel.send(msg, embed=welcome)
 
+        mute: utils.Mutes = await utils.Mutes.find_one({'_id': member.id})
+        if mute is not None:
+            muted_role = guild.get_role(913376647422545951)
+            await member.add_roles(muted_role, reason='[MUTE EVASION] user joined but was still muted in the database')
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Welcome(bot))
