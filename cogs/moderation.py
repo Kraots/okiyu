@@ -244,6 +244,11 @@ class Moderation(commands.Cog):
         it will only show for that member, including the reason they got muted.
         """
 
+        in_dm = False
+        if isinstance(ctx.channel, disnake.DMChannel):
+            member = None
+            in_dm = True
+
         guild = self.bot.get_guild(913310006814859334)
         if member is None:
             entries = []
@@ -268,9 +273,8 @@ class Moderation(commands.Cog):
             paginator = RoboPages(source, ctx=ctx, compact=True)
             await paginator.start()
         else:
-            if isinstance(ctx.channel, disnake.DMChannel):
+            if in_dm is True:
                 member = ctx.author
-
             mute: Mutes = await Mutes.find_one({'_id': member.id})
             if mute is None:
                 if member == ctx.author:
