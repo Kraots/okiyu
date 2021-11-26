@@ -4,7 +4,9 @@ from .dbs import (  # noqa
 )
 
 from .db_intros import Intro
+from .db_rules import Rules
 
 __all__ = (
     'Intro',
+    'Rules'
 )

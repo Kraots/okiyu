@@ -4,7 +4,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
-from utils import Context
+from utils import Context, Rules
 
 from main import Ukiyo
 
@@ -52,6 +52,70 @@ class Misc(commands.Cog):
         """Sends an invite that never expires."""
 
         await ctx.send('https://discord.gg/fQ6Nb4ac9x')
+
+    @commands.group(name='rules', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
+    async def server_rules(self, ctx: Context, *, rule: int = None):
+        """Sends the server's rules. If ``rule`` is given, it will only send that rule."""
+
+        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        if not rules:
+            return await ctx.reply('There are currently no rules set. Please contact an admin about this!')
+        em = disnake.Embed(title='Rules', color=utils.blurple)
+
+        if rule is None:
+            for index, rule in enumerate(rules.rules):
+                if em.description == disnake.embeds.EmptyEmbed:
+                    em.description = f'{index}. {rule}'
+                else:
+                    em.description += f'\n{index}. {rule}'
+        else:
+            try:
+                rules.rules[rule - 1]
+            except IndexError:
+                return await ctx.reply('Rule does not exist!')
+
+        await ctx.send(embed=em, reference=ctx.replied_reference)
+
+    @server_rules.command(name='add')
+    @utils.is_admin()
+    async def server_rules_add(self, ctx: Context, *, rule: str):
+        """Adds a rule to the server's rules."""
+
+        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        if not rules:
+            await Rules(id=self.bot._owner_id, rules=[rule]).commit
+        else:
+            rules.rules += [rule]
+            await rules.commit()
+
+        await ctx.reply(f'> 👌 `{rule}` successfully **added** to the rules.')
+
+    @server_rules.command(name='remove', aliases=('delete',))
+    @utils.is_admin()
+    async def server_rules_remove(self, ctx: Context, *, rule: int):
+        """Removes a rule from the server's rules by its number."""
+
+        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        if not rules:
+            return await ctx.reply('There are currently no rules set.')
+        else:
+            rules.rules.pop(rule - 1)
+            await rules.commit()
+
+        await ctx.reply(f'> 👌 `{rule}` successfully **removed** to the rules.')
+
+    @server_rules.command(name='clear')
+    @utils.is_owner()
+    async def server_rules_clear(self, ctx: Context):
+        """Deletes all the rules."""
+
+        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        if not rules:
+            return await ctx.reply('There are currently no rules set.')
+        else:
+            await rules.delete()
+
+        await ctx.reply('> 👌 successfully **cleared** to the rules.')
 
 
 def setup(bot: Ukiyo):
