@@ -163,7 +163,6 @@ class Moderation(commands.Cog):
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
-        is_staff = False
         time = time_and_reason.dt
         reason = time_and_reason.arg
         data = Mutes(
@@ -173,25 +172,17 @@ class Moderation(commands.Cog):
         )
         if 913310292505686046 in member.roles:  # Checks for owner
             data.is_owner = True
-            is_staff = True
         elif 913315033134542889 in member.roles:  # Checks for admin
             data.is_admin = True
-            is_staff = True
         elif 913315033684008971 in member.roles:  # Checks for mod
             data.is_mod = True
-            is_staff = True
         await data.commit()
 
         guild = self.bot.get_guild(913310006814859334)
         muted_role = guild.get_role(913376647422545951)
-        if is_staff is True:
-            new_roles = [role for role in member.roles
-                         if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
-                         ] + muted_role
-        else:
-            new_roles = [role for role in member.roles
-                         if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)]
-
+        new_roles = [role for role in member.roles
+                     if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
+                     ] + [muted_role]
         await member.edit(roles=new_roles, reason=f'[MUTE] {ctx.author} ({ctx.author.id}): {reason}')
         try:
             await member.send(
