@@ -79,7 +79,7 @@ class Intros(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data = Intro.find_one({'_id': member.id})
+        data = await Intro.find_one({'_id': member.id})
         if data:
             await data.delete()
 
