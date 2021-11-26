@@ -33,7 +33,7 @@ class Welcome(commands.Cog):
                         "***You can always get a colour from*** <#913331502761271296>\n"
                         "***Don't forget to get your roles from*** <#913336089492717618>\n"
                         "***For bot commands please use*** <#913330644875104306>\n\n"
-                        "Enjoy your stay and don't forget to do your intro by typing `!intro` in a bots channel ^-^\n\n",
+                        "> Enjoy your stay ^-^\n\n",
             color=utils.pastel
         )
         welcome.set_thumbnail(url=member.display_avatar)
