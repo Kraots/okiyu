@@ -23,6 +23,7 @@ class Moderation(commands.Cog):
     """Staff related commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.check_mutes.start()
 
     @property
     def display_emoji(self) -> str:
@@ -239,7 +240,7 @@ class Moderation(commands.Cog):
         await self.bot.reraise(ctx, error)
 
     @tasks.loop(seconds=15.0)
-    async def check_unmutes(self):
+    async def check_mutes(self):
         mutes: list[Mutes] = await Mutes.find().sort('muted_until', 1).to_list(5)
         for mute in mutes:
             if datetime.utcnow() >= mute.muted_until:
