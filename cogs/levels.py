@@ -152,7 +152,7 @@ class Levels(commands.Cog):
         index = 0
         data = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
-        guild = self.bot.get_guild(750160850077089853)
+        guild = self.bot.get_guild(913310006814859334)
 
         results: list[Level] = await Level.find().sort('messages_count', -1).to_list(100000)
         for result in results:
