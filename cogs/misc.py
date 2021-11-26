@@ -61,7 +61,7 @@ class Misc(commands.Cog):
             description=f"Bot has been online for: `{utils.human_timedelta(dt=self.bot.uptime, suffix=False)}`",
             color=utils.blurple
         )
-        uptime.set_footer(text=f'Bot made by: {self.bot._owner}', icon_url=self.bot.user.display_avatar)
+        uptime.set_footer(text=f'Bot made by: {self.bot._owner}')
         await ctx.send(embed=uptime)
 
     @commands.command(name='invite', aliases=('inv',))
