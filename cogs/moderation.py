@@ -170,13 +170,13 @@ class Moderation(commands.Cog):
             muted_by=ctx.author.id,
             muted_until=time
         )
-        if 913310292505686046 in member.roles:  # Checks for owner role
+        if 913310292505686046 in member.roles:  # Checks for owner
             data.is_owner = True
             is_staff = True
-        elif 913315033134542889 in member.roles:  # Checks for admin role
+        elif 913315033134542889 in member.roles:  # Checks for admin
             data.is_admin = True
             is_staff = True
-        elif 913315033684008971 in member.roles:  # Checks for mod role
+        elif 913315033684008971 in member.roles:  # Checks for mod
             data.is_mod = True
             is_staff = True
         await data.commit()
@@ -216,13 +216,13 @@ class Moderation(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         new_roles = [role for role in member.roles if not role.id == 913376647422545951]
         if data.is_owner is True:
-            owner_role = guild.get_role(913310292505686046)
+            owner_role = guild.get_role(913310292505686046)  # Check for owner
             new_roles += [owner_role]
         elif data.is_admin is True:
-            admin_role = guild.get_role(913315033134542889)
+            admin_role = guild.get_role(913315033134542889)  # Check for admin
             new_roles += [admin_role]
         elif data.is_mod is True:
-            mod_role = guild.get_role(913315033684008971)
+            mod_role = guild.get_role(913315033684008971)  # Check for mod
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[UNMUTE] Unmuted by {ctx.author} ({ctx.author.id})')
         try:
@@ -248,13 +248,13 @@ class Moderation(commands.Cog):
                 if member:
                     new_roles = [role for role in member.roles if not role.id == 913376647422545951]
                     if mute.is_owner is True:
-                        owner_role = guild.get_role(913310292505686046)
+                        owner_role = guild.get_role(913310292505686046)  # Check for owner
                         new_roles += [owner_role]
                     elif mute.is_admin is True:
-                        admin_role = guild.get_role(913315033134542889)
+                        admin_role = guild.get_role(913315033134542889)  # Check for admin
                         new_roles += [admin_role]
                     elif mute.is_mod is True:
-                        mod_role = guild.get_role(913315033684008971)
+                        mod_role = guild.get_role(913315033684008971)  # Check for mod
                         new_roles += [mod_role]
                     await member.edit(roles=new_roles, reason='[UNMUTE] Mute Expired.')
                     try:
