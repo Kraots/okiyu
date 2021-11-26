@@ -31,7 +31,7 @@ class Welcome(commands.Cog):
         welcome = disnake.Embed(
             description="\n\n***Please read the rules at*** <#913331459673178122>\n"
                         "***You can always get a colour from*** <#913331502761271296>\n"
-                        "***Don't forget to get your roles from*** <#913336089492717618>"
+                        "***Don't forget to get your roles from*** <#913336089492717618>\n"
                         "***For bot commands please use*** <#913330644875104306>\n\n"
                         "Enjoy your stay and don't forget to do your intro by typing `!intro` in a bots channel ^-^\n\n",
             color=utils.pastel
