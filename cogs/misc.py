@@ -72,7 +72,8 @@ class Misc(commands.Cog):
             if rule <= 0:
                 return await ctx.reply('Rule cannot be equal or less than `0`')
             try:
-                em.description = rules.rules[rule - 1]
+                _rule = rules.rules[rule - 1]
+                em.description = f'`{rule}.` {_rule}'
             except IndexError:
                 return await ctx.reply('Rule does not exist!')
 
