@@ -147,7 +147,7 @@ class Levels(commands.Cog):
 
     @_msgs.command(name='leaderboard', aliases=('top', 'lb',))
     async def msg_top(self, ctx: Context):
-        """See the top 15 most active members of the server and when the top restarts."""
+        """See a top of most active users."""
 
         index = 0
         data = []
@@ -171,7 +171,6 @@ class Levels(commands.Cog):
                     data.append(to_append)
         source = utils.FieldPageSource(data, per_page=10)
         source.embed.title = 'Top Most Active Users'
-        await self.message.delete()
         pages = utils.RoboPages(source, ctx=ctx)
         await pages.start()
 
