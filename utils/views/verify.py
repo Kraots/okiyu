@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from typing import TYPE_CHECKING
 
 import disnake
@@ -187,8 +188,8 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         msg = await intro_channel.send(embed=em)
 
         if to_update is False:
-            unverified_role = guild.get_role(913329062347423775)
-            await usr.remove_roles(unverified_role)
+            role = guild.get_role(random.choice(utils.all_colour_roles))
+            await usr.edit(roles=[role])
             await utils.Intro(
                 id=user_id,
                 name=name,
