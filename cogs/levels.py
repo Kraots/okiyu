@@ -145,6 +145,36 @@ class Levels(commands.Cog):
         em.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
         await ctx.send(embed=em)
 
+    @_msgs.command(name='leaderboard', aliases=('top', 'lb',))
+    async def msg_top(self, ctx: Context):
+        """See the top 15 most active members of the server and when the top restarts."""
+
+        index = 0
+        data = []
+        top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
+        guild = self.bot.get_guild(750160850077089853)
+
+        results: list[Level] = await Level.find().sort('messages_count', -1).to_list(100000)
+        for result in results:
+            if result.messages_count != 0:
+                index += 1
+                mem = guild.get_member(result.id)
+                if index in (1, 2, 3):
+                    place = top_3_emojis[index]
+                else:
+                    place = f'`#{index:,}`'
+                if mem == ctx.author:
+                    to_append = (f'**{place} {mem.name} (YOU)**', f'**{result.messages_count:,}** messages')
+                    data.append(to_append)
+                else:
+                    to_append = (f'{place} {mem.name}', f'**{result.messages_count:,}** messages')
+                    data.append(to_append)
+        source = utils.FieldPageSource(data, per_page=10)
+        source.embed.title = 'Top Most Active Users'
+        await self.message.delete()
+        pages = utils.RoboPages(source, ctx=ctx)
+        await pages.start()
+
     @_msgs.command(name='add')
     @utils.is_admin()
     async def msg_add(self, ctx: Context, member: disnake.Member, amount: str):
@@ -167,7 +197,7 @@ class Levels(commands.Cog):
         await ctx.send(content=f'Added `{amount:,}` messages to {member.mention}')
 
     @_msgs.command(name='set')
-    @utils.is_owner()
+    @utils.is_admin()
     async def msg_set(self, ctx: Context, member: disnake.Member, amount: str):
         """Set the amount of messages for the member."""
 
@@ -188,7 +218,7 @@ class Levels(commands.Cog):
         await ctx.send(content=f'Added `{amount:,}` messages to {member.mention}')
 
     @_msgs.command(name='reset')
-    @utils.is_owner()
+    @utils.is_admin()
     async def msg_reset(self, ctx: Context, member: disnake.Member):
         """Reset the amount of total messages for the member."""
 
