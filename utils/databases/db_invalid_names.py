@@ -11,7 +11,7 @@ instance = Instance(database2)
 class InvalidName(Document):
     id = IntField(attribute='_id', required=True)
     pos = IntField()
-    total_invalid_names = ListField(IntField())
+    last_pos = IntField()
 
     class Meta:
         collection_name = 'InvalidNameFilter'
