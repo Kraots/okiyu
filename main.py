@@ -69,6 +69,12 @@ class Ukiyo(commands.Bot):
 
         if self.added_views is False:
             self.add_view(utils.Verify(self), message_id=913512065799421953)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763247927218177)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763329816821780)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763420644462603)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763496448110603)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763571853303858)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763639922659358)
             self.added_views = True
 
         print('Bot is ready!')
