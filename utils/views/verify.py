@@ -111,7 +111,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         while True:
             _dms = await bot.wait_for('message', timeout=180.0, check=check)
             dms = _dms.content
-            if dms not in ('open', 'closed', 'ask'):
+            if dms.lower() not in ('open', 'closed', 'ask'):
                 await _dms.reply('Must only be `open` | `closed` | `ask`')
             else:
                 break
@@ -120,7 +120,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         while True:
             _looking = await bot.wait_for('message', timeout=180.0, check=check)
             looking = _looking.content
-            if looking not in ('yes', 'no'):
+            if looking.lower() not in ('yes', 'no'):
                 await _looking.reply('Must only be `yes` | `no`')
             else:
                 break
@@ -139,7 +139,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         while True:
             _status = await bot.wait_for('message', timeout=180.0, check=check)
             status = _status.content
-            if status not in ('single', 'taken', 'complicated'):
+            if status.lower() not in ('single', 'taken', 'complicated'):
                 await _status.reply('Must only be `single` | `taken` | `complicated`')
             else:
                 break
