@@ -8,6 +8,23 @@ from utils import Context, Rules
 
 from main import Ukiyo
 
+SERVER_AD = """
+☞ Ukiyo ☜
+✯ Looking for a great partner or friendship? This is the perfect server!! ✯
+
+⇨ This server:
+➢ Amazing owner, admins and mods ☺︎
+➢ Exclusive bot ☻︎
+➢ Roles and intros ☺︎
+➢ Possible relationships ☻︎
+➢ An active and fun server ☺︎
+➢ Exclusive emotes ☻︎
+➢ And over all an inclusive server for everyone ☺︎
+
+
+☀︎ Link: https://discord.gg/fQ6Nb4ac9x ☀︎
+"""
+
 
 class Misc(commands.Cog):
     """Miscellaneous commands."""
@@ -52,6 +69,26 @@ class Misc(commands.Cog):
         """Sends an invite that never expires."""
 
         await ctx.send('https://discord.gg/fQ6Nb4ac9x')
+
+    @commands.command(aliases=('ad',))
+    async def serverad(self, ctx: Context):
+        """See the server's ad."""
+
+        await ctx.message.delete()
+        ad = disnake.Embed(color=utils.blurple, title='Here\'s the ad to the server:', description=SERVER_AD)
+        ad.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
+
+        await ctx.send(embed=ad, reference=ctx.replied_reference)
+
+    @commands.command(aliases=('rad',))
+    async def rawad(self, ctx: Context):
+        """See the server's ad but in raw format."""
+
+        await ctx.message.delete()
+        ad = disnake.Embed(color=utils.blurple, title='Here\'s the raw ad version of the server:', description=f'``​`{SERVER_AD}``​`')
+        ad.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
+
+        await ctx.send(embed=ad, reference=ctx.replied_reference)
 
     @commands.group(
         name='rules', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('rule',)
