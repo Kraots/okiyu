@@ -166,6 +166,10 @@ class Moderation(commands.Cog):
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply('That member is above or equal to you. Cannot do that.')
 
+        usr = await Mutes.find_one({'_id': member.id})
+        if usr is not None:
+            return await ctx.reply(f'`{member}` is already muted.')
+
         time = time_and_reason.dt
         reason = time_and_reason.arg
         data = Mutes(
