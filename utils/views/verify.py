@@ -75,8 +75,8 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                     pass
                 return await ctx.reply('Ran out of time.')
             else:
-                if age < 13 or age > 19:
-                    await ctx.send('Sorry! This dating server is only for people between the ages of 13-19.')
+                if age < 14 or age > 19:
+                    await ctx.send('Sorry! This dating server is only for people between the ages of 14-19.')
                     try:
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
@@ -237,7 +237,7 @@ class Verify(View):
         if inter.author.id in self.bot.verifying:
             return await inter.followup.send(
                 'Please complete your current verification before proceeding again!', ephemeral=True
-        )
+            )
         self.bot.verifying.append(inter.author.id)
         try:
             msg = await inter.author.send('Starting the intro creation process...')
