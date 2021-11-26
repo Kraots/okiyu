@@ -74,10 +74,14 @@ class Levels(commands.Cog):
             await ctx.reply(file=rank_card)
 
     @level_cmd.command(name='set')
+    @utils.is_owner()
     async def level_set(self, ctx: Context, level: int, *, member: disnake.Member = None):
         """Set the level for somebody."""
 
         member = member or ctx.author
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
         if level < 0:
             return await ctx.reply('Level cannot be less than `0`')
 
@@ -123,6 +127,95 @@ class Levels(commands.Cog):
             source.embed.title = 'Rank Leaderboard'
             pages = utils.RoboPages(source, ctx=ctx)
             await pages.start()
+
+    @commands.group(
+        name='messages', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('msg',)
+    )
+    async def _msgs(self, ctx: Context, *, member: disnake.Member = None):
+        """Check yours or somebody else's total messages."""
+
+        member = member or ctx.author
+
+        user_db: Level = await Level.find_one({'_id': member.id})
+        if user_db is None:
+            return await ctx.reply(f'`{member.display_name}` sent no messages.')
+        em = disnake.Embed(color=utils.blurple)
+        em.set_author(name=f'{member.display_name}\'s message stats', icon_url=member.display_avatar)
+        em.add_field(name='Total Messages', value=f"`{user_db.messages_count:,}`")
+        em.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
+        await ctx.send(embed=em)
+
+    @_msgs.command(name='add')
+    @utils.is_admin()
+    async def msg_add(self, ctx: Context, member: disnake.Member, amount: str):
+        """Add a certain amount of messages for the member."""
+
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+        usr_db: Level = await Level.find_one({'_id': member.id})
+        if usr_db is None:
+            return await ctx.reply('User not in the database.')
+
+        try:
+            amount = amount.replace(',', '')
+            amount = int(amount)
+        except ValueError:
+            return await ctx.reply('The amount must be an integer 🥺')
+
+        usr_db.messages_count += amount
+        await usr_db.commit()
+        await ctx.send(content=f'Added `{amount:,}` messages to {member.mention}')
+
+    @_msgs.command(name='set')
+    @utils.is_owner()
+    async def msg_set(self, ctx: Context, member: disnake.Member, amount: str):
+        """Set the amount of messages for the member."""
+
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        usr_db: Level = await Level.find_one({'_id': member.id})
+        if usr_db is None:
+            return await ctx.reply('User not in the database.')
+
+        try:
+            amount = amount.replace(',', '')
+            amount = int(amount)
+        except ValueError:
+            return await ctx.reply('The amount must be an integer 🥺')
+
+        usr_db.messages_count = amount
+        await ctx.send(content=f'Added `{amount:,}` messages to {member.mention}')
+
+    @_msgs.command(name='reset')
+    @utils.is_owner()
+    async def msg_reset(self, ctx: Context, member: disnake.Member):
+        """Reset the amount of total messages for the member."""
+
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        usr_db: Level = await Level.find_one({'_id': member.id})
+        if usr_db is None:
+            return await ctx.reply('User not in the database.')
+
+        view = utils.ConfirmView(ctx, f"{ctx.author.mention} Did not react in time.")
+        view.message = msg = await ctx.send(
+            f"Are you sure you want to reset the total message count for member {member.mention}?",
+            view=view
+        )
+        await view.wait()
+        if view.response is True:
+            usr_db.messages_count = 0
+            await usr_db.commit()
+            return await msg.edit(
+                content=f'The total message count for member **{member}** has been reset successfully.',
+            )
+
+        elif view.response is False:
+            return await msg.edit(
+                content=f"Command to reset the message count for user `{member}` has been cancelled.",
+            )
 
 
 def setup(bot: Ukiyo):
