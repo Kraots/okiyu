@@ -44,7 +44,7 @@ class Intros(commands.Cog):
                     f'`{member}` doesn\'t have an intro. Please contact a staff member to unverify them! This is a bug.'
                 )
 
-        em = disnake.Embed()
+        em = disnake.Embed(colour=member.color)
         em.set_author(name=member, icon_url=member.display_avatar)
         em.set_thumbnail(url=member.display_avatar)
         em.add_field(name='Name', value=data.name)
