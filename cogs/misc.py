@@ -85,7 +85,10 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if not rules:
-            await Rules(id=self.bot._owner_id, rules=[rule]).commit
+            await Rules(
+                id=self.bot._owner_id,
+                rules=[rule]
+            ).commit()
         else:
             rules.rules += [rule]
             await rules.commit()
