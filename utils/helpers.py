@@ -54,7 +54,7 @@ def clean_code(content):
         return content
 
 
-async def reraise(ctx, error):
+async def reraise(ctx: utils.Context, error):
     if isinstance(error, commands.NotOwner):
         error = disnake.Embed(title="ERROR", description="Command Error: You do not own this bot!")
         error.set_footer(text='This is an owner only command')
@@ -104,7 +104,7 @@ async def reraise(ctx, error):
                         "here is the error:**",
                 embed=em
             )
-            await ctx.send('> <:disagree:913517714696454184> An error occurred')
+            await ctx.send(f'> {ctx.disagree} An error occurred')
         else:
             await ctx.send(embed=em)
 

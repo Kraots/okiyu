@@ -26,6 +26,12 @@ class Moderation(commands.Cog):
     """Staff related commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.ignored_channels = (
+            913331371282423808, 913331459673178122, 913331535170637825, 913336089492717618,
+            913331502761271296, 913331578606854184, 913332335473205308, 913332408537976892,
+            913332431417925634, 913332511789178951, 913425733567799346, 913445987102654474
+        )
+
         self.check_mutes.start()
 
     @property
@@ -39,12 +45,81 @@ class Moderation(commands.Cog):
 
         await ctx.message.delete()
         purged = await ctx.channel.purge(limit=amount)
-        msg = await ctx.send(f'> <:agree:913517732249612348> Deleted `{len(purged):,}` messages')
+        msg = await ctx.send(f'> {ctx.agree} Deleted `{len(purged):,}` messages')
         await asyncio.sleep(5.0)
         try:
             await msg.delete()
         except disnake.HTTPException:
             pass
+
+    @commands.group(name='lock', invoke_without_command=True, case_insensitive=True)
+    @is_mod()
+    async def lock_channel(self, ctx: Context, channel: disnake.TextChannel = None):
+        """
+        Locks the channel.
+        No one will be able to talk in that channel except the mods, but everyone will still see the channel.
+        """
+
+        channel = channel or ctx.channel
+
+        role = channel.guild.default_role
+        if channel.id not in self.ignored_channels:
+            overwrites = channel.overwrites_for(role)
+            overwrites.send_messages = False
+            await channel.set_permissions(role, overwrite=overwrites, reason=f'Channel locked by: "{ctx.author}"')
+        else:
+            return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
+        await ctx.reply('> 🔒 Channel Locked!')
+
+    @lock_channel.command(name='all')
+    @is_mod()
+    async def lock_all_channels(self, ctx: Context):
+        """
+        Locks *all* the channels that are have not been locked, but omits the channels that the users can't see or talk in already.
+        """
+
+        role = ctx.guild.default_role
+        for channel in ctx.guild.text_channels:
+            if channel.id not in self.ignored_channels:
+                if channel.overwrites_for(role).send_messages is not False:
+                    overwrites = channel.overwrites_for(role)
+                    overwrites.send_messages = False
+                    await channel.set_permissions(role, overwrite=overwrites, reason=f'Channel locked by: "{ctx.author}"')
+        await ctx.reply('> 🔒 All the unlocked channels have been locked!')
+
+    @commands.group(name='unlock', invoke_without_command=True, case_insensitive=True)
+    @is_mod()
+    async def unlock_channel(self, ctx: Context, channel: disnake.TextChannel = None):
+        """
+        Unlocks the channel.
+        """
+
+        channel = channel or ctx.channel
+
+        role = channel.guild.default_role
+        if channel.id not in self.ignored_channels:
+            overwrites = channel.overwrites_for(role)
+            overwrites.send_messages = None
+            await channel.set_permissions(role, overwrite=overwrites, reason=f'Channel unlocked by: "{ctx.author}"')
+        else:
+            return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
+        await ctx.reply('> 🔓 Channel Unlocked!')
+
+    @unlock_channel.command(name='all')
+    @is_mod()
+    async def unlock_all_channels(self, ctx: Context):
+        """
+        Unlocks *all the already locked* channels, but omits the channels that the users can't see or talk in already.
+        """
+
+        role = ctx.guild.default_role
+        for channel in ctx.guild.text_channels:
+            if channel.id not in self.ignored_channels:
+                if channel.overwrites_for(role).send_messages is not None:
+                    overwrites = channel.overwrites_for(role)
+                    overwrites.send_messages = None
+                    await channel.set_permissions(role, overwrite=overwrites, reason=f'Channel unlocked by: "{ctx.author}"')
+        await ctx.reply('> 🔓 All locked channels have been unlocked!')
 
     @commands.command(name='ban')
     @is_admin()
@@ -75,76 +150,6 @@ class Moderation(commands.Cog):
             pass
         await member.kick(reason=f'[KICK] {ctx.author} ({ctx.author.id}): {reason}')
         await ctx.send(f'> 👌 Kicked {member} for **{reason}**')
-
-    @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
-    @is_admin()
-    async def staff_make(self, ctx: Context):
-        """Shows this help."""
-
-        await ctx.send_help('make')
-
-    @staff_make.command(name='admin')
-    @is_owner()
-    async def staff_make_admin(self, ctx: Context, *, member: disnake.Member):
-        """Make somebody an admin."""
-
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
-
-        guild = self.bot.get_guild(913310006814859334)
-        if 913315033134542889 in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is already an admin!')
-        admin_role = guild.get_role(913315033134542889)
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
-        await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
-
-    @staff_make.command(name='moderator', aliases=('mod',))
-    @is_admin()
-    async def staff_make_mod(self, ctx: Context, *, member: disnake.Member):
-        """Make somebody a moderator."""
-
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
-
-        guild = self.bot.get_guild(913310006814859334)
-        if 913315033684008971 in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is already a moderator!')
-        mod_role = guild.get_role(913315033684008971)
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
-        await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
-
-    @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
-    @is_admin()
-    async def staff_remove(self, ctx: Context):
-        """Shows this help."""
-
-        await ctx.send_help('remove')
-
-    @staff_remove.command(name='admin')
-    @is_owner()
-    async def staff_remove_admin(self, ctx: Context, *, member: disnake.Member):
-        """Remove an admin."""
-
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
-
-        if 913315033134542889 not in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is not a moderator!')
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
-        await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
-
-    @staff_remove.command(name='moderator', aliases=('mod',))
-    @is_admin()
-    async def staff_remove_mod(self, ctx: Context, *, member: disnake.Member):
-        """Remove a moderator."""
-
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
-
-        if 913315033684008971 not in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is not a moderator!')
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971])
-        await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
 
     @commands.command(name='mute')
     @is_mod()
@@ -322,6 +327,76 @@ class Moderation(commands.Cog):
                     except disnake.Forbidden:
                         pass
                 await mute.delete()
+
+    @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
+    @is_admin()
+    async def staff_make(self, ctx: Context):
+        """Shows this help."""
+
+        await ctx.send_help('make')
+
+    @staff_make.command(name='admin')
+    @is_owner()
+    async def staff_make_admin(self, ctx: Context, *, member: disnake.Member):
+        """Make somebody an admin."""
+
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        guild = self.bot.get_guild(913310006814859334)
+        if 913315033134542889 in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is already an admin!')
+        admin_role = guild.get_role(913315033134542889)
+        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
+        await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
+
+    @staff_make.command(name='moderator', aliases=('mod',))
+    @is_admin()
+    async def staff_make_mod(self, ctx: Context, *, member: disnake.Member):
+        """Make somebody a moderator."""
+
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        guild = self.bot.get_guild(913310006814859334)
+        if 913315033684008971 in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is already a moderator!')
+        mod_role = guild.get_role(913315033684008971)
+        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
+        await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
+
+    @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
+    @is_admin()
+    async def staff_remove(self, ctx: Context):
+        """Shows this help."""
+
+        await ctx.send_help('remove')
+
+    @staff_remove.command(name='admin')
+    @is_owner()
+    async def staff_remove_admin(self, ctx: Context, *, member: disnake.Member):
+        """Remove an admin."""
+
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        if 913315033134542889 not in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is not a moderator!')
+        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
+        await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
+
+    @staff_remove.command(name='moderator', aliases=('mod',))
+    @is_admin()
+    async def staff_remove_mod(self, ctx: Context, *, member: disnake.Member):
+        """Remove a moderator."""
+
+        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+
+        if 913315033684008971 not in (r.id for r in member.roles):
+            return await ctx.reply(f'`{member}` is not a moderator!')
+        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971])
+        await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
 
 
 def setup(bot: Ukiyo):
