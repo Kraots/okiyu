@@ -258,12 +258,12 @@ class Moderation(commands.Cog):
                 index += 1
                 key = guild.get_member(mute.id)
                 if key is None:
-                    key = f'`{index}.` [LEFT] {mute.id}'
-                value = f'Muted By: {guild.get_member(mute.muted_by)}' \
+                    key = f'[LEFT] {mute.id}'
+                value = f'Muted By: {guild.get_member(mute.muted_by)}\n' \
                         f'Reason: {mute.reason}\n' \
-                        f'Expires At: {format_dt(mute.muted_until, "F")}' \
+                        f'Expires At: {format_dt(mute.muted_until, "F")}\n' \
                         f'Left: {human_timedelta(mute.muted_until, suffix=False)}\n\n'
-                entries.append((key, value))
+                entries.append((f'`{index}`. {key}', value))
             if len(entries) == 0:
                 return await ctx.reply('There are no current mutes.')
 
@@ -283,9 +283,9 @@ class Moderation(commands.Cog):
                     return await ctx.reply(f'`{member}` is not muted.')
             em = disnake.Embed()
             em.set_author(name=member, icon_url=member.display_avatar)
-            em.description = f'Muted By: {guild.get_member(mute.muted_by)}' \
+            em.description = f'Muted By: {guild.get_member(mute.muted_by)}\n' \
                              f'Reason: {mute.reason}\n' \
-                             f'Expires At: {format_dt(mute.muted_until, "F")}' \
+                             f'Expires At: {format_dt(mute.muted_until, "F")}\n' \
                              f'Left: {human_timedelta(mute.muted_until, suffix=False)}'
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.reply(embed=em)
