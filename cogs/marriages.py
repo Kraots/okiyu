@@ -93,9 +93,13 @@ class Marriages(commands.Cog):
         """See who, the date and how much it's been since the member/you married their/your partner if they/you have one."""
 
         member = member or ctx.author
-        data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
+        data: Marriage = await Marriage.find_one({'_id': member.id})
         if data is None:
-            return await ctx.reply('You are not married to anyone.')
+            if member == ctx.author:
+                i = 'You\'re not married to anyone.'
+            else:
+                i = f'{member.mention} is not married to anyone.'
+            return await ctx.reply(i)
         guild = self.bot.get_guild(913310006814859334)
         mem = guild.get_member(data.married_to)
         em = disnake.Embed(title=f'Married to {mem.display_name}', colour=utils.blurple)
