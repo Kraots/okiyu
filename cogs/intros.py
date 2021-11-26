@@ -93,6 +93,7 @@ class Intros(commands.Cog):
     async def on_member_remove(self, member: disnake.Member):
         data = await Intro.find_one({'_id': member.id})
         if data:
+            guild = self.bot.get_guild(913310006814859334)
             intro_channel = guild.get_channel(913331578606854184)
             msg = await intro_channel.fetch_message(data.message_id)
             if msg:
