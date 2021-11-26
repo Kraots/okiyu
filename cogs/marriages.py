@@ -39,7 +39,7 @@ class Marriages(commands.Cog):
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
         await view.wait()
         if view.response is True:
-            now = datetime.datetime.utcnow()
+            now = datetime.utcnow()
             await Marriage(
                 id=ctx.author.id,
                 married_to=member.id,
