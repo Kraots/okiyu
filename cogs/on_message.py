@@ -137,7 +137,7 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message')
     async def on_message(self, message: disnake.Message):
-        if message.bot:
+        if message.author.bot:
             return
         if message.author.id != self.bot._owner_id:
             if message.guild:
