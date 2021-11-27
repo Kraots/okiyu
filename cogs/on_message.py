@@ -66,7 +66,7 @@ class OnMessage(commands.Cog):
                 if self.bad_words_filter[message.author.id] >= 4:
                     self.bad_words_filter[message.author.id] = 0
                     time = get_mute_time(message.author.id)
-                    _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} [BAD WORD FILTER]')
+                    _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} Bad Words.')
                     muted_role = guild.get_role(913376647422545951)
                     duration = utils.human_timedelta(_data.dt, suffix=False)
                     data = utils.Mutes(
