@@ -64,7 +64,7 @@ class Logs(commands.Cog):
             em.add_field(name='Username', value=f'`{before.name}` **->** `{after.name}`', inline=False)
         if before.discriminator != after.discriminator:
             em.add_field(name='Discriminator', value=f'`#{before.discriminator}` **->** `#{after.discriminator}`', inline=False)
-        if before.avatar != after.avatar:
+        if before.display_avatar != after.display_avatar:
             em.add_field(name='Avatar', value=f'[`Before`]({before.display_avatar}) -> [`After`]({after.display_avatar})', inline=False)
 
         if len(em.fields) != 0:
