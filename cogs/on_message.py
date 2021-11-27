@@ -49,7 +49,7 @@ class OnMessage(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         for word in message.content.split():
             if utils.check_word(word) is True:
-                ctx = await self.bot.get_context(message)
+                ctx = await self.bot.get_context(message, cls=utils.Context)
                 await message.delete()
 
                 _ = self.bad_words_filter.get(message.author.id)
@@ -128,7 +128,7 @@ class OnMessage(commands.Cog):
                     )
                 await self.webhook.send(embed=em, view=btn)
             except Exception as e:
-                ctx = await self.bot.get_context(message)
+                ctx = await self.bot.get_context(message, cls=utils.Context)
                 await self.bot.reraise(ctx, e)
 
     @commands.Cog.listener('on_message_edit')
@@ -165,7 +165,7 @@ class OnMessage(commands.Cog):
                     )
                 await self.webhook.send(embed=em, view=btn)
             except Exception as e:
-                ctx = await self.bot.get_context(after)
+                ctx = await self.bot.get_context(after, cls=utils.Context)
                 await self.bot.reraise(ctx, e)
 
     @commands.Cog.listener('on_message')
@@ -202,7 +202,7 @@ class OnMessage(commands.Cog):
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
         if after.content.lower().startswith(('!e', '!eval')):
-            ctx = await self.bot.get_context(after)
+            ctx = await self.bot.get_context(after, cls=utils.Context)
             cmd = self.bot.get_command(after.content.lower().replace('!', ''))
             await after.add_reaction('🔁')
             try:
