@@ -27,12 +27,12 @@ class Welcome(commands.Cog):
         member_count = len([m for m in guild.members if not m.bot])
 
         welcome = disnake.Embed(
-            description="\n\n***Please read the rules at*** <#913331459673178122>\n"
+            description="***Please read the rules at*** <#913331459673178122>\n"
                         "***You can always get a colour from*** <#913331502761271296>\n"
                         "***Don't forget to get your roles from*** <#913336089492717618>\n"
                         "***For bot commands please use*** <#913330644875104306>\n\n"
-                        "> Enjoy your stay ^-^\n\n",
-            color=utils.pastel
+                        "> Enjoy your stay ^-^",
+            color=utils.light_pink
         )
         welcome.set_thumbnail(url=member.display_avatar)
         welcome.set_footer(text=f"Created {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
