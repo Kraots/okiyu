@@ -172,7 +172,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             pass
         return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
     else:
-        role = guild.get_role(random.choice(utils.all_colour_roles))
+        role = guild.get_role(random.choice(utils.all_colour_roles[:-1]))
         usr = guild.get_member(user_id)
         colour = role.color if to_update is False else usr.color
         em = disnake.Embed(colour=colour)
