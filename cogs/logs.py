@@ -11,11 +11,7 @@ from main import Ukiyo
 
 
 # Webhook that sends a message in the logs channel
-async def send_webhook(em: disnake.Embed, bot: Ukiyo):
-    webhook = await bot.get_webhook(
-        bot.get_channel(913332408537976892),
-        avatar=bot.user.display_avatar
-    )
+async def send_webhook(em: disnake.Embed, webhook: disnake.Webhook):
     if isinstance(em, disnake.Embed):
         await webhook.send(embed=em)
     else:
@@ -39,12 +35,18 @@ class Logs(commands.Cog):
         self.bot = bot
         self.send_embeds.start()
         self.embeds = []
+        self.webhook = None
 
     @tasks.loop(minutes=1.0)
     async def send_embeds(self):
         if len(self.embeds) != 0:
             try:
-                await send_webhook(self.embeds, self.bot)
+                if self.webhook is None:
+                    self.webhook = await self.bot.get_webhook(
+                        self.bot.get_channel(913332408537976892),
+                        avatar=self.bot.user.display_avatar
+                    )
+                await send_webhook(self.embeds, self.webhook)
             except Exception:
                 pass
             self.embeds = []
