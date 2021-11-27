@@ -312,7 +312,7 @@ class Moderation(commands.Cog):
         await member.edit(roles=new_roles, reason=f'[MUTE] {ctx.author} ({ctx.author.id}): {reason}')
         try:
             await member.send(
-                f'Hello, you have been muted in `Ukiyo` by **{ctx.author}** for **{reason}** '
+                f'Hello, you have been muted in `Ukiyo` by {ctx.author} for **{reason}** '
                 f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
             )
         except disnake.Forbidden:
