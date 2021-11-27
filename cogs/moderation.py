@@ -459,12 +459,14 @@ class Moderation(commands.Cog):
                         pass
                 await mute.delete()
                 await self.ensure_webhook()
+                mem = guild.get_member(mute.muted_by)
                 await utils.log(
                     self.webhook,
                     title='[MUTE EXPIRED]',
                     fields=[
                         ('Member', f'{member.mention} (`{member.id}`)'),
                         ('Mute Duration', f'`{mute.duration}`'),
+                        ('By', mem.mention),
                         ('At', format_dt(datetime.now(), 'F')),
                     ]
                 )
