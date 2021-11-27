@@ -144,7 +144,8 @@ class AnnouncementView(View):
 
         guild = self.bot.get_guild(913310006814859334)
         news_channel = guild.get_channel(913331371282423808)
-        em = disnake.Embed(colour=utils.red, title=self.title, description=self.description)
+        title = self.title or disnake.embeds.EmptyEmbed
+        em = disnake.Embed(colour=utils.red, title=title, description=self.description)
         if inter.author.id != self.bot._owner_id:
             em.set_footer(text=f'Announcement By: {inter.author}')
         if self.ping_everyone is False:
