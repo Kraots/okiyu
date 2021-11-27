@@ -37,18 +37,11 @@ def get_mute_time(user_id) -> str:
         return '1 month'  # This shouldn't really even happen, but just in case it really gets that bad.
 
 
-async def send_webhook(em: disnake.Embed, view: disnake.ui.View, bot: Ukiyo):
-    webhook = await bot.get_webhook(
-        bot.get_channel(913332431417925634),
-        avatar=bot.user.display_avatar
-    )
-    await webhook.send(embed=em, view=view)
-
-
 class OnMessage(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
         self.bad_words_filter = {}
+        self.webhook = None
 
     async def check_bad_word(self, message: disnake.Message):
         if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
@@ -128,7 +121,12 @@ class OnMessage(commands.Cog):
             try:
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
-                await send_webhook(em, btn, self.bot)
+                if self.webhook is None:
+                    self.webhook = self.bot.get_webhook(
+                        self.bot.get_channel(913332431417925634),
+                        avatar=self.bot.user.display_avatar
+                    )
+                await self.webhook.send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(message)
                 await self.bot.reraise(ctx, e)
@@ -160,7 +158,12 @@ class OnMessage(commands.Cog):
             try:
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=after.jump_url))
-                await send_webhook(em, btn, self.bot)
+                if self.webhook is None:
+                    self.webhook = self.bot.get_webhook(
+                        self.bot.get_channel(913332431417925634),
+                        avatar=self.bot.user.display_avatar
+                    )
+                await self.webhook.send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(after)
                 await self.bot.reraise(ctx, e)
