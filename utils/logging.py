@@ -12,7 +12,8 @@ async def log(
     title: Optional[str] = disnake.embeds.EmptyEmbed,
     description: Optional[str] = disnake.embeds.EmptyEmbed,
     fields: Optional[list[tuple[str, str]]] = [],
-    timestamp: Optional[bool] = False
+    timestamp: Optional[bool] = False,
+    view: Optional[disnake.ui.View] = None
 ) -> Optional[disnake.Message]:
     """
     A function that sends an embed to ``channel`` with the
@@ -34,6 +35,8 @@ async def log(
         timestamp: Optional[:class:`bool`]
             If set to ``True``, the footer will specify the date this got logged in.
             Defaults to ``False``.
+        view: Optional[:class:`ui.View`]
+            The view to attach to the log message.
 
     Returns
     -------
@@ -59,6 +62,14 @@ async def log(
         raise TypeError(
             "Argument 'fields' must be of type 'list', "
             f"not {fields.__class__}")
+    elif not isinstance(timestamp, bool):
+        raise TypeError(
+            "Argument 'timestamp' must be of type 'bool', "
+            f"not {timestamp.__class__}")
+    elif not isinstance(view, (disnake.ui.View, type(None))):
+        raise TypeError(
+            "Argument 'view' must be of type 'disnake.ui.View', "
+            f"not {view.__class__}")
     elif (
         (description == disnake.embeds.EmptyEmbed) and
         (title == disnake.embeds.EmptyEmbed)
