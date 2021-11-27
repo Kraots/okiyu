@@ -180,6 +180,16 @@ class Misc(commands.Cog):
         await ctx.author.edit(nick=None)
         await ctx.reply('I have removed your nickname.')
 
+    @commands.command(name='avatar', aliases=('av',))
+    async def _av(self, ctx: Context, *, member: disnake.Member = None):
+        """Check the avatar ``member`` has."""
+
+        member = member or ctx.author
+        em = disnake.Embed(title=f'{member.display_name}\'s avatar')
+        em.set_image(url=member.display_avatar)
+        em.set_footer(text=f'Requested By: {ctx.author}')
+        await ctx.reply(embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
