@@ -60,31 +60,28 @@ def clean_code(content):
 
 async def reraise(ctx: utils.Context, error):
     if isinstance(error, commands.NotOwner):
-        error = disnake.Embed(title="ERROR", description="Command Error: You do not own this bot!")
-        error.set_footer(text='This is an owner only command')
-
-        await ctx.send(embed=error, delete_after=8)
+        await ctx.send(f'> {ctx.disagree} You do not own this bot, this is an owner only command.', delete_after=8)
         await asyncio.sleep(7.5)
         await ctx.message.delete()
 
     elif isinstance(error, commands.CommandOnCooldown):
         return await ctx.send(
-            f'You are on cooldown, **`{time_phaser(error.retry_after)}`** remaining.'
+            f'> {ctx.disagree} You are on cooldown, **`{time_phaser(error.retry_after)}`** remaining.'
         )
 
     elif isinstance(error, commands.errors.MissingRequiredArgument):
         return await ctx.send(
-            f"You are missing an argument! See `!help {ctx.command}` "
+            f"> {ctx.disagree} You are missing an argument! See `!help {ctx.command}` "
             "if you do not know how to use this."
         )
 
     elif isinstance(error, commands.errors.MemberNotFound):
-        await ctx.send("Could not find member.")
+        await ctx.send(f"> {ctx.disagree} Could not find member.")
         ctx.command.reset_cooldown(ctx)
         return
 
     elif isinstance(error, commands.errors.UserNotFound):
-        await ctx.send("Could not find user.")
+        await ctx.send(f"> {ctx.disagree} Could not find user.")
         ctx.command.reset_cooldown(ctx)
         return
 
