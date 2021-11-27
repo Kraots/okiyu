@@ -125,7 +125,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             else:
                 break
 
-        await _looking.reply('What\'s your sexuality?')
+        await _looking.reply('What\'s your sexuality? (e.g: straight, bisexual, gay, lesbian, pansexual, etc...)')
         _sexuality = await bot.wait_for('message', timeout=180.0, check=check)
         sexuality = _sexuality.content
         if len(sexuality) > 100:
