@@ -142,7 +142,7 @@ class Moderation(commands.Cog):
             await member.send('> Hello! Sadly, you have been **banned** from `Ukiyo`. Goodbye 👋')
         except disnake.Forbidden:
             pass
-        await member.ban(reason=f'[BAN] {ctx.author} ({ctx.author.id}): {reason}')
+        await member.ban(reason=f'[BAN] {ctx.author} ({ctx.author.id}): {reason}', delete_message_days=0)
         await ctx.send(f'> 👌🔨 Banned {member.mention} for **{reason}**')
 
     @commands.command(name='kick')
