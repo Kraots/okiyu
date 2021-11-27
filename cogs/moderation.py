@@ -43,6 +43,11 @@ class Moderation(commands.Cog):
                 avatar=self.bot.user.display_avatar
             )
 
+    def jump_view(self, url: str) -> disnake.ui.View:
+        view = disnake.ui.View()
+        view.add_item(disnake.ui.Button(label='Jump!', url=url))
+        return view
+
     @property
     def display_emoji(self) -> str:
         return '🛠️'
@@ -72,7 +77,8 @@ class Moderation(commands.Cog):
                 ('Amount', f'`{utils.plural(len(purged)):message}`'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
         await asyncio.sleep(5.0)
         try:
@@ -106,7 +112,8 @@ class Moderation(commands.Cog):
                 ('Channel', channel.mention),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @lock_channel.command(name='all')
@@ -138,7 +145,8 @@ class Moderation(commands.Cog):
                 ('Channel', ' '.join(_channels)),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @commands.group(name='unlock', invoke_without_command=True, case_insensitive=True)
@@ -166,7 +174,8 @@ class Moderation(commands.Cog):
                 ('Channel', channel.mention),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @unlock_channel.command(name='all')
@@ -198,7 +207,8 @@ class Moderation(commands.Cog):
                 ('Channel', ' '.join(_channels)),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @commands.command(name='ban')
@@ -224,7 +234,8 @@ class Moderation(commands.Cog):
                 ('Reason', reason),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @commands.command(name='kick')
@@ -250,7 +261,8 @@ class Moderation(commands.Cog):
                 ('Reason', reason),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @commands.command(name='mute')
@@ -285,7 +297,8 @@ class Moderation(commands.Cog):
             muted_by=ctx.author.id,
             muted_until=time,
             reason=reason,
-            duration=duration
+            duration=duration,
+            jump_url=ctx.message.jump_url,
         )
         if 913310292505686046 in (r.id for r in member.roles):  # Checks for owner
             data.is_owner = True
@@ -323,7 +336,8 @@ class Moderation(commands.Cog):
                 ('Expires At', format_dt(time, "F")),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @commands.command(name='unmute')
@@ -373,7 +387,8 @@ class Moderation(commands.Cog):
                 ('Left', f'`{human_timedelta(data.muted_until, suffix=False)}`'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @commands.command(name='checkmute', aliases=('checkmutes', 'mutescheck', 'mutecheck',))
@@ -465,10 +480,12 @@ class Moderation(commands.Cog):
                     title='[MUTE EXPIRED]',
                     fields=[
                         ('Member', f'{member.mention} (`{member.id}`)'),
+                        ('Reason', mute.reason),
                         ('Mute Duration', f'`{mute.duration}`'),
                         ('By', mem.mention),
                         ('At', format_dt(datetime.now(), 'F')),
-                    ]
+                    ],
+                    view=self.jump_view(mute.jump_url)
                 )
 
     @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
@@ -500,7 +517,8 @@ class Moderation(commands.Cog):
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @staff_make.command(name='moderator', aliases=('mod',))
@@ -525,7 +543,8 @@ class Moderation(commands.Cog):
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
@@ -555,7 +574,8 @@ class Moderation(commands.Cog):
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
     @staff_remove.command(name='moderator', aliases=('mod',))
@@ -578,7 +598,8 @@ class Moderation(commands.Cog):
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
-            ]
+            ],
+            view=self.jump_view(ctx.message.jump_url)
         )
 
 

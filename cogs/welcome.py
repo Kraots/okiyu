@@ -52,6 +52,8 @@ class Welcome(commands.Cog):
             muted_role = guild.get_role(913376647422545951)
             mem = guild.get_member(mute.muted_by)
             await member.add_roles(muted_role, reason='[MUTE EVASION] user joined but was still muted in the database')
+            view = disnake.ui.View()
+            view.add_item(disnake.ui.Button(label='Jump!', url=mute.jump_url))
             await utils.log(
                 self.webhook,
                 title='[MUTE EVASION]',
@@ -62,7 +64,8 @@ class Welcome(commands.Cog):
                     ('Remaining', f'`{utils.human_timedelta(mute.muted_until, suffix=False)}`'),
                     ('By', f'{mem.mention} (`{mem.id}`)'),
                     ('At', utils.format_dt(datetime.now(), 'F')),
-                ]
+                ],
+                view=view
             )
 
 
