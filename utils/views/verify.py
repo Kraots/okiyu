@@ -170,7 +170,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             bot.verifying.pop(bot.verifying.index(user_id))
         except (IndexError, ValueError):
             pass
-        return await ctx.reply(f'> {ctx.disagree} Ran out of time.')
+        return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
     else:
         role = guild.get_role(random.choice(utils.all_colour_roles))
         usr = guild.get_member(user_id)
