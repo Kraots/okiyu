@@ -22,7 +22,7 @@ __all__ = (
     'reraise',
     'ConfirmView',
     'ConfirmViewDMS',
-    'check_bad_word',
+    'check_word',
     'check_username',
     'run_in_executor',
     'clean_inter_content',
@@ -223,7 +223,7 @@ class ConfirmViewDMS(disnake.ui.View):
         self.stop()
 
 
-def check_bad_word(word: str = None) -> bool:
+def check_word(word: str = None) -> bool:
     """
     If the return type is of bool ``True`` then it means that the word is a bad word, otherwise it's safe.
     """
@@ -253,7 +253,7 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str
             break
     if count < 4:
         for word in name.split():
-            if check_bad_word(word) is True:
+            if check_word(word) is True:
                 count = 0
     else:
         if word is not None and member is not None:
