@@ -190,6 +190,32 @@ class Misc(commands.Cog):
         em.set_footer(text=f'Requested By: {ctx.author}')
         await ctx.reply(embed=em)
 
+    @commands.command()
+    async def created(self, ctx: Context, *, member: disnake.Member = None):
+        """Check the date when the ``member`` created their account."""
+
+        member = member or ctx.author
+        em = disnake.Embed(
+            title='Creation Date',
+            description=f'{member.mention} created their account '
+                        f'on {utils.format_dt(member.created_at, "F")} '
+                        f'(`{utils.human_timedelta(member.created_at)}`)'
+        )
+        await ctx.reply(embed=em)
+
+    @commands.command()
+    async def joined(self, ctx: Context, *, member: disnake.Member = None):
+        """Check the date when the ``member`` joined the server."""
+
+        member = member or ctx.author
+        em = disnake.Embed(
+            title='Join Date',
+            description=f'{member.mention} joined the server '
+                        f'on {utils.format_dt(member.joined_at, "F")} '
+                        f'(`{utils.human_timedelta(member.joined_at)}`)'
+        )
+        await ctx.reply(embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
