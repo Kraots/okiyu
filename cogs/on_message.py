@@ -51,7 +51,7 @@ class OnMessage(commands.Cog):
     async def check_bad_word(self, message: disnake.Message):
         guild = self.bot.get_guild(913310006814859334)
         for word in message.content.split():
-            if utils.check_bad_word(word) is True:
+            if utils.check_word(word) is True:
                 ctx = await self.bot.get_context(message)
                 await message.delete()
 
