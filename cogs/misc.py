@@ -89,7 +89,7 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
-            return await ctx.reply('There are currently no rules set. Please contact an admin about this!')
+            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set. Please contact an admin about this!')
         em = disnake.Embed(title='Rules', color=utils.blurple)
 
         if rule is None:
@@ -100,12 +100,12 @@ class Misc(commands.Cog):
                     em.description += f'\n\n`{index + 1}.` {rule}'
         else:
             if rule <= 0:
-                return await ctx.reply('Rule cannot be equal or less than `0`')
+                return await ctx.reply(f'> {ctx.disagree} Rule cannot be equal or less than `0`')
             try:
                 _rule = rules.rules[rule - 1]
                 em.description = f'`{rule}.` {_rule}'
             except IndexError:
-                return await ctx.reply('Rule does not exist!')
+                return await ctx.reply(f'> {ctx.disagree} Rule does not exist!')
 
         await ctx.send(embed=em, reference=ctx.replied_reference)
 
@@ -133,14 +133,14 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
-            return await ctx.reply('There are currently no rules set.')
+            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set.')
         else:
             if rule <= 0:
-                return await ctx.reply('Rule cannot be equal or less than `0`')
+                return await ctx.reply(f'> {ctx.disagree} Rule cannot be equal or less than `0`')
             try:
                 rules.rules.pop(rule - 1)
             except IndexError:
-                return await ctx.reply('Rule does not exist!')
+                return await ctx.reply(f'> {ctx.disagree} Rule does not exist!')
             await rules.commit()
 
         await ctx.reply(f'> 👌 `{rule}` successfully **removed** to the rules.')
@@ -152,7 +152,7 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
-            return await ctx.reply('There are currently no rules set.')
+            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set.')
         else:
             await rules.delete()
 
@@ -166,7 +166,7 @@ class Misc(commands.Cog):
 
         res = await utils.check_username(self.bot, word=new_nickname)
         if res is True:
-            return await ctx.reply('That nickname is not pingable!')
+            return await ctx.reply(f'> {ctx.disagree} That nickname is not pingable or is too short!')
         await ctx.author.edit(nick=new_nickname)
         await ctx.reply(f'I have changed your nickname to `{new_nickname}`')
 
@@ -176,7 +176,7 @@ class Misc(commands.Cog):
 
         res = await utils.check_username(self.bot, word=ctx.author.display_name)
         if res is True:
-            return await ctx.reply('Cannot remove your nickname because your username is unpingable.')
+            return await ctx.reply(f'> {ctx.disagree} Cannot remove your nickname because your username is unpingable or is too short.')
         await ctx.author.edit(nick=None)
         await ctx.reply('I have removed your nickname.')
 
