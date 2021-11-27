@@ -147,7 +147,7 @@ class Moderation(commands.Cog):
 
     @commands.command(name='kick')
     @is_mod()
-    async def _kick(self, ctx: Context, member: Union[disnake.Member, disnake.User], *, reason: str):
+    async def _kick(self, ctx: Context, member: disnake.Member, *, reason: str):
         """Kicks a member."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:

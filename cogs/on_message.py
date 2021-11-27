@@ -57,13 +57,12 @@ class OnMessage(commands.Cog):
                 ctx = await self.bot.get_context(message)
                 await message.delete()
 
-                usr = self.bad_words_filter.get(message.author.id)
-                if usr is None:
+                _ = self.bad_words_filter.get(message.author.id)
+                if _ is None:
                     self.bad_words_filter[message.author.id] = 1
-                    usr = self.bad_words_filter[message.author.id]
                 else:
                     self.bad_words_filter[message.author.id] += 1
-                if usr >= 4:
+                if self.bad_words_filter[message.author.id] >= 4:
                     self.bad_words_filter[message.author.id] = 0
                     time = get_mute_time(message.author.id)
                     _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} [BAD WORD FILTER]')
