@@ -50,7 +50,7 @@ class AnnouncementView(View):
     def unlock_all(self):
         for child in self.children:
             if child.label == 'Confirm':
-                if self.description is not None and self.title is not None:
+                if self.description is not None:
                     child.disabled = False
                 else:
                     child.disabled = True
