@@ -127,7 +127,7 @@ class Moderation(commands.Cog):
         """Bans an user."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         try:
             await member.send('> Hello! Sadly, you have been **banned** from `Ukiyo`. Goodbye 👋')
@@ -142,7 +142,7 @@ class Moderation(commands.Cog):
         """Kicks a member."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         try:
             await member.send('> Hello! Sadly, you have been **kicked** from `Ukiyo`. Goodbye 👋')
@@ -169,7 +169,7 @@ class Moderation(commands.Cog):
         """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         usr = await Mutes.find_one({'_id': member.id})
         if usr is not None:
@@ -341,11 +341,11 @@ class Moderation(commands.Cog):
         """Make somebody an admin."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         guild = self.bot.get_guild(913310006814859334)
         if 913315033134542889 in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is already an admin!')
+            return await ctx.reply(f'> {ctx.disagree} `{member}` is already an admin!')
         admin_role = guild.get_role(913315033134542889)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
@@ -356,11 +356,11 @@ class Moderation(commands.Cog):
         """Make somebody a moderator."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         guild = self.bot.get_guild(913310006814859334)
         if 913315033684008971 in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is already a moderator!')
+            return await ctx.reply(f'> {ctx.disagree} `{member}` is already a moderator!')
         mod_role = guild.get_role(913315033684008971)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
@@ -378,10 +378,10 @@ class Moderation(commands.Cog):
         """Remove an admin."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         if 913315033134542889 not in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is not a moderator!')
+            return await ctx.reply(f'> {ctx.disagree} `{member}` is not an admin!')
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
 
@@ -391,10 +391,10 @@ class Moderation(commands.Cog):
         """Remove a moderator."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         if 913315033684008971 not in (r.id for r in member.roles):
-            return await ctx.reply(f'`{member}` is not a moderator!')
+            return await ctx.reply(f'> {ctx.disagree} `{member}` is not a moderator!')
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
 
