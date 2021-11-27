@@ -149,8 +149,6 @@ class OnMessage(commands.Cog):
                         is_staff = True
                     elif 913315033134542889 in (r.id for r in message.author.roles):  # Check for admin
                         is_staff = True
-                    elif 913315033684008971 in (r.id for r in message.author.roles):  # Check for mod
-                        is_staff = True
 
                     if is_staff is False:
                         await message.delete()
