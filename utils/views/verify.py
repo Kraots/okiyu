@@ -248,5 +248,5 @@ class Verify(View):
             msg = await inter.author.send('Starting the intro creation process...')
         except disnake.Forbidden:
             return await inter.followup.send(f'> {disagree} You have your dms off! Please enable them!!', ephemeral=True)
-        ctx = await self.bot.get_context(msg)
+        ctx = await self.bot.get_context(msg, cls=utils.Context)
         await create_intro(ctx, self.bot, inter.author.id)
