@@ -225,7 +225,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             await data.commit(replace=True)
 
         await ctx.reply(
-            f'> 👌 Successfully {"edited" if to_update else "created"} your intro. You can see it in {intro_channel.mention}'
+            f'Successfully {"edited" if to_update else "created"} your intro. You can see it in {intro_channel.mention}'
         )
 
 
