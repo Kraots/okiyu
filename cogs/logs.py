@@ -10,7 +10,7 @@ import utils
 from main import Ukiyo
 
 
-# Webhook that sends a message in logs channel
+# Webhook that sends a message in the logs channel
 async def send_webhook(em: disnake.Embed, bot: Ukiyo):
     webhook = await bot.get_webhook(
         bot.get_channel(913332408537976892),
