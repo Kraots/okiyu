@@ -80,6 +80,10 @@ class Ukiyo(commands.Bot):
             self.add_view(utils.AgeButtonRoles(), message_id=913788068031496192)
             self.add_view(utils.SexualityButtonRoles(), message_id=913788069373681685)
             self.add_view(utils.RelationshipStatusButtonRoles(), message_id=913790418959876097)
+
+            async for ticket in utils.Ticket.find():
+                self.add_view(utils.Ticket(), message_id=ticket.message_id)
+
             self.added_views = True
 
         print('Bot is ready!')
