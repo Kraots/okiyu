@@ -16,7 +16,8 @@ from utils import (
     format_dt,
     human_timedelta,
     RoboPages,
-    FieldPageSource
+    FieldPageSource,
+    AnnouncementView
 )
 
 from main import Ukiyo
@@ -37,6 +38,14 @@ class Moderation(commands.Cog):
     @property
     def display_emoji(self) -> str:
         return '🛠️'
+
+    @commands.command()
+    @is_admin()
+    async def announce(self, ctx):
+        """Make an announcement in <#913331371282423808>"""
+
+        view = AnnouncementView(self.bot, ctx.author)
+        view.message = await ctx.send(embed=view.prepare_embed(), view=view)
 
     @commands.command(name='purge', aliases=('clear',))
     @is_mod()

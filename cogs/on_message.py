@@ -49,9 +49,8 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message_delete')
     async def on_message_delete(self, message: disnake.Message):
-        if message.author.bot:
+        if message.author.bot or not message.guild:
             return
-
         if message.author.id == self.bot._owner_id:
             return
 
@@ -85,7 +84,7 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message_edit')
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
-        if before.author.bot:
+        if before.author.bot or not after.guild:
             return
         if before.author.id == self.bot._owner_id:
             return
