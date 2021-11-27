@@ -143,7 +143,7 @@ class Moderation(commands.Cog):
         except disnake.Forbidden:
             pass
         await member.ban(reason=f'[BAN] {ctx.author} ({ctx.author.id}): {reason}')
-        await ctx.send(f'> 👌🔨 Banned {member} for **{reason}**')
+        await ctx.send(f'> 👌🔨 Banned {member.mention} for **{reason}**')
 
     @commands.command(name='kick')
     @is_mod()
@@ -158,7 +158,7 @@ class Moderation(commands.Cog):
         except disnake.Forbidden:
             pass
         await member.kick(reason=f'[KICK] {ctx.author} ({ctx.author.id}): {reason}')
-        await ctx.send(f'> 👌 Kicked {member} for **{reason}**')
+        await ctx.send(f'> 👌 Kicked {member.mention} for **{reason}**')
 
     @commands.command(name='mute')
     @is_mod()
