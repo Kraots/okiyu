@@ -42,11 +42,17 @@ class OnMessage(commands.Cog):
         self.bot = bot
         self.bad_words_filter = {}
         self.webhook = None
+        self.mod_webhook = None
 
     async def check_bad_word(self, message: disnake.Message):
         if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
             return
         guild = self.bot.get_guild(913310006814859334)
+        if self.mod_webhook is None:
+            self.mod_webhook = await self.bot.get_webhook(
+                guild.get_channel(914257049456607272),
+                avatar=self.bot.user.display_avatar
+            )
         for word in message.content.split():
             if utils.check_word(word) is True:
                 ctx = await self.bot.get_context(message, cls=utils.Context)
@@ -62,11 +68,13 @@ class OnMessage(commands.Cog):
                     time = get_mute_time(message.author.id)
                     _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} [BAD WORD FILTER]')
                     muted_role = guild.get_role(913376647422545951)
+                    duration = utils.human_timedelta(_data.dt, suffix=False)
                     data = utils.Mutes(
                         id=message.author.id,
                         muted_by=self.bot.user.id,
                         muted_until=_data.dt,
                         reason=_data.arg,
+                        duration=duration,
                         filter=True
                     )
                     if 913315033134542889 in (r.id for r in message.author.roles):  # Checks for admin
@@ -82,13 +90,25 @@ class OnMessage(commands.Cog):
                     try:
                         await message.author.send(
                             f'Hello, you have been muted in `Ukiyo` by **{self.bot.user}** for **{_data.arg}** '
-                            f'until {utils.format_dt(_data.dt, "F")} (`{utils.human_timedelta(_data.dt, suffix=False)}`)'
+                            f'until {utils.format_dt(_data.dt, "F")} (`{duration}`)'
                         )
                     except disnake.Forbidden:
                         pass
                     await message.channel.send(
                         f'> ⚠️ **[BAD WORD]** {message.author.mention} has been muted for saying a bad word '
-                        f'until {utils.format_dt(_data.dt, "F")} (`{utils.human_timedelta(_data.dt, suffix=False)}`)'
+                        f'until {utils.format_dt(_data.dt, "F")} (`{duration}`)'
+                    )
+                    await utils.log(
+                        self.mod_webhook,
+                        title='[MUTE]',
+                        fields=[
+                            ('Member', f'{message.author.mention} (`{message.author.id}`)'),
+                            ('Reason', 'Bad Words.'),
+                            ('Mute Duration', duration),
+                            ('Expires At', utils.format_dt(_data.dt, "F")),
+                            ('By', self.bot.user.mention),
+                            ('At', utils.format_dt(datetime.now(), 'F')),
+                        ]
                     )
 
     @commands.Cog.listener('on_message_delete')

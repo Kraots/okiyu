@@ -96,7 +96,7 @@ class Ukiyo(commands.Bot):
         self,
         channel: disnake.TextChannel,
         *,
-        name: str = "Ukiyo",
+        name: str = "ukiyo",
         avatar: disnake.Asset = None,
     ) -> disnake.Webhook:
         """Returns the general bot hook or creates one."""
