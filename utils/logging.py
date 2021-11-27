@@ -47,11 +47,11 @@ async def log(
             "Argument 'channel' must be of type 'disnake.TextChannel' or 'disnake.Webhook', "
             f"not {channel.__class__}"
         )
-    elif not isinstance(title, (str, disnake.embeds.EmptyEmbed)):
+    elif not isinstance(title, (str, disnake.embeds._EmptyEmbed)):
         raise TypeError(
             "Argument 'title' must be of type 'str' or 'disnake.embeds.EmptyEmbed', "
             f"not {title.__class__}")
-    elif not isinstance(description, (str, disnake.embeds.EmptyEmbed)):
+    elif not isinstance(description, (str, disnake.embeds._EmptyEmbed)):
         raise TypeError(
             "Argument 'description' must be of type 'str' or 'disnake.embeds.EmptyEmbed', "
             f"not {description.__class__}")
@@ -66,6 +66,8 @@ async def log(
         raise utils.MissingArgument(
             "'title' or 'description' not given. Please specify at least one of them."
         )
+    if title != disnake.embeds.EmptyEmbed:
+        title = f'`{title}`'
 
     em = disnake.Embed(
         title=title,

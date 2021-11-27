@@ -63,13 +63,14 @@ class Moderation(commands.Cog):
         await ctx.message.delete()
         purged = await ctx.channel.purge(limit=amount)
         msg = await ctx.send(f'> {ctx.agree} Deleted `{len(purged):,}` messages')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[CHAT PURGE]',
             fields=[
                 ('Channel', ctx.channel.mention),
-                ('Amount', len(purged)),
-                ('By', ctx.author.mention),
+                ('Amount', f'`{utils.plural(len(purged)):message}`'),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -97,12 +98,13 @@ class Moderation(commands.Cog):
         else:
             return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
         await ctx.reply('> 🔒 Channel Locked!')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[CHANNEL LOCK]',
             fields=[
                 ('Channel', channel.mention),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -128,12 +130,13 @@ class Moderation(commands.Cog):
                     )
                     _channels.append(channel.mention)
         await ctx.reply('> 🔒 All the unlocked channels have been locked!')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[CHANNEL LOCK]',
             fields=[
                 ('Channel', ' '.join(_channels)),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -155,12 +158,13 @@ class Moderation(commands.Cog):
         else:
             return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
         await ctx.reply('> 🔓 Channel Unlocked!')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[CHANNEL UNLOCK]',
             fields=[
                 ('Channel', channel.mention),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -186,12 +190,13 @@ class Moderation(commands.Cog):
                     )
                     _channels.append(channel.mention)
         await ctx.reply('> 🔓 All locked channels have been unlocked!')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[CHANNEL UNLOCK]',
             fields=[
                 ('Channel', ' '.join(_channels)),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -210,13 +215,14 @@ class Moderation(commands.Cog):
             pass
         await member.ban(reason=f'[BAN] {ctx.author} ({ctx.author.id}): {reason}', delete_message_days=0)
         await ctx.send(f'> 👌🔨 Banned {member.mention} for **{reason}**')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[BAN]',
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('Reason', reason),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -235,13 +241,14 @@ class Moderation(commands.Cog):
             pass
         await member.kick(reason=f'[KICK] {ctx.author} ({ctx.author.id}): {reason}')
         await ctx.send(f'> 👌 Kicked {member.mention} for **{reason}**')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[KICK]',
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('Reason', reason),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -305,6 +312,7 @@ class Moderation(commands.Cog):
             f'> 👌 📨 Applied mute to {member.mention} '
             f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
         )
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[MUTE]',
@@ -313,7 +321,7 @@ class Moderation(commands.Cog):
                 ('Reason', reason),
                 ('Mute Duration', duration),
                 ('Expires At', format_dt(time, "F")),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -355,6 +363,7 @@ class Moderation(commands.Cog):
             pass
 
         await ctx.reply(f'> 👌 Successfully unmuted {member.mention}')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[UNMUTE]',
@@ -362,7 +371,7 @@ class Moderation(commands.Cog):
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('Mute Duration', data.duration),
                 ('Left', human_timedelta(data.muted_until, suffix=False)),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -449,6 +458,7 @@ class Moderation(commands.Cog):
                     except disnake.Forbidden:
                         pass
                 await mute.delete()
+                await self.ensure_webhook()
                 await utils.log(
                     self.webhook,
                     title='[MUTE EXPIRED]',
@@ -480,12 +490,13 @@ class Moderation(commands.Cog):
         admin_role = guild.get_role(913315033134542889)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[ADMIN ADDED]',
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -504,12 +515,13 @@ class Moderation(commands.Cog):
         mod_role = guild.get_role(913315033684008971)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[MODERATOR ADDED]',
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -533,12 +545,13 @@ class Moderation(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} `{member}` is not an admin!')
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[ADMIN REMOVED]',
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )
@@ -555,12 +568,13 @@ class Moderation(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} `{member}` is not a moderator!')
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
+        await self.ensure_webhook()
         await utils.log(
             self.webhook,
             title='[MODERATOR REMOVED]',
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
-                ('By', ctx.author.mention),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
         )

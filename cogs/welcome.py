@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import disnake
 from disnake.ext import commands
 
@@ -9,6 +11,7 @@ from main import Ukiyo
 class Welcome(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.webhook = None
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
@@ -41,8 +44,26 @@ class Welcome(commands.Cog):
 
         mute: utils.Mutes = await utils.Mutes.find_one({'_id': member.id})
         if mute is not None:
+            if self.webhook is None:
+                self.webhook = await self.bot.get_webhook(
+                    guild.get_channel(914257049456607272),
+                    avatar=self.bot.user.display_avatar
+                )
             muted_role = guild.get_role(913376647422545951)
+            mem = guild.get_member(mute.muted_by)
             await member.add_roles(muted_role, reason='[MUTE EVASION] user joined but was still muted in the database')
+            await utils.log(
+                self.webhook,
+                title='[MUTE EVASION]',
+                fields=[
+                    ('Member', f'{member.mention} (`{member.id}`)'),
+                    ('Reason', 'Mute Evasion.'),
+                    ('Mute Duration', utils.human_timedelta(mute.muted_until, suffix=False)),
+                    ('Expires At', utils.format_dt(mute.muted_until, "F")),
+                    ('By', f'{mem.mention} (`{mem.id}`)'),
+                    ('At', utils.format_dt(datetime.now(), 'F')),
+                ]
+            )
 
 
 def setup(bot: Ukiyo):
