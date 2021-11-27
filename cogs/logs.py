@@ -37,15 +37,18 @@ class Logs(commands.Cog):
         self.embeds = []
         self.webhook = None
 
+    async def ensure_webhook(self):
+        if self.webhook is None:
+            self.webhook = await self.bot.get_webhook(
+                self.bot.get_channel(913332408537976892),
+                avatar=self.bot.user.display_avatar
+            )
+
     @tasks.loop(minutes=1.0)
     async def send_embeds(self):
         if len(self.embeds) != 0:
             try:
-                if self.webhook is None:
-                    self.webhook = await self.bot.get_webhook(
-                        self.bot.get_channel(913332408537976892),
-                        avatar=self.bot.user.display_avatar
-                    )
+                await self.ensure_webhook()
                 await send_webhook(self.embeds, self.webhook)
             except Exception:
                 pass
@@ -125,6 +128,7 @@ class Logs(commands.Cog):
         em.set_footer(text=f'User ID: {member.id}')
 
         await asyncio.sleep(1)
+        await self.ensure_webhook()
         await send_webhook(em, self.bot)
 
     @commands.Cog.listener()
@@ -138,6 +142,7 @@ class Logs(commands.Cog):
         em.set_footer(text=f'User ID: {member.id}')
 
         await asyncio.sleep(1)
+        await self.ensure_webhook()
         await send_webhook(em, self.bot)
 
     @commands.Cog.listener()
@@ -147,6 +152,7 @@ class Logs(commands.Cog):
         em.set_thumbnail(url=user.display_avatar)
         em.set_footer(text=f'User ID: {user.id}')
 
+        await self.ensure_webhook()
         await send_webhook(em, self.bot)
 
     @commands.Cog.listener()
