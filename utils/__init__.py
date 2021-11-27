@@ -8,3 +8,4 @@ from .time import *  # noqa
 from .databases import *  # noqa
 from .views import *  # noqa
 from .pillow import *  # noqa
+from .regex import *  # noqa

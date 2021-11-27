@@ -1,3 +1,4 @@
+import re
 import asyncio
 import datetime
 
@@ -138,6 +139,31 @@ class OnMessage(commands.Cog):
     async def on_message(self, message: disnake.Message):
         if message.author.id != self.bot._owner_id:
             if message.guild:
+                guild = self.bot.get_guild(913310006814859334)
+                matches = re.findall(utils.invite_regex, message.content.lower())
+                if matches and message.author.id != self.bot._owner:
+                    is_staff = False
+                    if 913310292505686046 in (r.id for r in message.author.roles):  # Check for owner
+                        is_staff = True
+                    elif 913315033134542889 in (r.id for r in message.author.roles):  # Check for admin
+                        is_staff = True
+                    elif 913315033684008971 in (r.id for r in message.author.roles):  # Check for mod
+                        is_staff = True
+
+                    if is_staff is False:
+                        await message.delete()
+                        invite_logs = guild.get_channel(913332511789178951)
+                        em = disnake.Embed(
+                            title='New Invite Found!!',
+                            description=f'{message.author.mention} send an invite in {message.channel.mention}'
+                        )
+                        v = disnake.ui.View()
+                        v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
+                        await invite_logs.send(embed=em, view=v)
+                        return await message.channel.send(
+                            f'Invites are not allowed! {message.author.mention}', delete_after=5.0
+                        )
+
                 for word in message.content.split():
                     if utils.check_bad_word(word) is True:
                         ctx = await self.bot.get_context(message)
@@ -152,7 +178,6 @@ class OnMessage(commands.Cog):
                         if usr >= 4:
                             time = get_mute_time(message.author.id)
                             _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} [BAD WORD FILTER]')
-                            guild = self.bot.get_guild(913310006814859334)
                             muted_role = guild.get_role(913376647422545951)
                             data = utils.Mutes(
                                 id=message.author.id,
@@ -180,11 +205,10 @@ class OnMessage(commands.Cog):
                                 )
                             except disnake.Forbidden:
                                 pass
-                            await message.channel.send(
+                            return await message.channel.send(
                                 f'> ⚠️ **[BAD WORD]** `{message.author}` has been muted for saying a bad word '
                                 f'until {utils.format_dt(_data.dt, "F")} (`{utils.human_timedelta(_data.dt, suffix=False)}`)'
                             )
-                            return
 
                 await utils.check_username(self.bot, member=message.author)
 
