@@ -77,13 +77,13 @@ class Developer(commands.Cog):
         return '⚒️'
 
     @commands.command(name='eval', aliases=['e'])
-    async def _eval(self, ctx: Context, *, content=None):
+    async def _eval(self, ctx: Context, *, code: str = None):
         """Evaluate code."""
 
-        if content is None:
+        if code is None:
             return await ctx.send("Please give code that you want to evaluate!")
 
-        code = clean_code(content)
+        code = clean_code(code)
 
         local_variables = {
             "disnake": disnake,
