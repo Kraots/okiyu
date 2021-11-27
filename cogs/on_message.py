@@ -93,7 +93,7 @@ class OnMessage(commands.Cog):
                     except disnake.Forbidden:
                         pass
                     await message.channel.send(
-                        f'> ⚠️ **[BAD WORD]** {message.mention} has been muted for saying a bad word '
+                        f'> ⚠️ **[BAD WORD]** {message.author.mention} has been muted for saying a bad word '
                         f'until {utils.format_dt(_data.dt, "F")} (`{utils.human_timedelta(_data.dt, suffix=False)}`)'
                     )
 
