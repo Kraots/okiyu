@@ -81,7 +81,6 @@ class OnMessage(commands.Cog):
                         data.is_admin = True
                     elif 913315033684008971 in (r.id for r in message.author.roles):  # Checks for mod
                         data.is_mod = True
-                    await data.commit()
                     new_roles = [role for role in message.author.roles
                                  if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
                                  ] + [muted_role]
@@ -94,10 +93,14 @@ class OnMessage(commands.Cog):
                         )
                     except disnake.Forbidden:
                         pass
-                    await message.channel.send(
+                    _msg = await message.channel.send(
                         f'> ⚠️ **[BAD WORD]** {message.author.mention} has been muted for saying a bad word '
                         f'until {utils.format_dt(_data.dt, "F")} (`{duration}`)'
                     )
+                    data.jump_url = _msg.jump_url
+                    await data.commit()
+                    view = disnake.ui.View()
+                    view.add_item(disnake.ui.Button(label='Jump!', url=_msg.jump_url))
                     await utils.log(
                         self.mod_webhook,
                         title='[MUTE]',
@@ -108,7 +111,8 @@ class OnMessage(commands.Cog):
                             ('Expires At', utils.format_dt(_data.dt, "F")),
                             ('By', f'{self.bot.user.mention} (`{self.bot.user.id}`)'),
                             ('At', utils.format_dt(datetime.datetime.now(), 'F')),
-                        ]
+                        ],
+                        view=view
                     )
 
     @commands.Cog.listener('on_message_delete')
