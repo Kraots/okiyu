@@ -49,6 +49,8 @@ class OnMessage(commands.Cog):
         self.bad_words_filter = {}
 
     async def check_bad_word(self, message: disnake.Message):
+        if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
+            return
         guild = self.bot.get_guild(913310006814859334)
         for word in message.content.split():
             if utils.check_word(word) is True:
@@ -62,6 +64,7 @@ class OnMessage(commands.Cog):
                 else:
                     self.bad_words_filter[message.author.id] += 1
                 if usr >= 4:
+                    self.bad_words_filter[message.author.id] = 0
                     time = get_mute_time(message.author.id)
                     _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} [BAD WORD FILTER]')
                     muted_role = guild.get_role(913376647422545951)
@@ -72,9 +75,7 @@ class OnMessage(commands.Cog):
                         reason=_data.arg,
                         filter=True
                     )
-                    if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
-                        data.is_owner = True
-                    elif 913315033134542889 in (r.id for r in message.author.roles):  # Checks for admin
+                    if 913315033134542889 in (r.id for r in message.author.roles):  # Checks for admin
                         data.is_admin = True
                     elif 913315033684008971 in (r.id for r in message.author.roles):  # Checks for mod
                         data.is_mod = True
@@ -92,7 +93,7 @@ class OnMessage(commands.Cog):
                     except disnake.Forbidden:
                         pass
                     await message.channel.send(
-                        f'> ⚠️ **[BAD WORD]** `{message.author}` has been muted for saying a bad word '
+                        f'> ⚠️ **[BAD WORD]** {message.mention} has been muted for saying a bad word '
                         f'until {utils.format_dt(_data.dt, "F")} (`{utils.human_timedelta(_data.dt, suffix=False)}`)'
                     )
 
