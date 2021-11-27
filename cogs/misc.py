@@ -185,7 +185,7 @@ class Misc(commands.Cog):
         """Check the avatar ``member`` has."""
 
         member = member or ctx.author
-        em = disnake.Embed(title=f'{member.display_name}\'s avatar')
+        em = disnake.Embed(colour=utils.blurple, title=f'{member.display_name}\'s avatar')
         em.set_image(url=member.display_avatar)
         em.set_footer(text=f'Requested By: {ctx.author}')
         await ctx.reply(embed=em)
@@ -196,6 +196,7 @@ class Misc(commands.Cog):
 
         member = member or ctx.author
         em = disnake.Embed(
+            colour=utils.blurple,
             title='Creation Date',
             description=f'{member.mention} created their account '
                         f'on {utils.format_dt(member.created_at, "F")} '
@@ -209,6 +210,7 @@ class Misc(commands.Cog):
 
         member = member or ctx.author
         em = disnake.Embed(
+            colour=utils.blurple,
             title='Join Date',
             description=f'{member.mention} joined the server '
                         f'on {utils.format_dt(member.joined_at, "F")} '
