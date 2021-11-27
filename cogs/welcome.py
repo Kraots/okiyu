@@ -32,7 +32,7 @@ class Welcome(commands.Cog):
                         "***Don't forget to get your roles from*** <#913336089492717618>\n"
                         "***For bot commands please use*** <#913330644875104306>\n\n"
                         "> Enjoy your stay ^-^",
-            color=utils.light_blue
+            color=utils.pastel
         )
         welcome.set_thumbnail(url=member.display_avatar)
         welcome.set_footer(text=f"Created {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
