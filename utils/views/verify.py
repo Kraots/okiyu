@@ -87,7 +87,11 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 else:
                     break
 
-        await _age.reply('What\'s your gender? (e.g: male, female, non-binary, trans-male, trans-female, etc...)')
+        await _age.reply(
+            'What\'s your gender? '
+            '(e.g: male, female, non-binary, trans-male, trans-female, etc...)\n'
+            '***Please be specific!***'
+        )
         _gender = await bot.wait_for('message', timeout=180.0, check=check)
         gender = _gender.content
         if len(gender) > 100:
@@ -125,7 +129,11 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             else:
                 break
 
-        await _looking.reply('What\'s your sexuality? (e.g: straight, bisexual, gay, lesbian, pansexual, etc...)')
+        await _looking.reply(
+            'What\'s your sexuality? '
+            '(e.g: straight, bisexual, gay, lesbian, pansexual, etc...)\n'
+            '***Please be specific!***'
+        )
         _sexuality = await bot.wait_for('message', timeout=180.0, check=check)
         sexuality = _sexuality.content
         if len(sexuality) > 100:
