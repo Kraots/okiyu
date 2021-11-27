@@ -298,7 +298,7 @@ class Misc(commands.Cog):
                     key = f'[LEFT] {mute.id}'
                 value = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
                         f'**Reason:** {mute.reason}\n' \
-                        f'**Mute Duration:** `{mute.duration}`' \
+                        f'**Mute Duration:** `{mute.duration}`\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
                         f'**Left:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
@@ -321,7 +321,7 @@ class Misc(commands.Cog):
             em.set_author(name=member, icon_url=member.display_avatar)
             em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
-                             f'**Mute Duration:** `{mute.duration}`' \
+                             f'**Mute Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Left:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
