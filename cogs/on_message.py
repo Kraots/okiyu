@@ -34,7 +34,7 @@ def get_mute_time(user_id) -> str:
     elif curr_amount == 6:
         return '1 day'
     else:
-        return '1 month'  # This shouldn't really even happen, but just in case.
+        return '1 month'  # This shouldn't really even happen, but just in case it really gets that bad.
 
 
 async def send_webhook(em: disnake.Embed, view: disnake.ui.View, bot: Ukiyo):
