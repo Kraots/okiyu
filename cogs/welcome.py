@@ -58,7 +58,7 @@ class Welcome(commands.Cog):
                 fields=[
                     ('Member', f'{member.mention} (`{member.id}`)'),
                     ('Reason', 'Mute Evasion.'),
-                    ('Mute Duration', utils.human_timedelta(mute.muted_until, suffix=False)),
+                    ('Mute Duration', f'`{utils.human_timedelta(mute.muted_until, suffix=False)}`'),
                     ('Expires At', utils.format_dt(mute.muted_until, 'F')),
                     ('By', f'{mem.mention} (`{mem.id}`)'),
                     ('At', utils.format_dt(datetime.now(), 'F')),

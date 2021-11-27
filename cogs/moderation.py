@@ -319,7 +319,7 @@ class Moderation(commands.Cog):
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('Reason', reason),
-                ('Mute Duration', duration),
+                ('Mute Duration', f'`{duration}`'),
                 ('Expires At', format_dt(time, "F")),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
@@ -369,7 +369,7 @@ class Moderation(commands.Cog):
             title='[UNMUTE]',
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
-                ('Mute Duration', data.duration),
+                ('Mute Duration', f'`{data.duration}`'),
                 ('Left', human_timedelta(data.muted_until, suffix=False)),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
@@ -398,7 +398,7 @@ class Moderation(commands.Cog):
                     key = f'[LEFT] {mute.id}'
                 value = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
                         f'**Reason:** {mute.reason}\n' \
-                        f'**Mute Duration:** {mute.duration}' \
+                        f'**Mute Duration:** `{mute.duration}`' \
                         f'**Expires At:** {format_dt(mute.muted_until, "F")}\n' \
                         f'**Left:** `{human_timedelta(mute.muted_until, suffix=False)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
@@ -421,7 +421,7 @@ class Moderation(commands.Cog):
             em.set_author(name=member, icon_url=member.display_avatar)
             em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
-                             f'**Mute Duration:** {mute.duration}' \
+                             f'**Mute Duration:** `{mute.duration}`' \
                              f'**Expires At:** {format_dt(mute.muted_until, "F")}\n' \
                              f'**Left:** `{human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
@@ -464,7 +464,7 @@ class Moderation(commands.Cog):
                     title='[MUTE EXPIRED]',
                     fields=[
                         ('Member', f'{member.mention} (`{member.id}`)'),
-                        ('Mute Duration', mute.duration),
+                        ('Mute Duration', f'`{mute.duration}`'),
                         ('At', format_dt(datetime.now(), 'F')),
                     ]
                 )
