@@ -87,7 +87,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 else:
                     break
 
-        await _age.reply('What\'s your gender?')
+        await _age.reply('What\'s your gender? (e.g: male, female, non-binary, queer, trans-male, trans-female, etc...)')
         _gender = await bot.wait_for('message', timeout=180.0, check=check)
         gender = _gender.content
         if len(gender) > 100:
