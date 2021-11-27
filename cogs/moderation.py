@@ -370,7 +370,7 @@ class Moderation(commands.Cog):
             fields=[
                 ('Member', f'{member.mention} (`{member.id}`)'),
                 ('Mute Duration', f'`{data.duration}`'),
-                ('Left', human_timedelta(data.muted_until, suffix=False)),
+                ('Left', f'`{human_timedelta(data.muted_until, suffix=False)}`'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ]
