@@ -61,7 +61,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _name.reply('Name too long. Type `!intro` to redo.')
+            return await _name.reply(f'> {ctx.disagree} Name too long. Type `!intro` to redo.')
 
         await _name.reply('What\'s your age?')
         while True:
@@ -69,16 +69,16 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 _age = await bot.wait_for('message', timeout=180.0, check=check)
                 age = int(_age.content)
             except ValueError:
-                await ctx.send('Must be a number.')
+                await ctx.send(f'> {ctx.disagree} Must be a number.')
             except TimeoutError:
                 try:
                     bot.verifying.pop(bot.verifying.index(user_id))
                 except (IndexError, ValueError):
                     pass
-                return await ctx.reply('Ran out of time.')
+                return await ctx.reply(f'> {ctx.disagree} Ran out of time.')
             else:
                 if age < 14 or age > 19:
-                    await ctx.send('Sorry! This dating server is only for people between the ages of 14-19.')
+                    await ctx.send(f'> {ctx.disagree} Sorry! This dating server is only for people between the ages of 14-19.')
                     try:
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
@@ -95,7 +95,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _gender.reply('Gender too long. Type `!intro` to redo.')
+            return await _gender.reply(f'> {ctx.disagree} Gender too long. Type `!intro` to redo.')
 
         await _gender.reply('Where are you from?')
         _location = await bot.wait_for('message', timeout=180.0, check=check)
@@ -105,14 +105,14 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _location.reply('Location too long. Type `!intro` to redo.')
+            return await _location.reply(f'> {ctx.disagree} Location too long. Type `!intro` to redo.')
 
         await _location.reply('Dms? `open` | `closed` | `ask`')
         while True:
             _dms = await bot.wait_for('message', timeout=180.0, check=check)
             dms = _dms.content
             if dms.lower() not in ('open', 'closed', 'ask'):
-                await _dms.reply('Must only be `open` | `closed` | `ask`')
+                await _dms.reply(f'> {ctx.disagree} Must only be `open` | `closed` | `ask`')
             else:
                 break
 
@@ -121,7 +121,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             _looking = await bot.wait_for('message', timeout=180.0, check=check)
             looking = _looking.content
             if looking.lower() not in ('yes', 'no'):
-                await _looking.reply('Must only be `yes` | `no`')
+                await _looking.reply(f'> {ctx.disagree} Must only be `yes` | `no`')
             else:
                 break
 
@@ -133,14 +133,14 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await ctx.reply('Sexuality too long. Type `!intro` to redo.')
+            return await ctx.reply(f'> {ctx.disagree} Sexuality too long. Type `!intro` to redo.')
 
         await _sexuality.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
         while True:
             _status = await bot.wait_for('message', timeout=180.0, check=check)
             status = _status.content
             if status.lower() not in ('single', 'taken', 'complicated'):
-                await _status.reply('Must only be `single` | `taken` | `complicated`')
+                await _status.reply(f'> {ctx.disagree} Must only be `single` | `taken` | `complicated`')
             else:
                 break
 
@@ -152,7 +152,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _likes.reply('You like too many things. Please don\'t go above 1024 '
+            return await _likes.reply(f'> {ctx.disagree} You like too many things. Please don\'t go above 1024 '
                                       'characters next time. Type `!intro` to redo.')
 
         await _likes.reply('What do you dislike?')
@@ -163,14 +163,14 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _likes.reply('You dislike too many things. Please don\'t go above 1024 '
-                                      'characters next time. Type `!intro` to redo.')
+            return await _dislikes.reply(f'> {ctx.disagree} You dislike too many things. Please don\'t go above 1024 '
+                                         'characters next time. Type `!intro` to redo.')
     except TimeoutError:
         try:
             bot.verifying.pop(bot.verifying.index(user_id))
         except (IndexError, ValueError):
             pass
-        return await ctx.reply('Ran out of time.')
+        return await ctx.reply(f'> {ctx.disagree} Ran out of time.')
     else:
         role = guild.get_role(random.choice(utils.all_colour_roles))
         usr = guild.get_member(user_id)
@@ -225,7 +225,7 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
             await data.commit(replace=True)
 
         await ctx.reply(
-            f'Successfully {"edited" if to_update else "created"} your intro. You can see it in {intro_channel.mention}'
+            f'> 👌 Successfully {"edited" if to_update else "created"} your intro. You can see it in {intro_channel.mention}'
         )
 
 
@@ -237,14 +237,15 @@ class Verify(View):
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
         await inter.response.defer()
+        disagree = '<:disagree:913895999125196860>'
         if inter.author.id in self.bot.verifying:
             return await inter.followup.send(
-                'Please complete your current verification before proceeding again!', ephemeral=True
+                f'> {disagree} Please complete your current verification before proceeding again!', ephemeral=True
             )
         self.bot.verifying.append(inter.author.id)
         try:
             msg = await inter.author.send('Starting the intro creation process...')
         except disnake.Forbidden:
-            return await inter.followup.send('You have your dms off! Please enable them!!', ephemeral=True)
+            return await inter.followup.send(f'> {disagree} You have your dms off! Please enable them!!', ephemeral=True)
         ctx = await self.bot.get_context(msg)
         await create_intro(ctx, self.bot, inter.author.id)
