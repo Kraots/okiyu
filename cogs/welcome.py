@@ -26,9 +26,6 @@ class Welcome(commands.Cog):
         welcome_channel = guild.get_channel(913331535170637825)
         member_count = len([m for m in guild.members if not m.bot])
 
-        def format_date(dt):
-            return f'{dt:%Y-%m-%d %H:%M} ({utils.human_timedelta(dt, accuracy=3)})'
-
         welcome = disnake.Embed(
             description="\n\n***Please read the rules at*** <#913331459673178122>\n"
                         "***You can always get a colour from*** <#913331502761271296>\n"
@@ -38,7 +35,7 @@ class Welcome(commands.Cog):
             color=utils.pastel
         )
         welcome.set_thumbnail(url=member.display_avatar)
-        welcome.set_footer(text=f"Created: {format_date(member.created_at)}", icon_url=member.display_avatar)
+        welcome.set_footer(text=f"Created: {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
         msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{member_count}** member.\n\n\n_ _'
         await welcome_channel.send(msg, embed=welcome)
 

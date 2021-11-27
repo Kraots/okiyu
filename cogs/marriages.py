@@ -23,19 +23,19 @@ class Marriages(commands.Cog):
 
         guild = self.bot.get_guild(913310006814859334)
         if ctx.author == member:
-            return await ctx.reply('You cannot marry yourself.')
+            return await ctx.reply(f'> {ctx.disagree} You cannot marry yourself.')
         elif member.bot:
-            return await ctx.reply('You cannot marry bots.')
+            return await ctx.reply(f'> {ctx.disagree} You cannot marry bots.')
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
         if data is not None:
             mem = guild.get_member(member.id)
-            return await ctx.reply(f'You are already married to {mem.mention}')
+            return await ctx.reply(f'> {ctx.disagree} You are already married to {mem.mention}')
         data: Marriage = await Marriage.find_one({'_id': member.id})
         if data is not None:
             mem = guild.get_member(data.married_to)
-            return await ctx.reply(f'`{member}` is already married to {mem.mention}')
+            return await ctx.reply(f'> {ctx.disagree} `{member}` is already married to {mem.mention}')
 
-        view = utils.ConfirmView(ctx, f'{member.mention} Did not react in time.', member)
+        view = utils.ConfirmView(ctx, f'> {ctx.disagree} {member.mention} Did not react in time.', member)
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
         await view.wait()
         if view.response is True:
@@ -65,7 +65,7 @@ class Marriages(commands.Cog):
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
 
         if data is None:
-            return await ctx.send('You are not married to anyone.')
+            return await ctx.send(f'> {ctx.disagree} You are not married to anyone.')
 
         else:
             guild = self.bot.get_guild(913310006814859334)
@@ -96,9 +96,9 @@ class Marriages(commands.Cog):
         data: Marriage = await Marriage.find_one({'_id': member.id})
         if data is None:
             if member == ctx.author:
-                i = 'You\'re not married to anyone.'
+                i = f'> {ctx.disagree} You\'re not married to anyone.'
             else:
-                i = f'{member.mention} is not married to anyone.'
+                i = f'> {ctx.disagree} {member.mention} is not married to anyone.'
             return await ctx.reply(i)
         guild = self.bot.get_guild(913310006814859334)
         mem = guild.get_member(data.married_to)

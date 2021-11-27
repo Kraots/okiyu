@@ -273,7 +273,7 @@ class Moderation(commands.Cog):
                         f'**Left:** `{human_timedelta(mute.muted_until, suffix=False)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
             if len(entries) == 0:
-                return await ctx.reply('There are no current mutes.')
+                return await ctx.reply(f'> {ctx.disagree} There are no current mutes.')
 
             source = FieldPageSource(entries, per_page=5)
             source.embed.color = utils.blurple
@@ -284,9 +284,9 @@ class Moderation(commands.Cog):
             mute: Mutes = await Mutes.find_one({'_id': member.id})
             if mute is None:
                 if member == ctx.author:
-                    return await ctx.reply('You are not muted.')
+                    return await ctx.reply(f'> {ctx.disagree} You are not muted.')
                 else:
-                    return await ctx.reply(f'`{member}` is not muted.')
+                    return await ctx.reply(f'> {ctx.disagree} `{member}` is not muted.')
             em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=member, icon_url=member.display_avatar)
             em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
@@ -299,7 +299,7 @@ class Moderation(commands.Cog):
     @mute_cmd.error
     async def mute_cmd_error(self, ctx: Context, error):
         if isinstance(error, commands.BadArgument):
-            return await ctx.reply(error)
+            return await ctx.reply(f'> {ctx.disagree} {error}')
         await self.bot.reraise(ctx, error)
 
     @tasks.loop(seconds=15.0)
