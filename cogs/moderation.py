@@ -15,8 +15,6 @@ from utils import (
     Mutes,
     format_dt,
     human_timedelta,
-    RoboPages,
-    FieldPageSource,
     AnnouncementView
 )
 
@@ -390,57 +388,6 @@ class Moderation(commands.Cog):
             ],
             view=self.jump_view(ctx.message.jump_url)
         )
-
-    @commands.command(name='checkmute', aliases=('checkmutes', 'mutescheck', 'mutecheck',))
-    async def check_mute(self, ctx: Context, *, member: disnake.Member = None):
-        """
-        Check all the current muted members and their time left. If ``member`` is specified,
-        it will only show for that member, including the reason they got muted.
-        """
-
-        if isinstance(ctx.channel, disnake.DMChannel):
-            member = ctx.author
-
-        guild = self.bot.get_guild(913310006814859334)
-        if member is None:
-            entries = []
-            index = 0
-            async for mute in Mutes.find():
-                mute: Mutes
-                index += 1
-                key = guild.get_member(mute.id)
-                if key is None:
-                    key = f'[LEFT] {mute.id}'
-                value = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
-                        f'**Reason:** {mute.reason}\n' \
-                        f'**Mute Duration:** `{mute.duration}`' \
-                        f'**Expires At:** {format_dt(mute.muted_until, "F")}\n' \
-                        f'**Left:** `{human_timedelta(mute.muted_until, suffix=False)}`\n\n'
-                entries.append((f'`{index}`. {key}', value))
-            if len(entries) == 0:
-                return await ctx.reply(f'> {ctx.disagree} There are no current mutes.')
-
-            source = FieldPageSource(entries, per_page=5)
-            source.embed.color = utils.blurple
-            source.embed.title = 'Here are all the currently muted members'
-            paginator = RoboPages(source, ctx=ctx, compact=True)
-            await paginator.start()
-        else:
-            mute: Mutes = await Mutes.find_one({'_id': member.id})
-            if mute is None:
-                if member == ctx.author:
-                    return await ctx.reply(f'> {ctx.disagree} You are not muted.')
-                else:
-                    return await ctx.reply(f'> {ctx.disagree} `{member}` is not muted.')
-            em = disnake.Embed(colour=utils.blurple)
-            em.set_author(name=member, icon_url=member.display_avatar)
-            em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
-                             f'**Reason:** {mute.reason}\n' \
-                             f'**Mute Duration:** `{mute.duration}`' \
-                             f'**Expires At:** {format_dt(mute.muted_until, "F")}\n' \
-                             f'**Left:** `{human_timedelta(mute.muted_until, suffix=False)}`'
-            em.set_footer(text=f'Requested By: {ctx.author}')
-            await ctx.reply(embed=em)
 
     @mute_cmd.error
     async def mute_cmd_error(self, ctx: Context, error):
