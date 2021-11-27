@@ -82,7 +82,7 @@ class Ukiyo(commands.Bot):
             self.add_view(utils.RelationshipStatusButtonRoles(), message_id=913790418959876097)
 
             async for ticket in utils.Ticket.find():
-                self.add_view(utils.Ticket(), message_id=ticket.message_id)
+                self.add_view(utils.TicketView(), message_id=ticket.message_id)
 
             self.added_views = True
 
