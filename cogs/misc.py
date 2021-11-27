@@ -193,16 +193,16 @@ class Misc(commands.Cog):
         await ctx.reply(embed=em)
 
     @commands.command()
-    async def created(self, ctx: Context, *, member: disnake.Member = None):
-        """Check the date when the ``member`` created their account."""
+    async def created(self, ctx: Context, *, user: disnake.User = None):
+        """Check the date when the ``user`` created their account."""
 
-        member = member or ctx.author
+        user = user or ctx.author
         em = disnake.Embed(
             colour=utils.blurple,
             title='Creation Date',
-            description=f'{member.mention} created their account '
-                        f'on {utils.format_dt(member.created_at, "F")} '
-                        f'(`{utils.human_timedelta(member.created_at)}`)'
+            description=f'{user.mention} created their account '
+                        f'on {utils.format_dt(user.created_at, "F")} '
+                        f'(`{utils.human_timedelta(user.created_at)}`)'
         )
         await ctx.reply(embed=em)
 
