@@ -107,7 +107,7 @@ class OnMessage(commands.Cog):
                             ('Mute Duration', f'`{duration}`'),
                             ('Expires At', utils.format_dt(_data.dt, "F")),
                             ('By', f'{self.bot.user.mention} (`{self.bot.user.id}`)'),
-                            ('At', utils.format_dt(datetime.now(), 'F')),
+                            ('At', utils.format_dt(datetime.datetime.now(), 'F')),
                         ]
                     )
 
