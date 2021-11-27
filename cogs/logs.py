@@ -40,7 +40,7 @@ class Logs(commands.Cog):
         self.send_embeds.start()
         self.embeds = []
 
-    @tasks.loop(seconds=15.0)
+    @tasks.loop(minutes=1.0)
     async def send_embeds(self):
         if len(self.embeds) != 0:
             try:
