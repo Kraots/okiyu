@@ -37,11 +37,11 @@ class Intros(commands.Cog):
                 return await ctx.reply('User is mysterious.')
             if member == ctx.author:
                 return await ctx.reply(
-                    'You don\'t have an intro. Please contact a staff member to unverify you! This is a bug.'
+                    f'> {ctx.disagree} You don\'t have an intro. Please contact a staff member to unverify you! This is a bug.'
                 )
             else:
                 return await ctx.reply(
-                    f'`{member}` doesn\'t have an intro. Please contact a staff member to unverify them! This is a bug.'
+                    f'> {ctx.disagree} `{member}` doesn\'t have an intro. Please contact a staff member to unverify them! This is a bug.'
                 )
         guild = self.bot.get_guild(913310006814859334)
         intro_channel = guild.get_channel(913331578606854184)
@@ -75,7 +75,7 @@ class Intros(commands.Cog):
         consider that their intro is inappropriate."""
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply('You cannot unverify somebody that is a higher or equal role than you.')
+            return await ctx.reply(f'> {ctx.disagree} You cannot unverify somebody that is a higher or equal role than you.')
 
         guild = self.bot.get_guild(913310006814859334)
         unverified_role = guild.get_role(913329062347423775)
