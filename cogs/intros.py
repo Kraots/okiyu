@@ -87,7 +87,7 @@ class Intros(commands.Cog):
                 await msg.delete()
             await data.delete()
         await member.edit(roles=[unverified_role])
-        await ctx.reply(f'`{member}` has been successfully unverified.')
+        await ctx.reply(f'> 👌 `{member}` has been successfully unverified.')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
