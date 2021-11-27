@@ -7,7 +7,7 @@ all_sexuality_roles = (
 )
 
 sexuality_roles = {
-    'ukiyo:sexuality_roles:Other_Sexuality': 913771961845424159, 'ukiyo:sexuality_roles:Queer': 913771961530851368,
+    'ukiyo:sexuality_roles:Other-Sexuality': 913771961845424159, 'ukiyo:sexuality_roles:Queer': 913771961530851368,
     'ukiyo:sexuality_roles:Asexual': 913771961249828964, 'ukiyo:sexuality_roles:Bisexual': 913771961002364948,
     'ukiyo:sexuality_roles:Lesbian': 913771960725549096, 'ukiyo:sexuality_roles:Gay': 913771960343867402,
     'ukiyo:sexuality_roles:Straight': 913771959987372073
