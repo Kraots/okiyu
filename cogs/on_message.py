@@ -122,7 +122,7 @@ class OnMessage(commands.Cog):
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
                 if self.webhook is None:
-                    self.webhook = self.bot.get_webhook(
+                    self.webhook = await self.bot.get_webhook(
                         self.bot.get_channel(913332431417925634),
                         avatar=self.bot.user.display_avatar
                     )
@@ -159,7 +159,7 @@ class OnMessage(commands.Cog):
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=after.jump_url))
                 if self.webhook is None:
-                    self.webhook = self.bot.get_webhook(
+                    self.webhook = await self.bot.get_webhook(
                         self.bot.get_channel(913332431417925634),
                         avatar=self.bot.user.display_avatar
                     )
