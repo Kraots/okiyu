@@ -319,7 +319,7 @@ class Moderation(commands.Cog):
             )
         except disnake.Forbidden:
             pass
-        await ctx.reply(
+        _msg = await ctx.reply(
             f'> 👌 📨 Applied mute to {member.mention} '
             f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
         )
@@ -335,7 +335,7 @@ class Moderation(commands.Cog):
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
-            view=self.jump_view(ctx.message.jump_url)
+            view=self.jump_view(_msg.jump_url)
         )
 
     @commands.command(name='unmute')
