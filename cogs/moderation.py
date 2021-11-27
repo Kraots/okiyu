@@ -296,7 +296,6 @@ class Moderation(commands.Cog):
             muted_until=time,
             reason=reason,
             duration=duration,
-            jump_url=ctx.message.jump_url,
         )
         if 913310292505686046 in (r.id for r in member.roles):  # Checks for owner
             data.is_owner = True
@@ -304,7 +303,6 @@ class Moderation(commands.Cog):
             data.is_admin = True
         elif 913315033684008971 in (r.id for r in member.roles):  # Checks for mod
             data.is_mod = True
-        await data.commit()
 
         guild = self.bot.get_guild(913310006814859334)
         muted_role = guild.get_role(913376647422545951)
@@ -323,6 +321,8 @@ class Moderation(commands.Cog):
             f'> 👌 📨 Applied mute to {member.mention} '
             f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
         )
+        data.jump_url = _msg.jump_url
+        await data.commit()
         await self.ensure_webhook()
         await utils.log(
             self.webhook,
