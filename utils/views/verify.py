@@ -191,7 +191,8 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
         msg = await intro_channel.send(embed=em)
 
         if to_update is False:
-            await usr.edit(roles=[role])
+            new_roles = [r for r in usr.roles if r.id != 913329062347423775] + [role]
+            await usr.edit(roles=new_roles)
             await utils.Intro(
                 id=user_id,
                 name=name,
