@@ -127,9 +127,7 @@ class Logs(commands.Cog):
         em.set_thumbnail(url=member.display_avatar)
         em.set_footer(text=f'User ID: {member.id}')
 
-        await asyncio.sleep(1)
-        await self.ensure_webhook()
-        await send_webhook(em, self.webhook)
+        self.embeds.append(em)
 
     @commands.Cog.listener()
     async def on_member_ban(self, guild: disnake.Guild, member: Union[disnake.Member, disnake.User]):
@@ -142,8 +140,7 @@ class Logs(commands.Cog):
         em.set_footer(text=f'User ID: {member.id}')
 
         await asyncio.sleep(1)
-        await self.ensure_webhook()
-        await send_webhook(em, self.webhook)
+        self.embeds.append(em)
 
     @commands.Cog.listener()
     async def on_member_unban(self, guild: disnake.Guild, user: disnake.User):
@@ -152,8 +149,7 @@ class Logs(commands.Cog):
         em.set_thumbnail(url=user.display_avatar)
         em.set_footer(text=f'User ID: {user.id}')
 
-        await self.ensure_webhook()
-        await send_webhook(em, self.webhook)
+        self.embeds.append(em)
 
     @commands.Cog.listener()
     async def on_guild_update(self, before: disnake.Guild, after: disnake.Guild):
