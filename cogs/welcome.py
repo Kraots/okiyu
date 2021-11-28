@@ -52,6 +52,15 @@ class Welcome(commands.Cog):
             muted_role = guild.get_role(913376647422545951)
             mem = guild.get_member(mute.muted_by)
             await member.add_roles(muted_role, reason='[MUTE EVASION] user joined but was still muted in the database')
+            em = disnake.Embed(title='You have been muted!', color=utils.red)
+            em.description = f'**Muted By:** {self.bot.user}\n' \
+                             f'**Reason:** Mute Evasion.\n' \
+                             f'**Expire Date:** {utils.format_dt(mute.muted_until, "F")}\n' \
+                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
+            em.set_footer(text='Muted in `Ukiyo`')
+            em.timestamp = datetime.datetime.now(datetime.timezone.utc)
+            await member.send(embed=em)
+
             view = disnake.ui.View()
             view.add_item(disnake.ui.Button(label='Jump!', url=mute.jump_url))
             await utils.log(
