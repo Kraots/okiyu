@@ -214,8 +214,9 @@ class Moderation(commands.Cog):
     async def _ban(self, ctx: Context, member: Union[disnake.Member, disnake.User], *, reason: str):
         """Bans an user."""
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
+        if isinstance(member, disnake.Member):
+            if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
+                return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         try:
             await member.send('> Hello! Sadly, you have been **banned** from `Ukiyo`. Goodbye 👋')
