@@ -300,7 +300,7 @@ class Misc(commands.Cog):
                         f'**Reason:** {mute.reason}\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
                         f'**Mute Duration:** `{mute.duration}`\n' \
-                        f'**Left:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`\n\n'
+                        f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
             if len(entries) == 0:
                 return await ctx.reply(f'> {ctx.disagree} There are no current mutes.')
@@ -323,7 +323,7 @@ class Misc(commands.Cog):
                              f'**Reason:** {mute.reason}\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Mute Duration:** `{mute.duration}`\n' \
-                             f'**Left:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
+                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.reply(embed=em)
 
