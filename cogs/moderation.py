@@ -261,6 +261,17 @@ class Moderation(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} The user is not banned.')
         else:
             await ctx.reply(f'> 👌 Successfully unbanned `{user}`')
+            await self.ensure_webhook()
+            await utils.log(
+                self.webhook,
+                title='[UNBAN]',
+                fields=[
+                    ('Member', f'{user.mention} (`{user.id}`)'),
+                    ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                    ('At', format_dt(datetime.now(), 'F')),
+                ],
+                view=self.jump_view(ctx.message.jump_url)
+            )
 
     @commands.command(name='kick')
     @is_mod()
