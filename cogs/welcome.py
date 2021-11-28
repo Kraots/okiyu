@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import disnake
 from disnake.ext import commands
@@ -58,7 +58,7 @@ class Welcome(commands.Cog):
                              f'**Expire Date:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text='Muted in `Ukiyo`')
-            em.timestamp = datetime.datetime.now(datetime.timezone.utc)
+            em.timestamp = datetime.now(timezone.utc)
             await member.send(embed=em)
 
             view = disnake.ui.View()
