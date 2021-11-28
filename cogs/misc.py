@@ -200,7 +200,7 @@ class Misc(commands.Cog):
         em.set_footer(text=f'Requested By: {ctx.author}')
         await ctx.reply(embed=em)
 
-    @commands.command()
+    @commands.group(invoke_without_command=True, case_insensitive=True, ignore_extra=False)
     async def created(self, ctx: Context, *, user: disnake.User = None):
         """Check the date when the ``user`` created their account."""
 
@@ -211,6 +211,20 @@ class Misc(commands.Cog):
             description=f'{user.mention} created their account '
                         f'on {utils.format_dt(user.created_at, "F")} '
                         f'(`{utils.human_timedelta(user.created_at)}`)'
+        )
+        await ctx.reply(embed=em)
+
+    @created.command()
+    async def server(self, ctx: Context):
+        """See the date when the server got created at."""
+
+        guild = self.bot.get_guild(913310006814859334)
+        em = disnake.Embed(
+            colour=utils.blurple,
+            title='Creation Date',
+            description=f'The server was created on '
+                        f'on {utils.format_dt(guild.created_at, "F")} '
+                        f'(`{utils.human_timedelta(guild.created_at)}`)'
         )
         await ctx.reply(embed=em)
 
