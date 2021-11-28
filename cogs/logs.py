@@ -1,5 +1,4 @@
 from typing import Union, Sequence
-import asyncio
 import datetime
 
 import disnake
@@ -139,7 +138,6 @@ class Logs(commands.Cog):
         em.set_thumbnail(url=member.display_avatar)
         em.set_footer(text=f'User ID: {member.id}')
 
-        await asyncio.sleep(1)
         self.embeds.append(em)
 
     @commands.Cog.listener()
