@@ -223,7 +223,7 @@ class Misc(commands.Cog):
 
         guild = self.bot.get_guild(913310006814859334)
         created_date = guild.created_at
-        publiced_date = guild.get_member(302050872383242240)
+        publiced_date = guild.get_member(302050872383242240).joined_at
         em = disnake.Embed(colour=utils.red, title='Server Creation')
         em.add_field(
             name='Created At',
