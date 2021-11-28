@@ -87,10 +87,14 @@ class OnMessage(commands.Cog):
                     await message.author.edit(roles=new_roles, reason=f'[BAD WORD FILTER]: "{word}"')
 
                     try:
-                        await message.author.send(
-                            f'Hello, you have been muted in `Ukiyo` by **{self.bot.user}** for **{_data.arg}** '
-                            f'until {utils.format_dt(_data.dt, "F")} (`{duration}`)'
-                        )
+                        em = disnake.Embed(title='You have been muted!', color=utils.red)
+                        em.description = f'**Muted By:** {self.bot.user}\n' \
+                                         f'**Reason:** {_data.arg}\n' \
+                                         f'**Mute Duration:** `{duration}`\n' \
+                                         f'**Expire Date:** {utils.format_dt(_data.dt, "F")}'
+                        em.set_footer(text='Muted in `Ukiyo`')
+                        em.timestamp = datetime.datetime.now(datetime.timezone.utc)
+                        await message.author.send(embed=em)
                     except disnake.Forbidden:
                         pass
                     _msg = await message.channel.send(

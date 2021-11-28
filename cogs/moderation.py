@@ -1,6 +1,6 @@
 import asyncio
 from typing import Union
-from datetime import datetime
+from datetime import datetime, timezone
 
 import disnake
 from disnake.ext import commands, tasks
@@ -311,10 +311,14 @@ class Moderation(commands.Cog):
                      ] + [muted_role]
         await member.edit(roles=new_roles, reason=f'[MUTE] {ctx.author} ({ctx.author.id}): {reason}')
         try:
-            await member.send(
-                f'Hello, you have been muted in `Ukiyo` by {ctx.author} for **{reason}** '
-                f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
-            )
+            em = disnake.Embed(title='You have been muted!', color=utils.red)
+            em.description = f'**Muted By:** {ctx.author}\n' \
+                             f'**Reason:** {reason}\n' \
+                             f'**Mute Duration:** `{human_timedelta(time, suffix=False)}`\n' \
+                             f'**Expire Date:** {format_dt(time, "F")}'
+            em.set_footer(text='Muted in `Ukiyo`')
+            em.timestamp = datetime.now(timezone.utc)
+            await member.send(embed=em)
         except disnake.Forbidden:
             pass
         _msg = await ctx.reply(
