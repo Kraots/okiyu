@@ -90,6 +90,24 @@ class TabularData:
 
 
 def format_dt(dt, style=None):
+    """
+    Styles
+    -------
+        `t => 22:57`
+
+        `T => 22:57:58`
+
+        `d => 17/05/2016`
+
+        `D => 17 May 2016`
+
+        `f (default) => 17 May 2016 22:57`
+
+        `F => Tuesday, 17 May 2016 22:57`
+
+        `R => 5 years ago`
+    """
+
     if dt.tzinfo is None:
         dt = dt.replace(tzinfo=datetime.timezone.utc)
 
