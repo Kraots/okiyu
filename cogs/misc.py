@@ -216,15 +216,26 @@ class Misc(commands.Cog):
 
     @created.command()
     async def server(self, ctx: Context):
-        """See the date when the server got created at."""
+        """
+        See the date when the server got created at
+        and when it was made public.
+        """
 
         guild = self.bot.get_guild(913310006814859334)
-        em = disnake.Embed(
-            colour=utils.blurple,
-            title='Creation Date',
-            description=f'The server was created on '
-                        f'on {utils.format_dt(guild.created_at, "F")} '
-                        f'(`{utils.human_timedelta(guild.created_at)}`)'
+        created_date = guild.created_at
+        publiced_date = guild.get_member(302050872383242240)
+        em = disnake.Embed(colour=utils.red, title='Server Creation')
+        em.add_field(
+            name='Created At',
+            value=f'{utils.format_dt(created_date, "F")} '
+                  f'(`{utils.human_timedelta(created_date)}`)',
+            inline=False
+        )
+        em.add_field(
+            name='Publiced At',
+            value=f'{utils.format_dt(publiced_date, "F")} '
+                  f'(`{utils.human_timedelta(publiced_date)}`)',
+            inline=False
         )
         await ctx.reply(embed=em)
 
