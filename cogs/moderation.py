@@ -236,6 +236,18 @@ class Moderation(commands.Cog):
             view=self.jump_view(ctx.message.jump_url)
         )
 
+    @commands.command(name='unban')
+    async def _unban(self, ctx: Context, *, user: disnake.User):
+        """Unbans an user."""
+
+        guild = self.bot.get_guild(913310006814859334)
+        try:
+            await guild.unban(user)
+        except disnake.NotFound:
+            return await ctx.reply(f'> {ctx.disagree} The user is not banned.')
+        else:
+            await ctx.reply(f'> 👌 Successfully unbanned `{user}`')
+
     @commands.command(name='kick')
     @is_mod()
     async def _kick(self, ctx: Context, member: disnake.Member, *, reason: str):
