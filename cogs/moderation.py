@@ -98,7 +98,11 @@ class Moderation(commands.Cog):
         if channel.id not in self.ignored_channels:
             overwrites = channel.overwrites_for(role)
             overwrites.send_messages = False
-            await channel.set_permissions(role, overwrite=overwrites, reason=f'Channel locked by: "{ctx.author}"')
+            await channel.set_permissions(
+                role,
+                overwrite=overwrites,
+                reason=f'Channel locked by {ctx.author} ({ctx.author.id})'
+            )
         else:
             return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
         await ctx.reply('> 🔒 Channel Locked!')
@@ -131,7 +135,7 @@ class Moderation(commands.Cog):
                     await channel.set_permissions(
                         role,
                         overwrite=overwrites,
-                        reason=f'Channel locked by: "{ctx.author}"'
+                        reason=f'Channel locked by {ctx.author} ({ctx.author.id})'
                     )
                     _channels.append(channel.mention)
         await ctx.reply('> 🔒 All the unlocked channels have been locked!')
@@ -160,7 +164,11 @@ class Moderation(commands.Cog):
         if channel.id not in self.ignored_channels:
             overwrites = channel.overwrites_for(role)
             overwrites.send_messages = None
-            await channel.set_permissions(role, overwrite=overwrites, reason=f'Channel unlocked by: "{ctx.author}"')
+            await channel.set_permissions(
+                role,
+                overwrite=overwrites,
+                reason=f'Channel unlocked by {ctx.author} ({ctx.author.id})'
+            )
         else:
             return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
         await ctx.reply('> 🔓 Channel Unlocked!')
@@ -193,7 +201,7 @@ class Moderation(commands.Cog):
                     await channel.set_permissions(
                         role,
                         overwrite=overwrites,
-                        reason=f'Channel unlocked by: "{ctx.author}"'
+                        reason=f'Channel unlocked by {ctx.author} ({ctx.author.id})'
                     )
                     _channels.append(channel.mention)
         await ctx.reply('> 🔓 All locked channels have been unlocked!')
@@ -225,10 +233,10 @@ class Moderation(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         await guild.ban(
             member,
-            reason=f'[BAN] {ctx.author} ({ctx.author.id}): {reason}',
+            reason=f'{ctx.author} ({ctx.author.id}): "{reason}"',
             delete_message_days=0
         )
-        await ctx.send(f'> 👌🔨 Banned {member.mention} for **{reason}**')
+        await ctx.send(f'> 👌 🔨 Banned {member.mention} for **{reason}**')
         await self.ensure_webhook()
         await utils.log(
             self.webhook,
@@ -248,7 +256,7 @@ class Moderation(commands.Cog):
 
         guild = self.bot.get_guild(913310006814859334)
         try:
-            await guild.unban(user)
+            await guild.unban(user, reason=f'Unban by {ctx.author} ({ctx.author.id})')
         except disnake.NotFound:
             return await ctx.reply(f'> {ctx.disagree} The user is not banned.')
         else:
@@ -266,7 +274,7 @@ class Moderation(commands.Cog):
             await member.send('> Hello! Sadly, you have been **kicked** from `Ukiyo`. Goodbye 👋')
         except disnake.Forbidden:
             pass
-        await member.kick(reason=f'[KICK] {ctx.author} ({ctx.author.id}): {reason}')
+        await member.kick(reason=f'{ctx.author} ({ctx.author.id}): "{reason}"')
         await ctx.send(f'> 👌 Kicked {member.mention} for **{reason}**')
         await self.ensure_webhook()
         await utils.log(
@@ -327,7 +335,7 @@ class Moderation(commands.Cog):
         new_roles = [role for role in member.roles
                      if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
                      ] + [muted_role]
-        await member.edit(roles=new_roles, reason=f'[MUTE] {ctx.author} ({ctx.author.id}): {reason}')
+        await member.edit(roles=new_roles, reason=f'[MUTE] {ctx.author} ({ctx.author.id}): "{reason}"')
         try:
             em = disnake.Embed(title='You have been muted!', color=utils.red)
             em.description = f'**Muted By:** {ctx.author}\n' \
