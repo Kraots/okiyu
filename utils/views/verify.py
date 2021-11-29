@@ -76,7 +76,10 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                     bot.verifying.pop(bot.verifying.index(user_id))
                 except (IndexError, ValueError):
                     pass
-                return await ctx.reply(f'> {ctx.disagree} Ran out of time.')
+                try:
+                    return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
+                except disnake.Forbidden:
+                    pass
             else:
                 if age < 14 or age > 19:
                     await ctx.send(f'> {ctx.disagree} Sorry! This dating server is only for people between the ages of 14-19.')
@@ -190,7 +193,10 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
             bot.verifying.pop(bot.verifying.index(user_id))
         except (IndexError, ValueError):
             pass
-        return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
+        try:
+            return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
+        except disnake.Forbidden:
+            pass
     else:
         role = guild.get_role(random.choice(utils.all_colour_roles[:-1]))
         usr = guild.get_member(user_id)
