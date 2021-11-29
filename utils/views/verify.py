@@ -90,7 +90,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                         webhook,
                         title='[KICK]',
                         fields=[
-                            ('Member', f'{mem.mention} (`{mem.id}`)'),
+                            ('Member', f'{mem} (`{mem.id}`)'),
                             ('Reason', 'User does not match age requirements.'),
                             ('By', f'{bot.user.mention} (`{bot.user.id}`)'),
                             ('At', utils.format_dt(datetime.datetime.now(), 'F')),

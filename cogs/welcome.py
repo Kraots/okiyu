@@ -67,7 +67,7 @@ class Welcome(commands.Cog):
                 self.webhook,
                 title='[MUTE EVASION]',
                 fields=[
-                    ('Member', f'{member.mention} (`{member.id}`)'),
+                    ('Member', f'{member} (`{member.id}`)'),
                     ('Reason', 'Mute Evasion.'),
                     ('Expires At', utils.format_dt(mute.muted_until, 'F')),
                     ('Remaining', f'`{utils.human_timedelta(mute.muted_until, suffix=False)}`'),
