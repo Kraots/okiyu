@@ -99,6 +99,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                             ('At', utils.format_dt(datetime.datetime.now(), 'F')),
                         ]
                     )
+                    return
                 else:
                     break
 
