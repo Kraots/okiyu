@@ -36,7 +36,7 @@ class QuitButton(disnake.ui.View):
     async def interaction_check(self, interaction: disnake.MessageInteraction):
         if interaction.author.id != self.ctx.author.id:
             await interaction.response.send_message(
-                f'Only {self.ctx.author.display_name} can use the buttons on this message!',
+                f'Only **{self.ctx.author.display_name}** can use the buttons on this message!',
                 ephemeral=True
             )
             return False

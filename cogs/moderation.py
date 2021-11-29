@@ -411,7 +411,7 @@ class Moderation(commands.Cog):
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[UNMUTE] Unmuted by {ctx.author} ({ctx.author.id})')
         try:
-            await member.send(f'Hello, you have been **unmuted** in `Ukiyo` by {ctx.author}')
+            await member.send(f'Hello, you have been **unmuted** in `Ukiyo` by **{ctx.author}**')
         except disnake.Forbidden:
             pass
 
