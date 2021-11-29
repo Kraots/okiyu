@@ -108,16 +108,23 @@ async def reraise(ctx: utils.Context, error):
         await ctx.send(f'> {ctx.disagree} An error occurred')
 
 
-async def inter_reraise(bot: Ukiyo, inter, item, error):
+async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
     disagree = '<:disagree:913895999125196860>'
     get_error = "".join(format_exception(error, error, error.__traceback__))
     em = disnake.Embed(description=f'```py\n{get_error}\n```')
     await bot._owner.send(
-        content=f"**An error occurred with the item `{item}`, "
-                "here is the error:**",
+        content=f"**An error occurred with a view, "
+                "here is the error:**"
+                f"\nView: {item.view}\n"
+                f"Item Type: {item.type}\n"
+                f"Item Row: {item.row}",
         embed=em
     )
-    await inter.response.send_message(f'> {disagree} An error occurred')
+    fmt = f'> {disagree} An error occurred'
+    if inter.response.is_done():
+        await inter.followup.send(fmt)
+    else:
+        await inter.response.send_message(fmt)
 
 
 class ConfirmView(disnake.ui.View):
