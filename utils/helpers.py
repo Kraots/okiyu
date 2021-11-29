@@ -117,7 +117,7 @@ async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
                 "here is the error:**\n"
                 f"`View:` **{item.view.__class__}**\n"
                 f"`Item Type:` **{item.type}**\n"
-                f"`Item Row:` **{item.row}**",
+                f"`Item Row:` **{item.row or '0'}**",
         embed=em
     )
     fmt = f'> {disagree} An error occurred'
