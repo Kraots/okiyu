@@ -79,7 +79,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 try:
                     return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
                 except disnake.Forbidden:
-                    pass
+                    return
             else:
                 if age < 14 or age > 19:
                     await ctx.send(f'> {ctx.disagree} Sorry! This dating server is only for people between the ages of 14-19.')
@@ -94,7 +94,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                         title='[KICK]',
                         fields=[
                             ('Member', f'{mem} (`{mem.id}`)'),
-                            ('Reason', 'User does not match age requirements.'),
+                            ('Reason', f'User does not match age requirements. (`{age} y/o`)'),
                             ('By', f'{bot.user.mention} (`{bot.user.id}`)'),
                             ('At', utils.format_dt(datetime.datetime.now(), 'F')),
                         ]
