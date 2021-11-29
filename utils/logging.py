@@ -109,4 +109,7 @@ async def log(
     if timestamp is True:
         em.timestamp = datetime.now(timezone.utc)
 
-    return await channel.send(embed=em, view=view)
+    try:
+        return await channel.send(embed=em, view=view)
+    except AttributeError:
+        return await channel.send(embed=em)
