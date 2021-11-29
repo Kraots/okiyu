@@ -114,10 +114,10 @@ async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
     em = disnake.Embed(description=f'```py\n{get_error}\n```')
     await bot._owner.send(
         content=f"**An error occurred with a view, "
-                "here is the error:**"
-                f"\nView: {item.view}\n"
-                f"Item Type: {item.type}\n"
-                f"Item Row: {item.row}",
+                "here is the error:**\n"
+                f"`View:` **{item.view.__class__}**\n"
+                f"`Item Type:` **{item.type}**\n"
+                f"`Item Row:` **{item.row}**",
         embed=em
     )
     fmt = f'> {disagree} An error occurred'
