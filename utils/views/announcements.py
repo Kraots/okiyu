@@ -33,7 +33,7 @@ class AnnouncementView(View):
                 method = interaction.response.edit_message
             await method(content='You took too long. Goodbye.', view=None, embed=None)
             return self.stop()
-        raise error
+        await self.bot.inter_reraise(self.bot, interaction, item, error)
 
     async def interaction_check(self, inter: disnake.MessageInteraction) -> bool:
         if inter.author.id != self.author.id:
