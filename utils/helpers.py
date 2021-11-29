@@ -121,13 +121,10 @@ async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
         embed=em
     )
     fmt = f'> {disagree} An error occurred'
-    try:
-        if inter.response.is_done():
-            await inter.followup.send(fmt, ephemeral=True)
-        else:
-            await inter.response.send_message(fmt, ephemeral=True)
-    except AttributeError:
-        pass
+    if inter.response.is_done():
+        await inter.followup.send(fmt, ephemeral=True)
+    else:
+        await inter.response.send_message(fmt, ephemeral=True)
 
 
 class ConfirmView(disnake.ui.View):
