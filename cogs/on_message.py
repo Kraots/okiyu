@@ -109,7 +109,7 @@ class OnMessage(commands.Cog):
                         self.mod_webhook,
                         title='[MUTE]',
                         fields=[
-                            ('Member', f'{message.author.mention} (`{message.author.id}`)'),
+                            ('Member', f'{message.author} (`{message.author.id}`)'),
                             ('Reason', 'Bad Words.'),
                             ('Mute Duration', f'`{duration}`'),
                             ('Expires At', utils.format_dt(_data.dt, "F")),

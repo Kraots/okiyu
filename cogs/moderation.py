@@ -242,7 +242,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[BAN]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('Reason', reason),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
@@ -292,7 +292,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[KICK]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('Reason', reason),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
@@ -369,7 +369,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[MUTE]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('Reason', reason),
                 ('Mute Duration', f'`{duration}`'),
                 ('Expires At', format_dt(time, "F")),
@@ -421,7 +421,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[UNMUTE]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('Mute Duration', f'`{data.duration}`'),
                 ('Left', f'`{human_timedelta(data.muted_until, suffix=False)}`'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
@@ -504,7 +504,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[ADMIN ADDED]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
@@ -530,7 +530,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[MODERATOR ADDED]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
@@ -561,7 +561,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[ADMIN REMOVED]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
@@ -585,7 +585,7 @@ class Moderation(commands.Cog):
             self.webhook,
             title='[MODERATOR REMOVED]',
             fields=[
-                ('Member', f'{member.mention} (`{member.id}`)'),
+                ('Member', f'{member} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
