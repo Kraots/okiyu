@@ -83,7 +83,8 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
                         pass
-                    return await ctx.author.kick(reason='User does not match age limits.')
+                    mem = guild.get_member(ctx.author.id)
+                    return await mem.kick(reason='User does not match age limits.')
                 else:
                     break
 

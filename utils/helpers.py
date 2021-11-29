@@ -99,15 +99,12 @@ async def reraise(ctx: utils.Context, error):
     else:
         get_error = "".join(format_exception(error, error, error.__traceback__))
         em = disnake.Embed(description=f'```py\n{get_error}\n```')
-        if ctx.guild.id == 913310006814859334:
-            await ctx.bot._owner.send(
-                content=f"**An error occurred with the command `{ctx.command}`, "
-                        "here is the error:**",
-                embed=em
-            )
-            await ctx.send(f'> {ctx.disagree} An error occurred')
-        else:
-            await ctx.send(embed=em)
+        await ctx.bot._owner.send(
+            content=f"**An error occurred with the command `{ctx.command}`, "
+                    "here is the error:**",
+            embed=em
+        )
+        await ctx.send(f'> {ctx.disagree} An error occurred')
 
 
 class ConfirmView(disnake.ui.View):
