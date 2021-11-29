@@ -84,7 +84,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
                         pass
-                    mem = guild.get_member(user_id)
+                    mem = guild.get_member(ctx.author.id)
                     await mem.kick(reason='User does not match age limits.')
                     await utils.log(
                         webhook,
@@ -255,6 +255,9 @@ class Verify(View):
         super().__init__(timeout=None)
         self.bot = bot
         self.webhook = None
+
+    async def on_error(self, error, item, inter):
+        await self.bot.inter_reraise(self.bot, inter, item, error)
 
     async def ensure_webhook(self):
         if self.webhook is None:

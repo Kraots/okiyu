@@ -20,6 +20,7 @@ __all__ = (
     'time_phaser',
     'clean_code',
     'reraise',
+    'inter_reraise',
     'ConfirmView',
     'ConfirmViewDMS',
     'check_word',
@@ -107,6 +108,18 @@ async def reraise(ctx: utils.Context, error):
         await ctx.send(f'> {ctx.disagree} An error occurred')
 
 
+async def inter_reraise(bot: Ukiyo, inter, item, error):
+    disagree = '<:disagree:913895999125196860>'
+    get_error = "".join(format_exception(error, error, error.__traceback__))
+    em = disnake.Embed(description=f'```py\n{get_error}\n```')
+    await bot._owner.send(
+        content=f"**An error occurred with the item `{item}`, "
+                "here is the error:**",
+        embed=em
+    )
+    await inter.response.send_message(f'> {disagree} An error occurred')
+
+
 class ConfirmView(disnake.ui.View):
     """
     This class is a view with `Confirm` and `Cancel` buttons,
@@ -132,10 +145,8 @@ class ConfirmView(disnake.ui.View):
             return False
         return True
 
-    async def on_error(self, error: Exception, item, interaction):
-        if isinstance(self.ctx, disnake.ApplicationCommandInteraction):
-            return await self.ctx.bot.slash_reraise(self.ctx, error)
-        return await self.ctx.bot.reraise(self.ctx, error)
+    async def on_error(self, error, item, inter):
+        await self.bot.inter_reraise(self.bot, inter, item, error)
 
     async def on_timeout(self):
         for item in self.children:
@@ -183,8 +194,8 @@ class ConfirmViewDMS(disnake.ui.View):
         self.new_message = new_message
         self.response = None
 
-    async def on_error(self, error: Exception, item, interaction):
-        return await self.ctx.bot.reraise(self.ctx, error)
+    async def on_error(self, error, item, inter):
+        await self.bot.inter_reraise(self.bot, inter, item, error)
 
     async def on_timeout(self):
         for item in self.children:
