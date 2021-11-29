@@ -42,8 +42,8 @@ class QuitButton(disnake.ui.View):
             return False
         return True
 
-    async def on_error(self, error, item, interaction):
-        return await self.ctx.bot.reraise(self.ctx, error)
+    async def on_error(self, error, item, inter):
+        await self.bot.inter_reraise(self.bot, inter, item, error)
 
     async def on_timeout(self):
         if self.delete_after is False:

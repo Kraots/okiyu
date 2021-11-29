@@ -26,6 +26,7 @@ class Ukiyo(commands.Bot):
         )
         self.added_views = False
         self.reraise = utils.reraise
+        self.inter_reraise = utils.inter_reraise
         self.execs = {}
         self.verifying = []
 
