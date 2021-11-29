@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+import datetime
 from asyncio import TimeoutError
 from typing import TYPE_CHECKING
 
@@ -18,7 +19,7 @@ __all__ = (
 )
 
 
-async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
+async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo, user_id: int = None):
     user_id = user_id or ctx.author.id
 
     if not isinstance(ctx.channel, disnake.DMChannel):
@@ -84,7 +85,17 @@ async def create_intro(ctx: utils.Context, bot: Ukiyo, user_id: int = None):
                     except (IndexError, ValueError):
                         pass
                     mem = guild.get_member(ctx.author.id)
-                    return await mem.kick(reason='User does not match age limits.')
+                    await mem.kick(reason='User does not match age limits.')
+                    await utils.log(
+                        webhook,
+                        title='[KICK]',
+                        fields=[
+                            ('Member', f'{mem.mention} (`{mem.id}`)'),
+                            ('Reason', 'User does not match age requirements.'),
+                            ('By', f'{bot.user.mention} (`{bot.user.id}`)'),
+                            ('At', utils.format_dt(datetime.datetime.now(), 'F')),
+                        ]
+                    )
                 else:
                     break
 
@@ -243,6 +254,14 @@ class Verify(View):
     def __init__(self, bot: Ukiyo):
         super().__init__(timeout=None)
         self.bot = bot
+        self.webhook = None
+
+    async def ensure_webhook(self):
+        if self.webhook is None:
+            self.webhook = await self.bot.get_webhook(
+                self.bot.get_channel(914257049456607272),
+                avatar=self.bot.user.display_avatar
+            )
 
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
@@ -258,4 +277,5 @@ class Verify(View):
         except disnake.Forbidden:
             return await inter.followup.send(f'> {disagree} You have your dms off! Please enable them!!', ephemeral=True)
         ctx = await self.bot.get_context(msg, cls=utils.Context)
-        await create_intro(ctx, self.bot, inter.author.id)
+        await self.ensure_webhook()
+        await create_intro(self.webhook, ctx, self.bot, inter.author.id)
