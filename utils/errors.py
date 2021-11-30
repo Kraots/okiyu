@@ -6,3 +6,8 @@ class MissingArgument(Exception):
 class ExtraArgument(Exception):
     """Used for raising when there's an extra argument."""
     ...
+
+
+class Duplicate(Exception):
+    """Used for raising when there's a duplicate argument."""
+    ...
