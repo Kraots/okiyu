@@ -112,4 +112,4 @@ async def log(
     try:
         return await channel.send(embed=em, view=view)
     except AttributeError:
-        return await channel.send(embed=em)
+        pass  # Weirdly enough this gets raised but the embed still gets sent
