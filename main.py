@@ -28,7 +28,7 @@ class Ukiyo(commands.Bot):
         self.inter_reraise = utils.inter_reraise
 
         self.added_views = False
-        self.webhooks = None
+        self.webhooks = {}
         self.execs = {}
         self.verifying = []
 
