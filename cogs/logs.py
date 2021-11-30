@@ -39,10 +39,14 @@ class Logs(commands.Cog):
     async def send_embeds(self):
         if len(self.embeds) != 0:
             try:
-                await send_webhook(self.embeds, self.bot.cache.webhooks['logs'])
+                await send_webhook(self.embeds, self.bot.webhooks['logs'])
             except Exception:
                 pass
             self.embeds = []
+
+    @send_embeds.before_loop
+    async def wait_until_ready(self):
+        await self.bot.wait_until_ready()
 
     @commands.Cog.listener()
     async def on_user_update(self, before: disnake.User, after: disnake.User):

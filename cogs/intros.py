@@ -24,7 +24,7 @@ class Intros(commands.Cog):
     async def intro(self, ctx: Context):
         """Create/Edit your intro."""
 
-        await create_intro(self.bot.cache.webhooks['mod_logs'], ctx, self.bot)
+        await create_intro(self.bot.webhooks['mod_logs'], ctx, self.bot)
 
     @commands.command(aliases=('wi',))
     async def whois(self, ctx: Context, *, member: disnake.Member = None):

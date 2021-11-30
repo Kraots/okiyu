@@ -279,4 +279,4 @@ class Verify(View):
         except disnake.Forbidden:
             return await inter.followup.send(f'> {disagree} You have your dms off! Please enable them!!', ephemeral=True)
         ctx = await self.bot.get_context(msg, cls=utils.Context)
-        await create_intro(self.bot.cache.webhooks['mod_logs'], ctx, self.bot, inter.author.id)
+        await create_intro(self.bot.webhooks['mod_logs'], ctx, self.bot, inter.author.id)

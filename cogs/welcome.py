@@ -58,7 +58,7 @@ class Welcome(commands.Cog):
             view = disnake.ui.View()
             view.add_item(disnake.ui.Button(label='Jump!', url=mute.jump_url))
             await utils.log(
-                self.bot.cache.webhooks['mod_logs'],
+                self.bot.webhooks['mod_logs'],
                 title='[MUTE EVASION]',
                 fields=[
                     ('Member', f'{member} (`{member.id}`)'),
