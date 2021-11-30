@@ -41,18 +41,11 @@ class OnMessage(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
         self.bad_words_filter = {}
-        self.webhook = None
-        self.mod_webhook = None
 
     async def check_bad_word(self, message: disnake.Message):
         if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
             return
         guild = self.bot.get_guild(913310006814859334)
-        if self.mod_webhook is None:
-            self.mod_webhook = await self.bot.get_webhook(
-                guild.get_channel(914257049456607272),
-                avatar=self.bot.user.display_avatar
-            )
         for word in message.content.split():
             if utils.check_word(word) is True:
                 ctx = await self.bot.get_context(message, cls=utils.Context)
@@ -106,7 +99,7 @@ class OnMessage(commands.Cog):
                     view = disnake.ui.View()
                     view.add_item(disnake.ui.Button(label='Jump!', url=_msg.jump_url))
                     await utils.log(
-                        self.mod_webhook,
+                        self.bot.cache.webhooks['mod_logs'],
                         title='[MUTE]',
                         fields=[
                             ('Member', f'{message.author} (`{message.author.id}`)'),
@@ -149,12 +142,7 @@ class OnMessage(commands.Cog):
             try:
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
-                if self.webhook is None:
-                    self.webhook = await self.bot.get_webhook(
-                        self.bot.get_channel(913332431417925634),
-                        avatar=self.bot.user.display_avatar
-                    )
-                await self.webhook.send(embed=em, view=btn)
+                await self.bot.cache.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(message, cls=utils.Context)
                 await self.bot.reraise(ctx, e)
@@ -186,12 +174,7 @@ class OnMessage(commands.Cog):
             try:
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=after.jump_url))
-                if self.webhook is None:
-                    self.webhook = await self.bot.get_webhook(
-                        self.bot.get_channel(913332431417925634),
-                        avatar=self.bot.user.display_avatar
-                    )
-                await self.webhook.send(embed=em, view=btn)
+                await self.bot.cache.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(after, cls=utils.Context)
                 await self.bot.reraise(ctx, e)

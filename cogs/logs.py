@@ -34,20 +34,12 @@ class Logs(commands.Cog):
         self.bot = bot
         self.send_embeds.start()
         self.embeds = []
-        self.webhook = None
-
-    async def ensure_webhook(self):
-        if self.webhook is None:
-            self.webhook = await self.bot.get_webhook(
-                self.bot.get_channel(913332408537976892),
-                avatar=self.bot.user.display_avatar
-            )
 
     @tasks.loop(minutes=1.0)
     async def send_embeds(self):
         if len(self.embeds) != 0:
             try:
-                await self.ensure_webhook()
+                await self.bot.cache.webhooks['logs']
                 await send_webhook(self.embeds, self.webhook)
             except Exception:
                 pass

@@ -261,17 +261,9 @@ class Verify(View):
     def __init__(self, bot: Ukiyo):
         super().__init__(timeout=None)
         self.bot = bot
-        self.webhook = None
 
     async def on_error(self, error, item, inter):
         await self.bot.inter_reraise(self.bot, inter, item, error)
-
-    async def ensure_webhook(self):
-        if self.webhook is None:
-            self.webhook = await self.bot.get_webhook(
-                self.bot.get_channel(914257049456607272),
-                avatar=self.bot.user.display_avatar
-            )
 
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
@@ -287,5 +279,4 @@ class Verify(View):
         except disnake.Forbidden:
             return await inter.followup.send(f'> {disagree} You have your dms off! Please enable them!!', ephemeral=True)
         ctx = await self.bot.get_context(msg, cls=utils.Context)
-        await self.ensure_webhook()
-        await create_intro(self.webhook, ctx, self.bot, inter.author.id)
+        await create_intro(self.bot.cache.webhooks['mod_logs'], ctx, self.bot, inter.author.id)
