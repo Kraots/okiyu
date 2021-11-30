@@ -59,7 +59,7 @@ class Moderation(commands.Cog):
         purged = await ctx.channel.purge(limit=amount)
         msg = await ctx.send(f'> {ctx.agree} Deleted `{len(purged):,}` messages')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[CHAT PURGE]',
             fields=[
                 ('Channel', ctx.channel.mention),
@@ -98,7 +98,7 @@ class Moderation(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
         await ctx.reply('> 🔒 Channel Locked!')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[CHANNEL LOCK]',
             fields=[
                 ('Channel', channel.mention),
@@ -130,7 +130,7 @@ class Moderation(commands.Cog):
                     _channels.append(channel.mention)
         await ctx.reply('> 🔒 All the unlocked channels have been locked!')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[CHANNEL LOCK]',
             fields=[
                 ('Channel', ' '.join(_channels)),
@@ -162,7 +162,7 @@ class Moderation(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} That channel cannot be unlocked.')
         await ctx.reply('> 🔓 Channel Unlocked!')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[CHANNEL UNLOCK]',
             fields=[
                 ('Channel', channel.mention),
@@ -194,7 +194,7 @@ class Moderation(commands.Cog):
                     _channels.append(channel.mention)
         await ctx.reply('> 🔓 All locked channels have been unlocked!')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[CHANNEL UNLOCK]',
             fields=[
                 ('Channel', ' '.join(_channels)),
@@ -225,7 +225,7 @@ class Moderation(commands.Cog):
         )
         await ctx.send(f'> 👌 🔨 Banned {member.mention} for **{reason}**')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[BAN]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
@@ -248,7 +248,7 @@ class Moderation(commands.Cog):
         else:
             await ctx.reply(f'> 👌 Successfully unbanned `{user}`')
             await utils.log(
-                self.bot.cache.webhooks['mod_logs'],
+                self.bot.webhooks['mod_logs'],
                 title='[UNBAN]',
                 fields=[
                     ('Member', f'{user.mention} (`{user.id}`)'),
@@ -273,7 +273,7 @@ class Moderation(commands.Cog):
         await member.kick(reason=f'{ctx.author} ({ctx.author.id}): "{reason}"')
         await ctx.send(f'> 👌 Kicked {member.mention} for **{reason}**')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[KICK]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
@@ -349,7 +349,7 @@ class Moderation(commands.Cog):
         data.jump_url = _msg.jump_url
         await data.commit()
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[MUTE]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
@@ -400,7 +400,7 @@ class Moderation(commands.Cog):
 
         await ctx.reply(f'> 👌 Successfully unmuted {member.mention}')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[UNMUTE]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
@@ -420,7 +420,6 @@ class Moderation(commands.Cog):
 
     @tasks.loop(seconds=15.0)
     async def check_mutes(self):
-        await self.bot.wait_until_ready()
         mutes: list[Mutes] = await Mutes.find().sort('muted_until', 1).to_list(5)
         for mute in mutes:
             if datetime.utcnow() >= mute.muted_until:
@@ -447,7 +446,7 @@ class Moderation(commands.Cog):
                 await mute.delete()
                 mem = guild.get_member(mute.muted_by)
                 await utils.log(
-                    self.bot.cache.webhooks['mod_logs'],
+                    self.bot.webhooks['mod_logs'],
                     title='[MUTE EXPIRED]',
                     fields=[
                         ('Member', _mem),
@@ -458,6 +457,10 @@ class Moderation(commands.Cog):
                     ],
                     view=self.jump_view(mute.jump_url)
                 )
+
+    @check_mutes.before_loop
+    async def wait_until_ready(self):
+        await self.bot.wait_until_ready()
 
     @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
     @is_admin()
@@ -481,7 +484,7 @@ class Moderation(commands.Cog):
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[ADMIN ADDED]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
@@ -506,7 +509,7 @@ class Moderation(commands.Cog):
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[MODERATOR ADDED]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
@@ -536,7 +539,7 @@ class Moderation(commands.Cog):
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[ADMIN REMOVED]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
@@ -559,7 +562,7 @@ class Moderation(commands.Cog):
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971])
         await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
         await utils.log(
-            self.bot.cache.webhooks['mod_logs'],
+            self.bot.webhooks['mod_logs'],
             title='[MODERATOR REMOVED]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),

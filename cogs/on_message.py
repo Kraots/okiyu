@@ -99,7 +99,7 @@ class OnMessage(commands.Cog):
                     view = disnake.ui.View()
                     view.add_item(disnake.ui.Button(label='Jump!', url=_msg.jump_url))
                     await utils.log(
-                        self.bot.cache.webhooks['mod_logs'],
+                        self.bot.webhooks['mod_logs'],
                         title='[MUTE]',
                         fields=[
                             ('Member', f'{message.author} (`{message.author.id}`)'),
@@ -142,7 +142,7 @@ class OnMessage(commands.Cog):
             try:
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
-                await self.bot.cache.webhooks['message_logs'].send(embed=em, view=btn)
+                await self.bot.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(message, cls=utils.Context)
                 await self.bot.reraise(ctx, e)
@@ -174,7 +174,7 @@ class OnMessage(commands.Cog):
             try:
                 btn = disnake.ui.View()
                 btn.add_item(disnake.ui.Button(label='Jump!', url=after.jump_url))
-                await self.bot.cache.webhooks['message_logs'].send(embed=em, view=btn)
+                await self.bot.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(after, cls=utils.Context)
                 await self.bot.reraise(ctx, e)
