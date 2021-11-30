@@ -227,7 +227,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
         try:
             return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
         except disnake.Forbidden:
-            pass
+            return
     else:
         try:
             bot.verifying.pop(bot.verifying.index(user_id))
