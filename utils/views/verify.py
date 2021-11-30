@@ -63,12 +63,12 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
             except (IndexError, ValueError):
                 pass
             return await _name.reply(f'> {ctx.disagree} Name too long. Type `!intro` to redo.')
-        elif name is None:
+        elif len(name) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _name.reply(f'> {ctx.disagree} That is not a name! Type `!intro` to redo.')
+            return await _name.reply(f'> {ctx.disagree} You did not give a name! Type `!intro` to redo.')
 
         await _name.reply('What\'s your age?')
         while True:
@@ -122,12 +122,12 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
             except (IndexError, ValueError):
                 pass
             return await _gender.reply(f'> {ctx.disagree} Gender too long. Type `!intro` to redo.')
-        elif gender is None:
+        elif len(gender) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _gender.reply(f'> {ctx.disagree} That is not a gender! Type `!intro` to redo.')
+            return await _gender.reply(f'> {ctx.disagree} You did not give a gender! Type `!intro` to redo.')
 
         await _gender.reply('Where are you from?')
         _location = await bot.wait_for('message', timeout=180.0, check=check)
@@ -138,12 +138,12 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
             except (IndexError, ValueError):
                 pass
             return await _location.reply(f'> {ctx.disagree} Location too long. Type `!intro` to redo.')
-        elif location is None:
+        elif len(location) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _location.reply(f'> {ctx.disagree} That is not a location! Type `!intro` to redo.')
+            return await _location.reply(f'> {ctx.disagree} You did not give a location! Type `!intro` to redo.')
 
         await _location.reply('Dms? `open` | `closed` | `ask`')
         while True:
@@ -196,12 +196,12 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 pass
             return await _likes.reply(f'> {ctx.disagree} You like too many things. Please don\'t go above 1024 '
                                       'characters next time. Type `!intro` to redo.')
-        elif likes is None:
+        elif len(likes) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _likes.reply(f'> {ctx.disagree} Invalid! Type `!intro` to redo.')
+            return await _likes.reply(f'> {ctx.disagree} You did not say what you like! Type `!intro` to redo.')
 
         await _likes.reply('What do you dislike?')
         _dislikes = await bot.wait_for('message', timeout=180.0, check=check)
@@ -213,12 +213,12 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 pass
             return await _dislikes.reply(f'> {ctx.disagree} You dislike too many things. Please don\'t go above 1024 '
                                          'characters next time. Type `!intro` to redo.')
-        elif dislikes is None:
+        elif len(dislikes) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _dislikes.reply(f'> {ctx.disagree} Invalid! Type `!intro` to redo.')
+            return await _dislikes.reply(f'> {ctx.disagree} You did not say what you dislike! Type `!intro` to redo.')
     except TimeoutError:
         try:
             bot.verifying.pop(bot.verifying.index(user_id))
