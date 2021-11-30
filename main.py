@@ -24,6 +24,7 @@ class Ukiyo(commands.Bot):
             ),
             test_guilds=[913310006814859334]
         )
+        self._owner_id = 374622847672254466
         self.reraise = utils.reraise
         self.inter_reraise = utils.inter_reraise
 
@@ -66,10 +67,6 @@ class Ukiyo(commands.Bot):
             activity = disnake.Activity(type=disnake.ActivityType.watching, name='you date | !help')
             await self.change_presence(status=disnake.Status.dnd, activity=activity)
             self._presence_changed = True
-
-        if not hasattr(self, '_owner_id'):
-            app = await self.application_info()
-            self._owner_id = app.owner.id
 
         if self.added_views is False:
             self.add_view(utils.Verify(self), message_id=913512065799421953)
