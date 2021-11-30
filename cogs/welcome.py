@@ -11,7 +11,6 @@ from main import Ukiyo
 class Welcome(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
-        self.webhook = None
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
@@ -44,11 +43,6 @@ class Welcome(commands.Cog):
 
         mute: utils.Mutes = await utils.Mutes.find_one({'_id': member.id})
         if mute is not None:
-            if self.webhook is None:
-                self.webhook = await self.bot.get_webhook(
-                    guild.get_channel(914257049456607272),
-                    avatar=self.bot.user.display_avatar
-                )
             muted_role = guild.get_role(913376647422545951)
             mem = guild.get_member(mute.muted_by)
             await member.add_roles(muted_role, reason='[MUTE EVASION] user joined but was still muted in the database')
@@ -64,7 +58,7 @@ class Welcome(commands.Cog):
             view = disnake.ui.View()
             view.add_item(disnake.ui.Button(label='Jump!', url=mute.jump_url))
             await utils.log(
-                self.webhook,
+                self.bot.cache.webhooks['mod_logs'],
                 title='[MUTE EVASION]',
                 fields=[
                     ('Member', f'{member} (`{member.id}`)'),
