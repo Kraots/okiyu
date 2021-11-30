@@ -15,6 +15,14 @@ class Intros(commands.Cog):
     """Intro related commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.webhook = None
+
+    async def ensure_webhook(self):
+        if self.webhook is None:
+            self.webhook = await self.bot.get_webhook(
+                self.bot.get_channel(914257049456607272),
+                avatar=self.bot.user.display_avatar
+            )
 
     @property
     def display_emoji(self) -> str:
@@ -24,7 +32,8 @@ class Intros(commands.Cog):
     async def intro(self, ctx: Context):
         """Create/Edit your intro."""
 
-        await create_intro(ctx, self.bot)
+        await self.ensure_webhook()
+        await create_intro(self.webhook, ctx, self.bot)
 
     @commands.command(aliases=('wi',))
     async def whois(self, ctx: Context, *, member: disnake.Member = None):
