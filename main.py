@@ -89,7 +89,7 @@ class Ukiyo(commands.Bot):
 
             self.added_views = True
 
-        if self.webhooks is None:
+        if len(self.webhooks) == 0:
             av = self.user.display_avatar
             logs = await self.get_webhook(
                 self.get_channel(913332408537976892),
