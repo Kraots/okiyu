@@ -24,9 +24,11 @@ class Ukiyo(commands.Bot):
             ),
             test_guilds=[913310006814859334]
         )
-        self.added_views = False
+        self.cache = utils.Cache()
         self.reraise = utils.reraise
         self.inter_reraise = utils.inter_reraise
+
+        self.added_views = False
         self.execs = {}
         self.verifying = []
 
@@ -86,6 +88,24 @@ class Ukiyo(commands.Bot):
                 self.add_view(utils.TicketView(), message_id=ticket.message_id)
 
             self.added_views = True
+
+        if len(self.cache.webhooks) == 0:
+            av = self.user.display_avatar
+            logs = await self.get_webhook(
+                self.get_channel(913332408537976892),
+                avatar=av
+            )
+            mod_logs = await self.get_webhook(
+                self.get_channel(914257049456607272),
+                avatar=av
+            )
+            message_logs = await self.get_webhook(
+                self.get_channel(913332431417925634),
+                avatar=av
+            )
+            self.cache.webhooks.add('logs', logs)
+            self.cache.webhooks.add('mod_logs', mod_logs)
+            self.cache.webhooks.add('message_logs', message_logs)
 
         print('Bot is ready!')
 
