@@ -68,7 +68,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _name.reply(f'> {ctx.disagree} You did not give a name! Type `!intro` to redo.')
+            return await _name.reply(f'> {ctx.disagree} You did not say what your name is! Type `!intro` to redo.')
 
         await _name.reply('What\'s your age?')
         while True:
@@ -127,7 +127,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _gender.reply(f'> {ctx.disagree} You did not give a gender! Type `!intro` to redo.')
+            return await _gender.reply(f'> {ctx.disagree} You did not say what your gender is! Type `!intro` to redo.')
 
         await _gender.reply('Where are you from?')
         _location = await bot.wait_for('message', timeout=180.0, check=check)
@@ -143,7 +143,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _location.reply(f'> {ctx.disagree} You did not give a location! Type `!intro` to redo.')
+            return await _location.reply(f'> {ctx.disagree} You did not say what your location is! Type `!intro` to redo.')
 
         await _location.reply('Dms? `open` | `closed` | `ask`')
         while True:
@@ -176,6 +176,12 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
             except (IndexError, ValueError):
                 pass
             return await ctx.reply(f'> {ctx.disagree} Sexuality too long. Type `!intro` to redo.')
+        elif len(sexuality) == 0:
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
+            return await _sexuality.reply(f'> {ctx.disagree} You did not say what your sexuality is! Type `!intro` to redo.')
 
         await _sexuality.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
         while True:
