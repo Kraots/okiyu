@@ -39,8 +39,7 @@ class Logs(commands.Cog):
     async def send_embeds(self):
         if len(self.embeds) != 0:
             try:
-                await self.bot.cache.webhooks['logs']
-                await send_webhook(self.embeds, self.webhook)
+                await send_webhook(self.embeds, self.bot.cache.webhooks['logs'])
             except Exception:
                 pass
             self.embeds = []
