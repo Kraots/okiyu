@@ -229,6 +229,10 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
         except disnake.Forbidden:
             pass
     else:
+        try:
+            bot.verifying.pop(bot.verifying.index(user_id))
+        except (IndexError, ValueError):
+            pass
         role = guild.get_role(random.choice(utils.all_colour_roles[:-1]))
         usr = guild.get_member(user_id)
         colour = role.color if to_update is False else usr.color
