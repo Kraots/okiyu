@@ -1,6 +1,7 @@
 from .dbs import (  # noqa
     database1,
     database2,
+    database3,
 )
 
 from .db_intros import Intro
