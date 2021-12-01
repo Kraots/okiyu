@@ -10,8 +10,8 @@ instance = Instance(database3)
 @instance.register
 class Marriage(Document):
     id = IntField(attribute='_id', required=True)
-    married_to = IntField()
-    married_since = DateTimeField()
+    married_to = IntField(required=True)
+    married_since = DateTimeField(required=True)
 
     class Meta:
         collection_name = 'Marriages'
