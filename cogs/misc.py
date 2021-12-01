@@ -153,7 +153,7 @@ class Misc(commands.Cog):
                 return await ctx.reply(f'> {ctx.disagree} Rule does not exist!')
             await rules.commit()
 
-        await ctx.reply(f'> 👌 successfully **removed** rule `{rule}`.')
+        await ctx.reply(f'> 👌 Successfully **removed** rule `{rule}`.')
 
     @server_rules.command(name='clear')
     @utils.is_owner()
