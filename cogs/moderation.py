@@ -52,7 +52,7 @@ class Moderation(commands.Cog):
 
     @commands.command(name='purge', aliases=('clear',))
     @is_mod()
-    async def chat_purge(self, ctx: Context, *, amount: int):
+    async def chat_purge(self, ctx: Context, amount: int):
         """Clear the ``amount`` of messages from the chat."""
 
         await ctx.message.delete()
