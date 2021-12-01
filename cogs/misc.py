@@ -92,7 +92,7 @@ class Misc(commands.Cog):
         await ctx.send(embed=ad, reference=ctx.replied_reference)
 
     @commands.group(
-        name='rules', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('rule',)
+        name='rules', invoke_without_command=True, case_insensitive=True, aliases=('rule',)
     )
     async def server_rules(self, ctx: Context, rule: int = None):
         """Sends the server's rules. If ``rule`` is given, it will only send that rule."""
