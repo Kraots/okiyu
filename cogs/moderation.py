@@ -426,7 +426,7 @@ class Moderation(commands.Cog):
             if datetime.utcnow() >= mute.muted_until:
                 guild = self.bot.get_guild(913310006814859334)
                 member = guild.get_member(mute.id)
-                _mem = f'[LEFT] (`{mute.id}`)'
+                _mem = f'**[LEFT]** (`{mute.id}`)'
                 if member:
                     _mem = f'{member.mention} (`{member.id}`)'
                     new_roles = [role for role in member.roles if role.id != 913376647422545951]
