@@ -314,8 +314,8 @@ class Logs(commands.Cog):
                 self.embeds.append(em)
                 return
 
-    @commands.Cog.listener()
-    async def on_guild_channel_update(self, before: disnake.abc.GuildChannel, after: disnake.abc.GuildChannel):
+    @commands.Cog.listener('on_guild_channel_update')
+    async def overwrites_update(self, before: disnake.abc.GuildChannel, after: disnake.abc.GuildChannel):
         if before.guild.id != 913310006814859334:
             return
 
@@ -353,6 +353,29 @@ class Logs(commands.Cog):
                 em.add_field(name='⧄ Neutral Perms', value=', '.join(neutral_perms), inline=False)
             if len(denied_perms) != 0:
                 em.add_field(name=r'\❌ Denied Perms', value=', '.join(denied_perms), inline=False)
+
+        if len(em.fields) != 0:
+            self.embeds.append(em)
+
+    @commands.Cog.listener()
+    async def on_guild_channel_update(self, before: disnake.abc.GuildChannel, after: disnake.abc.GuildChannel):
+        if before.guild.id != 913310006814859334:
+            return
+
+        em = disnake.Embed(title=f'Channel Updated: {before.name}', color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
+        em.set_footer(text=f'Channel ID: {after.id}')
+        if before.name != after.name:
+            em.add_field(name='Name', value=f'`{before.name}` **->** `{after.name}`', inline=False)
+        try:
+            if before.topic != after.topic:
+                em.add_field(name='Topic', value=f'`{before.topic}` **->** `{after.topic}`', inline=False)
+        except AttributeError:
+            pass
+        try:
+            if before.nsfw != after.nsfw:
+                em.add_field(name='NSFW', value=f'`{before.nsfw}` **->** `{after.nsfw}`', inline=False)
+        except AttributeError:
+            pass
 
         if len(em.fields) != 0:
             self.embeds.append(em)
