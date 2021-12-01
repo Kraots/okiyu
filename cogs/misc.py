@@ -169,7 +169,7 @@ class Misc(commands.Cog):
         await ctx.reply('> 👌 successfully **cleared** to the rules.')
 
     @commands.group(
-        name='nick', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('nickname',)
+        name='nick', invoke_without_command=True, case_insensitive=True, aliases=('nickname',)
     )
     async def change_nick(self, ctx: Context, *, new_nickname: str):
         """Change your nickname to your desired one."""
@@ -203,7 +203,7 @@ class Misc(commands.Cog):
         em.set_footer(text=f'Requested By: {ctx.author}')
         await ctx.reply(embed=em)
 
-    @commands.group(invoke_without_command=True, case_insensitive=True, ignore_extra=False)
+    @commands.group(invoke_without_command=True, case_insensitive=True)
     async def created(self, ctx: Context, *, user: disnake.User = None):
         """Check the date when the ``user`` created their account."""
 

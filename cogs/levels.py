@@ -30,7 +30,7 @@ class Levels(commands.Cog):
             await data.commit()
 
     @commands.group(
-        name='level', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('rank',)
+        name='level', invoke_without_command=True, case_insensitive=True, aliases=('rank',)
     )
     async def level_cmd(self, ctx: Context, *, member: disnake.Member = None):
         """Check your current level or somebody else's."""
@@ -134,7 +134,7 @@ class Levels(commands.Cog):
             await pages.start()
 
     @commands.group(
-        name='messages', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('msg',)
+        name='messages', invoke_without_command=True, case_insensitive=True, aliases=('msg',)
     )
     async def _msgs(self, ctx: Context, *, member: disnake.Member = None):
         """Check yours or somebody else's total messages."""
