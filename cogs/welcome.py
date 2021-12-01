@@ -53,7 +53,10 @@ class Welcome(commands.Cog):
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text='Muted in `Ukiyo`')
             em.timestamp = datetime.now(timezone.utc)
-            await member.send(embed=em)
+            try:
+                await member.send(embed=em)
+            except disnake.Forbidden:
+                pass
 
             view = disnake.ui.View()
             view.add_item(disnake.ui.Button(label='Jump!', url=mute.jump_url))
