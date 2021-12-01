@@ -11,5 +11,5 @@ cluster2 = motor.motor_asyncio.AsyncIOMotorClient(key2)
 database2 = cluster2['Ukiyo']  # Mainly stores levels
 
 key3 = os.getenv('MONGODBKEY3')
-cluster3 = motor.motor_asyncio.AsyncIOMotorClient(key2)
-database3 = cluster2['Ukiyo']  # Extra stuff (mutes, rules, etc...)
+cluster3 = motor.motor_asyncio.AsyncIOMotorClient(key3)
+database3 = cluster3['Ukiyo']  # Extra stuff (mutes, rules, etc...)
