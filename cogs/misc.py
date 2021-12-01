@@ -94,7 +94,7 @@ class Misc(commands.Cog):
     @commands.group(
         name='rules', invoke_without_command=True, case_insensitive=True, ignore_extra=False, aliases=('rule',)
     )
-    async def server_rules(self, ctx: Context, *, rule: int = None):
+    async def server_rules(self, ctx: Context, rule: int = None):
         """Sends the server's rules. If ``rule`` is given, it will only send that rule."""
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
@@ -138,7 +138,7 @@ class Misc(commands.Cog):
 
     @server_rules.command(name='remove', aliases=('delete',))
     @utils.is_admin()
-    async def server_rules_remove(self, ctx: Context, *, rule: int):
+    async def server_rules_remove(self, ctx: Context, rule: int):
         """Removes a rule from the server's rules by its number."""
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
