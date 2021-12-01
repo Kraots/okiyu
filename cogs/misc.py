@@ -134,7 +134,7 @@ class Misc(commands.Cog):
             rules.rules += [rule]
             await rules.commit()
 
-        await ctx.reply(f'> 👌 `{rule}` successfully **added** to the rules.')
+        await ctx.reply(f'> 👌 📝 `{rule}` successfully **added** to the rules.')
 
     @server_rules.command(name='remove', aliases=('delete',))
     @utils.is_admin()
