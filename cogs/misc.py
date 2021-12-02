@@ -201,7 +201,7 @@ class Misc(commands.Cog):
         em = disnake.Embed(colour=utils.blurple, title=f'`{member.display_name}`\'s avatar')
         em.set_image(url=member.display_avatar)
         em.set_footer(text=f'Requested By: {ctx.author}')
-        await ctx.reply(embed=em)
+        await ctx.reply(embed=em, reference=ctx.replied_reference)
 
     @commands.group(invoke_without_command=True, case_insensitive=True)
     async def created(self, ctx: Context, *, user: disnake.User = None):
@@ -215,7 +215,7 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(user.created_at, "F")} '
                         f'(`{utils.human_timedelta(user.created_at)}`)'
         )
-        await ctx.reply(embed=em)
+        await ctx.reply(embed=em, reference=ctx.replied_reference)
 
     @created.command()
     async def server(self, ctx: Context):
@@ -240,7 +240,7 @@ class Misc(commands.Cog):
                   f'(`{utils.human_timedelta(publiced_date)}`)',
             inline=False
         )
-        await ctx.reply(embed=em)
+        await ctx.reply(embed=em, reference=ctx.replied_reference)
 
     @commands.command()
     async def joined(self, ctx: Context, *, member: disnake.Member = None):
@@ -254,7 +254,7 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(member.joined_at, "F")} '
                         f'(`{utils.human_timedelta(member.joined_at)}`)'
         )
-        await ctx.reply(embed=em)
+        await ctx.reply(embed=em, reference=ctx.replied_reference)
 
     @commands.command(name='ticket')
     @commands.cooldown(1, 60.0, commands.BucketType.member)
