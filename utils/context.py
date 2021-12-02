@@ -25,7 +25,7 @@ class Context(commands.Context):
         ref = self.message.reference
         if ref and isinstance(ref.resolved, disnake.Message):
             return ref.resolved.to_reference()
-        return None
+        return self.message
 
     async def trigger_typing(self):
         try:
