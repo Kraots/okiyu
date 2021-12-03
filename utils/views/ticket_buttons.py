@@ -23,8 +23,8 @@ class TicketView(View):
         await inter.response.defer()
         ticket: utils.Ticket = await utils.Ticket.find_one({'_id': inter.channel.id})
         em = disnake.Embed(title='Ticket Closed', colour=utils.blurple)
-        ticket_owner = inter.guild.get_member(ticket.user_id)
-        if inter.author.id == ticket.user_id:
+        ticket_owner = inter.guild.get_member(ticket.owner_id)
+        if inter.author.id == ticket.owner_id:
             em.description = f'You closed ticket `#{ticket.ticket_id}` ' \
                              f'that you created on {utils.format_dt(ticket.created_at, "F")} ' \
                              f'(`{utils.human_timedelta(ticket.created_at)}`)'

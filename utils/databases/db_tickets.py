@@ -11,7 +11,7 @@ instance = Instance(database3)
 class Ticket(Document):
     channel_id = IntField(attribute='_id', required=True)
     message_id = IntField(required=True)
-    user_id = IntField(required=True)
+    owner_id = IntField(required=True)
     ticket_id = StrField(required=True)
     created_at = DateTimeField(required=True)
 
