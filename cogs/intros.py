@@ -26,7 +26,7 @@ class Intros(commands.Cog):
 
         if ctx.author.id in self.bot.verifying:
             return await ctx.send(
-                f'> {ctx.disagree} Please complete your current intro before making another one!', ephemeral=True
+                f'> {ctx.disagree} Please complete your current intro before making another one!'
             )
         self.bot.verifying.append(ctx.author.id)
         await create_intro(self.bot.webhooks['mod_logs'], ctx, self.bot)
