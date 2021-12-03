@@ -376,7 +376,8 @@ class Misc(commands.Cog):
     @commands.command(name='match')
     async def match_people(self, ctx: Context):
         """
-        Matches you with another person, based on the sexuality and gender of what the both of you have in your intros.
+        Matches you with another person, based on the sexuality, gender and relationship status
+        of what the both of you have in your intros.
         """
 
         guild = self.bot.get_guild(913310006814859334)
@@ -397,6 +398,8 @@ class Misc(commands.Cog):
                     f'> {ctx.disagree} Couldn\'t find a match because you don\'t have an intro. '
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
+        elif data.status.lower() == 'taken':
+            return await ctx.reply('You\'re already taken!')
         _sexuality = None
         _gender = None
         if data.gender.lower() in ('male', 'm', 'boy'):
@@ -424,6 +427,19 @@ class Misc(commands.Cog):
                 if _sexuality is not None:
                     for sexuality in _sexuality:
                         async for mem in utils.Intro.find({'gender': gender, 'sexuality': sexuality}):
+                            if mem.status.lower() != 'taken':
+                                if data.age == 14 and mem.age < 17:
+                                    choices.append(guild.get_member(mem.id))
+                                elif data.age == 15 and mem.age < 18:
+                                    choices.append(guild.get_member(mem.id))
+                                elif data.age == 16 and mem.age < 19:
+                                    choices.append(guild.get_member(mem.id))
+                                elif mem.age > 14:
+                                    choices.append(guild.get_member(mem.id))
+
+                else:
+                    async for mem in utils.Intro.find({'gender': gender}):
+                        if mem.status.lower() != 'taken':
                             if data.age == 14 and mem.age < 17:
                                 choices.append(guild.get_member(mem.id))
                             elif data.age == 15 and mem.age < 18:
@@ -432,27 +448,17 @@ class Misc(commands.Cog):
                                 choices.append(guild.get_member(mem.id))
                             elif mem.age > 14:
                                 choices.append(guild.get_member(mem.id))
-
-                else:
-                    async for mem in utils.Intro.find({'gender': gender}):
-                        if data.age == 14 and mem.age < 17:
-                            choices.append(guild.get_member(mem.id))
-                        elif data.age == 15 and mem.age < 18:
-                            choices.append(guild.get_member(mem.id))
-                        elif data.age == 16 and mem.age < 19:
-                            choices.append(guild.get_member(mem.id))
-                        elif mem.age > 14:
-                            choices.append(guild.get_member(mem.id))
         else:
             async for mem in utils.Intro.find():
-                if data.age == 14 and mem.age < 17:
-                    choices.append(guild.get_member(mem.id))
-                elif data.age == 15 and mem.age < 18:
-                    choices.append(guild.get_member(mem.id))
-                elif data.age == 16 and mem.age < 19:
-                    choices.append(guild.get_member(mem.id))
-                elif mem.age > 14:
-                    choices.append(guild.get_member(mem.id))
+                if mem.status.lower() != 'taken':
+                    if data.age == 14 and mem.age < 17:
+                        choices.append(guild.get_member(mem.id))
+                    elif data.age == 15 and mem.age < 18:
+                        choices.append(guild.get_member(mem.id))
+                    elif data.age == 16 and mem.age < 19:
+                        choices.append(guild.get_member(mem.id))
+                    elif mem.age > 14:
+                        choices.append(guild.get_member(mem.id))
 
         if len(choices) == 0:
             em.title = 'Uh oh...'
