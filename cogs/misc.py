@@ -290,7 +290,7 @@ class Misc(commands.Cog):
         ticket = Ticket(
             channel_id=channel.id,
             message_id=m.id,
-            user_id=ctx.author.id,
+            owner_id=ctx.author.id,
             ticket_id=ticket_id,
             created_at=datetime.utcnow()
         )
@@ -363,6 +363,14 @@ class Misc(commands.Cog):
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.reply(embed=em)
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: disnake.Member):
+        async for ticket in Ticket.find({'owner_id': member.id}):
+            guild = self.bot.get_guild(913310006814859334)
+            ch = guild.get_channel(ticket.id)
+            await ch.delete(reason='Member left.')
+            await ticket.delete()
 
 
 def setup(bot: Ukiyo):
