@@ -391,6 +391,14 @@ class Misc(commands.Cog):
         em = disnake.Embed(title='Matching... Please wait...', color=utils.blurple)
         msg = await ctx.reply(embed=em)
         data: utils.Intro = await utils.Intro.find_one({'_id': ctx.author.id})
+        if data is None:
+            if ctx.author.id == self.bot._owner_id:
+                return await ctx.reply('Master, you forgot that you didn\'t make an intro? 🥺 🥺')
+            else:
+                return await ctx.reply(
+                    f'> {ctx.disagree} You don\'t have an intro. '
+                    'Please contact a staff member to unverify you! This is a bug.'
+                )
         _sexuality = None
         if data.gender.lower in ('male', 'm', 'boy'):
             if data.sexuality.lower == 'straight':
@@ -412,7 +420,7 @@ class Misc(commands.Cog):
             elif data.sexuality.lower in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
         else:
-            gender = None
+            _gender = None
         if _gender is not None:
             for gender in _gender:
                 if _sexuality is not None:

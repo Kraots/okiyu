@@ -42,11 +42,13 @@ class Intros(commands.Cog):
                 return await ctx.reply('🤫 🤫 🤫')
             if member == ctx.author:
                 return await ctx.reply(
-                    f'> {ctx.disagree} You don\'t have an intro. Please contact a staff member to unverify you! This is a bug.'
+                    f'> {ctx.disagree} You don\'t have an intro. '
+                    'Please contact a staff member to unverify you! This is a bug.'
                 )
             else:
                 return await ctx.reply(
-                    f'> {ctx.disagree} `{member}` doesn\'t have an intro. Please contact a staff member to unverify them! This is a bug.'
+                    f'> {ctx.disagree} `{member}` doesn\'t have an intro. '
+                    'Please contact a staff member to unverify them! This is a bug.'
                 )
         guild = self.bot.get_guild(913310006814859334)
         intro_channel = guild.get_channel(913331578606854184)
