@@ -43,6 +43,9 @@ class ViewIntro(disnake.ui.View):
         self.bot = bot
         self.uid = uid
 
+    async def on_error(self, error, item, inter):
+        await self.bot.inter_reraise(self.bot, inter, item, error)
+
     @disnake.ui.button(label='View Intro', style=disnake.ButtonStyle.blurple)
     async def view_intro(self, button: disnake.Button, inter: disnake.MessageInteraction):
         disagree = '<:disagree:913895999125196860>'
