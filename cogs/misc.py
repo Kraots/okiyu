@@ -37,6 +37,48 @@ SERVER_AD = """
 """
 
 
+class ViewIntro(disnake.ui.View):
+    def __init__(self, bot: Ukiyo, uid: int):
+        super().__init__(timeout=None)
+        self.bot = bot
+        self.uid = uid
+
+    @disnake.ui.button(label='View Intro', style=disnake.ButtonStyle.blurple)
+    async def view_intro(self, button: disnake.Button, inter: disnake.MessageInteraction):
+        disagree = '<:disagree:913895999125196860>'
+        data: utils.Intro = await utils.Intro.find_one({'_id': self.uid})
+        guild = self.bot.get_guild(913310006814859334)
+        member = guild.get_member(self.uid)
+        if data is None:
+            return await inter.response.send_message(
+                f'> {disagree} `{member}` doesn\'t have an intro. '
+                'Please contact a staff member to unverify them! This is a bug.',
+                ephemeral=True
+            )
+        intro_channel = guild.get_channel(913331578606854184)
+        msg = await intro_channel.fetch_message(data.message_id)
+        if msg:
+            view = disnake.ui.View()
+            view.add_item(disnake.ui.Button(label='Jump!', url=msg.jump_url))
+        else:
+            view = None
+
+        em = disnake.Embed(colour=member.color)
+        em.set_author(name=member, icon_url=member.display_avatar)
+        em.set_thumbnail(url=member.display_avatar)
+        em.add_field(name='Name', value=data.name)
+        em.add_field(name='Age', value=data.age)
+        em.add_field(name='Gender', value=data.gender)
+        em.add_field(name='Location', value=data.location, inline=False)
+        em.add_field(name='DMs', value=data.dms)
+        em.add_field(name='Looking', value=data.looking)
+        em.add_field(name='Sexuality', value=data.sexuality)
+        em.add_field(name='Relationship Status', value=data.status)
+        em.add_field(name='Likes', value=data.likes)
+        em.add_field(name='Dislikes', value=data.dislikes)
+        await inter.response.send_message(embed=em, view=view, ephemeral=True)
+
+
 class Misc(commands.Cog):
     """Miscellaneous commands."""
     def __init__(self, bot: Ukiyo):
@@ -427,7 +469,7 @@ class Misc(commands.Cog):
                 if _sexuality is not None:
                     for sexuality in _sexuality:
                         async for mem in utils.Intro.find({'gender': gender, 'sexuality': sexuality}):
-                            if mem.status.lower() != 'taken':
+                            if mem.status.lower() != 'taken' and mem.id != ctx.author.id:
                                 if data.age == 14 and mem.age < 17:
                                     choices.append(guild.get_member(mem.id))
                                 elif data.age == 15 and mem.age < 18:
@@ -439,7 +481,7 @@ class Misc(commands.Cog):
 
                 else:
                     async for mem in utils.Intro.find({'gender': gender}):
-                        if mem.status.lower() != 'taken':
+                        if mem.status.lower() != 'taken' and mem.id != ctx.author.id:
                             if data.age == 14 and mem.age < 17:
                                 choices.append(guild.get_member(mem.id))
                             elif data.age == 15 and mem.age < 18:
@@ -450,7 +492,7 @@ class Misc(commands.Cog):
                                 choices.append(guild.get_member(mem.id))
         else:
             async for mem in utils.Intro.find():
-                if mem.status.lower() != 'taken':
+                if mem.status.lower() != 'taken' and mem.id != ctx.author.id:
                     if data.age == 14 and mem.age < 17:
                         choices.append(guild.get_member(mem.id))
                     elif data.age == 15 and mem.age < 18:
@@ -471,7 +513,7 @@ class Misc(commands.Cog):
         em.description = f'You matched with {match.mention}'
         em.color = utils.green
         em.timestamp = datetime.now(timezone.utc)
-        await msg.edit(embed=em)
+        await msg.edit(embed=em, view=ViewIntro(self.bot, match.id))
 
 
 def setup(bot: Ukiyo):
