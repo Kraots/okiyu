@@ -376,9 +376,7 @@ class Misc(commands.Cog):
     @commands.command(name='match')
     async def match_people(self, ctx: Context):
         """
-        Matches you with another person, based on the
-        sexuality and gender of what the both of you have
-        in your intros.
+        Matches you with another person, based on the sexuality and gender of what the both of you have in your intros.
         """
 
         guild = self.bot.get_guild(913310006814859334)
@@ -396,7 +394,7 @@ class Misc(commands.Cog):
                 return await ctx.reply('Master, you forgot that you didn\'t make an intro? 🥺 🥺')
             else:
                 return await ctx.reply(
-                    f'> {ctx.disagree} You don\'t have an intro. '
+                    f'> {ctx.disagree} Couldn\'t find a match because you don\'t have an intro. '
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
         _sexuality = None
