@@ -215,7 +215,7 @@ class Moderation(commands.Cog):
                 return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         try:
-            await member.send('> Hello! Sadly, you have been **banned** from `Ukiyo`. Goodbye 👋')
+            await member.send(f'> ⚠️ Hello! Sadly, you have been **banned** from `Ukiyo` for **{reason}**. Goodbye 👋')
         except disnake.Forbidden:
             pass
         guild = self.bot.get_guild(913310006814859334)
@@ -268,7 +268,7 @@ class Moderation(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
 
         try:
-            await member.send('> Hello! Sadly, you have been **kicked** from `Ukiyo`. Goodbye 👋')
+            await member.send(f'> ⚠️ Hello! Sadly, you have been **kicked** from `Ukiyo` for **{reason}**. Goodbye 👋')
         except disnake.Forbidden:
             pass
         await member.kick(reason=f'{ctx.author} ({ctx.author.id}): "{reason}"')
