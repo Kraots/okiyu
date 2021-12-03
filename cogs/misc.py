@@ -421,8 +421,8 @@ class Misc(commands.Cog):
     @commands.command(name='match')
     async def match_people(self, ctx: Context):
         """
-        Matches you with another person, based on the sexuality, gender and relationship status
-        of what the both of you have in your intros.
+        Matches you with another person, based on the sexuality, gender, relationship status
+        of what the both of you have in your intros and if they are looking.
         """
 
         guild = self.bot.get_guild(913310006814859334)
@@ -472,7 +472,11 @@ class Misc(commands.Cog):
                 if _sexuality is not None:
                     for sexuality in _sexuality:
                         async for mem in utils.Intro.find({'gender': gender, 'sexuality': sexuality}):
-                            if mem.status.lower() != 'taken' and mem.id != ctx.author.id:
+                            if (
+                                (mem.status.lower() != 'taken') and
+                                (mem.id != ctx.author.id) and
+                                (mem.looking.lower() == 'yes')
+                            ):
                                 if data.age == 14 and mem.age < 17:
                                     choices.append(guild.get_member(mem.id))
                                 elif data.age == 15 and mem.age < 18:
@@ -484,7 +488,11 @@ class Misc(commands.Cog):
 
                 else:
                     async for mem in utils.Intro.find({'gender': gender}):
-                        if mem.status.lower() != 'taken' and mem.id != ctx.author.id:
+                        if (
+                            (mem.status.lower() != 'taken') and
+                            (mem.id != ctx.author.id) and
+                            (mem.looking.lower() == 'yes')
+                        ):
                             if data.age == 14 and mem.age < 17:
                                 choices.append(guild.get_member(mem.id))
                             elif data.age == 15 and mem.age < 18:
@@ -495,7 +503,11 @@ class Misc(commands.Cog):
                                 choices.append(guild.get_member(mem.id))
         else:
             async for mem in utils.Intro.find():
-                if mem.status.lower() != 'taken' and mem.id != ctx.author.id:
+                if (
+                    (mem.status.lower() != 'taken') and
+                    (mem.id != ctx.author.id) and
+                    (mem.looking.lower() == 'yes')
+                ):
                     if data.age == 14 and mem.age < 17:
                         choices.append(guild.get_member(mem.id))
                     elif data.age == 15 and mem.age < 18:
