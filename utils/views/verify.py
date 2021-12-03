@@ -24,6 +24,10 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
 
     if not isinstance(ctx.channel, disnake.DMChannel):
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474):
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
             return
         else:
             view = utils.ConfirmView
