@@ -398,24 +398,24 @@ class Misc(commands.Cog):
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
         _sexuality = None
-        if data.gender.lower in ('male', 'm', 'boy'):
-            if data.sexuality.lower == 'straight':
+        if data.gender.lower() in ('male', 'm', 'boy'):
+            if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
                 _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
-            elif data.sexuality.lower == 'gay':
+            elif data.sexuality.lower() == 'gay':
                 _sexuality = ('gay', 'bisexual', 'bi', 'Gay', 'Bisexual', 'Bi')
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
-            elif data.sexuality.lower in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
+            elif data.sexuality.lower() in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
 
-        elif data.gender.lower in ('female', 'f', 'girl'):
-            if data.sexuality.lower == 'straight':
+        elif data.gender.lower() in ('female', 'f', 'girl'):
+            if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
-            elif data.sexuality.lower == 'gay':
+            elif data.sexuality.lower() == 'gay':
                 _sexuality = ('gay', 'bisexual', 'bi', 'Gay', 'Bisexual', 'Bi')
                 _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
-            elif data.sexuality.lower in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
+            elif data.sexuality.lower() in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
         else:
             _gender = None
@@ -430,6 +430,8 @@ class Misc(commands.Cog):
                                 choices.append(guild.get_member(mem.id))
                             elif data.age == 16 and mem.age < 19:
                                 choices.append(guild.get_member(mem.id))
+                            elif mem.age > 14:
+                                choices.append(guild.get_member(mem.id))
 
                 else:
                     async for mem in utils.Intro.find({'gender': gender}):
@@ -439,6 +441,8 @@ class Misc(commands.Cog):
                             choices.append(guild.get_member(mem.id))
                         elif data.age == 16 and mem.age < 19:
                             choices.append(guild.get_member(mem.id))
+                        elif mem.age > 14:
+                            choices.append(guild.get_member(mem.id))
         else:
             async for mem in utils.Intro.find():
                 if data.age == 14 and mem.age < 17:
@@ -446,6 +450,8 @@ class Misc(commands.Cog):
                 elif data.age == 15 and mem.age < 18:
                     choices.append(guild.get_member(mem.id))
                 elif data.age == 16 and mem.age < 19:
+                    choices.append(guild.get_member(mem.id))
+                elif mem.age > 14:
                     choices.append(guild.get_member(mem.id))
 
         if len(choices) == 0:
