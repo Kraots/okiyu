@@ -24,6 +24,11 @@ class Intros(commands.Cog):
     async def intro(self, ctx: Context):
         """Create/Edit your intro."""
 
+        if ctx.author.id in self.bot.verifying:
+            return await ctx.send(
+                f'> {ctx.disagree} Please complete your current intro before making another one!', ephemeral=True
+            )
+        self.bot.verifying.append(ctx.author.id)
         await create_intro(self.bot.webhooks['mod_logs'], ctx, self.bot)
 
     @commands.command(aliases=('wi',))
