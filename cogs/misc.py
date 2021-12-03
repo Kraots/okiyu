@@ -398,6 +398,7 @@ class Misc(commands.Cog):
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
         _sexuality = None
+        _gender = None
         if data.gender.lower() in ('male', 'm', 'boy'):
             if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
@@ -417,8 +418,7 @@ class Misc(commands.Cog):
                 _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
             elif data.sexuality.lower() in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
-        else:
-            _gender = None
+
         if _gender is not None:
             for gender in _gender:
                 if _sexuality is not None:
