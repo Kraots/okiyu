@@ -303,6 +303,15 @@ class Misc(commands.Cog):
         v = View()
         v.add_item(Button(label='Jump!', url=m.jump_url))
         await ctx.reply('Ticket created!', view=v)
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title='[TICKET OPENED]',
+            fields=[
+                ('Ticket Owner', f'{ctx.author} (`{ctx.author.id}`)'),
+                ('Ticket ID', f'`#{ticket_id}`'),
+                ('At', utils.format_dt(datetime.now(), 'F')),
+            ]
+        )
 
     @commands.command(name='checkmute', aliases=('checkmutes', 'mutescheck', 'mutecheck',))
     async def check_mute(self, ctx: Context, *, member: disnake.Member = None):
