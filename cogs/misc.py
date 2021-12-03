@@ -516,6 +516,7 @@ class Misc(commands.Cog):
         em.description = f'You matched with {match.mention}'
         em.color = utils.green
         em.timestamp = datetime.now(timezone.utc)
+        em.set_footer(text='Keep in mind that this is just a suggestion! Nothing more!!')
         await msg.edit(embed=em, view=ViewIntro(self.bot, match.id))
 
 
