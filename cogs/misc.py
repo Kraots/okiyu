@@ -436,6 +436,7 @@ class Misc(commands.Cog):
         msg = await ctx.reply(embed=em)
         data: utils.Intro = await utils.Intro.find_one({'_id': ctx.author.id})
         if data is None:
+            await msg.delete()
             if ctx.author.id == self.bot._owner_id:
                 return await ctx.reply('Master, you forgot that you didn\'t make an intro? 🥺 🥺')
             else:
