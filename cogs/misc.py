@@ -1,5 +1,6 @@
 import time
-from datetime import datetime
+import random
+from datetime import datetime, timezone
 
 import disnake
 from disnake.ext import commands
@@ -313,6 +314,14 @@ class Misc(commands.Cog):
             ]
         )
 
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: disnake.Member):
+        async for ticket in Ticket.find({'owner_id': member.id}):
+            guild = self.bot.get_guild(913310006814859334)
+            ch = guild.get_channel(ticket.id)
+            await ch.delete(reason='Member left.')
+            await ticket.delete()
+
     @commands.command(name='checkmute', aliases=('checkmutes', 'mutescheck', 'mutecheck',))
     async def check_mute(self, ctx: Context, *, member: disnake.Member = None):
         """
@@ -364,13 +373,87 @@ class Misc(commands.Cog):
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.reply(embed=em)
 
-    @commands.Cog.listener()
-    async def on_member_remove(self, member: disnake.Member):
-        async for ticket in Ticket.find({'owner_id': member.id}):
-            guild = self.bot.get_guild(913310006814859334)
-            ch = guild.get_channel(ticket.id)
-            await ch.delete(reason='Member left.')
-            await ticket.delete()
+    @commands.command(name='match')
+    async def match_people(self, ctx: Context):
+        """
+        Matches you with another person, based on the
+        sexuality and gender of what the both of you have
+        in your intros.
+        """
+
+        guild = self.bot.get_guild(913310006814859334)
+        _ = await utils.Marriage.find_one({'_id': ctx.author.id})
+        if _ is not None:
+            mem = guild.get_member(_.married_to)
+            return await ctx.reply(f'You are already married to {mem.mention}')
+
+        choices = []
+        em = disnake.Embed(title='Matching... Please wait...', color=utils.blurple)
+        msg = await ctx.reply(embed=em)
+        data: utils.Intro = await utils.Intro.find_one({'_id': ctx.author.id})
+        _sexuality = None
+        if data.gender.lower in ('male', 'm', 'boy'):
+            if data.sexuality.lower == 'straight':
+                _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
+                _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
+            elif data.sexuality.lower == 'gay':
+                _sexuality = ('gay', 'bisexual', 'bi', 'Gay', 'Bisexual', 'Bi')
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
+            elif data.sexuality.lower in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
+
+        elif data.gender.lower in ('female', 'f', 'girl'):
+            if data.sexuality.lower == 'straight':
+                _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
+            elif data.sexuality.lower == 'gay':
+                _sexuality = ('gay', 'bisexual', 'bi', 'Gay', 'Bisexual', 'Bi')
+                _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
+            elif data.sexuality.lower in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
+        else:
+            gender = None
+        if _gender is not None:
+            for gender in _gender:
+                if _sexuality is not None:
+                    for sexuality in _sexuality:
+                        async for mem in utils.Intro.find({'gender': gender, 'sexuality': sexuality}):
+                            if data.age == 14 and mem.age < 17:
+                                choices.append(guild.get_member(mem.id))
+                            elif data.age == 15 and mem.age < 18:
+                                choices.append(guild.get_member(mem.id))
+                            elif data.age == 16 and mem.age < 19:
+                                choices.append(guild.get_member(mem.id))
+
+                else:
+                    async for mem in utils.Intro.find({'gender': gender}):
+                        if data.age == 14 and mem.age < 17:
+                            choices.append(guild.get_member(mem.id))
+                        elif data.age == 15 and mem.age < 18:
+                            choices.append(guild.get_member(mem.id))
+                        elif data.age == 16 and mem.age < 19:
+                            choices.append(guild.get_member(mem.id))
+        else:
+            async for mem in utils.Intro.find():
+                if data.age == 14 and mem.age < 17:
+                    choices.append(guild.get_member(mem.id))
+                elif data.age == 15 and mem.age < 18:
+                    choices.append(guild.get_member(mem.id))
+                elif data.age == 16 and mem.age < 19:
+                    choices.append(guild.get_member(mem.id))
+
+        if len(choices) == 0:
+            em.title = 'Uh oh...'
+            em.description = 'Sadly, I couldn\'t find a match for you.'
+            em.color = utils.red
+            return await msg.edit(embed=em)
+
+        match = random.choice(choices)
+        em.title = 'Match Found!'
+        em.description = f'You matched with {match.mention}'
+        em.color = utils.green
+        em.timestamp = datetime.now(timezone.utc)
+        await msg.edit(embed=em)
 
 
 def setup(bot: Ukiyo):
