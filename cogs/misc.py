@@ -212,7 +212,7 @@ class Misc(commands.Cog):
         else:
             await rules.delete()
 
-        await ctx.reply('> 👌 successfully **cleared** to the rules.')
+        await ctx.reply('> 👌 Successfully **cleared** the rules.')
 
     @commands.group(
         name='nick', invoke_without_command=True, case_insensitive=True, aliases=('nickname',)
