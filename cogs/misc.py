@@ -539,10 +539,10 @@ class Misc(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         message = ""
         all_status = {
-            "online": {"users": [], "emoji": "🟢"},
-            "idle": {"users": [], "emoji": "🟡"},
-            "dnd": {"users": [], "emoji": "🔴"},
-            "offline": {"users": [], "emoji": "⚫"}
+            "online": {"users": [], "emoji": "<:status_online:916642281631670273>"},
+            "idle": {"users": [], "emoji": "<:status_idle:916642281665212437>"},
+            "dnd": {"users": [], "emoji": "<:status_dnd:916642281665220699>"},
+            "offline": {"users": [], "emoji": "<:status_offline:916642281593913354>"}
         }
 
         for mem in guild.members:
@@ -556,9 +556,9 @@ class Misc(commands.Cog):
                 if not mem.bot:
                     all_status[str(mem.status)]["users"].append(f"`{mem}`")
 
-        for g in all_status:
-            if all_status[g]["users"]:
-                message += f"{all_status[g]['emoji']} {'  **|**  '.join(all_status[g]['users'])}\n\n"
+        for entry in all_status:
+            if all_status[entry]["users"]:
+                message += f"{all_status[entry]['emoji']} {'  **|**  '.join(all_status[entry]['users'])}\n\n"
 
         await ctx.send(message)
 
