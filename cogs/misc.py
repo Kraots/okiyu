@@ -534,7 +534,7 @@ class Misc(commands.Cog):
 
     @commands.command(name='staff', aliases=('mods',))
     async def check_staff(self, ctx):
-        """Check which staff members current status."""
+        """Check the staff members current status."""
 
         guild = self.bot.get_guild(913310006814859334)
         message = ""
