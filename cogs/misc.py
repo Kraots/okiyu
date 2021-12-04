@@ -462,8 +462,8 @@ class Misc(commands.Cog):
             if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
-            elif data.sexuality.lower() == 'gay':
-                _sexuality = ('gay', 'bisexual', 'bi', 'Gay', 'Bisexual', 'Bi')
+            elif data.sexuality.lower() == 'lesbian':
+                _sexuality = ('lesbian', 'bisexual', 'bi', 'Lesbian', 'Bisexual', 'Bi')
                 _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
             elif data.sexuality.lower() in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
