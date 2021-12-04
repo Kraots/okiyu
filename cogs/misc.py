@@ -532,6 +532,36 @@ class Misc(commands.Cog):
         em.set_footer(text='Keep in mind that this is just a suggestion! Nothing more!!')
         await msg.edit(embed=em, view=ViewIntro(self.bot, match.id))
 
+    @commands.command(name='staff', aliases=('mods',))
+    async def check_staff(self, ctx):
+        """Check which staff members current status."""
+
+        guild = self.bot.get_guild(913310006814859334)
+        message = ""
+        all_status = {
+            "online": {"users": [], "emoji": "🟢"},
+            "idle": {"users": [], "emoji": "🟡"},
+            "dnd": {"users": [], "emoji": "🔴"},
+            "offline": {"users": [], "emoji": "⚫"}
+        }
+
+        for mem in guild.members:
+            if 913310292505686046 in (r.id for r in mem.roles):  # Checks for owner
+                if not mem.bot:
+                    all_status[str(mem.status)]["users"].append(f"`{mem}`")
+            elif 913315033134542889 in (r.id for r in mem.roles):  # Checks for admin
+                if not mem.bot:
+                    all_status[str(mem.status)]["users"].append(f"`{mem}`")
+            elif 913315033684008971 in (r.id for r in mem.roles):  # Checks for mod
+                if not mem.bot:
+                    all_status[str(mem.status)]["users"].append(f"`{mem}`")
+
+        for g in all_status:
+            if all_status[g]["users"]:
+                message += f"{all_status[g]['emoji']} {'  **|**  '.join(all_status[g]['users'])}\n\n"
+
+        await ctx.send(message)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
