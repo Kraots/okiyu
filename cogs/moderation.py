@@ -428,7 +428,7 @@ class Moderation(commands.Cog):
                 member = guild.get_member(mute.id)
                 _mem = f'**[LEFT]** (`{mute.id}`)'
                 if member:
-                    _mem = f'{member.mention} (`{member.id}`)'
+                    _mem = f'{member} (`{member.id}`)'
                     new_roles = [role for role in member.roles if role.id != 913376647422545951]
                     if mute.is_owner is True:
                         owner_role = guild.get_role(913310292505686046)  # Check for owner
