@@ -539,26 +539,36 @@ class Misc(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         message = ""
         all_status = {
-            "online": {"users": [], "emoji": "<:status_online:916642281631670273>"},
-            "idle": {"users": [], "emoji": "<:status_idle:916642281665212437>"},
-            "dnd": {"users": [], "emoji": "<:status_dnd:916642281665220699>"},
-            "offline": {"users": [], "emoji": "<:status_offline:916642281593913354>"}
+            "online": {"users": [], "emoji": "<:status_online:916642281631670273> "},
+            "idle": {"users": [], "emoji": "<:status_idle:916642281665212437> "},
+            "dnd": {"users": [], "emoji": "<:status_dnd:916642281665220699> "},
+            "offline": {"users": [], "emoji": "<:status_offline:916642281593913354> "}
         }
 
         for mem in guild.members:
             if 913310292505686046 in (r.id for r in mem.roles):  # Checks for owner
                 if not mem.bot:
-                    all_status[str(mem.status)]["users"].append(f"`{mem}`")
+                    if len(all_status[str(mem.status)]['users']) == 0:
+                        all_status[str(mem.status)]["users"].append(f"**{mem}** `(OWNER)`")
+                    else:
+                        all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(OWNER)`")
             elif 913315033134542889 in (r.id for r in mem.roles):  # Checks for admin
                 if not mem.bot:
-                    all_status[str(mem.status)]["users"].append(f"`{mem}`")
+                    if len(all_status[str(mem.status)]['users']) == 0:
+                        all_status[str(mem.status)]["users"].append(f"**{mem}** `(ADMIN)`")
+                    else:
+                        all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(ADMIN)`")
             elif 913315033684008971 in (r.id for r in mem.roles):  # Checks for mod
                 if not mem.bot:
-                    all_status[str(mem.status)]["users"].append(f"`{mem}`")
+                    if len(all_status[str(mem.status)]['users']) == 0:
+                        all_status[str(mem.status)]["users"].append(f"**{mem}** `(MODERATOR)`")
+                    else:
+                        all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(MODERATOR)`")
 
         for entry in all_status:
             if all_status[entry]["users"]:
-                message += f"{all_status[entry]['emoji']} {'  **|**  '.join(all_status[entry]['users'])}\n\n"
+                usrs = '\n'.join(all_status[entry]['users'])
+                message += f"{all_status[entry]['emoji']} {usrs}\n\n"
 
         await ctx.send(message)
 
