@@ -144,7 +144,7 @@ class RoboPages(disnake.ui.View):
             )
         await self.ctx.bot.inter_reraise(self.bot, interaction, item, error)
 
-    async def start(self) -> None:
+    async def start(self, *, ref: bool = False) -> None:
         if self.check_embeds and not self.ctx.channel.permissions_for(self.ctx.me).embed_links:
             await self.ctx.send('Bot does not have embed links permission in this channel.')
             return
@@ -153,7 +153,10 @@ class RoboPages(disnake.ui.View):
         page = await self.source.get_page(0)
         kwargs = await self._get_kwargs_from_page(page)
         self._update_labels(0)
-        self.message = await self.ctx.send(**kwargs, view=self)
+        if ref is False:
+            self.message = await self.ctx.send(**kwargs, view=self)
+        else:
+            self.message = await self.ctx.send(**kwargs, view=self, reference=self.ctx.replied_reference)
 
     @disnake.ui.button(label='≪', style=disnake.ButtonStyle.grey)
     async def go_to_first_page(self, button: disnake.ui.Button, interaction: MessageInteraction):
