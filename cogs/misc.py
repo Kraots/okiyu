@@ -589,7 +589,7 @@ class Misc(commands.Cog):
             reason=reason,
             date=datetime.now(timezone.utc)
         ).commit()
-        await ctx.reply(f'You are now ``AFK``: **{reason}**')
+        await ctx.reply(f'You are now ``AFK``: **"{reason}"**')
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
@@ -601,17 +601,17 @@ class Misc(commands.Cog):
             await data.delete()
             return await message.reply(
                 'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
-                f'*since {utils.format_dt(data.date, "F")} '
-                f'(`{utils.human_timedelta(dt=data.date, suffix=False)}`)*'
+                f'since {utils.format_dt(data.date, "F")} '
+                f'(`{utils.human_timedelta(dt=data.date, suffix=False)}`)'
             )
 
         for user in message.mentions:
             data: AFK = await AFK.find_one({'_id': user.id})
             if data is not None:
                 await message.reply(
-                    f'**{user}** is ``AFK``: **{data.reason}** '
+                    f'**{user}** is ``AFK``: "**{data.reason}**" '
                     f'*since {utils.format_dt(data.date, "F")} '
-                    f'(`{utils.human_timedelta(dt=data.date, suffix=False)}`)*')
+                    f'(`{utils.human_timedelta(dt=data.date)}`)*')
 
 
 def setup(bot: Ukiyo):
