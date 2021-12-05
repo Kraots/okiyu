@@ -65,4 +65,4 @@ class SlashColours(disnake.ui.View):
     async def on_timeout(self):
         for item in self.children:
             item.disabled = True
-        await self.inter.edit_message(view=self)
+        await self.inter.edit_original_message(view=self)
