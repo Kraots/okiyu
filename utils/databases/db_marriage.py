@@ -1,10 +1,10 @@
-from . import database3
+from . import database5
 
 from umongo.fields import *
 from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance as Instance
 from umongo.frameworks.motor_asyncio import MotorAsyncIODocument as Document
 
-instance = Instance(database3)
+instance = Instance(database5)
 
 
 @instance.register
