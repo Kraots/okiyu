@@ -10,6 +10,7 @@ import utils
 from utils import (
     Context,
     Rules,
+    AFK,
     Ticket,
     TicketView,
     Mutes,
@@ -571,6 +572,35 @@ class Misc(commands.Cog):
                 message += f"{all_status[entry]['emoji']} {usrs}\n\n"
 
         await ctx.send(message)
+
+    @commands.command(name='afk')
+    async def _afk(self, ctx: Context, *, reason: str):
+        """Set yourself on ``AFK``. While being ``AFK``, anybody
+        who pings you will be told by the bot that you are ``AFK``
+        with the reason you provided.
+        """
+
+        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        if data is not None:
+            return await ctx.reply('You are already ``AFK``!')
+
+        await AFK(
+            id=ctx.author.id,
+            reason=reason
+        ).commit()
+        await ctx.reply(f'You are now ``AFK``: **{reason}**')
+
+    @commands.Cog.listener()
+    async def on_message(self, message: disnake.Message):
+        data: AFK = await AFK.find_one({'_id': message.author.id})
+        if data is not None:
+            await data.delete()
+            return await message.reply('Welcome back! Removed your ``AFK``')
+
+        for user in message.mentions:
+            data: AFK = await AFK.find_one({'_id': user.id})
+            if data is not None:
+                await message.reply(f'**{user}** is ``AFK``: **{data.reason}**')
 
 
 def setup(bot: Ukiyo):
