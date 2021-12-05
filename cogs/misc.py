@@ -602,7 +602,7 @@ class Misc(commands.Cog):
             return await message.reply(
                 'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
                 f'since {utils.format_dt(data.date, "F")} '
-                f'(`{utils.human_timedelta(dt=data.date, suffix=False)}`)'
+                f'(`{utils.human_timedelta(dt=data.date)}`)'
             )
 
         for user in message.mentions:
