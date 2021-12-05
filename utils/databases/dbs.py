@@ -18,6 +18,6 @@ key4 = os.getenv('MONGODBKEY4')
 cluster4 = motor.motor_asyncio.AsyncIOMotorClient(key4)
 database4 = cluster4['Ukiyo2']  # AFKs
 
-# key5 = os.getenv('MONGODBKEY5')
-# cluster5 = motor.motor_asyncio.AsyncIOMotorClient(key5)
-# database5 = cluster5['Ukiyo2']  # Marriages
+key5 = os.getenv('MONGODBKEY5')
+cluster5 = motor.motor_asyncio.AsyncIOMotorClient(key5)
+database5 = cluster5['Ukiyo2']  # Marriages
