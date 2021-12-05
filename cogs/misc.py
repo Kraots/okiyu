@@ -485,7 +485,11 @@ class Misc(commands.Cog):
                                     choices.append(guild.get_member(mem.id))
                                 elif data.age == 16 and mem.age < 19:
                                     choices.append(guild.get_member(mem.id))
-                                elif data.age >= 17 and mem.age > 14:
+                                elif data.age == 17 and mem.age > 14:
+                                    choices.append(guild.get_member(mem.id))
+                                elif data.age == 18 and mem.age > 15:
+                                    choices.append(guild.get_member(mem.id))
+                                elif data.age == 19 and mem.age > 16:
                                     choices.append(guild.get_member(mem.id))
 
                 else:
@@ -501,7 +505,11 @@ class Misc(commands.Cog):
                                 choices.append(guild.get_member(mem.id))
                             elif data.age == 16 and mem.age < 19:
                                 choices.append(guild.get_member(mem.id))
-                            elif data.age >= 17 and mem.age > 14:
+                            elif data.age == 17 and mem.age > 14:
+                                choices.append(guild.get_member(mem.id))
+                            elif data.age == 18 and mem.age > 15:
+                                choices.append(guild.get_member(mem.id))
+                            elif data.age == 19 and mem.age > 16:
                                 choices.append(guild.get_member(mem.id))
         else:
             async for mem in utils.Intro.find():
@@ -516,7 +524,11 @@ class Misc(commands.Cog):
                         choices.append(guild.get_member(mem.id))
                     elif data.age == 16 and mem.age < 19:
                         choices.append(guild.get_member(mem.id))
-                    elif data.age >= 17 and mem.age > 14:
+                    elif data.age == 17 and mem.age > 14:
+                        choices.append(guild.get_member(mem.id))
+                    elif data.age == 18 and mem.age > 15:
+                        choices.append(guild.get_member(mem.id))
+                    elif data.age == 19 and mem.age > 16:
                         choices.append(guild.get_member(mem.id))
 
         if len(choices) == 0:
