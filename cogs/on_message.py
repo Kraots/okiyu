@@ -231,12 +231,6 @@ class OnMessage(commands.Cog):
                 await after.clear_reaction('🔁')
                 await cmd.invoke(ctx)
 
-    @commands.Cog.listener()
-    async def on_member_remove(self, member: disnake.Member):
-        data = await utils.InvalidName.find_one({'_id': member.id})
-        if data:
-            await data.delete()
-
 
 def setup(bot: Ukiyo):
     bot.add_cog(OnMessage(bot))
