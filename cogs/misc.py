@@ -598,12 +598,19 @@ class Misc(commands.Cog):
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
             await data.delete()
-            return await message.reply('Welcome back! Removed your ``AFK``')
+            return await message.reply(
+                'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
+                f'*since {utils.format_dt(data.date, "F")} '
+                f'(`{utils.human_timedelta(dt=data.date, suffix=False)}`)*'
+            )
 
         for user in message.mentions:
             data: AFK = await AFK.find_one({'_id': user.id})
             if data is not None:
-                await message.reply(f'**{user}** is ``AFK``: **{data.reason}**')
+                await message.reply(
+                    f'**{user}** is ``AFK``: **{data.reason}** '
+                    f'*since {utils.format_dt(data.date, "F")} '
+                    f'(`{utils.human_timedelta(dt=data.date, suffix=False)}`)*')
 
 
 def setup(bot: Ukiyo):
