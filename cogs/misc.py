@@ -609,7 +609,7 @@ class Misc(commands.Cog):
             data: AFK = await AFK.find_one({'_id': user.id})
             if data is not None:
                 await message.reply(
-                    f'**{user}** is ``AFK``: "**{data.reason}**" '
+                    f'**{user}** is ``AFK``: **"{data.reason}"** '
                     f'*since {utils.format_dt(data.date, "F")} '
                     f'(`{utils.human_timedelta(dt=data.date)}`)*')
 
