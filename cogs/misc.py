@@ -586,7 +586,8 @@ class Misc(commands.Cog):
 
         await AFK(
             id=ctx.author.id,
-            reason=reason
+            reason=reason,
+            date=datetime.now(timezone.utc)
         ).commit()
         await ctx.reply(f'You are now ``AFK``: **{reason}**')
 
