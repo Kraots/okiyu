@@ -198,12 +198,12 @@ class PaginatedHelpCommand(commands.HelpCommand):
 
         menu = HelpMenu(FrontPageSource(), ctx=self.context)
         menu.add_categories(all_commands)
-        await menu.start()
+        await menu.start(ref=True)
 
     async def send_cog_help(self, cog):
         entries = await self.filter_commands(cog.get_commands(), sort=True)
         menu = HelpMenu(GroupHelpPageSource(cog, entries, prefix=self.context.clean_prefix), ctx=self.context)
-        await menu.start()
+        await menu.start(ref=True)
 
     def common_command_formatting(self, embed_like, command):
         embed_like.title = self.get_command_signature(command)
@@ -227,7 +227,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
         # No pagination necessary for a single command.
         embed = disnake.Embed(color=utils.blurple)
         self.common_command_formatting(embed, command)
-        await self.context.send(embed=embed)
+        await self.context.send(embed=embed, reference=self.context.replied_reference)
 
     async def send_group_help(self, group):
         subcommands = group.commands
@@ -241,4 +241,4 @@ class PaginatedHelpCommand(commands.HelpCommand):
         source = GroupHelpPageSource(group, entries, prefix=self.context.clean_prefix)
         self.common_command_formatting(source, group)
         menu = HelpMenu(source, ctx=self.context)
-        await menu.start()
+        await menu.start(ref=True)
