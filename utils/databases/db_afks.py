@@ -11,6 +11,7 @@ instance = Instance(database4)
 class AFK(Document):
     id = IntField(attribute='_id', required=True)
     reason = StrField(required=True)
+    date = DateTimeField(required=True)
 
     class Meta:
         collection_name = 'AFK'
