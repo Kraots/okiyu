@@ -24,6 +24,8 @@ class Ukiyo(commands.Bot):
             ),
             test_guilds=[913310006814859334]
         )
+        self.add_check(self.check_dms)
+
         self._owner_id = 374622847672254466
         self.reraise = utils.reraise
         self.inter_reraise = utils.inter_reraise
@@ -148,6 +150,15 @@ class Ukiyo(commands.Bot):
             return await channel.fetch_message(reference.message_id)
         except disnake.NotFound:
             return None
+
+    async def check_dms(self, ctx: utils.Context):
+        if ctx.author.id == self.owner_id:
+            return True
+        if isinstance(ctx.channel, disnake.DMChannel):
+            if ctx.command.qualified_name != 'intro':
+                await ctx.send('Commands do not work in dm channels. Please use commands only in <#913330644875104306>')
+                return False
+        return True
 
 
 Ukiyo().run(TOKEN)
