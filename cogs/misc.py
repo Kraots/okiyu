@@ -592,6 +592,9 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
+        if message.author.bot:
+            return
+
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
             await data.delete()
