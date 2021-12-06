@@ -147,13 +147,6 @@ class Developer(commands.Cog):
         await ctx.send("*Restarting...*")
         restart_program()
 
-    @commands.Cog.listener()
-    async def on_member_remove(self, member: disnake.Member):
-        try:
-            self.bot.verifying.pop(self.bot.verifying.index(member.id))
-        except (IndexError, ValueError):
-            pass
-
 
 def setup(bot: Ukiyo):
     bot.add_cog(Developer(bot))
