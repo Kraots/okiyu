@@ -602,7 +602,7 @@ class Misc(commands.Cog):
         await AFK(
             id=ctx.author.id,
             reason=reason,
-            date=datetime.now(timezone.utc)
+            date=ctx.message.created_at
         ).commit()
         await ctx.reply(f'You are now ``AFK``: **"{reason}"**')
 
@@ -613,12 +613,13 @@ class Misc(commands.Cog):
 
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
-            await data.delete()
-            return await message.reply(
-                'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
-                f'since {utils.format_dt(data.date, "F")} '
-                f'(`{utils.human_timedelta(dt=data.date)}`)'
-            )
+            if message.created_at != data.date:
+                await data.delete()
+                return await message.reply(
+                    'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
+                    f'since {utils.format_dt(data.date, "F")} '
+                    f'(`{utils.human_timedelta(dt=data.date)}`)'
+                )
 
         for user in message.mentions:
             data: AFK = await AFK.find_one({'_id': user.id})
