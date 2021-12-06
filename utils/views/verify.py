@@ -313,9 +313,9 @@ class Verify(View):
             return await inter.followup.send(
                 f'> {disagree} Please complete your current verification before proceeding again!', ephemeral=True
             )
-        self.bot.verifying.append(inter.author.id)
         try:
             msg = await inter.author.send('Starting the intro creation process...')
+            self.bot.verifying.append(inter.author.id)
         except disnake.Forbidden:
             return await inter.followup.send(f'> {disagree} You have your dms off! Please enable them!!', ephemeral=True)
         ctx = await self.bot.get_context(msg, cls=utils.Context)
