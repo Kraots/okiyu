@@ -224,7 +224,7 @@ class Misc(commands.Cog):
         res = await utils.check_username(self.bot, word=new_nickname)
         if res is True:
             return await ctx.reply(
-                f'> {ctx.disagree} Cannot remove your nickname because your username '
+                f'> {ctx.disagree} Cannot change your nickname because your username '
                 'has too less pingable characters, is a bad word or is too short.'
             )
         await ctx.author.edit(nick=new_nickname)
