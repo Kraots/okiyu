@@ -600,7 +600,8 @@ class Misc(commands.Cog):
             return await ctx.reply('You are already ``AFK``!')
 
         if ctx.author.id == self.bot._owner_id:
-            reason += ' don\'t ping me again unless you plan on hitting me up and are a girl smh 💅'
+            reason += ' | don\'t ping me again unless you plan ' \
+                      'on hitting me up and are a girl smh 💅'
 
         await AFK(
             id=ctx.author.id,
