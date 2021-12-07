@@ -224,7 +224,7 @@ class Moderation(commands.Cog):
             reason=f'{ctx.author} ({ctx.author.id}): "{reason}"',
             delete_message_days=0
         )
-        await ctx.send(f'> 👌 🔨 Banned {member.mention} for **{reason}**')
+        await ctx.send(f'> 👌 🔨 Banned `{member}` for **{reason}**')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title='[BAN]',
@@ -272,7 +272,7 @@ class Moderation(commands.Cog):
         except disnake.Forbidden:
             pass
         await member.kick(reason=f'{ctx.author} ({ctx.author.id}): "{reason}"')
-        await ctx.send(f'> 👌 Kicked {member.mention} for **{reason}**')
+        await ctx.send(f'> 👌 Kicked `{member}` for **{reason}**')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title='[KICK]',
