@@ -603,6 +603,7 @@ class Misc(commands.Cog):
             id=ctx.author.id,
             reason=reason,
             date=ctx.message.created_at
+            message_id=ctx.message.id
         ).commit()
         await ctx.reply(f'You are now ``AFK``: **"{reason}"**')
 
@@ -613,7 +614,7 @@ class Misc(commands.Cog):
 
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
-            if message.created_at != data.date:
+            if message.id != data.message_id:
                 await data.delete()
                 return await message.reply(
                     'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
