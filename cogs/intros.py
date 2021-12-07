@@ -87,14 +87,17 @@ class Intros(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         unverified_role = guild.get_role(913329062347423775)
         data = await Intro.find_one({'_id': member.id})
-        if data is None:
-            return await ctx.reply(f'> {ctx.disagree} `{member}` is not verified.')
-        intro_channel = guild.get_channel(913331578606854184)
-        msg = await intro_channel.fetch_message(data.message_id)
-        if msg:
-            await msg.delete()
-        await data.delete()
+        if data is not None:
+            intro_channel = guild.get_channel(913331578606854184)
+            msg = await intro_channel.fetch_message(data.message_id)
+            if msg:
+                await msg.delete()
+            await data.delete()
         await member.edit(roles=[r for r in member.roles if r.id == 913376647422545951] + [unverified_role])
+        await member.send(
+            'You have been unverified in `Ukiyo` by one of our staff members. '
+            'Please be serious when you\'re making your intro!'
+        )
         await ctx.reply(f'> 👌 `{member}` has been successfully unverified.')
 
     @commands.Cog.listener()
