@@ -94,7 +94,7 @@ class Intros(commands.Cog):
         if msg:
             await msg.delete()
         await data.delete()
-        await member.edit(roles=[unverified_role])
+        await member.edit(roles=[r for r in member.roles if r.id == 913376647422545951] + [unverified_role])
         await ctx.reply(f'> 👌 `{member}` has been successfully unverified.')
 
     @commands.Cog.listener()
