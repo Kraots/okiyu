@@ -12,6 +12,7 @@ class AFK(Document):
     id = IntField(attribute='_id', required=True)
     reason = StrField(required=True)
     date = DateTimeField(required=True)
+    message_id = IntField(required=True)
 
     class Meta:
         collection_name = 'AFK'
