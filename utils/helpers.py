@@ -241,7 +241,7 @@ def check_word(word: str = None) -> bool:
     If the return type is of bool ``True`` then it means that the word is a bad word, otherwise it's safe.
     """
 
-    if word in BAD_WORDS:
+    if any([w for w in BAD_WORDS if w in word]):
         return True
     return False
 
