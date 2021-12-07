@@ -602,7 +602,7 @@ class Misc(commands.Cog):
         await AFK(
             id=ctx.author.id,
             reason=reason,
-            date=ctx.message.created_at
+            date=ctx.message.created_at,
             message_id=ctx.message.id
         ).commit()
         await ctx.reply(f'You are now ``AFK``: **"{reason}"**')
