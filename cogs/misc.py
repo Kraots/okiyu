@@ -234,7 +234,7 @@ class Misc(commands.Cog):
     async def remove_nick(self, ctx: Context):
         """Removes your nickname."""
 
-        res = await utils.check_username(self.bot, word=ctx.author.display_name)
+        res = await utils.check_username(self.bot, word=ctx.author.name)
         if res is True:
             return await ctx.reply(
                 f'> {ctx.disagree} Cannot remove your nickname because your username '
