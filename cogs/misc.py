@@ -668,6 +668,11 @@ class Misc(commands.Cog):
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
             if data.is_afk is True and message.id != data.message_id:
+                await message.reply(
+                    'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
+                    f'since {utils.format_dt(data.date, "F")} '
+                    f'(`{utils.human_timedelta(dt=data.date)}`)'
+                )
                 if data.default is None:
                     await data.delete()
                 else:
@@ -676,11 +681,7 @@ class Misc(commands.Cog):
                     data.date = None
                     data.message_id = None
                     await data.commit()
-                return await message.reply(
-                    'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
-                    f'since {utils.format_dt(data.date, "F")} '
-                    f'(`{utils.human_timedelta(dt=data.date)}`)'
-                )
+                return
 
         for user in message.mentions:
             data: AFK = await AFK.find_one({'_id': user.id})
