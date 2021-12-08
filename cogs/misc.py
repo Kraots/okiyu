@@ -662,11 +662,14 @@ class Misc(commands.Cog):
 
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
-            if message.id != data.message_id and data.is_afk is True:
+            if data.is_afk is True and message.id != data.message_id:
                 if data.default is None:
                     await data.delete()
                 else:
                     data.is_afk = False
+                    data.reason = None
+                    data.date = None
+                    data.message_id = None
                     await data.commit()
                 return await message.reply(
                     'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
