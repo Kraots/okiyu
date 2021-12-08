@@ -610,8 +610,7 @@ class Misc(commands.Cog):
         elif data is not None:
             if data.is_afk is True:
                 return await ctx.reply('You are already ``AFK``!')
-            reason += f' | {data.default}' if reason is not None else data.default
-            data.reason = reason
+            data.reason = f'{reason} | {data.default}' if reason is not None else data.default
             data.date = ctx.message.created_at
             data.message_id = ctx.message.id
             data.is_afk = True
@@ -619,8 +618,18 @@ class Misc(commands.Cog):
 
         await ctx.reply(f'You are now ``AFK``: **"{reason}"**')
 
-    @_afk.command(name='set')
-    async def _afk_set(self, ctx: Context, *, default: str):
+    @_afk.group(name='default', invoke_without_command=True, case_insensitive=True)
+    async def _afk_default(self, ctx: Context):
+        """See your default ``AFK`` reason, if you set any."""
+
+        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        if data is None or data.default is None:
+            return await ctx.reply('You don\'t have a default ``AFK`` reason set!')
+
+        await ctx.reply(f'Your default ``AFK`` reason is: "{data.default}"')
+
+    @_afk_default.command(name='set')
+    async def _afk_default_set(self, ctx: Context, *, default: str):
         """Sets your default ``AFK`` reason."""
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
@@ -635,8 +644,8 @@ class Misc(commands.Cog):
 
         await ctx.reply(f'Successfully set your default ``AFK`` reason to: **"{default}"**')
 
-    @_afk.command(name='remove')
-    async def _afk_remove(self, ctx: Context):
+    @_afk_default.command(name='remove')
+    async def _afk_default_remove(self, ctx: Context):
         """Removes your default ``AFK`` reason."""
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
