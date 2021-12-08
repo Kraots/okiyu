@@ -588,28 +588,63 @@ class Misc(commands.Cog):
 
         await ctx.send(message)
 
-    @commands.command(name='afk')
-    async def _afk(self, ctx: Context, *, reason: str):
+    @commands.group(name='afk', invoke_without_command=True, case_insensitive=True)
+    async def _afk(self, ctx: Context, *, reason: str = None):
         """Set yourself on ``AFK``. While being ``AFK``, anybody
         who pings you will be told by the bot that you are ``AFK``
         with the reason you provided.
         """
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
-        if data is not None:
-            return await ctx.reply('You are already ``AFK``!')
+        if data is None:
+            if reason is None:
+                return await ctx.reply('You must give the reason!')
+            await AFK(
+                id=ctx.author.id,
+                reason=reason,
+                date=ctx.message.created_at,
+                message_id=ctx.message.id,
+                is_afk=True
+            ).commit()
 
-        if ctx.author.id == self.bot._owner_id:
-            reason += ' | don\'t ping me again unless you plan ' \
-                      'on hitting me up and are a girl smh 💅'
+        elif data is not None:
+            if data.is_afk is True:
+                return await ctx.reply('You are already ``AFK``!')
+            reason += f' | {data.default}' if reason is not None else data.default
+            data.reason = reason
+            data.date = ctx.message.created_at
+            data.message_id = ctx.message.id
+            data.is_afk = True
+            await data.commit()
 
-        await AFK(
-            id=ctx.author.id,
-            reason=reason,
-            date=ctx.message.created_at,
-            message_id=ctx.message.id
-        ).commit()
         await ctx.reply(f'You are now ``AFK``: **"{reason}"**')
+
+    @_afk.command(name='set')
+    async def _afk_set(self, ctx: Context, *, default: str):
+        """Sets your default ``AFK`` reason."""
+
+        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        if data is None:
+            await AFK(
+                id=ctx.author.id,
+                default=default
+            ).commit()
+        else:
+            data.default = default
+            await data.commit()
+
+        await ctx.reply(f'Successfully set your default ``AFK`` reason to: **"{default}"**')
+
+    @_afk.command(name='remove')
+    async def _afk_remove(self, ctx: Context):
+        """Removes your default ``AFK`` reason."""
+
+        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        if data is None:
+            return await ctx.reply('You don\'t have a default ``AFK`` reason set!')
+        await data.delete()
+
+        await ctx.reply('Successfully removed your default ``AFK`` reason.')
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
@@ -619,7 +654,11 @@ class Misc(commands.Cog):
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
             if message.id != data.message_id:
-                await data.delete()
+                if data.default is None:
+                    await data.delete()
+                else:
+                    data.is_afk = False
+                    await data.commit()
                 return await message.reply(
                     'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
                     f'since {utils.format_dt(data.date, "F")} '
@@ -628,7 +667,7 @@ class Misc(commands.Cog):
 
         for user in message.mentions:
             data: AFK = await AFK.find_one({'_id': user.id})
-            if data is not None:
+            if data is not None and data.is_afk is True:
                 await message.reply(
                     f'**{user}** is ``AFK``: **"{data.reason}"** '
                     f'*since {utils.format_dt(data.date, "F")} '
