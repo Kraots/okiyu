@@ -365,6 +365,10 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
+        data: AFK = await AFK.find_one({'_id': member.id})
+        if data is not None:
+            await data.delete()
+
         async for ticket in Ticket.find({'owner_id': member.id}):
             guild = self.bot.get_guild(913310006814859334)
             ch = guild.get_channel(ticket.id)
