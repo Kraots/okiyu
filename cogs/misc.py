@@ -662,7 +662,7 @@ class Misc(commands.Cog):
 
         data: AFK = await AFK.find_one({'_id': message.author.id})
         if data is not None:
-            if message.id != data.message_id:
+            if message.id != data.message_id and data.is_afk is True:
                 if data.default is None:
                     await data.delete()
                 else:
