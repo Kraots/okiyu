@@ -10,9 +10,12 @@ instance = Instance(database4)
 @instance.register
 class AFK(Document):
     id = IntField(attribute='_id', required=True)
-    reason = StrField(required=True)
-    date = DateTimeField(required=True)
-    message_id = IntField(required=True)
+    reason = StrField(default=None)
+    date = DateTimeField(default=None)
+    message_id = IntField(default=None)
+
+    is_afk = BooleanField(default=False)
+    default = StrField(default=None)
 
     class Meta:
         collection_name = 'AFK'
