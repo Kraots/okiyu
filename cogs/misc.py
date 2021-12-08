@@ -610,7 +610,8 @@ class Misc(commands.Cog):
         elif data is not None:
             if data.is_afk is True:
                 return await ctx.reply('You are already ``AFK``!')
-            data.reason = f'{reason} | {data.default}' if reason is not None else data.default
+            reason = f'{reason} | {data.default}' if reason is not None else data.default
+            data.reason = reason
             data.date = ctx.message.created_at
             data.message_id = ctx.message.id
             data.is_afk = True
