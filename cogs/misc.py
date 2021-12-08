@@ -631,7 +631,7 @@ class Misc(commands.Cog):
         if data is None or data.default is None:
             return await ctx.reply('You don\'t have a default ``AFK`` reason set!')
 
-        await ctx.reply(f'Your default ``AFK`` reason is: "{data.default}"')
+        await ctx.reply(f'Your default ``AFK`` reason is: **"{data.default}"**')
 
     @_afk_default.command(name='set')
     async def _afk_default_set(self, ctx: Context, *, default: str):
