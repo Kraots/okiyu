@@ -211,7 +211,7 @@ class Misc(commands.Cog):
             return await ctx.reply('Rule does not exist!')
         await rules.commit()
 
-        await ctx.reply(f'> 👌 📝 Successfully **edited** rule `{rule}` to `{new_rule}`.')
+        await ctx.reply(f'> 👌 📝 Successfully **edited** rule `{rule + 1}` to `{new_rule}`.')
 
     @server_rules.command(name='remove', aliases=('delete',))
     @utils.is_admin()
