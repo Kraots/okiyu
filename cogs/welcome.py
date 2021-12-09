@@ -37,7 +37,7 @@ class Welcome(commands.Cog):
             color=utils.pastel
         )
         welcome.set_thumbnail(url=member.display_avatar)
-        welcome.set_footer(text=f"Created {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
+        welcome.set_footer(text=f"Joined discord {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
         msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{member_count}** member.\n\n\n_ _'
         await welcome_channel.send(msg, embed=welcome)
 
