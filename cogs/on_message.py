@@ -184,7 +184,7 @@ class OnMessage(commands.Cog):
         if message.author.bot:
             return
         if message.author.id != self.bot._owner_id:
-            if message.guild:
+            if message.guild and message.content != '':
                 guild = self.bot.get_guild(913310006814859334)
                 matches = re.findall(utils.invite_regex, message.content.lower())
                 if matches and message.author.id != self.bot._owner:
