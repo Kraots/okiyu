@@ -158,6 +158,7 @@ class Misc(commands.Cog):
                     em.description = f'`{index + 1}.` {rule}'
                 else:
                     em.description += f'\n\n`{index + 1}.` {rule}'
+            em.set_footer(text='NOTE: Breaking any of these rules will result in a mute, or in the worst case, a ban.')
         else:
             if rule <= 0:
                 return await ctx.reply(f'> {ctx.disagree} Rule cannot be equal or less than `0`')
