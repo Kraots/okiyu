@@ -8,7 +8,7 @@ all_gender_roles = (
 
 gender_roles = {
     'ukiyo:gender_roles:Trans-Female': 913771963099541524, 'ukiyo:gender_roles:Trans-Male': 913771962835271820,
-    'ukiyo:gender_roles:Cis-Female': 913771962256482346, 'ukiyo:gender_roles:Cis-Male': 913771962155810846,
+    'ukiyo:gender_roles:Female': 913771962256482346, 'ukiyo:gender_roles:Male': 913771962155810846,
     'ukiyo:gender_roles:Other-Gender': 913771963346989117
 }
 
@@ -22,14 +22,14 @@ class GenderButtonRoles(disnake.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @disnake.ui.button(label='Cis-Male', custom_id='ukiyo:gender_roles:Cis-Male', row=0, style=disnake.ButtonStyle.blurple)
+    @disnake.ui.button(label='Cis-Male', custom_id='ukiyo:gender_roles:Male', row=0, style=disnake.ButtonStyle.blurple)
     async def Cis_Male(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         roles = [role for role in interaction.author.roles if role.id not in all_gender_roles]
         roles.append(interaction.guild.get_role(gender_roles[button.custom_id]))
         await interaction.author.edit(roles=roles, reason='Gender role update.')
         await interaction.response.send_message(f'I have changed your gender role to `{button.label}`', ephemeral=True)
 
-    @disnake.ui.button(label='Cis-Female', custom_id='ukiyo:gender_roles:Cis-Female', row=0, style=disnake.ButtonStyle.blurple)
+    @disnake.ui.button(label='Cis-Female', custom_id='ukiyo:gender_roles:Female', row=0, style=disnake.ButtonStyle.blurple)
     async def Cis_Female(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         roles = [role for role in interaction.author.roles if role.id not in all_gender_roles]
         roles.append(interaction.guild.get_role(gender_roles[button.custom_id]))
