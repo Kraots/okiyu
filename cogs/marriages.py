@@ -136,7 +136,7 @@ class Marriages(commands.Cog):
 
         `member` **->** The member you want to kiss. You can only kiss the person you are married with.
 
-        If for some reason you don't know this, you are a complete jerk but luckily for you, there's the command `!marriedwho` which reminds you who you are married to, and for how long.
+        If for some reason you don't know who you're married to, you are a complete jerk but luckily for you, there's the command `!marriedwho` which reminds you who you are married to, and for how long.
         """  # noqa
 
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
