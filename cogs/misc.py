@@ -422,8 +422,7 @@ class Misc(commands.Cog):
     @commands.command(name='checkmute', aliases=('checkmutes', 'mutescheck', 'mutecheck',))
     async def check_mute(self, ctx: Context, *, member: disnake.Member = None):
         """
-        Check all the current muted members and their time left. If ``member`` is specified,
-        it will only show for that member, including the reason they got muted.
+        Check all the current muted members and their time left. If ``member`` is specified, it will only show for that member, including the reason they got muted.
 
         `user` **->** The user that you want to see the date of when they joined discord. If you want to see all the currently muted members, you can ignore this since it defaults to yourself.
         """  # noqa
@@ -639,9 +638,7 @@ class Misc(commands.Cog):
 
     @commands.group(name='afk', invoke_without_command=True, case_insensitive=True)
     async def _afk(self, ctx: Context, *, reason: str = None):
-        """Set yourself on ``AFK``. While being ``AFK``, anybody
-        who pings you will be told by the bot that you are ``AFK``
-        with the reason you provided.
+        """Set yourself on ``AFK``. While being ``AFK``, anybody who pings you will be told by the bot that you are ``AFK`` with the reason you provided.
 
         `reason` **->** The reason you are ``AFK``. You can set a default by using `!afk default set`. For a list of commands for that, you can type `!help afk default`.
         """  # noqa
