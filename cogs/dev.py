@@ -78,7 +78,21 @@ class Developer(commands.Cog):
 
     @commands.command(name='eval', aliases=['e'])
     async def _eval(self, ctx: Context, *, code: str = None):
-        """Evaluate code."""
+        """Evaluate code.
+
+        `code`: The code to evaluate.
+
+        **Local Variables**
+        \u2800 • ``disnake`` **->** The disnake module.
+        \u2800 • ``commands`` **->** The disnake.ext.commands module.
+        \u2800 • ``_bot`` **->** The bot instance. (`Ukiyo`)
+        \u2800 • ``_ctx`` **->** The ``Context`` object of the command.
+        \u2800 • ``_channel`` **->** The ``disnake.abc.GuildChannel`` the command is invoked in.
+        \u2800 • ``_author`` **->** The ``disnake.Member`` of the command.
+        \u2800 • ``_guild`` **->** The ``disnake.Guild`` object the command is invoked in.
+        \u2800 • ``_message`` **->** The ``disnake.Message`` object of the command.
+        \u2800 • ``utils`` **->** The bot's ``utils`` custom package.
+        """
 
         if code is None:
             return await ctx.send("Please give code that you want to evaluate!")

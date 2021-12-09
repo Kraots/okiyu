@@ -142,7 +142,10 @@ class Misc(commands.Cog):
         name='rules', invoke_without_command=True, case_insensitive=True, aliases=('rule',)
     )
     async def server_rules(self, ctx: Context, rule: int = None):
-        """Sends the server's rules. If ``rule`` is given, it will only send that rule."""
+        """Sends the server's rules. If ``rule`` is given, it will only send that rule.
+
+        `rule`: The number of the rule you wish to see.
+        """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
@@ -169,7 +172,10 @@ class Misc(commands.Cog):
     @server_rules.command(name='add')
     @utils.is_admin()
     async def server_rules_add(self, ctx: Context, *, rule: str):
-        """Adds a rule to the server's rules."""
+        """Adds a rule to the server's rules.
+
+        `rule`: The rule to add.
+        """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
@@ -186,7 +192,11 @@ class Misc(commands.Cog):
     @server_rules.command(name='edit')
     @utils.is_admin()
     async def server_rules_edit(self, ctx: Context, rule: int, *, new_rule: str):
-        """Edits an existing rule."""
+        """Edits an existing rule.
+
+        `rule`: The number of the rule to edit.
+        `new_rule`: The new rule to replace it with.
+        """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
@@ -206,7 +216,10 @@ class Misc(commands.Cog):
     @server_rules.command(name='remove', aliases=('delete',))
     @utils.is_admin()
     async def server_rules_remove(self, ctx: Context, rule: int):
-        """Removes a rule from the server's rules by its number."""
+        """Removes a rule from the server's rules by its number.
+
+        `rule`: The number of the rule to remove.
+        """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
@@ -239,7 +252,10 @@ class Misc(commands.Cog):
         name='nick', invoke_without_command=True, case_insensitive=True, aliases=('nickname',)
     )
     async def change_nick(self, ctx: Context, *, new_nickname: str):
-        """Change your nickname to your desired one."""
+        """Change your nickname to your desired one.
+
+        `new_nickname`: The new nickname you wish to change to.
+        """
 
         res = await utils.check_username(self.bot, word=new_nickname)
         if res is True:
@@ -265,7 +281,11 @@ class Misc(commands.Cog):
 
     @commands.command(name='avatar', aliases=('av',))
     async def _av(self, ctx: Context, *, member: disnake.Member = None):
-        """Check the avatar ``member`` has."""
+        """Check the avatar ``member`` has.
+
+        `member`: The member that you want to see the avatar of. If you want to see your own
+        avatar, you can ignore this since it defaults to you if you don't provide this argument.
+        """
 
         member = member or ctx.author
         em = disnake.Embed(colour=utils.blurple, title=f'`{member.display_name}`\'s avatar')
@@ -275,7 +295,12 @@ class Misc(commands.Cog):
 
     @commands.group(invoke_without_command=True, case_insensitive=True)
     async def created(self, ctx: Context, *, user: disnake.User = None):
-        """Check the date when the ``user`` created their account."""
+        """Check the date when the ``user`` created their account.
+
+        `user`: The user that you want to see the date of when they created their discord account.
+        If you want to see your own account creation date, you can ignore this since it defaults
+        to you if you don't provide this argument.
+        """
 
         user = user or ctx.author
         em = disnake.Embed(
@@ -314,7 +339,12 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def joined(self, ctx: Context, *, member: disnake.Member = None):
-        """Check the date when the ``member`` joined the server."""
+        """Check the date when the ``member`` joined the server.
+
+        `member`: The member that you want to see the date of when they joined this server.
+        If you want to see your own join date, you can ignore this since it defaults
+        to you if you don't provide this argument.
+        """
 
         member = member or ctx.author
         em = disnake.Embed(
@@ -400,6 +430,9 @@ class Misc(commands.Cog):
         """
         Check all the current muted members and their time left. If ``member`` is specified,
         it will only show for that member, including the reason they got muted.
+
+        `user`: The user that you want to see the date of when they joined discord.
+        If you want to see all the currently muted members, you can ignore this.
         """
 
         if isinstance(ctx.channel, disnake.DMChannel):
@@ -573,7 +606,7 @@ class Misc(commands.Cog):
         await msg.edit(embed=em, view=ViewIntro(self.bot, match.id))
 
     @commands.command(name='staff', aliases=('mods',))
-    async def check_staff(self, ctx):
+    async def check_staff(self, ctx: Context):
         """Check the staff members current status."""
 
         guild = self.bot.get_guild(913310006814859334)
@@ -617,6 +650,9 @@ class Misc(commands.Cog):
         """Set yourself on ``AFK``. While being ``AFK``, anybody
         who pings you will be told by the bot that you are ``AFK``
         with the reason you provided.
+
+        `reason`: The reason you are ``AFK``. You can set a default by using `!afk default set`.
+        For a list of commands for that, you can type `!help afk default`.
         """
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
@@ -655,7 +691,10 @@ class Misc(commands.Cog):
 
     @_afk_default.command(name='set')
     async def _afk_default_set(self, ctx: Context, *, default: str):
-        """Sets your default ``AFK`` reason."""
+        """Sets your default ``AFK`` reason.
+
+        `default`: The default reason of your ``AFK`` to set.
+        """
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
         if data is None:

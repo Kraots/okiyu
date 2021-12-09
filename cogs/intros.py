@@ -33,7 +33,11 @@ class Intros(commands.Cog):
 
     @commands.command(aliases=('wi',))
     async def whois(self, ctx: Context, *, member: disnake.Member = None):
-        """Check somebody's intro!"""
+        """Check somebody's intro!
+
+        `member`: The member you want to see the intro of. If you want to see your own intro,
+        you can just ignore this since it defaults to you.
+        """
 
         member = member or ctx.author
         data: Intro = await Intro.find_one({'_id': member.id})
@@ -79,7 +83,10 @@ class Intros(commands.Cog):
     @is_mod()
     async def intro_unverify(self, ctx: Context, *, member: disnake.Member):
         """Unverify a member if their intro is a troll or if you
-        consider that their intro is inappropriate."""
+        consider that their intro is inappropriate.
+
+        `member`: The member you want to unverify.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} You cannot unverify somebody that is a higher or equal role than you.')
