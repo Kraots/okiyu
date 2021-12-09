@@ -104,8 +104,7 @@ class Marriages(commands.Cog):
 
     @commands.command()
     async def marriedwho(self, ctx: Context, *, member: disnake.Member = None):
-        """See who, the date and how much it's been since the member/you
-        married their/your partner if they/you have one.
+        """See who, who, the date and how much it's been since the member married their partner if they have one.
 
         `member` **->** The member you want to see who they are married with. If you want to see who you married, you can ignore this.
         """

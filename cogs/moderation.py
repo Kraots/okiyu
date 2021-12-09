@@ -44,7 +44,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @is_admin()
-    async def announce(self, ctx):
+    async def announce(self, ctx: Context):
         """Make an announcement in <#913331371282423808>"""
 
         view = AnnouncementView(self.bot, ctx.author)
