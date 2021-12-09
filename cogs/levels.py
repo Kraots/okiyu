@@ -33,7 +33,11 @@ class Levels(commands.Cog):
         name='level', invoke_without_command=True, case_insensitive=True, aliases=('rank',)
     )
     async def level_cmd(self, ctx: Context, *, member: disnake.Member = None):
-        """Check your current level or somebody else's."""
+        """Check your current level or somebody else's.
+
+        `member`: The member you want to see the level of. If you want to see your own,
+        you can ignore this since it defaults to yourself.
+        """
 
         if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474):
             member = member or ctx.author
@@ -81,7 +85,11 @@ class Levels(commands.Cog):
     @level_cmd.command(name='set')
     @utils.is_owner()
     async def level_set(self, ctx: Context, level: int, *, member: disnake.Member = None):
-        """Set the level for somebody."""
+        """Set the level for somebody.
+
+        `level`: The level to set.
+        `member`: The member to set the level for.
+        """
 
         member = member or ctx.author
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
@@ -137,7 +145,11 @@ class Levels(commands.Cog):
         name='messages', invoke_without_command=True, case_insensitive=True, aliases=('msg',)
     )
     async def _msgs(self, ctx: Context, *, member: disnake.Member = None):
-        """Check yours or somebody else's total messages."""
+        """Check yours or somebody else's total messages.
+
+        `member`: The member you want to see the total messages of. If you want to see your own,
+        you can ignore this since it defaults to yourself.
+        """
 
         member = member or ctx.author
 
@@ -182,7 +194,11 @@ class Levels(commands.Cog):
     @_msgs.command(name='add')
     @utils.is_admin()
     async def msg_add(self, ctx: Context, member: disnake.Member, amount: str):
-        """Add a certain amount of messages for the member."""
+        """Add a certain amount of messages for the member.
+
+        `member`: The member to add the amount of messages messages to.
+        `amount`: The amount of messages to add.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
@@ -203,7 +219,11 @@ class Levels(commands.Cog):
     @_msgs.command(name='set')
     @utils.is_admin()
     async def msg_set(self, ctx: Context, member: disnake.Member, amount: str):
-        """Set the amount of messages for the member."""
+        """Set the amount of messages for the member.
+
+        `member`: The member to set the amount of messages messages to.
+        `amount`: The amount of messages to set.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
@@ -224,7 +244,10 @@ class Levels(commands.Cog):
     @_msgs.command(name='reset')
     @utils.is_admin()
     async def msg_reset(self, ctx: Context, member: disnake.Member):
-        """Reset the amount of total messages for the member."""
+        """Reset the amount of total messages for the member.
+
+        `member`: The member for who to reset the total messages count for.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
