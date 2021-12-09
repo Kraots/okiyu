@@ -80,7 +80,7 @@ class Developer(commands.Cog):
     async def _eval(self, ctx: Context, *, code: str = None):
         """Evaluate code.
 
-        `code`: The code to evaluate.
+        `code` **->** The code to evaluate.
 
         **Local Variables**
         \u2800 • ``disnake`` **->** The disnake module.

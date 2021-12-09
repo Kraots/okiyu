@@ -144,7 +144,7 @@ class Misc(commands.Cog):
     async def server_rules(self, ctx: Context, rule: int = None):
         """Sends the server's rules. If ``rule`` is given, it will only send that rule.
 
-        `rule`: The number of the rule you wish to see.
+        `rule` **->** The number of the rule you wish to see.
         """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
@@ -174,7 +174,7 @@ class Misc(commands.Cog):
     async def server_rules_add(self, ctx: Context, *, rule: str):
         """Adds a rule to the server's rules.
 
-        `rule`: The rule to add.
+        `rule` **->** The rule to add.
         """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
@@ -194,8 +194,8 @@ class Misc(commands.Cog):
     async def server_rules_edit(self, ctx: Context, rule: int, *, new_rule: str):
         """Edits an existing rule.
 
-        `rule`: The number of the rule to edit.
-        `new_rule`: The new rule to replace it with.
+        `rule` **->** The number of the rule to edit.
+        `new_rule` **->** The new rule to replace it with.
         """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
@@ -218,7 +218,7 @@ class Misc(commands.Cog):
     async def server_rules_remove(self, ctx: Context, rule: int):
         """Removes a rule from the server's rules by its number.
 
-        `rule`: The number of the rule to remove.
+        `rule` **->** The number of the rule to remove.
         """
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
@@ -254,7 +254,7 @@ class Misc(commands.Cog):
     async def change_nick(self, ctx: Context, *, new_nickname: str):
         """Change your nickname to your desired one.
 
-        `new_nickname`: The new nickname you wish to change to.
+        `new_nickname` **->** The new nickname you wish to change to.
         """
 
         res = await utils.check_username(self.bot, word=new_nickname)
@@ -283,7 +283,7 @@ class Misc(commands.Cog):
     async def _av(self, ctx: Context, *, member: disnake.Member = None):
         """Check the avatar ``member`` has.
 
-        `member`: The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you if you don't provide this argument.
+        `member` **->** The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you if you don't provide this argument.
         """  # noqa
 
         member = member or ctx.author
@@ -296,7 +296,7 @@ class Misc(commands.Cog):
     async def created(self, ctx: Context, *, user: disnake.User = None):
         """Check the date when the ``user`` created their account.
 
-        `user`: The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you if you don't provide this argument.
+        `user` **->** The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you if you don't provide this argument.
         """  # noqa
 
         user = user or ctx.author
@@ -337,7 +337,7 @@ class Misc(commands.Cog):
     async def joined(self, ctx: Context, *, member: disnake.Member = None):
         """Check the date when the ``member`` joined the server.
 
-        `member`: The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you if you don't provide this argument.
+        `member` **->** The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you if you don't provide this argument.
         """  # noqa
 
         member = member or ctx.author
@@ -425,7 +425,7 @@ class Misc(commands.Cog):
         Check all the current muted members and their time left. If ``member`` is specified,
         it will only show for that member, including the reason they got muted.
 
-        `user`: The user that you want to see the date of when they joined discord. If you want to see all the currently muted members, you can ignore this since it defaults to yourself.
+        `user` **->** The user that you want to see the date of when they joined discord. If you want to see all the currently muted members, you can ignore this since it defaults to yourself.
         """  # noqa
 
         if isinstance(ctx.channel, disnake.DMChannel):
@@ -643,7 +643,7 @@ class Misc(commands.Cog):
         who pings you will be told by the bot that you are ``AFK``
         with the reason you provided.
 
-        `reason`: The reason you are ``AFK``. You can set a default by using `!afk default set`. For a list of commands for that, you can type `!help afk default`.
+        `reason` **->** The reason you are ``AFK``. You can set a default by using `!afk default set`. For a list of commands for that, you can type `!help afk default`.
         """  # noqa
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
@@ -668,7 +668,7 @@ class Misc(commands.Cog):
             data.is_afk = True
             await data.commit()
 
-        await ctx.reply(f'You are now ``AFK``: **"{reason}"**')
+        await ctx.reply(f'You are now ``AFK`` **->** **"{reason}"**')
 
     @_afk.group(name='default', invoke_without_command=True, case_insensitive=True)
     async def _afk_default(self, ctx: Context):
@@ -684,7 +684,7 @@ class Misc(commands.Cog):
     async def _afk_default_set(self, ctx: Context, *, default: str):
         """Sets your default ``AFK`` reason.
 
-        `default`: The default reason of your ``AFK`` to set.
+        `default` **->** The default reason of your ``AFK`` to set.
         """
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
@@ -737,7 +737,7 @@ class Misc(commands.Cog):
             data: AFK = await AFK.find_one({'_id': user.id})
             if data is not None and data.is_afk is True:
                 await message.reply(
-                    f'**{user}** is ``AFK``: **"{data.reason}"** '
+                    f'**{user}** is ``AFK`` **->** **"{data.reason}"** '
                     f'*since {utils.format_dt(data.date, "F")} '
                     f'(`{utils.human_timedelta(dt=data.date)}`)*')
 
