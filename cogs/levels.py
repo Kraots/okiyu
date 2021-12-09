@@ -35,8 +35,7 @@ class Levels(commands.Cog):
     async def level_cmd(self, ctx: Context, *, member: disnake.Member = None):
         """Check your current level or somebody else's.
 
-        `member`: The member you want to see the level of. If you want to see your own,
-        you can ignore this since it defaults to yourself.
+        `member`: The member you want to see the level of. If you want to see your own, you can ignore this since it defaults to yourself.
         """
 
         if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474):
@@ -147,8 +146,7 @@ class Levels(commands.Cog):
     async def _msgs(self, ctx: Context, *, member: disnake.Member = None):
         """Check yours or somebody else's total messages.
 
-        `member`: The member you want to see the total messages of. If you want to see your own,
-        you can ignore this since it defaults to yourself.
+        `member`: The member you want to see the total messages of. If you want to see your own, you can ignore this since it defaults to yourself.
         """
 
         member = member or ctx.author

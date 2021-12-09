@@ -35,8 +35,7 @@ class Intros(commands.Cog):
     async def whois(self, ctx: Context, *, member: disnake.Member = None):
         """Check somebody's intro!
 
-        `member`: The member you want to see the intro of. If you want to see your own intro,
-        you can just ignore this since it defaults to you.
+        `member`: The member you want to see the intro of. If you want to see your own intro, you can just ignore this since it defaults to you.
         """
 
         member = member or ctx.author
@@ -82,8 +81,7 @@ class Intros(commands.Cog):
     @commands.command(name='unverify')
     @is_mod()
     async def intro_unverify(self, ctx: Context, *, member: disnake.Member):
-        """Unverify a member if their intro is a troll or if you
-        consider that their intro is inappropriate.
+        """Unverify a member if their intro is a troll or if you consider that their intro is inappropriate.
 
         `member`: The member you want to unverify.
         """

@@ -283,9 +283,8 @@ class Misc(commands.Cog):
     async def _av(self, ctx: Context, *, member: disnake.Member = None):
         """Check the avatar ``member`` has.
 
-        `member`: The member that you want to see the avatar of. If you want to see your own
-        avatar, you can ignore this since it defaults to you if you don't provide this argument.
-        """
+        `member`: The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you if you don't provide this argument.
+        """  # noqa
 
         member = member or ctx.author
         em = disnake.Embed(colour=utils.blurple, title=f'`{member.display_name}`\'s avatar')
@@ -297,10 +296,8 @@ class Misc(commands.Cog):
     async def created(self, ctx: Context, *, user: disnake.User = None):
         """Check the date when the ``user`` created their account.
 
-        `user`: The user that you want to see the date of when they created their discord account.
-        If you want to see your own account creation date, you can ignore this since it defaults
-        to you if you don't provide this argument.
-        """
+        `user`: The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you if you don't provide this argument.
+        """  # noqa
 
         user = user or ctx.author
         em = disnake.Embed(
@@ -315,8 +312,7 @@ class Misc(commands.Cog):
     @created.command()
     async def server(self, ctx: Context):
         """
-        See the date when the server got created at
-        and when it was made public.
+        See the date when the server got created at and when it was made public.
         """
 
         guild = self.bot.get_guild(913310006814859334)
@@ -341,10 +337,8 @@ class Misc(commands.Cog):
     async def joined(self, ctx: Context, *, member: disnake.Member = None):
         """Check the date when the ``member`` joined the server.
 
-        `member`: The member that you want to see the date of when they joined this server.
-        If you want to see your own join date, you can ignore this since it defaults
-        to you if you don't provide this argument.
-        """
+        `member`: The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you if you don't provide this argument.
+        """  # noqa
 
         member = member or ctx.author
         em = disnake.Embed(
@@ -431,9 +425,8 @@ class Misc(commands.Cog):
         Check all the current muted members and their time left. If ``member`` is specified,
         it will only show for that member, including the reason they got muted.
 
-        `user`: The user that you want to see the date of when they joined discord.
-        If you want to see all the currently muted members, you can ignore this.
-        """
+        `user`: The user that you want to see the date of when they joined discord. If you want to see all the currently muted members, you can ignore this since it defaults to yourself.
+        """  # noqa
 
         if isinstance(ctx.channel, disnake.DMChannel):
             member = ctx.author
@@ -482,9 +475,8 @@ class Misc(commands.Cog):
     @commands.command(name='match')
     async def match_people(self, ctx: Context):
         """
-        Matches you with another person, based on the sexuality, gender, relationship status
-        of what the both of you have in your intros and if they are looking.
-        """
+        Matches you with another person, based on the sexuality, gender, relationship status of what the both of you have in your intros and if they are looking.
+        """  # noqa
 
         guild = self.bot.get_guild(913310006814859334)
         _ = await utils.Marriage.find_one({'_id': ctx.author.id})
@@ -651,9 +643,8 @@ class Misc(commands.Cog):
         who pings you will be told by the bot that you are ``AFK``
         with the reason you provided.
 
-        `reason`: The reason you are ``AFK``. You can set a default by using `!afk default set`.
-        For a list of commands for that, you can type `!help afk default`.
-        """
+        `reason`: The reason you are ``AFK``. You can set a default by using `!afk default set`. For a list of commands for that, you can type `!help afk default`.
+        """  # noqa
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
         if data is None:
