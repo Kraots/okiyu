@@ -183,6 +183,26 @@ class Misc(commands.Cog):
 
         await ctx.reply(f'> 👌 📝 `{rule}` successfully **added** to the rules.')
 
+    @server_rules.command(name='edit')
+    @utils.is_admin()
+    async def server_rules_edit(self, ctx: Context, rule: int, *, new_rule: str):
+        """Edits an existing rule."""
+
+        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        if rules is None:
+            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set.')
+        elif rule == 0:
+            return await ctx.reply('Rule cannot be ``0``')
+
+        rule -= 1
+        try:
+            rules.rules[rule] = new_rule
+        except IndexError:
+            return await ctx.reply('Rule does not exist!')
+        await rules.commit()
+
+        await ctx.reply(f'> 👌 📝 Successfully **edited** rule `{rule}` to `{new_rule}`.')
+
     @server_rules.command(name='remove', aliases=('delete',))
     @utils.is_admin()
     async def server_rules_remove(self, ctx: Context, rule: int):
