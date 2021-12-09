@@ -56,7 +56,7 @@ class Moderation(commands.Cog):
     async def chat_purge(self, ctx: Context, amount: int):
         """Clear the ``amount`` of messages from the chat.
 
-        `amount`: The amount of messages to delete from the current channel.
+        `amount` **->** The amount of messages to delete from the current channel.
         """
 
         await ctx.message.delete()

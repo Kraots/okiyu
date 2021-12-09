@@ -21,7 +21,7 @@ class Marriages(commands.Cog):
     async def marry(self, ctx: Context, *, member: disnake.Member):
         """Marry the member if they want to and if you're/they're not taken by somebody else already.
 
-        `member`: The member you wish to marry. You can either ping them, give their discord id, or just type in their username
+        `member` **->** The member you wish to marry. You can either ping them, give their discord id, or just type in their username
         """
 
         guild = self.bot.get_guild(913310006814859334)
@@ -107,7 +107,7 @@ class Marriages(commands.Cog):
         """See who, the date and how much it's been since the member/you
         married their/your partner if they/you have one.
 
-        `member`: The member you want to see who they are married with. If you want to see who you married, you can ignore this.
+        `member` **->** The member you want to see who they are married with. If you want to see who you married, you can ignore this.
         """
 
         member = member or ctx.author
@@ -134,7 +134,7 @@ class Marriages(commands.Cog):
     async def _kiss(self, ctx: Context, *, member: disnake.Member):
         """Kiss the person you are married with.
 
-        `member`: The member you want to kiss. You can only kiss the person you are married with.
+        `member` **->** The member you want to kiss. You can only kiss the person you are married with.
 
         If for some reason you don't know this, you are a complete jerk but luckily for you, there's the command `!marriedwho` which reminds you who you are married to, and for how long.
         """  # noqa
