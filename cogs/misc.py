@@ -682,7 +682,7 @@ class Misc(commands.Cog):
     async def _afk_default_set(self, ctx: Context, *, default: str):
         """Sets your default ``AFK`` reason.
 
-        `default` **->** The default reason of your ``AFK`` to set.
+        `default` **->** The default reason you want to set for your ``AFK``.
         """
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
