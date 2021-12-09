@@ -1,5 +1,4 @@
 import asyncio
-from typing import Union
 from datetime import datetime, timezone
 
 import disnake
@@ -85,7 +84,9 @@ class Moderation(commands.Cog):
         """
         Locks the channel.
         No one will be able to talk in that channel except the mods, but everyone will still see the channel.
-        """
+
+        `channel` **->** The channel to lock. If you want to lock the current channel you use the command, you can ignore this since it defaults to the current channel.
+        """  # noqa
 
         channel = channel or ctx.channel
 
@@ -149,7 +150,9 @@ class Moderation(commands.Cog):
     async def unlock_channel(self, ctx: Context, channel: disnake.TextChannel = None):
         """
         Unlocks the channel.
-        """
+
+        `channel` **->** The channel to unlock. If you want to unlock the current channel you use the command, you can ignore this since it defaults to the current channel.
+        """  # noqa
 
         channel = channel or ctx.channel
 
@@ -210,8 +213,12 @@ class Moderation(commands.Cog):
 
     @commands.command(name='ban')
     @is_admin()
-    async def _ban(self, ctx: Context, member: Union[disnake.Member, disnake.User], *, reason: str):
-        """Bans an user."""
+    async def _ban(self, ctx: Context, member: disnake.User, *, reason: str):
+        """Bans an user.
+
+        `member` **->** The member to ban. If the member is not in the server you must provide their discord id.
+        `reason` **->** The reason you're banning the member.
+        """
 
         if isinstance(member, disnake.Member):
             if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
@@ -242,7 +249,10 @@ class Moderation(commands.Cog):
 
     @commands.command(name='unban')
     async def _unban(self, ctx: Context, *, user: disnake.User):
-        """Unbans an user."""
+        """Unbans an user.
+
+        `user` **->** The user to unban. Must be their discord id.
+        """
 
         guild = self.bot.get_guild(913310006814859334)
         try:
@@ -265,7 +275,11 @@ class Moderation(commands.Cog):
     @commands.command(name='kick')
     @is_mod()
     async def _kick(self, ctx: Context, member: disnake.Member, *, reason: str):
-        """Kicks a member."""
+        """Kicks a member.
+
+        `member` **->** The member to kick.
+        `reason` **->** The reason you're kicking the member.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
@@ -300,7 +314,10 @@ class Moderation(commands.Cog):
         """
         Mute somebody.
 
-        Example:
+        `member` **->** The member you want to mute.
+        `time_and_reason` **->** The time and the reason why you're muting the member.
+
+        **Example:**
         `!mute @carrot 2m coolest person alive`
         `!mute @carrot coolest person alive 2m`
         """
@@ -369,7 +386,10 @@ class Moderation(commands.Cog):
     @commands.command(name='unmute')
     @is_mod()
     async def unmute_cmd(self, ctx: Context, *, member: disnake.Member):
-        """Unmute somebody that is currently muted."""
+        """Unmute somebody that is currently muted.
+
+        `member` **->** The member you want to unmute. If the member was muted by carrot then you can't do shit about it <:lipbite:914193306416742411> <:kek:913339277939720204>
+        """  # noqa
 
         data: Mutes = await Mutes.find_one({'_id': member.id})
         if data is None:
@@ -379,7 +399,7 @@ class Moderation(commands.Cog):
         muted_by = guild.get_member(data.muted_by)
         if data.filter is False:
             if ctx.author.id not in (data.muted_by, self.bot._owner_id):
-                if muted_by.top_role > ctx.author.top_role or data.muted_by == self.bot._owner_id:
+                if data.muted_by == self.bot._owner_id:
                     return await ctx.reply(
                         f'{member.mention} was muted by `{muted_by}` which is in a higher role hierarcy than you. '
                         'Only staff members of the same role or above can unmute that person.'
@@ -476,7 +496,10 @@ class Moderation(commands.Cog):
     @staff_make.command(name='admin')
     @is_owner()
     async def staff_make_admin(self, ctx: Context, *, member: disnake.Member):
-        """Make somebody an admin."""
+        """Make somebody an admin.
+
+        `member` **->** The member you want to make an admin.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
@@ -501,7 +524,10 @@ class Moderation(commands.Cog):
     @staff_make.command(name='moderator', aliases=('mod',))
     @is_admin()
     async def staff_make_mod(self, ctx: Context, *, member: disnake.Member):
-        """Make somebody a moderator."""
+        """Make somebody a moderator.
+
+        `member` **->** The member you want to make a moderator.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
@@ -533,7 +559,10 @@ class Moderation(commands.Cog):
     @staff_remove.command(name='admin')
     @is_owner()
     async def staff_remove_admin(self, ctx: Context, *, member: disnake.Member):
-        """Remove an admin."""
+        """Remove an admin.
+
+        `member` **->** The member you want to remove admin from.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
@@ -556,7 +585,10 @@ class Moderation(commands.Cog):
     @staff_remove.command(name='moderator', aliases=('mod',))
     @is_admin()
     async def staff_remove_mod(self, ctx: Context, *, member: disnake.Member):
-        """Remove a moderator."""
+        """Remove a moderator.
+
+        `member` **->** The member you want to remove the moderator from.
+        """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
