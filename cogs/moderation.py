@@ -371,7 +371,6 @@ class Moderation(commands.Cog):
         data: Mutes = await Mutes.find_one({'_id': member.id})
         if data is None:
             return await ctx.reply(f'`{member}` is not muted!')
-        await data.delete()
 
         guild = self.bot.get_guild(913310006814859334)
         muted_by = guild.get_member(data.muted_by)
@@ -383,6 +382,7 @@ class Moderation(commands.Cog):
                         'Only staff members of the same role or above can unmute that person.'
                     )
 
+        await data.delete()
         new_roles = [role for role in member.roles if role.id != 913376647422545951]
         if data.is_owner is True:
             owner_role = guild.get_role(913310292505686046)  # Check for owner
