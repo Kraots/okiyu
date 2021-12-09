@@ -323,7 +323,15 @@ class Moderation(commands.Cog):
         """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(
+                f'> {ctx.disagree} That member is above or equal to you. '
+                'Cannot do that.'
+            )
+        elif member.id == self.bot._owner_id and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply(
+                f'> {ctx.disagree} That member is above or equal to you. '
+                'Cannot do that. (above in this case you bottom sub <:kek:913339277939720204>)'
+            )
 
         usr = await Mutes.find_one({'_id': member.id})
         if usr is not None:
