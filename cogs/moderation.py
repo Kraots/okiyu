@@ -248,6 +248,7 @@ class Moderation(commands.Cog):
         )
 
     @commands.command(name='unban')
+    @is_admin()
     async def _unban(self, ctx: Context, *, user: disnake.User):
         """Unbans an user.
 
