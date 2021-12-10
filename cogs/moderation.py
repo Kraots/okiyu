@@ -320,7 +320,7 @@ class Moderation(commands.Cog):
 
         **Example:**
         `!mute @carrot 2m coolest person alive`
-        `!mute @carrot 1 jan coolest person alive` (will mute them until 1 January, next year, or this one, depending whether this date has passed. You can also directly specify the year.)
+        `!mute @carrot 1 Jan coolest person alive` (will mute them until 1 January, next year, or this one, depending whether this date has passed. You can also directly specify the year.)
         """  # noqa
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
