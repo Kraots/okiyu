@@ -55,8 +55,14 @@ class Marriages(commands.Cog):
                 married_since=now
             ).commit()
 
-            new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939668385822] + [taken_role]
-            new_roles_2 = [r for r in member.roles if not r.id == 913789939668385822] + [taken_role]
+            try:
+                new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939668385822] + [taken_role]
+            except disnake.HTTPException:
+                pass
+            try:
+                new_roles_2 = [r for r in member.roles if not r.id == 913789939668385822] + [taken_role]
+            except disnake.HTTPException:
+                pass
             await ctx.author.edit(roles=new_roles_1)
             await member.edit(roles=new_roles_2)
             await ctx.send(f'`{ctx.author.display_name}` married `{member.display_name}`!!! :heart: :tada: :tada:')
@@ -88,8 +94,14 @@ class Marriages(commands.Cog):
                 await data.delete()
                 await mem.delete()
 
-                new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939961954304] + [single_role]
-                new_roles_2 = [r for r in usr.roles if not r.id == 913789939961954304] + [single_role]
+                try:
+                    new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939961954304] + [single_role]
+                except disnake.HTTPException:
+                    pass
+                try:
+                    new_roles_2 = [r for r in usr.roles if not r.id == 913789939961954304] + [single_role]
+                except disnake.HTTPException:
+                    pass
                 await ctx.author.edit(roles=new_roles_1)
                 await usr.edit(roles=new_roles_2)
 
