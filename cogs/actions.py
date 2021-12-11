@@ -30,6 +30,21 @@ class Actions(commands.Cog):
 
         await ctx.reply(mems, embed=em)
 
+    @commands.command(name='pat')
+    async def _pat(self, ctx: Context, members: commands.Greedy[disnake.Member] = None):
+        """Give somebody a pat ❤️
+
+        `members` **->** The people you want to pat. Can be more than just one, or none.
+        """
+
+        mems = ' '.join([m.mention for m in members]) if members else None
+        em = disnake.Embed(color=utils.red)
+        em.set_image(
+            url='https://cdn.discordapp.com/attachments/750160852380024893/751229628202483772/tenor_9.gif'
+        )
+
+        await ctx.reply(mems, embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Actions(bot))
