@@ -112,6 +112,31 @@ class OnMessage(commands.Cog):
                         view=view
                     )
 
+    async def check_invite(self, message: disnake.Message):
+        guild = self.bot.get_guild(913310006814859334)
+        matches = re.findall(utils.invite_regex, message.content.lower())
+        if matches and message.author.id != self.bot._owner:
+            is_staff = False
+            if 913310292505686046 in (r.id for r in message.author.roles):  # Check for owner
+                is_staff = True
+            elif 913315033134542889 in (r.id for r in message.author.roles):  # Check for admin
+                is_staff = True
+
+            if is_staff is False:
+                await message.delete()
+                invite_logs = guild.get_channel(913332511789178951)
+                em = disnake.Embed(
+                    title='New Invite Found!!',
+                    description=f'`{message.author}` sent an invite in {message.channel.mention}'
+                )
+                em.set_footer(text=f'User ID: {message.author.id}')
+                v = disnake.ui.View()
+                v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
+                await invite_logs.send(embed=em, view=v)
+                return await message.channel.send(
+                    f'Invites are not allowed! {message.author.mention}', delete_after=5.0
+                )
+
     @commands.Cog.listener('on_message_delete')
     async def on_message_delete(self, message: disnake.Message):
         if message.author.bot or not message.guild:
@@ -170,6 +195,8 @@ class OnMessage(commands.Cog):
                 )
 
             await self.check_bad_word(after)
+            await self.check_invite(after)
+            await utils.check_username(self.bot, member=after.author)
             await asyncio.sleep(0.5)
             try:
                 btn = disnake.ui.View()
@@ -185,29 +212,8 @@ class OnMessage(commands.Cog):
             return
         if message.author.id != self.bot._owner_id:
             if message.guild and message.content != '':
-                guild = self.bot.get_guild(913310006814859334)
-                matches = re.findall(utils.invite_regex, message.content.lower())
-                if matches and message.author.id != self.bot._owner:
-                    is_staff = False
-                    if 913310292505686046 in (r.id for r in message.author.roles):  # Check for owner
-                        is_staff = True
-                    elif 913315033134542889 in (r.id for r in message.author.roles):  # Check for admin
-                        is_staff = True
-
-                    if is_staff is False:
-                        await message.delete()
-                        invite_logs = guild.get_channel(913332511789178951)
-                        em = disnake.Embed(
-                            title='New Invite Found!!',
-                            description=f'{message.author.mention} send an invite in {message.channel.mention}'
-                        )
-                        v = disnake.ui.View()
-                        v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
-                        await invite_logs.send(embed=em, view=v)
-                        return await message.channel.send(
-                            f'Invites are not allowed! {message.author.mention}', delete_after=5.0
-                        )
                 await self.check_bad_word(message)
+                await self.check_invite(message)
                 await utils.check_username(self.bot, member=message.author)
 
     @commands.Cog.listener('on_message_edit')
