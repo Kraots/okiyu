@@ -128,8 +128,8 @@ class FrontPageSource(menus.PageSource):
         embed.description = inspect.cleandoc(
             f"""
             Hello! Welcome to the help page.
-            Use "{menu.ctx.clean_prefix}help command" for more info on a command.
-            Use "{menu.ctx.clean_prefix}help category" for more info on a category.
+            Use "{menu.ctx.clean_prefix}help <command>" for more info on a command.
+            Use "{menu.ctx.clean_prefix}help <category>" for more info on a category.
             Use the dropdown menu below to select a category.
 
             **NOTE:** Some commands may only work in <#913330644875104306>
