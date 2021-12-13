@@ -33,7 +33,7 @@ class GroupHelpPageSource(menus.ListPageSource):
         if maximum > 1:
             embed.set_author(name=f'Page {menu.current_page + 1}/{maximum} ({len(self.entries)} commands)')
 
-        embed.set_footer(text=f'Use "{self.prefix}help command" for more info on a command.')
+        embed.set_footer(text=f'Use "{self.prefix}help <command>" for more info on a command.')
         return embed
 
 
@@ -131,6 +131,8 @@ class FrontPageSource(menus.PageSource):
             Use "{menu.ctx.clean_prefix}help command" for more info on a command.
             Use "{menu.ctx.clean_prefix}help category" for more info on a category.
             Use the dropdown menu below to select a category.
+
+            **NOTE:** Some commands may only work in <#913330644875104306>
         """
         )
 
