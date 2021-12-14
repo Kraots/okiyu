@@ -68,6 +68,9 @@ async def reraise(ctx: utils.Context, error):
             f'> {ctx.disagree} You are on cooldown, **`{time_phaser(error.retry_after)}`** remaining.'
         )
 
+    elif isinstance(error, commands.DisabledCommand):
+        return await ctx.reply('This command is currently disabled!')
+
     elif isinstance(error, commands.errors.MissingRequiredArgument):
         _missing_args = list(ctx.command.clean_params)
         missing_args = [f'`{arg}`' for arg in _missing_args[_missing_args.index(error.param.name):]]
