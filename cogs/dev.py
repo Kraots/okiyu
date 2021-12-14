@@ -169,6 +169,8 @@ class Developer(commands.Cog):
         """
 
         cmd = self.bot.get_command(command)
+        if cmd is None:
+            return await ctx.reply('Command not found.')
         cmd.enabled = not cmd.enabled
 
         await ctx.reply(
