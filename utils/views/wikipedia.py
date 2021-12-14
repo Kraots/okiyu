@@ -30,7 +30,10 @@ class WikiPageSource(menus.ListPageSource):
         if maximum > 1:
             embed.set_author(name=f'Page {menu.current_page + 1}/{maximum}')
 
-        embed.description = entries.replace('=== ', '**') \
+        embed.description = entries \
+            .replace('==== ', '**') \
+            .replace(' ====', '**') \
+            .replace('=== ', '**') \
             .replace(' ===', '**') \
             .replace('== ', '**') \
             .replace(' ==', '**') \
