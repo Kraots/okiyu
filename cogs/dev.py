@@ -172,7 +172,7 @@ class Developer(commands.Cog):
         cmd.enabled = not cmd.enabled
 
         await ctx.reply(
-            f'Successfully {"enabled" if cmd.enabled is True else "disabled"} the command `{cmd.qualified_name}`'
+            f'Successfully **{"enabled" if cmd.enabled is True else "disabled"}** the command `{cmd.qualified_name}`'
         )
 
 
