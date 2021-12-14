@@ -8,3 +8,4 @@ from .slash_cmd_roles import *  # noqa
 from .announcements import *  # noqa
 from .ticket_buttons import *  # noqa
 from .confirm_buttons import *  # noqa
+from .wikipedia import *  # noqa

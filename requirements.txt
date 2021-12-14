@@ -13,3 +13,4 @@ disnake-jishaku==2.6.5
 disnake-ext-menus==0.0.3
 pymongo==3.12.1
 umongo[motor]
+wikipedia

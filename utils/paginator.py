@@ -142,7 +142,7 @@ class RoboPages(disnake.ui.View):
             await interaction.response.send_message(
                 'An unknown error occurred, sorry', ephemeral=True
             )
-        await self.ctx.bot.inter_reraise(self.bot, interaction, item, error)
+        await self.ctx.bot.inter_reraise(self.ctx.bot, interaction, item, error)
 
     async def start(self, *, ref: bool = False) -> None:
         if self.check_embeds and not self.ctx.channel.permissions_for(self.ctx.me).embed_links:
