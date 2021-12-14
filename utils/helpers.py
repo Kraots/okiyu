@@ -73,7 +73,7 @@ async def reraise(ctx: utils.Context, error):
         missing_args = [f'`{arg}`' for arg in _missing_args[_missing_args.index(error.param.name):]]
         return await ctx.send(
             f">>> {ctx.disagree} You are missing the following required arguments for this command:\n "
-            f"{utils.human_join(missing_args, final='and')}\n\n"
+            f"\u2800\u2800{utils.human_join(missing_args, final='and')}\n\n"
             "If you don't know how to use this command, please type "
             f"`!help {ctx.command.qualified_name}` for more information on how to use it and what each "
             "argument means."
