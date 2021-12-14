@@ -264,6 +264,9 @@ class Misc(commands.Cog):
                 f'> {ctx.disagree} Cannot change your nickname because the nickname you chose '
                 'has too less pingable characters, is a bad word or is too short.'
             )
+        elif len(new_nickname) > 32:
+            return await ctx.reply('Nickname has too many characters! (maximum is **32**)')
+
         await ctx.author.edit(nick=new_nickname)
         await ctx.reply(f'I have changed your nickname to `{new_nickname}`')
 
