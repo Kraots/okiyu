@@ -1,5 +1,6 @@
 import time
 import random
+import wikipedia
 from datetime import datetime, timezone
 
 import disnake
@@ -741,6 +742,26 @@ class Misc(commands.Cog):
                     f'**{user}** is ``AFK`` **->** **"{data.reason}"** '
                     f'*since {utils.format_dt(data.date, "F")} '
                     f'(`{utils.human_timedelta(dt=data.date)}`)*')
+
+    @utils.run_in_executor
+    def search_wiki(self, query):
+        return wikipedia.page(query, auto_suggest=False)
+
+    @commands.command(name='wikipedia', aliases=('wiki',))
+    async def _wikipedia(self, ctx: Context, *, query: str):
+        """Search something on wikipedia."""
+
+        try:
+            res: wikipedia.WikipediaPage = await self.search_wiki(query)
+        except Exception:
+            return await ctx.reply('Failed to find what you were looking for.')
+
+        menu = utils.WikiView(utils.FrontPageSource(), ctx)
+        menu.clear_items()
+        menu.add_item(utils.WikiSelect(ctx, res))
+        menu.fill_items()
+
+        await menu.start(ref=True)
 
 
 def setup(bot: Ukiyo):
