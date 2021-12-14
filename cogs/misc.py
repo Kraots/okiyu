@@ -97,6 +97,10 @@ class Misc(commands.Cog):
     async def ping(self, ctx: Context):
         """See the bot's ping."""
 
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
+
         ping = disnake.Embed(title="Pong!", description="_Pinging..._", color=utils.blurple)
         start = time.time() * 1000
         msg = await ctx.send(embed=ping)
@@ -115,6 +119,10 @@ class Misc(commands.Cog):
     async def uptime(self, ctx: Context):
         """See how long the bot has been online for."""
 
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
+
         uptime = disnake.Embed(
             description=f"Bot has been online since {utils.format_dt(self.bot.uptime, 'F')} "
                         f"(`{utils.human_timedelta(dt=self.bot.uptime, suffix=False)}`)",
@@ -127,11 +135,19 @@ class Misc(commands.Cog):
     async def _invite(self, ctx: Context):
         """Sends an invite that never expires."""
 
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
+
         await ctx.send('https://discord.gg/fQ6Nb4ac9x')
 
     @commands.command(aliases=('ad',))
     async def serverad(self, ctx: Context):
         """See the server's ad."""
+
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
 
         await ctx.message.delete()
         ad = disnake.Embed(color=utils.blurple, title='Here\'s the ad to the server:', description=SERVER_AD)
@@ -291,6 +307,10 @@ class Misc(commands.Cog):
         `member` **->** The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you if you don't provide this argument.
         """  # noqa
 
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
+
         member = member or ctx.author
         em = disnake.Embed(colour=utils.blurple, title=f'`{member.display_name}`\'s avatar')
         em.set_image(url=member.display_avatar)
@@ -303,6 +323,10 @@ class Misc(commands.Cog):
 
         `user` **->** The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you if you don't provide this argument.
         """  # noqa
+
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
 
         user = user or ctx.author
         em = disnake.Embed(
@@ -319,6 +343,10 @@ class Misc(commands.Cog):
         """
         See the date when the server got created at and when it was made public.
         """
+
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
 
         guild = self.bot.get_guild(913310006814859334)
         created_date = guild.created_at
@@ -344,6 +372,10 @@ class Misc(commands.Cog):
 
         `member` **->** The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you if you don't provide this argument.
         """  # noqa
+
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
 
         member = member or ctx.author
         em = disnake.Embed(
@@ -481,6 +513,10 @@ class Misc(commands.Cog):
         """
         Matches you with another person, based on the sexuality, gender, relationship status of what the both of you have in your intros and if they are looking.
         """  # noqa
+
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
 
         guild = self.bot.get_guild(913310006814859334)
         _ = await utils.Marriage.find_one({'_id': ctx.author.id})
@@ -749,7 +785,14 @@ class Misc(commands.Cog):
 
     @commands.command(name='wikipedia', aliases=('wiki',))
     async def _wikipedia(self, ctx: Context, *, query: str):
-        """Search something on wikipedia."""
+        """Search something on wikipedia.
+
+        `query` **->** What to search on wikipedia for.
+        """
+
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
 
         try:
             res: wikipedia.WikipediaPage = await self.search_wiki(query)
