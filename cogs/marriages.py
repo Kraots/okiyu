@@ -31,7 +31,7 @@ class Marriages(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} You cannot marry bots.')
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
         if data is not None:
-            mem = guild.get_member(member.id)
+            mem = guild.get_member(data.married_to)
             return await ctx.reply(f'> {ctx.disagree} You are already married to {mem.mention}')
         data: Marriage = await Marriage.find_one({'_id': member.id})
         if data is not None:
