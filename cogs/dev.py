@@ -161,6 +161,20 @@ class Developer(commands.Cog):
         await ctx.send("*Restarting...*")
         restart_program()
 
+    @commands.command(name='toggle')
+    async def toggle_cmd(self, ctx: Context, *, command: str):
+        """Toggle a command on and off.
+
+        `command` **->** The command to disable.
+        """
+
+        cmd = self.bot.get_command(command)
+        cmd.enabled = not cmd.enabled
+
+        await ctx.reply(
+            f'Successfully {"enabled" if cmd.enabled is True else "disabled"} the command `{cmd.qualified_name}`'
+        )
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Developer(bot))
