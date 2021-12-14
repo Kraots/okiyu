@@ -56,7 +56,7 @@ class WikiSelect(disnake.ui.Select['WikiView']):
         kwargs = {
             'title': self.res.title,
             'title_url': self.res.url,
-            'footer': self.ctx.author,
+            'footer': f'Requested by: {self.ctx.author}',
             'footer_icon': self.ctx.author.display_avatar
         }
         if value == 'Content':
