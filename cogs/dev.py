@@ -171,6 +171,8 @@ class Developer(commands.Cog):
         cmd = self.bot.get_command(command)
         if cmd is None:
             return await ctx.reply('Command not found.')
+        elif cmd.qualified_name == 'toggle':
+            return await ctx.reply('This command cannot be disabled.')
         cmd.enabled = not cmd.enabled
 
         await ctx.reply(
