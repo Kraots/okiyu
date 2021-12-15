@@ -541,7 +541,7 @@ class Misc(commands.Cog):
             return await ctx.reply('You\'re already taken!')
         _sexuality = None
         _gender = None
-        if data.gender.lower() in ('male', 'm', 'boy'):
+        if data.gender.lower() in ('male', 'm', 'boy', 'trans-male', 'trans male'):
             if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
                 _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
@@ -551,7 +551,7 @@ class Misc(commands.Cog):
             elif data.sexuality.lower() in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
 
-        elif data.gender.lower() in ('female', 'f', 'girl'):
+        elif data.gender.lower() in ('female', 'f', 'girl', 'trans-female', 'trans female'):
             if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
                 _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
