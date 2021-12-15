@@ -19,7 +19,7 @@ class ConfirmView(disnake.ui.View):
         self.ctx = ctx
         self.new_message = new_message
         self.member = react_user
-        self.response = None
+        self.response = False
 
     async def interaction_check(self, interaction: disnake.MessageInteraction):
         check_for = self.ctx.author.id if self.member is None else self.member.id
@@ -55,7 +55,6 @@ class ConfirmView(disnake.ui.View):
     @disnake.ui.button(label='Cancel', style=disnake.ButtonStyle.red)
     async def no_button(self, button: disnake.ui.Button, inter: disnake.Interaction):
         await inter.response.defer()
-        self.response = False
         for item in self.children:
             item.disabled = True
             item.style = disnake.ButtonStyle.grey
@@ -78,7 +77,7 @@ class ConfirmViewDMS(disnake.ui.View):
         super().__init__(timeout=timeout)
         self.ctx = ctx
         self.new_message = new_message
-        self.response = None
+        self.response = False
 
     async def on_error(self, error, item, inter):
         await self.bot.inter_reraise(self.bot, inter, item, error)
@@ -104,7 +103,6 @@ class ConfirmViewDMS(disnake.ui.View):
     @disnake.ui.button(label='Cancel', style=disnake.ButtonStyle.red)
     async def no_button(self, button: disnake.ui.Button, inter: disnake.Interaction):
         await inter.response.defer()
-        self.response = False
         for item in self.children:
             item.disabled = True
             item.style = disnake.ButtonStyle.grey
