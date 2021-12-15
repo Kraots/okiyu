@@ -5,7 +5,8 @@ from utils import (
     Context,
     Intro,
     create_intro,
-    is_mod
+    is_mod,
+    lock
 )
 
 from main import Ukiyo
@@ -21,6 +22,7 @@ class Intros(commands.Cog):
         return '🙌'
 
     @commands.command()
+    @lock()
     async def intro(self, ctx: Context):
         """Create/Edit your intro."""
 
