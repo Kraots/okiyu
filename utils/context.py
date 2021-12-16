@@ -1,3 +1,5 @@
+from aiohttp import ClientSession
+
 import disnake
 from disnake.ext import commands
 
@@ -9,7 +11,7 @@ class Context(commands.Context):
         super().__init__(**kwargs)
 
     @property
-    def session(self):
+    def session(self) -> ClientSession:
         return self.bot.session
 
     @property

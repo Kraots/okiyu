@@ -806,6 +806,33 @@ class Misc(commands.Cog):
 
         await menu.start(ref=True)
 
+    @commands.command()
+    async def urban(self, ctx: Context, *, word):
+        """Searches the urban dictionary for the word."""
+
+        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+                and ctx.author.id != self.bot._owner_id:
+            return
+
+        url = 'http://api.urbandictionary.com/v0/define'
+        resp = await ctx.session.get(url, params={'term': word})
+        if resp.status != 200:
+            await self.bot._owner.send(
+                embed=disnake.Embed(
+                    description=f"[`{ctx.command}`]({ctx.message.jump_url}) gave an error:\n\n"
+                                f"Word: **{word}**\nStatus: **{resp.status}**\nReason: **{resp.reason}**"
+                )
+            )
+            return await ctx.send('An error occurred. Please try again later.')
+
+        js: dict = await resp.json()
+        data = js.get('list', [])
+        if not data:
+            return await ctx.send('No results found.')
+
+        pages = RoboPages(source=utils.UrbanDictionaryPageSource(data), ctx=ctx, compact=True)
+        await pages.start()
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
