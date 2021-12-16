@@ -40,7 +40,7 @@ class Levels(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474):
+        if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474) or ctx.author.id == self.bot._owner_id:
             member = member or ctx.author
             if member.bot:
                 return await ctx.reply(f'> {ctx.disagree} Bot\'s do not have levels!')
@@ -114,7 +114,7 @@ class Levels(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474):
+        if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474) or ctx.author.id == self.bot._owner_id:
             entries = []
             index = 0
             guild = self.bot.get_guild(913310006814859334)
