@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 import itertools
 import inspect
 
@@ -12,7 +12,7 @@ from disnake.ext import menus
 
 
 class GroupHelpPageSource(menus.ListPageSource):
-    def __init__(self, group: Union[commands.Group, commands.Cog], commands: List[commands.Command], *, prefix: str, aliases: List[str] = None):
+    def __init__(self, group: commands.Group | commands.Cog, commands: List[commands.Command], *, prefix: str, aliases: List[str] = None):
         super().__init__(entries=commands, per_page=6)
         self.group = group
         self.prefix = prefix

@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Optional
 from datetime import datetime, timezone
 
 import disnake
@@ -7,7 +7,7 @@ import utils
 
 
 async def log(
-    channel: Union[disnake.TextChannel, disnake.Webhook],
+    channel: disnake.TextChannel | disnake.Webhook,
     *,
     title: Optional[str] = disnake.embeds.EmptyEmbed,
     description: Optional[str] = disnake.embeds.EmptyEmbed,
@@ -21,7 +21,7 @@ async def log(
 
     Parameters
     ----------
-        channel: Union[:class:`TextChannel`, :class:`Webhook`]
+        channel: :class:`TextChannel` | :class:`Webhook`
             The channel to send the log to.
         title: Optional[:class:`str`]
             The title of the logging embed. Defaults to :class:``.EmptyEmbed``

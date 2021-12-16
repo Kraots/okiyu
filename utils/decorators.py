@@ -1,6 +1,6 @@
 import asyncio
 import functools
-from typing import Callable, Union
+from typing import Callable
 from weakref import WeakValueDictionary
 
 from disnake.ext import commands
@@ -67,7 +67,7 @@ def is_mod():
     return commands.check(pred)
 
 
-def lock() -> Union[Callable, None]:
+def lock() -> Callable | None:
     """
     Allows the user to only run one instance of the decorated command at a time.
 
@@ -76,11 +76,11 @@ def lock() -> Union[Callable, None]:
     This decorator has to go before (below) the `command` decorator.
     """
 
-    def wrap(func: Callable) -> Union[Callable, None]:
+    def wrap(func: Callable) -> Callable | None:
         func.__locks = WeakValueDictionary()
 
         @functools.wraps(func)
-        async def inner(self: Callable, ctx: Context, *args, **kwargs) -> Union[Callable, None]:
+        async def inner(self: Callable, ctx: Context, *args, **kwargs) -> Callable | None:
             lock = func.__locks.setdefault(ctx.author.id, asyncio.Lock())
             if lock.locked():
                 await ctx.reply(
