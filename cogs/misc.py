@@ -95,7 +95,10 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx: Context):
-        """See the bot's ping."""
+        """See the bot's ping.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
+        """
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
                 and ctx.author.id != self.bot._owner_id:
@@ -117,7 +120,10 @@ class Misc(commands.Cog):
 
     @commands.command()
     async def uptime(self, ctx: Context):
-        """See how long the bot has been online for."""
+        """See how long the bot has been online for.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
+        """
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
                 and ctx.author.id != self.bot._owner_id:
@@ -133,7 +139,10 @@ class Misc(commands.Cog):
 
     @commands.command(name='invite', aliases=('inv',))
     async def _invite(self, ctx: Context):
-        """Sends an invite that never expires."""
+        """Sends an invite that never expires.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
+        """
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
                 and ctx.author.id != self.bot._owner_id:
@@ -143,7 +152,10 @@ class Misc(commands.Cog):
 
     @commands.command(aliases=('ad',))
     async def serverad(self, ctx: Context):
-        """See the server's ad."""
+        """See the server's ad.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
+        """
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
                 and ctx.author.id != self.bot._owner_id:
@@ -305,6 +317,8 @@ class Misc(commands.Cog):
         """Check the avatar ``member`` has.
 
         `member` **->** The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you if you don't provide this argument.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
         """  # noqa
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
@@ -322,6 +336,8 @@ class Misc(commands.Cog):
         """Check the date when the ``user`` created their account.
 
         `user` **->** The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you if you don't provide this argument.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
         """  # noqa
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
@@ -342,6 +358,8 @@ class Misc(commands.Cog):
     async def server(self, ctx: Context):
         """
         See the date when the server got created at and when it was made public.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
         """
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
@@ -371,6 +389,8 @@ class Misc(commands.Cog):
         """Check the date when the ``member`` joined the server.
 
         `member` **->** The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you if you don't provide this argument.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
         """  # noqa
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
@@ -512,6 +532,8 @@ class Misc(commands.Cog):
     async def match_people(self, ctx: Context):
         """
         Matches you with another person, based on the sexuality, gender, relationship status of what the both of you have in your intros and if they are looking.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
         """  # noqa
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
@@ -788,6 +810,8 @@ class Misc(commands.Cog):
         """Search something on wikipedia.
 
         `query` **->** What to search on wikipedia for.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
         """
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
@@ -807,20 +831,25 @@ class Misc(commands.Cog):
         await menu.start(ref=True)
 
     @commands.command()
-    async def urban(self, ctx: Context, *, word):
-        """Searches the urban dictionary for the word."""
+    async def urban(self, ctx: Context, *, query):
+        """Searches using urban dictionary for the given query.
+
+        `query` **->** What to search for using the urban dictionary.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
+        """
 
         if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
                 and ctx.author.id != self.bot._owner_id:
             return
 
         url = 'http://api.urbandictionary.com/v0/define'
-        resp = await ctx.session.get(url, params={'term': word})
+        resp = await ctx.session.get(url, params={'term': query})
         if resp.status != 200:
             await self.bot._owner.send(
                 embed=disnake.Embed(
                     description=f"[`{ctx.command}`]({ctx.message.jump_url}) gave an error:\n\n"
-                                f"Word: **{word}**\nStatus: **{resp.status}**\nReason: **{resp.reason}**"
+                                f"Query: **{query}**\nStatus: **{resp.status}**\nReason: **{resp.reason}**"
                 )
             )
             return await ctx.send('An error occurred. Please try again later.')
