@@ -1,4 +1,4 @@
-from typing import Union, Sequence
+from typing import Sequence
 import datetime
 
 import disnake
@@ -124,7 +124,7 @@ class Logs(commands.Cog):
         self.embeds.append(em)
 
     @commands.Cog.listener()
-    async def on_member_ban(self, guild: disnake.Guild, member: Union[disnake.Member, disnake.User]):
+    async def on_member_ban(self, guild: disnake.Guild, member: disnake.Member | disnake.User):
         if guild.id != 913310006814859334:
             return
 
