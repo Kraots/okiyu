@@ -528,6 +528,45 @@ class Misc(commands.Cog):
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.reply(embed=em)
 
+    def append_choices(
+        self,
+        choices: list,
+        bi_bool: bool,
+        author_gender: str,
+        data1: utils.Intro,
+        data2: utils.Intro
+    ) -> list:
+        if (
+            (data2.status.lower() != 'taken') and
+            (data2.id != data1.id) and
+            (data2.looking.lower() == 'yes')
+        ):
+            if bi_bool is True and author_gender is not None:
+                if author_gender == 'male':
+                    if data2.gender.lower() in ('male', 'm', 'boy', 'trans-male', 'trans male', 'make'):
+                        if data2.sexuality.lower() not in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual', 'gay'):
+                            return choices
+
+                elif author_gender == 'female':
+                    if data2.gender.lower() in ('female', 'f', 'girl', 'trans-female', 'trans female'):
+                        if data2.sexuality.lower() not in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual', 'lesbian'):
+                            return choices
+
+            if data1.age == 14 and data2.age < 17:
+                choices.append(self.bot.get_user(data2.id))
+            elif data1.age == 15 and data2.age < 18:
+                choices.append(self.bot.get_user(data2.id))
+            elif data1.age == 16 and data2.age < 19:
+                choices.append(self.bot.get_user(data2.id))
+            elif data1.age == 17 and data2.age > 14:
+                choices.append(self.bot.get_user(data2.id))
+            elif data1.age == 18 and data2.age > 15:
+                choices.append(self.bot.get_user(data2.id))
+            elif data1.age == 19 and data2.age > 16:
+                choices.append(self.bot.get_user(data2.id))
+
+        return choices
+
     @commands.command(name='match')
     async def match_people(self, ctx: Context):
         """
@@ -563,87 +602,44 @@ class Misc(commands.Cog):
             return await ctx.reply('You\'re already taken!')
         _sexuality = None
         _gender = None
-        if data.gender.lower() in ('male', 'm', 'boy', 'trans-male', 'trans male'):
+        _bi_bool = False
+        _author_gender = None
+        if data.gender.lower() in ('male', 'm', 'boy', 'trans-male', 'trans male', 'make'):
             if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
                 _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
             elif data.sexuality.lower() == 'gay':
                 _sexuality = ('gay', 'bisexual', 'bi', 'Gay', 'Bisexual', 'Bi')
-                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'make', 'Make')
             elif data.sexuality.lower() in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
-                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f', 'make', 'Make')
+                _author_gender = 'male'
+                _bi_bool = True
 
         elif data.gender.lower() in ('female', 'f', 'girl', 'trans-female', 'trans female'):
             if data.sexuality.lower() == 'straight':
                 _sexuality = ('straight', 'bisexual', 'bi', 'Straight', 'Bisexual', 'Bi')
-                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm')
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'make', 'Make')
             elif data.sexuality.lower() == 'lesbian':
                 _sexuality = ('lesbian', 'bisexual', 'bi', 'Lesbian', 'Bisexual', 'Bi')
                 _gender = ('female', 'Female', 'girl', 'Girl', 'F', 'f')
             elif data.sexuality.lower() in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual'):
-                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f')
+                _gender = ('male', 'Male', 'boy', 'Boy', 'M', 'm', 'female', 'Female', 'girl', 'Girl', 'F', 'f', 'make', 'Make')
+                _author_gender = 'female'
+                _bi_bool = True
 
         if _gender is not None:
             for gender in _gender:
                 if _sexuality is not None:
                     for sexuality in _sexuality:
                         async for mem in utils.Intro.find({'gender': gender, 'sexuality': sexuality}):
-                            if (
-                                (mem.status.lower() != 'taken') and
-                                (mem.id != ctx.author.id) and
-                                (mem.looking.lower() == 'yes')
-                            ):
-                                if data.age == 14 and mem.age < 17:
-                                    choices.append(guild.get_member(mem.id))
-                                elif data.age == 15 and mem.age < 18:
-                                    choices.append(guild.get_member(mem.id))
-                                elif data.age == 16 and mem.age < 19:
-                                    choices.append(guild.get_member(mem.id))
-                                elif data.age == 17 and mem.age > 14:
-                                    choices.append(guild.get_member(mem.id))
-                                elif data.age == 18 and mem.age > 15:
-                                    choices.append(guild.get_member(mem.id))
-                                elif data.age == 19 and mem.age > 16:
-                                    choices.append(guild.get_member(mem.id))
-
+                            choices = self.append_choices(choices, _bi_bool, _author_gender, data, mem)
                 else:
                     async for mem in utils.Intro.find({'gender': gender}):
-                        if (
-                            (mem.status.lower() != 'taken') and
-                            (mem.id != ctx.author.id) and
-                            (mem.looking.lower() == 'yes')
-                        ):
-                            if data.age == 14 and mem.age < 17:
-                                choices.append(guild.get_member(mem.id))
-                            elif data.age == 15 and mem.age < 18:
-                                choices.append(guild.get_member(mem.id))
-                            elif data.age == 16 and mem.age < 19:
-                                choices.append(guild.get_member(mem.id))
-                            elif data.age == 17 and mem.age > 14:
-                                choices.append(guild.get_member(mem.id))
-                            elif data.age == 18 and mem.age > 15:
-                                choices.append(guild.get_member(mem.id))
-                            elif data.age == 19 and mem.age > 16:
-                                choices.append(guild.get_member(mem.id))
+                        choices = self.append_choices(choices, _bi_bool, _author_gender, data, mem)
         else:
             async for mem in utils.Intro.find():
-                if (
-                    (mem.status.lower() != 'taken') and
-                    (mem.id != ctx.author.id) and
-                    (mem.looking.lower() == 'yes')
-                ):
-                    if data.age == 14 and mem.age < 17:
-                        choices.append(guild.get_member(mem.id))
-                    elif data.age == 15 and mem.age < 18:
-                        choices.append(guild.get_member(mem.id))
-                    elif data.age == 16 and mem.age < 19:
-                        choices.append(guild.get_member(mem.id))
-                    elif data.age == 17 and mem.age > 14:
-                        choices.append(guild.get_member(mem.id))
-                    elif data.age == 18 and mem.age > 15:
-                        choices.append(guild.get_member(mem.id))
-                    elif data.age == 19 and mem.age > 16:
-                        choices.append(guild.get_member(mem.id))
+                choices = self.append_choices(choices, _bi_bool, _author_gender, data, mem)
 
         if len(choices) == 0:
             em.title = 'Uh oh...'
