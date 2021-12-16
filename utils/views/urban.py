@@ -29,7 +29,7 @@ class UrbanDictionaryPageSource(menus.ListPageSource):
     async def format_page(self, menu, entry):
         maximum = self.get_max_pages()
         title = f'{entry["word"]}: {menu.current_page + 1} out of {maximum}' if maximum else entry['word']
-        embed = disnake.Embed(title=title, colour=utils.light_pink, url=entry['permalink'])
+        embed = disnake.Embed(title=title, colour=utils.blurple, url=entry['permalink'])
         embed.set_footer(text=f'by {entry["author"]}')
         embed.description = self.cleanup_definition(entry['definition'])
 
