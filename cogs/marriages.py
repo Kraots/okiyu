@@ -79,14 +79,14 @@ class Marriages(commands.Cog):
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
 
         if data is None:
-            return await ctx.send(f'> {ctx.disagree} You are not married to anyone.')
+            return await ctx.reply(f'> {ctx.disagree} You are not married to anyone.')
 
         else:
             guild = self.bot.get_guild(913310006814859334)
             usr = guild.get_member(data.married_to)
 
             view = utils.ConfirmView(ctx, f'{ctx.author.mention} Did not react in time.')
-            view.message = msg = await ctx.send(f'Are you sure you want to divorce {usr.mention}?', view=view)
+            view.message = msg = await ctx.reply(f'Are you sure you want to divorce {usr.mention}?', view=view)
             await view.wait()
             if view.response is True:
                 single_role = guild.get_role(913789939668385822)
