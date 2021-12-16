@@ -36,6 +36,8 @@ class Levels(commands.Cog):
         """Check your current level or somebody else's.
 
         `member` **->** The member you want to see the level of. If you want to see your own, you can ignore this since it defaults to yourself.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
         """
 
         if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474):
@@ -107,7 +109,10 @@ class Levels(commands.Cog):
 
     @level_cmd.command(name='leaderboard', aliases=('lb', 'top',))
     async def level_top(self, ctx: Context):
-        """See the top people with the highest levels."""
+        """See the top people with the highest levels.
+
+        **NOTE:** This command can only be used in <#913330644875104306>.
+        """
 
         if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474):
             entries = []
