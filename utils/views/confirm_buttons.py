@@ -23,7 +23,7 @@ class ConfirmView(disnake.ui.View):
 
     async def interaction_check(self, interaction: disnake.MessageInteraction):
         check_for = self.ctx.author.id if self.member is None else self.member.id
-        if interaction.author.id != check_for:
+        if interaction.author.id not in (check_for, self.ctx.bot._owner_id):
             await interaction.response.send_message(
                 f'Only {self.ctx.author.display_name if self.member is None else self.member.display_name} can use the buttons on this message!',
                 ephemeral=True
