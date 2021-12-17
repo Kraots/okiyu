@@ -56,7 +56,7 @@ class _Game(commands.Cog, name='Game'):
     async def base_game(self, ctx: Context):
         """Base command for all the `game` commands. To see the commands, please type `!help game`"""
 
-        pass
+        await ctx.send_help('game')
 
     @base_game.command(name='coins')
     async def game_coins(self, ctx: Context):
