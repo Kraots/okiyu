@@ -119,6 +119,27 @@ class _Game(commands.Cog, name='Game'):
 
         await ctx.reply(embed=em)
 
+    @base_game.command(name='streak')
+    async def game_streak(self, ctx: Context):
+        """Check your current daily streak.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if self.check_channel(ctx) is False:
+            return
+
+        data = await self.get_user(ctx)
+        em = disnake.Embed(
+            description=f'Your current daily streak is `{data.streak - 1}`',
+            color=utils.blurple
+        )
+        em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
+        if data.daily <= datetime.now():
+            em.set_footer(text='• You can claim your daily!')
+
+        await ctx.reply(em)
+
     @base_game.command(name='characters', aliases=('chars',))
     async def game_characters(self, ctx: Context):
         """Take a look at the characters that you own.
