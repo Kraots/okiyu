@@ -3,7 +3,8 @@ from .dbs import (  # noqa
     database2,
     database3,
     database4,
-    database5
+    database5,
+    database6
 )
 
 from .db_intros import Intro
@@ -14,6 +15,7 @@ from .db_invalid_names import InvalidName
 from .db_marriage import Marriage
 from .db_tickets import Ticket
 from .db_afks import AFK
+from .db_game import Game
 
 __all__ = (
     'Intro',
@@ -24,4 +26,5 @@ __all__ = (
     'Marriage',
     'Ticket',
     'AFK',
+    'Game',
 )

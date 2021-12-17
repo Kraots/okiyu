@@ -24,7 +24,10 @@ class Intros(commands.Cog):
     @commands.command()
     @lock()
     async def intro(self, ctx: Context):
-        """Create/Edit your intro."""
+        """Create/Edit your intro.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
 
         if ctx.author.id in self.bot.verifying:
             return await ctx.send(
