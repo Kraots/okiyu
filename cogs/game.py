@@ -129,7 +129,7 @@ class _Game(commands.Cog, name='Game'):
         if not data.characters:
             em = disnake.Embed(
                 title='Uh-oh',
-                description='You do not own any characters! See `!shop` to check all the available buyable characters.',
+                description='You do not own any characters! See `!game shop` to check all the available buyable characters.',
                 color=utils.red
             )
             await ctx.reply(embed=em)
