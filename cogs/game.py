@@ -80,7 +80,7 @@ class _Game(commands.Cog, name='Game'):
         em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
         em.set_thumbnail(url=ctx.author.display_avatar)
         if data.daily <= datetime.now():
-            em.set_footer(text='You can claim your daily!')
+            em.set_footer(text='• You can claim your daily!')
 
         await ctx.reply(embed=em)
 
