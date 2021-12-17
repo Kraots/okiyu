@@ -138,7 +138,7 @@ class _Game(commands.Cog, name='Game'):
         if data.daily <= datetime.now():
             em.set_footer(text='• You can claim your daily!')
 
-        await ctx.reply(em)
+        await ctx.reply(embed=em)
 
     @base_game.command(name='characters', aliases=('chars',))
     async def game_characters(self, ctx: Context):
