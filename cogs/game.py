@@ -18,6 +18,10 @@ class _Game(commands.Cog, name='Game'):
         self.bot = bot
         self.streaks_check.start()
 
+    @property
+    def display_emoji(self) -> str:
+        return '🪙'
+
     @tasks.loop(seconds=3.0)
     async def streaks_check(self):
         dailys: list[Game] = await Game.find().sort('daily', 1).to_list(10)
@@ -47,8 +51,8 @@ class _Game(commands.Cog, name='Game'):
             return False
         return True
 
-    @commands.group(name='game', aliases=('g',))
-    async def base_game(*_):
+    @commands.group(name='game', aliases=('g',), invoke_without_command=True, case_insensitive=True)
+    async def base_game(self, ctx: Context):
         """Base command for all the ``game`` commands."""
 
         pass
