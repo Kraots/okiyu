@@ -54,9 +54,13 @@ class _Game(commands.Cog, name='Game'):
 
     @commands.group(name='game', aliases=('g',), invoke_without_command=True, case_insensitive=True)
     async def base_game(self, ctx: Context):
-        """Base command for all the `game` commands. To see the commands, please type `!help game`"""
+        """Base command for all the `game` commands. To see the commands, please type `!help game`
 
-        await ctx.send_help('game')
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if self.check_channel(ctx) is True:
+            await ctx.send_help('game')
 
     @base_game.command(name='coins')
     async def game_coins(self, ctx: Context):
@@ -71,7 +75,7 @@ class _Game(commands.Cog, name='Game'):
         data = await self.get_user(ctx)
         em = disnake.Embed(
             color=utils.blurple,
-            description=f'You currently have `{data.coins}` coins.'
+            description=f'You currently have `{data.coins}` 🪙'
         )
         em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
         em.set_thumbnail(url=ctx.author.display_avatar)
@@ -108,7 +112,7 @@ class _Game(commands.Cog, name='Game'):
         await data.commit()
         em = disnake.Embed(
             title='Daily Claimed',
-            description=f'You have successfully claimed your daily and got `{coins}` coins!',
+            description=f'You have successfully claimed your daily and got `{coins}` 🪙',
             color=utils.green
         )
         em.set_footer(text=f'Current Streak: {data.streak - 1}')
