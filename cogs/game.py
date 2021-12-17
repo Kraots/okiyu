@@ -111,7 +111,7 @@ class _Game(commands.Cog, name='Game'):
             description=f'You have successfully claimed your daily and got `{coins}` coins!',
             color=utils.green
         )
-        em.set_footer(text=f'Current Streak: {data.streak}')
+        em.set_footer(text=f'Current Streak: {data.streak - 1}')
 
         await ctx.reply(embed=em)
 
