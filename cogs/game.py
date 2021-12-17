@@ -100,13 +100,14 @@ class _Game(commands.Cog, name='Game'):
             )
             return await ctx.reply(embed=em)
 
-        data.coins += 1000 + (data.streak * 100)
+        coins = 1000 + (data.streak * 100)
+        data.coins += coins
         data.streak += 1
         data.daily = datetime.now() + relativedelta(days=1)
         await data.commit()
         em = disnake.Embed(
             title='Daily Claimed',
-            description=f'You have successfully claimed your daily and got `{data.coins}` coins!',
+            description=f'You have successfully claimed your daily and got `{coins}` coins!',
             color=utils.green
         )
         em.set_footer(text=f'Current Streak: {data.streak}')
