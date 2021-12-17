@@ -54,7 +54,7 @@ class _Game(commands.Cog, name='Game'):
 
     @commands.group(name='game', aliases=('g',), invoke_without_command=True, case_insensitive=True)
     async def base_game(self, ctx: Context):
-        """Base command for all the ``game`` commands."""
+        """Base command for all the `game` commands. To see the commands, please type `!help game`"""
 
         pass
 
