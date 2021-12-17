@@ -131,7 +131,7 @@ class _Game(commands.Cog, name='Game'):
 
         data = await self.get_user(ctx)
         em = disnake.Embed(
-            description=f'Your current daily streak is `{data.streak - 1}`',
+            description=f'Your current daily streak is `{data.streak}`',
             color=utils.blurple
         )
         em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
