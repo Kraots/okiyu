@@ -8,6 +8,7 @@ from main import Ukiyo
 
 
 class Levels(commands.Cog):
+    """Level and message related commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 

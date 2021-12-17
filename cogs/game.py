@@ -14,6 +14,7 @@ from main import Ukiyo
 
 
 class _Game(commands.Cog, name='Game'):
+    """This category shows the base command for the game commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
         self.streaks_check.start()

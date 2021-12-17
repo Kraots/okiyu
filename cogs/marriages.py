@@ -10,6 +10,7 @@ from main import Ukiyo
 
 
 class Marriages(commands.Cog):
+    """Marriage commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 

@@ -8,6 +8,7 @@ from main import Ukiyo
 
 
 class Actions(commands.Cog):
+    """Action commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
