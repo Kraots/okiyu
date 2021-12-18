@@ -26,6 +26,7 @@ class Characters(Document):
     description = StrField(required=True)
     dmg = IntField(required=True)
     hp = IntField(required=True)
+    rarity_level = StrField(required=True)
 
     obtainable = BoolField(default=True)
     added_date = DateTimeField(required=True)
