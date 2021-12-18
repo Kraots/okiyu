@@ -234,8 +234,8 @@ class _Game(commands.Cog, name='Game'):
         )
         await ctx.reply(embed=em)
 
-    @game_shop.command(name='use')
-    async def shop_use(self, ctx: Context, box_rarity: str):
+    @game_shop.command(name='buy')
+    async def shop_buy(self, ctx: Context, box_rarity: str):
         """Buy and open a box.
 
         `box_rarity` **->** The rarity of the box that you wish to open.
