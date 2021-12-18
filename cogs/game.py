@@ -225,7 +225,7 @@ class _Game(commands.Cog, name='Game'):
 
         embeds = []
         _characters = {}
-        for charact in Characters.find().sort('rarity', 1):
+        async for charact in Characters.find().sort('rarity_level', 1):
             _characters[charact.name] = charact
 
         for character_name, xp in data.characters.items():
@@ -536,7 +536,7 @@ class _Game(commands.Cog, name='Game'):
             return
 
         embeds = []
-        async for data in Characters.find({'obtainable': True}).sort('rarity', 1):
+        async for data in Characters.find({'obtainable': True}).sort('rarity_level', 1):
             data: Characters
             date = data.added_date.strftime('%d/%m/%Y')
 
