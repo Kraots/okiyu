@@ -496,6 +496,7 @@ class _Game(commands.Cog, name='Game'):
         )
 
     @base_game.command(name='fight')
+    @utils.lock()
     async def game_fight(self, ctx: Context, *, member: disnake.Member):
         """Challenge a member using one of your characters.
 
@@ -508,6 +509,56 @@ class _Game(commands.Cog, name='Game'):
         data2 = await self.get_user(member.id)
         if not data2.characters:
             return await ctx.reply(f'`{member}` doesn\'t have any characters.')
+
+        view = utils.ConfirmView(ctx, react_user=member)
+        view.message = await ctx.send(
+            f'{ctx.author.mention} is challenging you to a fight, do you want to participate? {member.mention}'
+        )
+        await view.wait()
+        if view.response is False:
+            return await ctx.reply(f'{member.mention} does not want to fight you.')
+        await ctx.reply(
+            f'{member.mention} has agreed to have a fight with you. '
+            'Please send the name of one of the characters you own that '
+            'you wish to use in this fight.'
+        )
+        try:
+            _p1 = await self.bot.wait_for(
+                'message',
+                check=lambda m: m.channel.id == ctx.channel.id and m.author.id == ctx.author.id,
+                timeout=30.0
+            )
+            p1 = data1.characters.get(_p1.content.lower())
+            if p1 is None:
+                return await _p1.reply('You do not own that character.')
+
+            await ctx.send(
+                f'{member.mention} Please send the name of one of the characters '
+                'that you own that you wish to use in this fight.'
+            )
+            _p2 = await self.bot.wait_for(
+                'message',
+                check=lambda m: m.channel.id == ctx.channel.id and m.author.id == member.id,
+                timeout=30.0
+            )
+            p2 = data2.characters.get(_p2.content.lower())
+            if p2 is None:
+                return await _p2.reply('You do not own that character.')
+        except TimeoutError:
+            return await ctx.reply('Somebody ran out of time while picking their character.')
+
+        p1: Characters = await Characters.find_one({'_id': p1})
+        p2: Characters = await Characters.find_one({'_id': p2})
+        pl = [(ctx.author, p1), (member, p2)]
+        for i in range(5):
+            random.shuffle(pl)
+
+        game = utils.Fight(
+            (pl[0][0], pl[0][1]),
+            (pl[1][0], pl[1][1]),
+            ctx
+        )
+        game.message = await ctx.send(f'{pl[0][0].mention} you start!', view=game)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
