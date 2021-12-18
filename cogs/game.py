@@ -273,13 +273,13 @@ class _Game(commands.Cog, name='Game'):
         if character.name in data.characters:
             data.characters[character.name] += 10
             await ctx.reply(
-                f'You bought **{fmt + box_rarity}** box and got `{character.name.title()}`.\n'
+                f'You bought **{fmt + box_rarity}** box and got the character `{character.name.title()}`.\n'
                 'Since you already own this character, you have been awarded 10xp for it.'
             )
         else:
             data.characters[character.name] = 0
             await ctx.reply(
-                f'You bought **{fmt + box_rarity}** box and got `{character.name.title()}`.'
+                f'You bought **{fmt + box_rarity}** box and got the character `{character.name.title()}`.'
             )
         await data.commit()
 
