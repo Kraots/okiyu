@@ -161,11 +161,9 @@ class _Game(commands.Cog, name='Game'):
 
         data = await self.get_user(ctx.author.id)
         if data.daily > datetime.now():
-            em = disnake.Embed(
-                title='Uh-oh',
-                description='You cannot claim your daily yet! Please come back in '
-                            f'`{utils.human_timedelta(data.daily, suffix=False)}`',
-                color=utils.red
+            em = utils.fail_embed(
+                'You cannot claim your daily yet! Please come back in '
+                f'`{utils.human_timedelta(data.daily, suffix=False)}`',
             )
             return await ctx.reply(embed=em)
 
@@ -216,10 +214,8 @@ class _Game(commands.Cog, name='Game'):
 
         data = await self.get_user(ctx.author.id)
         if not data.characters:
-            em = disnake.Embed(
-                title='Uh-oh',
-                description='You do not own any characters! See `!game shop` to buy a crate.',
-                color=utils.red
+            em = utils.fail_embed(
+                'You do not own any characters! See `!game shop` to buy a crate.'
             )
             return await ctx.reply(embed=em)
 
@@ -332,16 +328,19 @@ class _Game(commands.Cog, name='Game'):
         }
         box: tuple | None = boxes.get(box_rarity.lower())
         if box is None:
-            return await ctx.reply('That box rarity does not exist.')
+            em = utils.fail_embed('That box rarity does not exist.')
+            return await ctx.reply(embed=em)
 
         data = await self.get_user(ctx.author.id)
         if data.coins < box[1]:
-            return await ctx.reply('You don\'t have enough money to buy that box.')
+            em = utils.fail_embed('You don\'t have enough money to buy that box.')
+            return await ctx.reply(embed=em)
         data.coins -= box[1]
 
         characters = await Characters.find({'rarity_level': box[0], 'obtainable': True}).to_list(100_000)
         if len(characters) == 0:
-            return await ctx.reply('There currently are no characters of that rarity.')
+            em = utils.fail_embed('There currently are no characters of that rarity.')
+            return await ctx.reply(embed=em)
         for i in range(3):
             random.shuffle(characters)
         character: Characters = random.choice(characters)
@@ -378,20 +377,30 @@ class _Game(commands.Cog, name='Game'):
             return
 
         if member.id in self.in_game:
-            return await ctx.reply('That member is already fighting someone. Let them finish their current fight first.')
+            em = utils.fail_embed(
+                'That member is already fighting someone. Let them finish their current fight first.'
+            )
+            return await ctx.reply(embed=em)
         elif ctx.author.id in self.in_game:
-            return await ctx.reply('You are already fighting someone. Please finish the current fight first.')
+            em = utils.fail_embed(
+                'You are already fighting someone. Please finish the current fight first.'
+            )
+            return await ctx.reply(embed=em)
 
         data1 = await self.get_user(ctx.author.id)
         if not data1.characters:
-            return await ctx.reply('You don\'t have any characters.')
+            em = utils.fail_embed('You don\'t have any characters.')
+            return await ctx.reply(embed=em)
         elif data1.coins < 1500:
-            return await ctx.reply(f'You must have at least **1,500** {self.coin_emoji}')
+            em = utils.fail_embed(f'You must have at least **1,500** {self.coin_emoji}')
+            return await ctx.reply(embed=em)
         data2 = await self.get_user(member.id)
         if not data2.characters:
-            return await ctx.reply(f'`{member}` doesn\'t have any characters.')
+            em = utils.fail_embed(f'`{member}` doesn\'t have any characters.')
+            return await ctx.reply(embed=em)
         elif data2.coins < 1500:
-            return await ctx.reply(f'{member.mention} must have at least **1,500** {self.coin_emoji}')
+            em = utils.fail_embed(f'{member.mention} must have at least **1,500** {self.coin_emoji}')
+            return await ctx.reply(embed=em)
 
         view = utils.ConfirmView(ctx, react_user=member)
         view.message = await ctx.send(
@@ -519,7 +528,8 @@ class _Game(commands.Cog, name='Game'):
         character_name = character_name.lower()
         data: Characters = await Characters.find_one({'_id': character_name})
         if data is None:
-            return await ctx.reply('Character does not exist.')
+            em = utils.fail_embed('Character does not exist.')
+            return await ctx.reply(embed=em)
 
         date = data.added_date.strftime('%d/%m/%Y')
         em = disnake.Embed(
@@ -563,7 +573,8 @@ class _Game(commands.Cog, name='Game'):
             embeds.append(em)
 
         if len(embeds) == 0:
-            return await ctx.reply('There are currently no obtainable characters.')
+            em = utils.fail_embed('There are currently no obtainable characters.')
+            return await ctx.reply(embed=em)
 
         pag = utils.EmbedPaginator(ctx, embeds)
         await pag.start()
@@ -673,6 +684,18 @@ class _Game(commands.Cog, name='Game'):
         await ctx.reply(
             f'Successfully toggled the character to **{"be" if data.obtainable is True else "not be"}** obtainable.'
         )
+
+    @base_game.command(name='reset')
+    @utils.is_owner()
+    async def game_reset(self, ctx: Context, *, member: disnake.Member):
+        """Reset a user's game data.
+
+        `member` **->** The member whose data you wish to reset.
+        """
+
+        data = await self.get_user(member.id)
+        await data.delete()
+        await ctx.reply(f'Successfully deleted the game data for {member.mention}')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
