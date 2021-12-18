@@ -20,13 +20,13 @@ class _Game(commands.Cog, name='Game'):
     """This category shows the base command for the game commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
-        self.coin_emoji = r'\🪙'
+        self.coin_emoji = '🪙'
 
         self.streaks_check.start()
 
     @property
     def display_emoji(self) -> str:
-        return '🪙'
+        return self.coin_emoji
 
     @tasks.loop(seconds=3.0)
     async def streaks_check(self):
@@ -80,7 +80,7 @@ class _Game(commands.Cog, name='Game'):
         data = await self.get_user(ctx.author.id)
         em = disnake.Embed(
             color=utils.blurple,
-            description=f'You currently have `{data.coins}` {self.coin_emoji}'
+            description=f'You currently have `{data.coins:,}` {self.coin_emoji}'
         )
         em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
         em.set_thumbnail(url=ctx.author.display_avatar)
@@ -208,27 +208,27 @@ class _Game(commands.Cog, name='Game'):
 
         em = disnake.Embed(title='Box Shop', color=utils.blurple)
         em.add_field(
-            f'Common Box — 2.500 {self.coin_emoji}',
+            f'Common Box — 2,500 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮(1)',
             inline=False
         )
         em.add_field(
-            f'Uncommon Box — 5.000 {self.coin_emoji}',
+            f'Uncommon Box — 5,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮(2)',
             inline=False
         )
         em.add_field(
-            f'Rare Box — 15.000 {self.coin_emoji}',
+            f'Rare Box — 15,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮✮(3)',
             inline=False
         )
         em.add_field(
-            f'Epic Box — 65.000 {self.coin_emoji}',
+            f'Epic Box — 65,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮✮✮(4)',
             inline=False
         )
         em.add_field(
-            f'Legendary Box — 150.000 {self.coin_emoji}',
+            f'Legendary Box — 150,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮✮✮✮(5)',
             inline=False
         )
