@@ -263,6 +263,8 @@ class _Game(commands.Cog, name='Game'):
         data.coins -= box[1]
 
         characters = await Characters.find({'rarity_level': box[0]}).to_list(100_000)
+        if len(characters) == 0:
+            return await ctx.reply('There currently are no characters of that rarity.')
         for i in range(3):
             random.shuffle(characters)
         character: Characters = random.choice(characters)
