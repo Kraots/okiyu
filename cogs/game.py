@@ -20,13 +20,13 @@ class _Game(commands.Cog, name='Game'):
     """This category shows the base command for the game commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
-        self.coin_emoji = '🪙'
+        self.coin_emoji = r'\🪙'
 
         self.streaks_check.start()
 
     @property
     def display_emoji(self) -> str:
-        return f'{self.coin_emoji}'
+        return '🪙'
 
     @tasks.loop(seconds=3.0)
     async def streaks_check(self):
@@ -37,11 +37,11 @@ class _Game(commands.Cog, name='Game'):
                 data.streak = 0
                 await data.commit()
 
-    async def get_user(self, ctx: Context) -> Game:
-        data: Game = await Game.find_one({'_id': ctx.author.id})
+    async def get_user(self, uid: Context) -> Game:
+        data: Game = await Game.find_one({'_id': uid})
         if data is None:
             data = Game(
-                id=ctx.author.id,
+                id=uid,
                 coins=5000,
                 characters={},
                 daily=datetime.now(),
@@ -67,7 +67,7 @@ class _Game(commands.Cog, name='Game'):
         if self.check_channel(ctx) is True:
             await ctx.send_help('game')
 
-    @base_game.command(name='coins')
+    @base_game.group(name='coins', invoke_without_command=True, case_insensitive=True)
     async def game_coins(self, ctx: Context):
         """See how many coins you currently have.
 
@@ -77,7 +77,7 @@ class _Game(commands.Cog, name='Game'):
         if self.check_channel(ctx) is False:
             return
 
-        data = await self.get_user(ctx)
+        data = await self.get_user(ctx.author.id)
         em = disnake.Embed(
             color=utils.blurple,
             description=f'You currently have `{data.coins}` {self.coin_emoji}'
@@ -88,6 +88,38 @@ class _Game(commands.Cog, name='Game'):
             em.set_footer(text='• You can claim your daily!')
 
         await ctx.reply(embed=em)
+
+    @game_coins.command(name='set')
+    @utils.is_owner()
+    async def coins_set(self, ctx: Context, member: disnake.Member = None, amount: int = 1000):
+        """Set the coins for the member.
+
+        `member` **->** The member that you wish to set the coins for. Defaults to yourself.
+        `amount` **->** The amount of coins you wish to set.
+        """
+
+        member = member or ctx.author.id
+        data = await self.get_user(member.id)
+        data.coins = amount
+        await data.commit()
+
+        await ctx.reply(f'Successfully set the amount of coins for `{member}` to *{amount}* {self.game_coins}')
+
+    @game_coins.command(name='add')
+    @utils.is_owner()
+    async def coins_add(self, ctx: Context, member: disnake.Member = None, amount: int = 1000):
+        """Add the coins to the member's existing coins.
+
+        `member` **->** The member that you wish to add the coins for. Defaults to yourself.
+        `amount` **->** The amount of coins you wish to add.
+        """
+
+        member = member or ctx.author.id
+        data = await self.get_user(member.id)
+        data.coins += amount
+        await data.commit()
+
+        await ctx.reply(f'Successfully added *{amount}* {self.game_coins} to `{member}`')
 
     @base_game.command(name='daily')
     async def game_daily(self, ctx: Context):
@@ -100,7 +132,7 @@ class _Game(commands.Cog, name='Game'):
         if self.check_channel(ctx) is False:
             return
 
-        data = await self.get_user(ctx)
+        data = await self.get_user(ctx.author.id)
         if data.daily > datetime.now():
             em = disnake.Embed(
                 title='Uh-oh',
@@ -134,7 +166,7 @@ class _Game(commands.Cog, name='Game'):
         if self.check_channel(ctx) is False:
             return
 
-        data = await self.get_user(ctx)
+        data = await self.get_user(ctx.author.id)
         em = disnake.Embed(
             description=f'Your current daily streak is `{data.streak}`',
             color=utils.blurple
@@ -155,7 +187,7 @@ class _Game(commands.Cog, name='Game'):
         if self.check_channel(ctx) is False:
             return
 
-        data = await self.get_user(ctx)
+        data = await self.get_user(ctx.author.id)
         if not data.characters:
             em = disnake.Embed(
                 title='Uh-oh',
@@ -225,7 +257,7 @@ class _Game(commands.Cog, name='Game'):
         if box is None:
             return await ctx.reply('That box rarity does not exist.')
 
-        data = await self.get_user(ctx)
+        data = await self.get_user(ctx.author.id)
         if data.coins < box[1]:
             return await ctx.reply('You don\'t have enough money to buy that box.')
         data.coins -= box[1]
