@@ -352,7 +352,6 @@ class _Game(commands.Cog, name='Game'):
         await data.commit()
 
     @base_game.command(name='fight')
-    @utils.lock()
     async def game_fight(self, ctx: Context, *, member: disnake.Member):
         """Challenge a member to a fight using one of your characters.
 
@@ -365,7 +364,9 @@ class _Game(commands.Cog, name='Game'):
             return
 
         if member.id in self.in_game:
-            return await ctx.reply('That member is already fighting someone.')
+            return await ctx.reply('That member is already fighting someone. Let them finish their current fight first.')
+        elif ctx.author.id in self.in_game:
+            return await ctx.reply('You are already fighting someone. Please finish the current fight first.')
 
         data1 = await self.get_user(ctx.author.id)
         if not data1.characters:
