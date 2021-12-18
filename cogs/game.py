@@ -231,7 +231,7 @@ class _Game(commands.Cog, name='Game'):
             )
             em.add_field('Level', lvl, inline=False)
             em.add_field('XP', _xp, inline=False)
-            em.add_field('Attack (DMG)', character.dmg * _lvl)
+            em.add_field('Attack (DMG)', f'{character.lowest_dmg * lvl} - {character.highest_dmg * lvl}')
             em.add_field('Health (HP)', character.hp * _lvl)
             em.add_field('Rarity', f'{character.rarity_level * "✮"}({character.rarity_level})')
 
@@ -355,7 +355,7 @@ class _Game(commands.Cog, name='Game'):
             description=f'*{data.description}*',
             color=utils.blurple
         )
-        em.add_field('Attack (DMG)', data.dmg)
+        em.add_field('Attack (DMG)', f'{data.lowest_dmg} - {data.highest_dmg}')
         em.add_field('Health (HP)', data.hp)
         em.add_field('Rarity', f'{data.rarity_level * "✮"}({data.rarity_level})')
         em.add_field('Obtainable', 'Yes' if data.obtainable is True else 'No', inline=False)
@@ -383,7 +383,7 @@ class _Game(commands.Cog, name='Game'):
                 description=f'*{data.description}*',
                 color=utils.blurple
             )
-            em.add_field('Attack (DMG)', data.dmg)
+            em.add_field('Attack (DMG)', f'{data.lowest_dmg} - {data.highest_dmg}')
             em.add_field('Health (HP)', data.hp)
             em.add_field('Rarity', f'{data.rarity_level * "✮"}({data.rarity_level})')
             em.set_footer(text=f'Character added on {date}')
@@ -420,13 +420,19 @@ class _Game(commands.Cog, name='Game'):
                 return await ctx.reply('You did not give the character\'s description, cancelling.')
             description = _description.content
 
-            await _description.reply('Please send the character\'s attack points (DMG).')
-            _dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
-            if _dmg.content is None:
-                return await ctx.reply('You did not give the character\'s attack points, cancelling.')
-            dmg = int(_dmg.content)
+            await _description.reply('Please send the character\'s lowest attack points (DMG).')
+            _lowest_dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
+            if _lowest_dmg.content is None:
+                return await ctx.reply('You did not give the character\'s lowest attack points, cancelling.')
+            lowest_dmg = int(_lowest_dmg.content)
 
-            await _dmg.reply('Please send the character\'s health points (HP).')
+            await _lowest_dmg.reply('Please send the character\'s lowest attack points (DMG).')
+            _highest_dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
+            if _highest_dmg.content is None:
+                return await ctx.reply('You did not give the character\'s highest attack points, cancelling.')
+            highest_dmg = int(_highest_dmg.content)
+
+            await _highest_dmg.reply('Please send the character\'s health points (HP).')
             _hp = await self.bot.wait_for('message', check=check, timeout=45.0)
             if _hp.content is None:
                 return await ctx.reply('You did not give the character\'s health points, cancelling.')
@@ -449,7 +455,8 @@ class _Game(commands.Cog, name='Game'):
         await Characters(
             name=name,
             description=description,
-            dmg=dmg,
+            lowest_dmg=lowest_dmg,
+            highest_dmg=highest_dmg,
             hp=hp,
             rarity_level=rarity_level,
             added_date=datetime.now()
@@ -487,6 +494,17 @@ class _Game(commands.Cog, name='Game'):
         await ctx.reply(
             f'Successfully toggled the character to **{"be" if data.obtainable is True else "not be"}** obtainable.'
         )
+
+    @base_game.command(name='fight')
+    async def game_fight(self, ctx: Context, *, member: disnake.Member):
+        """Challenge a member using one of your characters.
+
+        `member` **->** The member you want to challenge.
+        """
+
+        # data1 = await self.get_user(ctx.author.id)
+        # if len(data1.characters) == 0:
+        # data2 = await self.get_user(member.id)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
