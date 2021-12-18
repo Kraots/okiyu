@@ -512,7 +512,8 @@ class _Game(commands.Cog, name='Game'):
 
         view = utils.ConfirmView(ctx, react_user=member)
         view.message = await ctx.send(
-            f'{ctx.author.mention} is challenging you to a fight, do you want to participate? {member.mention}'
+            f'{ctx.author.mention} is challenging you to a fight, do you want to participate? {member.mention}',
+            view=view
         )
         await view.wait()
         if view.response is False:
