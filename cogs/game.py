@@ -282,7 +282,13 @@ class _Game(commands.Cog, name='Game'):
 
     @game_character.command(name='all')
     async def character_all(self, ctx: Context):
-        """Shows all of the existing obtainable characters."""
+        """Shows all of the existing obtainable characters.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if self.check_channel(ctx) is False:
+            return
 
         embeds = []
         async for data in Characters.find({'obtainable': True}):
