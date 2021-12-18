@@ -560,12 +560,12 @@ class _Game(commands.Cog, name='Game'):
         lvl1 = 0
         lvl2 = 0
         for k, v in LEVELS.items():
-            if data1.xp >= k:
+            if data1.characters[p1.name] >= k:
                 lvl1 = v[0]
             else:
                 break
         for k, v in LEVELS.items():
-            if data2.xp >= k:
+            if data2.characters[p2.name] >= k:
                 lvl2 = v[0]
             else:
                 break
