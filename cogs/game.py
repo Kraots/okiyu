@@ -161,7 +161,7 @@ class _Game(commands.Cog, name='Game'):
             )
             await ctx.reply(embed=em)
 
-    @base_game.command(name='shop')
+    @base_game.group(name='shop', invoke_without_command=True, case_insensitive=True)
     async def game_shop(self, ctx: Context):
         """The shop from which you can buy characters with your coins.
 
@@ -191,7 +191,7 @@ class _Game(commands.Cog, name='Game'):
 
         date = data.added_date.strftime('%d/%m/%Y')
         em = disnake.Embed(
-            title=data.name.title(),
+            title=f'`{data.name.title()}`',
             description=data.description,
             color=utils.blurple
         )
@@ -213,7 +213,7 @@ class _Game(commands.Cog, name='Game'):
             date = data.added_date.strftime('%d/%m/%Y')
 
             em = disnake.Embed(
-                title=data.name.title(),
+                title=f'`{data.name.title()}`',
                 description=data.description,
                 color=utils.blurple
             )
