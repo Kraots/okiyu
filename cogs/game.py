@@ -325,7 +325,7 @@ class _Game(commands.Cog, name='Game'):
             return await ctx.reply('You don\'t have enough money to buy that box.')
         data.coins -= box[1]
 
-        characters = await Characters.find({'rarity_level': box[0]}).to_list(100_000)
+        characters = await Characters.find({'rarity_level': box[0], 'obtainable': True}).to_list(100_000)
         if len(characters) == 0:
             return await ctx.reply('There currently are no characters of that rarity.')
         for i in range(3):
