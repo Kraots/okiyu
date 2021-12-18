@@ -224,6 +224,10 @@ class _Game(commands.Cog, name='Game'):
             return await ctx.reply(embed=em)
 
         embeds = []
+        _characters = {}
+        for charact in Characters.find().sort('rarity', 1):
+            _characters[charact.name] = charact
+
         for character_name, xp in data.characters.items():
             _lvl = 0
             needed_xp = 0
@@ -242,7 +246,7 @@ class _Game(commands.Cog, name='Game'):
                 _xp = str(xp - _curr) + '/' + str(needed_xp)
                 lvl = _lvl
 
-            character: Characters = await Characters.find_one({'_id': character_name})
+            character: Characters = _characters.get(character_name)
             em = disnake.Embed(
                 title=f'`{character.name.title()}`',
                 description=f'*{character.description}*',
@@ -532,7 +536,7 @@ class _Game(commands.Cog, name='Game'):
             return
 
         embeds = []
-        async for data in Characters.find({'obtainable': True}):
+        async for data in Characters.find({'obtainable': True}).sort('rarity', 1):
             data: Characters
             date = data.added_date.strftime('%d/%m/%Y')
 
