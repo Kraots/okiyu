@@ -508,7 +508,12 @@ class _Game(commands.Cog, name='Game'):
         """Challenge a member to a fight using one of your characters.
 
         `member` **->** The member you want to challenge.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
         """
+
+        if self.check_channel(ctx) is False:
+            return
 
         data1 = await self.get_user(ctx.author.id)
         if not data1.characters:
@@ -599,6 +604,28 @@ class _Game(commands.Cog, name='Game'):
             ctx
         )
         game.message = await ctx.send(f'{pl[0][0].mention} you start!', view=game)
+
+    @base_game.command(name='profile')
+    async def game_profile(self, ctx: Context, *, member: disnake.Member = None):
+        """Check someone's game profile.
+
+        `member` **->** The member you wish to see the profile of. If you want to see your own, then you can ignore this since it defaults to yourself.
+        """
+
+        member = member or ctx.author
+        data = await self.get_user(member.id)
+
+        em = disnake.Embed()
+        em.set_author(name=f'{member}\'s game profile', icon_url=member.display_avatar)
+        em.add_field('Coins', f'{data.coins:,} {self.coin_emoji}', inline=False)
+        em.add_field('Total Characters', len(data.characters), inline=False)
+        em.add_field('Current Streak', f'{data.streak:,}', inline=False)
+        em.add_field('Total Matches', f'{data.total_matches:,}')
+        em.add_field('Total Wins', f'{data.wins:,}')
+        em.add_field('Total Loses', f'{data.loses:,}')
+        em.set_footer(text=f'Requested By: {ctx.author}')
+
+        await ctx.send(embed=em, reference=ctx.replied_reference)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
