@@ -207,15 +207,20 @@ class _Game(commands.Cog, name='Game'):
 
         embeds = []
         for character_name, xp in data.characters.items():
-            lvl = 0
+            _lvl = 0
             needed_xp = 0
             for k, v in LEVELS.items():
                 if xp >= k:
-                    lvl = v[0]
+                    _lvl = v[0]
                     needed_xp = v[1]
                 else:
                     break
-            curr_xp = xp - needed_xp
+            if _lvl == 7:
+                curr_xp = 'MAX'
+                lvl = '7 (MAX)'
+            else:
+                curr_xp = xp - needed_xp
+                lvl = _lvl
 
             character: Characters = await Characters.find_one({'_id': character_name})
             em = disnake.Embed(
@@ -225,8 +230,8 @@ class _Game(commands.Cog, name='Game'):
             )
             em.add_field('Level', lvl, inline=False)
             em.add_field('XP', f'{curr_xp}/{needed_xp}', inline=False)
-            em.add_field('Attack (DMG)', character.dmg)
-            em.add_field('Health (HP)', character.hp)
+            em.add_field('Attack (DMG)', character.dmg * _lvl)
+            em.add_field('Health (HP)', character.hp * _lvl)
             em.add_field('Rarity', f'{character.rarity_level * "✮"}({character.rarity_level})')
 
             embeds.append(em)
