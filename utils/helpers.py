@@ -259,4 +259,4 @@ def clean_inter_content(
 
 
 def fail_embed(description: str) -> disnake.Embed:
-    return disnake.Embed(title='Uh-oh', color=utils.red, description=description)
+    return disnake.Embed(title='Uh-oh!', color=utils.red, description=description)
