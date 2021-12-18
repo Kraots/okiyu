@@ -10,11 +10,14 @@ instance = Instance(database6)
 @instance.register
 class Game(Document):
     id = IntField(attribute='_id', required=True)
-    coins = IntField(required=True)
-    characters = DictField(StrField(), IntField(), required=True)  # CHARACTER_NAME: CHARACTER_XP
+    coins = IntField(default=5000)
+    characters = DictField(StrField(), IntField(), default={})  # CHARACTER_NAME: CHARACTER_XP
+    wins = IntField(default=0)
+    loses = IntField(default=0)
+    total_matches = IntField(default=0)
 
     daily = DateTimeField(required=True)
-    streak = IntField(required=True)
+    streak = IntField(default=0)
 
     class Meta:
         collection_name = 'Game'
