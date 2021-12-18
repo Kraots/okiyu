@@ -197,6 +197,7 @@ class _Game(commands.Cog, name='Game'):
         )
         em.add_field('Attack (DMG)', data.dmg)
         em.add_field('Health (HP)', data.hp)
+        em.add_field('Rarity', data.rarity_level * '✮')
         em.add_field('Obtainable', 'Yes' if data.obtainable is True else 'No', inline=False)
         em.set_footer(text=f'Character added on {date}')
 
@@ -218,6 +219,7 @@ class _Game(commands.Cog, name='Game'):
             )
             em.add_field('Attack (DMG)', data.dmg)
             em.add_field('Health (HP)', data.hp)
+            em.add_field('Rarity', data.rarity_level * '✮')
             em.set_footer(text=f'Character added on {date}')
 
             embeds.append(em)
@@ -263,6 +265,12 @@ class _Game(commands.Cog, name='Game'):
             if _hp.content is None:
                 return await ctx.reply('You did not give the character\'s health points, cancelling.')
             hp = int(_hp.content)
+
+            await _hp.reply('Please send the character\'s rarity level.')
+            _rarity = await self.bot.wait_for('message', check=check, timeout=45.0)
+            if _rarity.content is None:
+                return await ctx.reply('You did not give the character\'s rarity level, cancelling.')
+            rarity_level = int(_rarity.content)
         except TimeoutError:
             return await ctx.reply('Ran out of time.')
         except ValueError:
@@ -275,6 +283,7 @@ class _Game(commands.Cog, name='Game'):
             description=description,
             dmg=dmg,
             hp=hp,
+            rarity_level=rarity_level,
             added_date=datetime.now()
         ).commit()
 
