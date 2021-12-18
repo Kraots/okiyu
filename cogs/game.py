@@ -435,8 +435,8 @@ class _Game(commands.Cog, name='Game'):
         self.in_game.append(ctx.author.id)
         self.in_game.append(member.id)
         game = utils.Fight(
-            (pl[0][0], pl[0][1]),
-            (pl[1][0], pl[1][1]),
+            pl[0],
+            pl[1],
             ctx
         )
         game.message = await ctx.send(f'{pl[0][0].mention} you start!', view=game)
