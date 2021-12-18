@@ -557,6 +557,27 @@ class _Game(commands.Cog, name='Game'):
         if p2 is None:
             return await ctx.reply(f'{member.mention} that character does not exist.')
 
+        lvl1 = 0
+        lvl2 = 0
+        for k, v in LEVELS.items():
+            if data1.xp >= k:
+                lvl1 = v[0]
+            else:
+                break
+        for k, v in LEVELS.items():
+            if data2.xp >= k:
+                lvl2 = v[0]
+            else:
+                break
+
+        p1.hp = p1.hp * lvl1
+        p1.lowest_dmg = p1.lowest_dmg * lvl1
+        p1.highest_dmg = p1.highest_dmg * lvl1
+
+        p2.hp = p2.hp * lvl2
+        p2.lowest_dmg = p2.lowest_dmg * lvl2
+        p2.highest_dmg = p2.highest_dmg * lvl2
+
         pl = [(ctx.author, p1), (member, p2)]
         for i in range(5):
             random.shuffle(pl)
