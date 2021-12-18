@@ -197,7 +197,7 @@ class _Game(commands.Cog, name='Game'):
         )
         em.add_field('Attack (DMG)', data.dmg)
         em.add_field('Health (HP)', data.hp)
-        em.add_field('Rarity', data.rarity_level * '✮')
+        em.add_field('Rarity', f'{data.rarity_level * "✮"}({data.rarity_level})')
         em.add_field('Obtainable', 'Yes' if data.obtainable is True else 'No', inline=False)
         em.set_footer(text=f'Character added on {date}')
 
@@ -219,7 +219,7 @@ class _Game(commands.Cog, name='Game'):
             )
             em.add_field('Attack (DMG)', data.dmg)
             em.add_field('Health (HP)', data.hp)
-            em.add_field('Rarity', data.rarity_level * '✮')
+            em.add_field('Rarity', f'{data.rarity_level * "✮"}({data.rarity_level})')
             em.set_footer(text=f'Character added on {date}')
 
             embeds.append(em)
