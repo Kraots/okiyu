@@ -103,7 +103,7 @@ class _Game(commands.Cog, name='Game'):
         data.coins = amount
         await data.commit()
 
-        await ctx.reply(f'Successfully set the amount of coins for `{member}` to *{amount}* {self.game_coins}')
+        await ctx.reply(f'Successfully set the amount of coins for `{member}` to **{amount}** {self.game_coins}')
 
     @game_coins.command(name='add')
     @utils.is_owner()
@@ -119,7 +119,7 @@ class _Game(commands.Cog, name='Game'):
         data.coins += amount
         await data.commit()
 
-        await ctx.reply(f'Successfully added *{amount}* {self.game_coins} to `{member}`')
+        await ctx.reply(f'Successfully added **{amount}** {self.game_coins} to `{member}`')
 
     @base_game.command(name='daily')
     async def game_daily(self, ctx: Context):
