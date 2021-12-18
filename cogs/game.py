@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from asyncio import TimeoutError
 from dateutil.relativedelta import relativedelta
@@ -19,11 +20,13 @@ class _Game(commands.Cog, name='Game'):
     """This category shows the base command for the game commands."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.coin_emoji = '🪙'
+
         self.streaks_check.start()
 
     @property
     def display_emoji(self) -> str:
-        return '🪙'
+        return f'{self.coin_emoji}'
 
     @tasks.loop(seconds=3.0)
     async def streaks_check(self):
@@ -39,7 +42,7 @@ class _Game(commands.Cog, name='Game'):
         if data is None:
             data = Game(
                 id=ctx.author.id,
-                coins=0,
+                coins=5000,
                 characters={},
                 daily=datetime.now(),
                 streak=0
@@ -77,7 +80,7 @@ class _Game(commands.Cog, name='Game'):
         data = await self.get_user(ctx)
         em = disnake.Embed(
             color=utils.blurple,
-            description=f'You currently have `{data.coins}` 🪙'
+            description=f'You currently have `{data.coins}` {self.coin_emoji}'
         )
         em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
         em.set_thumbnail(url=ctx.author.display_avatar)
@@ -114,7 +117,7 @@ class _Game(commands.Cog, name='Game'):
         await data.commit()
         em = disnake.Embed(
             title='Daily Claimed',
-            description=f'You have successfully claimed your daily and got `{coins}` 🪙',
+            description=f'You have successfully claimed your daily and got `{coins}` {self.coin_emoji}',
             color=utils.green
         )
         em.set_footer(text=f'Current Streak: {data.streak - 1}')
@@ -163,14 +166,88 @@ class _Game(commands.Cog, name='Game'):
 
     @base_game.group(name='shop', invoke_without_command=True, case_insensitive=True)
     async def game_shop(self, ctx: Context):
-        """The shop from which you can buy characters with your coins.
+        """The shop from which you can buy boxes that contain a character.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        return await ctx.reply(
-            'There have not been added any characters yet as this is still in development.'
+        if self.check_channel(ctx) is False:
+            return
+
+        em = disnake.Embed(title='Box Shop', color=utils.blurple)
+        em.add_field(
+            f'Common Box — 2.500 {self.coin_emoji}',
+            'This box will get you characters that have a rarity of ✮(1)',
+            inline=False
         )
+        em.add_field(
+            f'Uncommon Box — 5.000 {self.coin_emoji}',
+            'This box will get you characters that have a rarity of ✮✮(2)',
+            inline=False
+        )
+        em.add_field(
+            f'Rare Box — 15.000 {self.coin_emoji}',
+            'This box will get you characters that have a rarity of ✮✮✮(3)',
+            inline=False
+        )
+        em.add_field(
+            f'Epic Box — 65.000 {self.coin_emoji}',
+            'This box will get you characters that have a rarity of ✮✮✮✮(4)',
+            inline=False
+        )
+        em.add_field(
+            f'Legendary Box — 150.000 {self.coin_emoji}',
+            'This box will get you characters that have a rarity of ✮✮✮✮✮(5)',
+            inline=False
+        )
+        await ctx.reply(embed=em)
+
+    @game_shop.command(name='use')
+    async def shop_use(self, ctx: Context, box_rarity: str):
+        """Buy and open a box.
+
+        `box_rarity` **->** The rarity of the box that you wish to open.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if self.check_channel(ctx) is False:
+            return
+
+        boxes = {
+            'common': (1, 2500),
+            'uncommon': (2, 5000),
+            'rare': (3, 15000),
+            'epic': (4, 65000),
+            'legendary': (5, 150000)
+        }
+        box: tuple | None = boxes.get(box_rarity.lower())
+        if box is None:
+            return await ctx.reply('That box rarity does not exist.')
+
+        data = await self.get_user(ctx)
+        if data.coins < box[1]:
+            return await ctx.reply('You don\'t have enough money to buy that box.')
+        data.coins -= box[1]
+
+        characters = await Characters.find({'rarity_level': box[0]}).to_list(100_000)
+        for i in range(3):
+            random.shuffle(characters)
+        character: Characters = random.choice(characters)
+
+        fmt = 'an' if box_rarity.startswith(('a', 'e')) else 'a'
+        if character.name in data.characters:
+            data.characters[character.name] += 10
+            await ctx.reply(
+                f'You bought **{fmt + box_rarity}** box and got `{character.name.title()}`.\n'
+                'Since you already own this character, you have been awarded 10xp for it.'
+            )
+        else:
+            data.characters[character.name] = 0
+            await ctx.reply(
+                f'You bought **{fmt + box_rarity}** box and got `{character.name.title()}`.'
+            )
+        await data.commit()
 
     @base_game.group(name='character', aliases=('char',), invoke_without_command=True, case_insensitive=True)
     async def game_character(self, ctx: Context, *, character_name: str):
@@ -271,6 +348,8 @@ class _Game(commands.Cog, name='Game'):
             if _rarity.content is None:
                 return await ctx.reply('You did not give the character\'s rarity level, cancelling.')
             rarity_level = int(_rarity.content)
+            if rarity_level < 1 or rarity_level > 5:
+                return await ctx.reply('The rarity level cannot be less than 1 or greater than 5.')
         except TimeoutError:
             return await ctx.reply('Ran out of time.')
         except ValueError:
