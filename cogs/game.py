@@ -98,7 +98,7 @@ class _Game(commands.Cog, name='Game'):
         `member` **->** The member that you wish to set the coins for. Defaults to yourself.
         """
 
-        member = member or ctx.author.id
+        member = member or ctx.author
         data = await self.get_user(member.id)
         data.coins = amount
         await data.commit()
@@ -114,7 +114,7 @@ class _Game(commands.Cog, name='Game'):
         `member` **->** The member that you wish to add the coins for. Defaults to yourself.
         """
 
-        member = member or ctx.author.id
+        member = member or ctx.author
         data = await self.get_user(member.id)
         data.coins += amount
         await data.commit()
