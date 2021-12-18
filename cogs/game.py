@@ -230,7 +230,7 @@ class _Game(commands.Cog, name='Game'):
         pag = utils.EmbedPaginator(ctx, embeds)
         await pag.start()
 
-    @game_character.command(name='add')
+    @game_character.command(name='add', aliases=('create',))
     @utils.is_owner()
     async def character_add(self, ctx: Context):
         """Adds a character to the game."""
