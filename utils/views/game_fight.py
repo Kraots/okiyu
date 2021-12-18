@@ -94,8 +94,8 @@ class Fight(disnake.ui.View):
         winner_db.wins += 1
         winner_db.total_matches += 1
         loser_db.coins -= 1500
-        winner_db.loses += 1
-        winner_db.total_matches += 1
+        loser_db.loses += 1
+        loser_db.total_matches += 1
 
         await winner_db.commit()
         await loser_db.commit()
