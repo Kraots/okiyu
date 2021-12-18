@@ -223,11 +223,11 @@ class _Game(commands.Cog, name='Game'):
             )
             return await ctx.reply(embed=em)
 
-        embeds = []
-        _characters = {}
-        async for charact in Characters.find().sort('rarity_level', 1):
-            _characters[charact.name] = charact
-
+        commons = []
+        uncommons = []
+        rares = []
+        epics = []
+        legendaries = []
         for character_name, xp in data.characters.items():
             _lvl = 0
             needed_xp = 0
@@ -246,7 +246,7 @@ class _Game(commands.Cog, name='Game'):
                 _xp = str(xp - _curr) + '/' + str(needed_xp)
                 lvl = _lvl
 
-            character: Characters = _characters.get(character_name)
+            character: Characters = await Characters.find_one({'_id': character_name})
             em = disnake.Embed(
                 title=f'`{character.name.title()}`',
                 description=f'*{character.description}*',
@@ -258,8 +258,18 @@ class _Game(commands.Cog, name='Game'):
             em.add_field('Health (HP)', character.hp * _lvl)
             em.add_field('Rarity', f'{character.rarity_level * "✮"}({character.rarity_level})')
 
-            embeds.append(em)
+            if character.rarity_level == 1:
+                commons.append(em)
+            elif character.rarity_level == 2:
+                uncommons.append(em)
+            elif character.rarity_level == 3:
+                rares.append(em)
+            elif character.rarity_level == 4:
+                epics.append(em)
+            elif character.rarity_level == 5:
+                legendaries.append(em)
 
+        embeds = uncommons + commons + rares + epics + legendaries
         paginator = utils.EmbedPaginator(ctx, embeds)
         await paginator.start()
 
