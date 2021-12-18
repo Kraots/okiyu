@@ -39,7 +39,7 @@ class Fight(disnake.ui.View):
         self.hp = {self.p1: pl1[1].hp, self.p2: pl2[1].hp}
         self.dmg = {
             self.p1: (pl1[1].lowest_dmg, pl1[1].highest_dmg),
-            self.p2: (pl1[1].lowest_dmg, pl1[1].highest_dmg)
+            self.p2: (pl2[1].lowest_dmg, pl2[1].highest_dmg)
         }
 
         self.turn = self.p1
