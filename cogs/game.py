@@ -192,7 +192,7 @@ class _Game(commands.Cog, name='Game'):
         date = data.added_date.strftime('%d/%m/%Y')
         em = disnake.Embed(
             title=f'`{data.name.title()}`',
-            description=data.description,
+            description=f'*{data.description}*',
             color=utils.blurple
         )
         em.add_field('Attack (DMG)', data.dmg)
@@ -214,7 +214,7 @@ class _Game(commands.Cog, name='Game'):
 
             em = disnake.Embed(
                 title=f'`{data.name.title()}`',
-                description=data.description,
+                description=f'*{data.description}*',
                 color=utils.blurple
             )
             em.add_field('Attack (DMG)', data.dmg)
