@@ -269,7 +269,7 @@ class _Game(commands.Cog, name='Game'):
             random.shuffle(characters)
         character: Characters = random.choice(characters)
 
-        fmt = 'an' if box_rarity.startswith(('a', 'e')) else 'a'
+        fmt = 'an ' if box_rarity.startswith(('a', 'e')) else 'a '
         if character.name in data.characters:
             data.characters[character.name] += 10
             await ctx.reply(
