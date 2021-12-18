@@ -498,7 +498,7 @@ class _Game(commands.Cog, name='Game'):
     @base_game.command(name='fight')
     @utils.lock()
     async def game_fight(self, ctx: Context, *, member: disnake.Member):
-        """Challenge a member using one of your characters.
+        """Challenge a member to a fight using one of your characters.
 
         `member` **->** The member you want to challenge.
         """
@@ -506,9 +506,13 @@ class _Game(commands.Cog, name='Game'):
         data1 = await self.get_user(ctx.author.id)
         if not data1.characters:
             return await ctx.reply('You don\'t have any characters.')
+        elif data1.coins < 1500:
+            return await ctx.reply(f'You must have at least **1,500** {self.coin_emoji}')
         data2 = await self.get_user(member.id)
         if not data2.characters:
             return await ctx.reply(f'`{member}` doesn\'t have any characters.')
+        elif data2.coins < 1500:
+            return await ctx.reply(f'{member.mention} must have at least **1,500** {self.coin_emoji}')
 
         view = utils.ConfirmView(ctx, react_user=member)
         view.message = await ctx.send(
@@ -578,7 +582,7 @@ class _Game(commands.Cog, name='Game'):
         p2.lowest_dmg = p2.lowest_dmg * lvl2
         p2.highest_dmg = p2.highest_dmg * lvl2
 
-        pl = [(ctx.author, p1), (member, p2)]
+        pl = [(ctx.author, p1, lvl1), (member, p2, lvl2)]
         for i in range(5):
             random.shuffle(pl)
 
