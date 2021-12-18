@@ -1,4 +1,5 @@
 from datetime import datetime
+from asyncio import TimeoutError
 from dateutil.relativedelta import relativedelta
 
 import disnake
@@ -7,7 +8,8 @@ from disnake.ext import commands, tasks
 import utils
 from utils import (
     Context,
-    Game
+    Game,
+    Characters
 )
 
 from main import Ukiyo
@@ -140,9 +142,9 @@ class _Game(commands.Cog, name='Game'):
 
         await ctx.reply(embed=em)
 
-    @base_game.command(name='characters', aliases=('chars',))
-    async def game_characters(self, ctx: Context):
-        """Take a look at the characters that you own.
+    @base_game.command(name='inventory', aliases=('inv',))
+    async def game_inventory(self, ctx: Context):
+        """Shows your inventory which contains all of the characters that you own.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """
@@ -168,6 +170,145 @@ class _Game(commands.Cog, name='Game'):
 
         return await ctx.reply(
             'There have not been added any characters yet as this is still in development.'
+        )
+
+    @base_game.group(name='character', aliases=('char',), invoke_without_command=True, case_insensitive=True)
+    async def game_character(self, ctx: Context, *, character_name: str):
+        """Shows info about a character based on its specific name.
+
+        `character_name` **->** The full name of the character you want to see the info of.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if self.check_channel(ctx) is False:
+            return
+
+        character_name = character_name.lower()
+        data: Characters = await Characters.find_one({'_id': character_name})
+        if data is None:
+            return await ctx.reply('Character does not exist.')
+
+        date = data.added_date.strftime('%d/%m/%Y')
+        em = disnake.Embed(
+            title=data.name.title(),
+            description=data.description,
+            color=utils.blurple
+        )
+        em.add_field('Attack (DMG)', data.dmg)
+        em.add_field('Health (HP)', data.hp)
+        em.add_field('Obtainable', 'Yes' if data.obtainable is True else 'No')
+        em.set_footer(text=f'Character added on {date}')
+
+        await ctx.reply(embed=em)
+
+    @game_character.command(name='all')
+    async def character_all(self, ctx: Context):
+        """Shows all of the existing obtainable characters."""
+
+        embeds = []
+        async for data in Characters.find({'obtainable': True}):
+            data: Characters
+            date = data.added_date.strftime('%d/%m/%Y')
+
+            em = disnake.Embed(
+                title=data.name.title(),
+                description=data.description,
+                color=utils.blurple
+            )
+            em.add_field('Attack (DMG)', data.dmg)
+            em.add_field('Health (HP)', data.hp)
+            em.set_footer(text=f'Character added on {date}')
+
+            embeds.append(em)
+
+        if len(embeds) == 0:
+            return await ctx.reply('There are currently no obtainable characters.')
+
+        pag = utils.EmbedPaginator(ctx, embeds)
+        await pag.start()
+
+    @game_character.command(name='add')
+    @utils.is_owner()
+    async def character_add(self, ctx: Context):
+        """Adds a character to the game."""
+
+        def check(m):
+            return m.channel.id == ctx.channel.id and m.author.id == ctx.author.id
+
+        await ctx.reply('What\'s the character\'s name?')
+        try:
+            _name = await self.bot.wait_for('message', check=check, timeout=45.0)
+            if _name.content is None:
+                return await ctx.reply('You did not give the character\'s name, cancelling.')
+            name = _name.content.lower()
+            data: Characters = await Characters.find_one({'_id': name})
+            if data is not None:
+                return await _name.reply('A character with that name already exists.')
+
+            await _name.reply('Please send the character\'s description.')
+            _description = await self.bot.wait_for('message', check=check, timeout=120.0)
+            if _description.content is None:
+                return await ctx.reply('You did not give the character\'s description, cancelling.')
+            description = _description.content
+
+            await _description.reply('Please send the character\'s attack points (DMG).')
+            _dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
+            if _dmg.content is None:
+                return await ctx.reply('You did not give the character\'s attack points, cancelling.')
+            dmg = int(_dmg.content)
+
+            await _dmg.reply('Please send the character\'s health points (HP).')
+            _hp = await self.bot.wait_for('message', check=check, timeout=45.0)
+            if _hp.content is None:
+                return await ctx.reply('You did not give the character\'s health points, cancelling.')
+            hp = int(_hp.content)
+        except TimeoutError:
+            return await ctx.reply('Ran out of time.')
+        except ValueError:
+            return await ctx.reply(
+                'The damage or the health points that you have given are not numbers, cancelling.'
+            )
+
+        await Characters(
+            name=name,
+            description=description,
+            dmg=dmg,
+            hp=hp,
+            added_date=datetime.now()
+        ).commit()
+
+        await ctx.reply('Character has been successfully added.')
+
+    @game_character.command(name='remove', aliases=('delete',))
+    @utils.is_owner()
+    async def character_remove(self, ctx: Context, *, character_name: str):
+        """Remove a character from the game's characters.
+
+        `character_name` **->** The full name of the character you want to remove.
+        """
+
+        data: Characters = await Characters.find_one({'_id': character_name.lower()})
+        if data is None:
+            return await ctx.reply('Character does not exist.')
+        await data.delete()
+        await ctx.reply('Character has been successfully deleted.')
+
+    @game_character.command(name='toggle')
+    @utils.is_owner()
+    async def character_toggle(self, ctx: Context, *, character_name: str):
+        """Toggle the character's obtainable status. What that means is that if this is toggled off, they can't be obtained anymore, but can still be used.
+
+        `character_name` **->** The full name of the character you want to remove.
+        """
+
+        data: Characters = await Characters.find_one({'_id': character_name.lower()})
+        if data is None:
+            return await ctx.reply('Character does not exist.')
+        data.obtainable = not data.obtainable
+        await data.commit()
+        await ctx.reply(
+            f'Successfully toggled the character to **{"be" if data.obtainable is True else "not be"}** obtainable.'
         )
 
 

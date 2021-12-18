@@ -18,3 +18,17 @@ class Game(Document):
 
     class Meta:
         collection_name = 'Game'
+
+
+@instance.register
+class Characters(Document):
+    name = IntField(attribute='_id', required=True)
+    description = StrField(required=True)
+    dmg = IntField(required=True)
+    hp = IntField(required=True)
+
+    obtainable = BoolField(default=True)
+    added_date = DateTimeField(required=True)
+
+    class Meta:
+        collection_name = 'Characters'

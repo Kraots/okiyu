@@ -15,7 +15,7 @@ from .db_invalid_names import InvalidName
 from .db_marriage import Marriage
 from .db_tickets import Ticket
 from .db_afks import AFK
-from .db_game import Game
+from .db_game import Game, Characters
 
 __all__ = (
     'Intro',
@@ -27,4 +27,5 @@ __all__ = (
     'Ticket',
     'AFK',
     'Game',
+    'Characters',
 )
