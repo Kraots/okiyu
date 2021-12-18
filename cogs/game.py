@@ -212,8 +212,8 @@ class _Game(commands.Cog, name='Game'):
             for k, v in LEVELS.items():
                 if xp >= k:
                     lvl = v[0]
-                else:
                     needed_xp = v[1]
+                else:
                     break
             curr_xp = xp - needed_xp
 
