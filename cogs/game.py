@@ -450,7 +450,7 @@ class _Game(commands.Cog, name='Game'):
         member = member or ctx.author
         data = await self.get_user(member.id)
 
-        em = disnake.Embed()
+        em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{member}\'s game profile', icon_url=member.display_avatar)
         em.add_field('Coins', f'{data.coins:,} {self.coin_emoji}', inline=False)
         em.add_field('Total Characters', len(data.characters), inline=False)
