@@ -15,6 +15,15 @@ from utils import (
 
 from main import Ukiyo
 
+# TOTAL_XP = (LVL, NEEDED_XP)
+LEVELS = {
+    0: (1, 500),
+    500: (2, 1700),
+    2200: (3, 3300),
+    5500: (4, 7000),
+    12500: (5, 0)
+}
+
 
 class _Game(commands.Cog, name='Game'):
     """This category shows the base command for the game commands."""
@@ -195,6 +204,35 @@ class _Game(commands.Cog, name='Game'):
                 color=utils.red
             )
             await ctx.reply(embed=em)
+
+        embeds = []
+        for character_name, xp in data.characters.items():
+            lvl = 0
+            needed_xp = 0
+            for k, v in LEVELS:
+                if xp >= k:
+                    lvl = v[0]
+                else:
+                    needed_xp = v[1]
+                    break
+            curr_xp = needed_xp - xp
+
+            character: Characters = await Characters.find_one({'_id': character_name})
+            em = disnake.Embed(
+                title=f'`{character.name.title()}`',
+                description=f'*{character.description}*',
+                color=utils.blurple
+            )
+            em.add_field('Level', lvl, inline=False)
+            em.add_field('XP', f'{curr_xp}/{needed_xp}', inline=False)
+            em.add_field('Attack (DMG)', character.dmg)
+            em.add_field('Health (HP)', character.hp)
+            em.add_field('Rarity', f'{character.rarity_level * "✮"}({character.rarity_level})')
+
+            embeds.append(em)
+
+        paginator = utils.EmbedPaginator(ctx, embeds)
+        await paginator.start()
 
     @base_game.group(name='shop', invoke_without_command=True, case_insensitive=True)
     async def game_shop(self, ctx: Context):
