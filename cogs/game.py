@@ -440,7 +440,12 @@ class _Game(commands.Cog, name='Game'):
         """Check someone's game profile.
 
         `member` **->** The member you wish to see the profile of. If you want to see your own, then you can ignore this since it defaults to yourself.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
         """
+
+        if self.check_channel(ctx) is False:
+            return
 
         member = member or ctx.author
         data = await self.get_user(member.id)
