@@ -220,6 +220,8 @@ class _Game(commands.Cog, name='Game'):
                 lvl = '7 (MAX)'
             else:
                 curr_xp = xp - needed_xp
+                if curr_xp < 0:
+                    curr_xp = xp
                 lvl = _lvl
 
             character: Characters = await Characters.find_one({'_id': character_name})
