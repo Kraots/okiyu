@@ -104,8 +104,8 @@ class Fight(disnake.ui.View):
     def _data(self) -> str:
         data = inspect.cleandoc(
             f'''
-            `{self.p1.display_name} (lvl {self.p1_lvl} {self._p1})` **==> {self.hp[self.p1]} hp**
-            `{self.p2.display_name} (lvl {self.p2_lvl} {self._p2})` **==> {self.hp[self.p2]} hp**
+            `{self.p1.display_name} (lvl {self.p1_lvl} {self._p1.name})` **==> {self.hp[self.p1]} hp**
+            `{self.p2.display_name} (lvl {self.p2_lvl} {self._p2.name})` **==> {self.hp[self.p2]} hp**
             '''
         )
         return data
@@ -130,7 +130,7 @@ class Fight(disnake.ui.View):
                         f'\n{self.turn.mention} you lost **1,500** 🪙!',
                 view=self
             )
-            await self.award(winner.id, self.turn.mention, winner_charact)
+            await self.award(winner.id, self.turn.id, winner_charact)
             self.stop()
 
     @disnake.ui.button(label='Fight', style=disnake.ButtonStyle.red)
