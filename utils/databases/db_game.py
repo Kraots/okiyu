@@ -11,7 +11,7 @@ instance = Instance(database6)
 class Game(Document):
     id = IntField(attribute='_id', required=True)
     coins = IntField(required=True)
-    characters = DictField(StrField(), IntField(), required=True)  # CHARACTER_NAME: CHARACTER_LEVEL
+    characters = DictField(StrField(), IntField(), required=True)  # CHARACTER_NAME: CHARACTER_XP
 
     daily = DateTimeField(required=True)
     streak = IntField(required=True)
