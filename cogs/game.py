@@ -32,6 +32,7 @@ class _Game(commands.Cog, name='Game'):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
         self.coin_emoji = '🪙'
+        self.in_game = []
 
         self.streaks_check.start()
 
@@ -345,6 +346,9 @@ class _Game(commands.Cog, name='Game'):
         if self.check_channel(ctx) is False:
             return
 
+        if member.id in self.in_game:
+            return await ctx.reply('That member is already fighting someone.')
+
         data1 = await self.get_user(ctx.author.id)
         if not data1.characters:
             return await ctx.reply('You don\'t have any characters.')
@@ -428,12 +432,17 @@ class _Game(commands.Cog, name='Game'):
         for i in range(5):
             random.shuffle(pl)
 
+        self.in_game.append(ctx.author.id)
+        self.in_game.append(member.id)
         game = utils.Fight(
             (pl[0][0], pl[0][1]),
             (pl[1][0], pl[1][1]),
             ctx
         )
         game.message = await ctx.send(f'{pl[0][0].mention} you start!', view=game)
+        await game.wait()
+        self.in_game.pop(self.in_game.index(ctx.author.id))
+        self.in_game.pop(self.in_game.index(member.id))
 
     @base_game.command(name='profile')
     async def game_profile(self, ctx: Context, *, member: disnake.Member = None):
