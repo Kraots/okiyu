@@ -491,6 +491,12 @@ class _Game(commands.Cog, name='Game'):
             f'Successfully toggled the character to **{"be" if data.obtainable is True else "not be"}** obtainable.'
         )
 
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: disnake.Member):
+        data: Game = await Game.find_one({'_id': member.id})
+        if data:
+            await data.delete()
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(_Game(bot))
