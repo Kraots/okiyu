@@ -209,7 +209,7 @@ class _Game(commands.Cog, name='Game'):
         for character_name, xp in data.characters.items():
             lvl = 0
             needed_xp = 0
-            for k, v in LEVELS:
+            for k, v in LEVELS.items():
                 if xp >= k:
                     lvl = v[0]
                 else:
