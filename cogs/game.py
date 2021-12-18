@@ -577,13 +577,13 @@ class _Game(commands.Cog, name='Game'):
                 return await ctx.reply('You did not give the character\'s description, cancelling.')
             description = _description.content
 
-            await _description.reply('Please send the character\'s lowest attack points (DMG).')
+            await _description.reply('Please send the character\'s lowest attack points (lowest DMG).')
             _lowest_dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
             if _lowest_dmg.content is None:
                 return await ctx.reply('You did not give the character\'s lowest attack points, cancelling.')
             lowest_dmg = int(_lowest_dmg.content)
 
-            await _lowest_dmg.reply('Please send the character\'s lowest attack points (DMG).')
+            await _lowest_dmg.reply('Please send the character\'s highest attack points (highest DMG).')
             _highest_dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
             if _highest_dmg.content is None:
                 return await ctx.reply('You did not give the character\'s highest attack points, cancelling.')
@@ -595,7 +595,7 @@ class _Game(commands.Cog, name='Game'):
                 return await ctx.reply('You did not give the character\'s health points, cancelling.')
             hp = int(_hp.content)
 
-            await _hp.reply('Please send the character\'s rarity level.')
+            await _hp.reply('Please send the character\'s rarity level. (1-5)')
             _rarity = await self.bot.wait_for('message', check=check, timeout=45.0)
             if _rarity.content is None:
                 return await ctx.reply('You did not give the character\'s rarity level, cancelling.')
