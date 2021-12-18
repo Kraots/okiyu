@@ -100,12 +100,21 @@ class _Game(commands.Cog, name='Game'):
 
     @game_coins.command(name='set')
     @utils.is_owner()
-    async def coins_set(self, ctx: Context, amount: int = 1000, member: disnake.Member = None):
+    async def coins_set(self, ctx: Context, amount: str = '1,000', member: disnake.Member = None):
         """Set the coins for the member.
 
         `amount` **->** The amount of coins you wish to set.
         `member` **->** The member that you wish to set the coins for. Defaults to yourself.
         """
+
+        amount = amount \
+            .replace(',', '') \
+            .replace(' ', '') \
+            .replace('.', '')
+        try:
+            amount = int(amount)
+        except ValueError:
+            return await ctx.reply('The amount must be a number.')
 
         member = member or ctx.author
         data = await self.get_user(member.id)
@@ -116,12 +125,21 @@ class _Game(commands.Cog, name='Game'):
 
     @game_coins.command(name='add')
     @utils.is_owner()
-    async def coins_add(self, ctx: Context, amount: int = 1000, member: disnake.Member = None):
+    async def coins_add(self, ctx: Context, amount: str = '1,000', member: disnake.Member = None):
         """Add the coins to the member's existing coins.
 
         `amount` **->** The amount of coins you wish to add.
         `member` **->** The member that you wish to add the coins for. Defaults to yourself.
         """
+
+        amount = amount \
+            .replace(',', '') \
+            .replace(' ', '') \
+            .replace('.', '')
+        try:
+            amount = int(amount)
+        except ValueError:
+            return await ctx.reply('The amount must be a number.')
 
         member = member or ctx.author
         data = await self.get_user(member.id)
