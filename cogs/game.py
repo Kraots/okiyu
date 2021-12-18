@@ -202,7 +202,7 @@ class _Game(commands.Cog, name='Game'):
                 description='You do not own any characters! See `!game shop` to check all the available buyable characters.',
                 color=utils.red
             )
-            await ctx.reply(embed=em)
+            return await ctx.reply(embed=em)
 
         embeds = []
         for character_name, xp in data.characters.items():
