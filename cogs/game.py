@@ -475,8 +475,15 @@ class _Game(commands.Cog, name='Game'):
         data: Characters = await Characters.find_one({'_id': character_name.lower()})
         if data is None:
             return await ctx.reply('Character does not exist.')
+
+        async for g in Game.find():
+            g: Game
+            if character_name.lower() in g.characters:
+                del g.characters[character_name.lower()]
+                await g.commit()
+
         await data.delete()
-        await ctx.reply('Character has been successfully deleted.')
+        await ctx.reply('Character has been successfully deleted and removed from everyone\'s inventory.')
 
     @game_character.command(name='toggle')
     @utils.is_owner()
