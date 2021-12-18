@@ -314,6 +314,11 @@ class _Game(commands.Cog, name='Game'):
 
         fmt = 'an ' if box_rarity.startswith(('a', 'e')) else 'a '
         if character.name in data.characters:
+            if data.characters[character.name] == 12500:
+                return await ctx.reply(
+                    f'You bought **{fmt + box_rarity}** box and got the character `{character.name.title()}`.\n'
+                    'Since you already own this character, and it is max level, you have been awarded your money back.'
+                )
             data.characters[character.name] += 10
             await ctx.reply(
                 f'You bought **{fmt + box_rarity}** box and got the character `{character.name.title()}`.\n'
