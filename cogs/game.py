@@ -231,7 +231,7 @@ class _Game(commands.Cog, name='Game'):
             )
             em.add_field('Level', lvl, inline=False)
             em.add_field('XP', _xp, inline=False)
-            em.add_field('Attack (DMG)', f'{character.lowest_dmg * lvl} - {character.highest_dmg * lvl}')
+            em.add_field('Attack (DMG)', f'{character.lowest_dmg * _lvl} - {character.highest_dmg * _lvl}')
             em.add_field('Health (HP)', character.hp * _lvl)
             em.add_field('Rarity', f'{character.rarity_level * "✮"}({character.rarity_level})')
 
@@ -502,9 +502,12 @@ class _Game(commands.Cog, name='Game'):
         `member` **->** The member you want to challenge.
         """
 
-        # data1 = await self.get_user(ctx.author.id)
-        # if len(data1.characters) == 0:
-        # data2 = await self.get_user(member.id)
+        data1 = await self.get_user(ctx.author.id)
+        if not data1.characters:
+            return await ctx.reply('You don\'t have any characters.')
+        data2 = await self.get_user(member.id)
+        if not data2.characters:
+            return await ctx.reply(f'`{member}` doesn\'t have any characters.')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
