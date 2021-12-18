@@ -151,7 +151,7 @@ class _Game(commands.Cog, name='Game'):
     @base_game.command(name='daily')
     async def game_daily(self, ctx: Context):
         """Get your daily coins.
-        One streak is `100` coins, which gets multiplied by the amount of streaks you have accumulated. That means that a 10 day streak is `1000` extra coins.
+        One streak is `200` coins, which gets multiplied by the amount of streaks you have accumulated. That means that a 10 day streak is `2000` extra coins.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """
@@ -169,7 +169,7 @@ class _Game(commands.Cog, name='Game'):
             )
             return await ctx.reply(embed=em)
 
-        coins = 1000 + (data.streak * 100)
+        coins = 2000 + (data.streak * 200)
         data.coins += coins
         data.streak += 1
         data.daily = datetime.now() + relativedelta(days=1)
