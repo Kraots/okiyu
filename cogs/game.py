@@ -215,7 +215,7 @@ class _Game(commands.Cog, name='Game'):
                 else:
                     needed_xp = v[1]
                     break
-            curr_xp = needed_xp - xp
+            curr_xp = xp - needed_xp
 
             character: Characters = await Characters.find_one({'_id': character_name})
             em = disnake.Embed(
