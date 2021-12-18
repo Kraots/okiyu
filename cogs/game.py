@@ -209,19 +209,19 @@ class _Game(commands.Cog, name='Game'):
         for character_name, xp in data.characters.items():
             _lvl = 0
             needed_xp = 0
+            _curr = 0
             for k, v in LEVELS.items():
                 if xp >= k:
                     _lvl = v[0]
                     needed_xp = v[1]
+                    _curr = k
                 else:
                     break
             if _lvl == 7:
                 curr_xp = 'MAX'
                 lvl = '7 (MAX)'
             else:
-                curr_xp = xp - needed_xp
-                if curr_xp < 0:
-                    curr_xp = xp
+                curr_xp = xp - _curr
                 lvl = _lvl
 
             character: Characters = await Characters.find_one({'_id': character_name})
