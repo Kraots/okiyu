@@ -337,12 +337,12 @@ class _Game(commands.Cog, name='Game'):
             if data.characters[character.name] >= 37500:
                 return await ctx.reply(
                     f'You bought **{fmt + box_rarity}** box and got the character `{character.name.title()}`.\n'
-                    'Since you already own this character, and it is max level, you have been awarded your money back.'
+                    'Since you already own this character, and it is max level, you get your money back.'
                 )
             data.characters[character.name] += 10
             await ctx.reply(
                 f'You bought **{fmt + box_rarity}** box and got the character `{character.name.title()}`.\n'
-                'Since you already own this character, you have been awarded 10xp for it.'
+                'Since you already own this character, you have been awarded **10xp** for it.'
             )
         else:
             data.characters[character.name] = 0
