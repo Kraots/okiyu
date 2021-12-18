@@ -27,7 +27,8 @@ class Game(Document):
 class Characters(Document):
     name = StrField(attribute='_id', required=True)
     description = StrField(required=True)
-    dmg = IntField(required=True)
+    lowest_dmg = IntField(required=True)
+    highest_dmg = IntField(required=True)
     hp = IntField(required=True)
     rarity_level = IntField(required=True)
 
