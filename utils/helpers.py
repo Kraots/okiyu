@@ -25,6 +25,7 @@ __all__ = (
     'check_username',
     'run_in_executor',
     'clean_inter_content',
+    'fail_embed',
 )
 
 allowed_letters = tuple(list(string.ascii_lowercase) + list(string.digits) + list(string.punctuation) + ['♡', ' ', '\\'])
@@ -255,3 +256,7 @@ def clean_inter_content(
         return disnake.utils.escape_mentions(result)
 
     return convert
+
+
+def fail_embed(description: str) -> disnake.Embed:
+    return disnake.Embed(title='Uh-oh', color=utils.red, description=description)
