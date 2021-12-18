@@ -220,10 +220,10 @@ class _Game(commands.Cog, name='Game'):
                 else:
                     break
             if _lvl == 7:
-                curr_xp = 'MAX'
+                _xp = 'MAX'
                 lvl = '7 (MAX)'
             else:
-                curr_xp = xp - _curr
+                _xp = str(xp - _curr) + '/' + str(needed_xp)
                 lvl = _lvl
 
             character: Characters = await Characters.find_one({'_id': character_name})
@@ -233,7 +233,7 @@ class _Game(commands.Cog, name='Game'):
                 color=utils.blurple
             )
             em.add_field('Level', lvl, inline=False)
-            em.add_field('XP', f'{curr_xp}/{needed_xp}', inline=False)
+            em.add_field('XP', _xp, inline=False)
             em.add_field('Attack (DMG)', character.dmg * _lvl)
             em.add_field('Health (HP)', character.hp * _lvl)
             em.add_field('Rarity', f'{character.rarity_level * "✮"}({character.rarity_level})')
