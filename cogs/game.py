@@ -91,11 +91,11 @@ class _Game(commands.Cog, name='Game'):
 
     @game_coins.command(name='set')
     @utils.is_owner()
-    async def coins_set(self, ctx: Context, member: disnake.Member = None, amount: int = 1000):
+    async def coins_set(self, ctx: Context, amount: int = 1000, member: disnake.Member = None):
         """Set the coins for the member.
 
-        `member` **->** The member that you wish to set the coins for. Defaults to yourself.
         `amount` **->** The amount of coins you wish to set.
+        `member` **->** The member that you wish to set the coins for. Defaults to yourself.
         """
 
         member = member or ctx.author.id
@@ -107,11 +107,11 @@ class _Game(commands.Cog, name='Game'):
 
     @game_coins.command(name='add')
     @utils.is_owner()
-    async def coins_add(self, ctx: Context, member: disnake.Member = None, amount: int = 1000):
+    async def coins_add(self, ctx: Context, amount: int = 1000, member: disnake.Member = None):
         """Add the coins to the member's existing coins.
 
-        `member` **->** The member that you wish to add the coins for. Defaults to yourself.
         `amount` **->** The amount of coins you wish to add.
+        `member` **->** The member that you wish to add the coins for. Defaults to yourself.
         """
 
         member = member or ctx.author.id
