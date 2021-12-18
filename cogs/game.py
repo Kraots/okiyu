@@ -519,7 +519,7 @@ class _Game(commands.Cog, name='Game'):
         if view.response is False:
             return await ctx.reply(f'{member.mention} does not want to fight you.')
         await ctx.reply(
-            f'{member.mention} has agreed to have a fight with you. '
+            f'`{member}` has agreed to have a fight with you. '
             'Please send the name of one of the characters you own that '
             'you wish to use in this fight.'
         )
@@ -529,8 +529,9 @@ class _Game(commands.Cog, name='Game'):
                 check=lambda m: m.channel.id == ctx.channel.id and m.author.id == ctx.author.id,
                 timeout=30.0
             )
-            p1 = data1.characters.get(_p1.content.lower())
-            if p1 is None:
+            p1 = _p1.content.lower()
+            __p1 = data1.characters.get(_p1.content.lower())
+            if __p1 is None:
                 return await _p1.reply('You do not own that character.')
 
             await ctx.send(
@@ -542,14 +543,20 @@ class _Game(commands.Cog, name='Game'):
                 check=lambda m: m.channel.id == ctx.channel.id and m.author.id == member.id,
                 timeout=30.0
             )
-            p2 = data2.characters.get(_p2.content.lower())
-            if p2 is None:
+            p2 = _p2.content.lower()
+            __p2 = data2.characters.get(_p2.content.lower())
+            if __p2 is None:
                 return await _p2.reply('You do not own that character.')
         except TimeoutError:
             return await ctx.reply('Somebody ran out of time while picking their character.')
 
         p1: Characters = await Characters.find_one({'_id': p1})
+        if p1 is None:
+            return await ctx.reply(f'{ctx.author.mention} that character does not exist.')
         p2: Characters = await Characters.find_one({'_id': p2})
+        if p2 is None:
+            return await ctx.reply(f'{member.mention} that character does not exist.')
+
         pl = [(ctx.author, p1), (member, p2)]
         for i in range(5):
             random.shuffle(pl)
