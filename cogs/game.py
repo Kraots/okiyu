@@ -53,10 +53,7 @@ class _Game(commands.Cog, name='Game'):
         if data is None:
             data = Game(
                 id=uid,
-                coins=5000,
-                characters={},
-                daily=datetime.now(),
-                streak=0
+                daily=datetime.now()
             )
             await data.commit()
 
