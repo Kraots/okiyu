@@ -21,8 +21,8 @@ __all__ = (
 class Fight(disnake.ui.View):
     def __init__(
         self,
-        pl1: tuple[disnake.Member, utils.Characters],
-        pl2: tuple[disnake.Member, utils.Characters],
+        pl1: tuple[disnake.Member, utils.Characters, int],
+        pl2: tuple[disnake.Member, utils.Characters, int],
         ctx: Context,
         *,
         timeout=30.0
@@ -30,8 +30,10 @@ class Fight(disnake.ui.View):
         super().__init__(timeout=timeout)
         self.p1 = pl1[0]
         self._p1 = pl1[1]
+        self.p1_lvl = pl1[2]
         self.p2 = pl2[0]
         self._p2 = pl2[1]
+        self.p2_lvl = pl2[2]
 
         self.ctx = ctx
         self.bot: Ukiyo = ctx.bot
@@ -66,12 +68,16 @@ class Fight(disnake.ui.View):
             item.disabled = True
         if self.turn == self.p1:
             winner = self.p2
+            winner_charact = self._p2
         else:
             winner = self.p1
+            winner_charact = self._p1
         await self.message.edit(
-            content=f'{self._data}\n\n**___TIMEOUT___**\n**{self.turn.display_name}** took too much to react. {winner.mention} won.',
+            content=f'{self._data}\n\n**___TIMEOUT___**\n**{self.turn.display_name}** took too much to react and lost **1,500** 🪙. '
+                    f'{winner.mention} won **2,500** 🪙 and their character got **25xp**.',
             view=self
         )
+        await self.award(winner.id, self.turn.id, winner_charact)
 
     def update_turn(self):
         if self.turn == self.p1:
@@ -79,12 +85,27 @@ class Fight(disnake.ui.View):
         else:
             self.turn = self.p1
 
+    async def award(self, winner_id: int, loser_id: int, winner_character: utils.Characters):
+        winner_db: utils.Game = await utils.Game.find_one({'_id': winner_id})
+        loser_db: utils.Game = await utils.Game.find_one({'_id': loser_id})
+        winner_db.characters[winner_character.name] += 25
+
+        winner_db.coins += 2500
+        winner_db.wins += 1
+        winner_db.total_matches += 1
+        loser_db.coins -= 1500
+        winner_db.loses += 1
+        winner_db.total_matches += 1
+
+        await winner_db.commit()
+        await loser_db.commit()
+
     @property
     def _data(self) -> str:
         data = inspect.cleandoc(
             f'''
-            `{self.p1.display_name}` **==> {self.hp[self.p1]} hp**
-            `{self.p2.display_name}` **==> {self.hp[self.p2]} hp**
+            `{self.p1.display_name} (lvl {self.p1_lvl} {self._p1})` **==> {self.hp[self.p1]} hp**
+            `{self.p2.display_name} (lvl {self.p2_lvl} {self._p2})` **==> {self.hp[self.p2]} hp**
             '''
         )
         return data
@@ -93,10 +114,10 @@ class Fight(disnake.ui.View):
         winner = None
         if self.hp[self.p1] <= 0:
             winner = self.p2
-            _winner_charact = self._p2
+            winner_charact = self._p2
         elif self.hp[self.p2] <= 0:
             winner = self.p1
-            _winner_charact = self._p1
+            winner_charact = self._p1
 
         if winner is not None:
             self.ended = True
@@ -104,19 +125,12 @@ class Fight(disnake.ui.View):
                 item.style = disnake.ButtonStyle.grey
                 item.disabled = True
 
-            winner_db: utils.Game = await utils.Game.find_one({'_id': winner.id})
-            loser_db: utils.Game = await utils.Game.find_one({'_id': self.turn.id})
-            winner_db.characters[_winner_charact.name] += 25
-            winner_db.coins += 2500
-            loser_db.coins -= 1500
-            await winner_db.commit()
-            await loser_db.commit()
-
             await self.message.edit(
-                content=f'{self._data}\n\n**{winner.display_name}** won and got **2500** 🪙 and their character got **25xp**.'
-                        f'\n{self.turn.mention} you lost **1500** 🪙!',
+                content=f'{self._data}\n\n**{winner.display_name}** won and got **2,500** 🪙 and their character got **25xp**.'
+                        f'\n{self.turn.mention} you lost **1,500** 🪙!',
                 view=self
             )
+            await self.award(winner.id, self.turn.mention, winner_charact)
             self.stop()
 
     @disnake.ui.button(label='Fight', style=disnake.ButtonStyle.red)
@@ -146,5 +160,11 @@ class Fight(disnake.ui.View):
         for item in self.children:
             item.style = disnake.ButtonStyle.grey
             item.disabled = True
-        await self.message.edit(content=f'{self._data}\n\n**___FORFEIT___**\n**{p.display_name}** forfeited, {self.turn.mention} you won!', view=self)
+        await self.message.edit(
+            content=f'{self._data}\n\n**___FORFEIT___**\n**{p.display_name}** forfeited and lost **1,500** 🪙\n'
+                    f'{self.turn.mention} you won **2,500** 🪙 and your character gets **25xp**!',
+            view=self
+        )
+        winner_charact = self._p1 if p == self.p1 else self._p2
+        await self.award(p.id, self.turn.id, winner_charact)
         self.stop()
