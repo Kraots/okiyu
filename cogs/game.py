@@ -332,6 +332,131 @@ class _Game(commands.Cog, name='Game'):
             )
         await data.commit()
 
+    @base_game.command(name='fight')
+    @utils.lock()
+    async def game_fight(self, ctx: Context, *, member: disnake.Member):
+        """Challenge a member to a fight using one of your characters.
+
+        `member` **->** The member you want to challenge.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if self.check_channel(ctx) is False:
+            return
+
+        data1 = await self.get_user(ctx.author.id)
+        if not data1.characters:
+            return await ctx.reply('You don\'t have any characters.')
+        elif data1.coins < 1500:
+            return await ctx.reply(f'You must have at least **1,500** {self.coin_emoji}')
+        data2 = await self.get_user(member.id)
+        if not data2.characters:
+            return await ctx.reply(f'`{member}` doesn\'t have any characters.')
+        elif data2.coins < 1500:
+            return await ctx.reply(f'{member.mention} must have at least **1,500** {self.coin_emoji}')
+
+        view = utils.ConfirmView(ctx, react_user=member)
+        view.message = await ctx.send(
+            f'{ctx.author.mention} is challenging you to a fight, do you want to participate? {member.mention}',
+            view=view
+        )
+        await view.wait()
+        if view.response is False:
+            return await ctx.reply(f'{member.mention} does not want to fight you.')
+        await ctx.reply(
+            f'`{member}` has agreed to have a fight with you. '
+            'Please send the name of one of the characters you own that '
+            'you wish to use in this fight.'
+        )
+        try:
+            _p1 = await self.bot.wait_for(
+                'message',
+                check=lambda m: m.channel.id == ctx.channel.id and m.author.id == ctx.author.id,
+                timeout=30.0
+            )
+            p1 = _p1.content.lower()
+            __p1 = data1.characters.get(_p1.content.lower())
+            if __p1 is None:
+                return await _p1.reply('You do not own that character.')
+
+            await ctx.send(
+                f'{member.mention} Please send the name of one of the characters '
+                'that you own that you wish to use in this fight.'
+            )
+            _p2 = await self.bot.wait_for(
+                'message',
+                check=lambda m: m.channel.id == ctx.channel.id and m.author.id == member.id,
+                timeout=30.0
+            )
+            p2 = _p2.content.lower()
+            __p2 = data2.characters.get(_p2.content.lower())
+            if __p2 is None:
+                return await _p2.reply('You do not own that character.')
+        except TimeoutError:
+            return await ctx.reply('Somebody ran out of time while picking their character.')
+
+        p1: Characters = await Characters.find_one({'_id': p1})
+        if p1 is None:
+            return await ctx.reply(f'{ctx.author.mention} that character does not exist.')
+        p2: Characters = await Characters.find_one({'_id': p2})
+        if p2 is None:
+            return await ctx.reply(f'{member.mention} that character does not exist.')
+
+        lvl1 = 0
+        lvl2 = 0
+        for k, v in LEVELS.items():
+            if data1.characters[p1.name] >= k:
+                lvl1 = v[0]
+            else:
+                break
+        for k, v in LEVELS.items():
+            if data2.characters[p2.name] >= k:
+                lvl2 = v[0]
+            else:
+                break
+
+        p1.hp = p1.hp * lvl1
+        p1.lowest_dmg = p1.lowest_dmg * lvl1
+        p1.highest_dmg = p1.highest_dmg * lvl1
+
+        p2.hp = p2.hp * lvl2
+        p2.lowest_dmg = p2.lowest_dmg * lvl2
+        p2.highest_dmg = p2.highest_dmg * lvl2
+
+        pl = [(ctx.author, p1, lvl1), (member, p2, lvl2)]
+        for i in range(5):
+            random.shuffle(pl)
+
+        game = utils.Fight(
+            (pl[0][0], pl[0][1]),
+            (pl[1][0], pl[1][1]),
+            ctx
+        )
+        game.message = await ctx.send(f'{pl[0][0].mention} you start!', view=game)
+
+    @base_game.command(name='profile')
+    async def game_profile(self, ctx: Context, *, member: disnake.Member = None):
+        """Check someone's game profile.
+
+        `member` **->** The member you wish to see the profile of. If you want to see your own, then you can ignore this since it defaults to yourself.
+        """
+
+        member = member or ctx.author
+        data = await self.get_user(member.id)
+
+        em = disnake.Embed()
+        em.set_author(name=f'{member}\'s game profile', icon_url=member.display_avatar)
+        em.add_field('Coins', f'{data.coins:,} {self.coin_emoji}', inline=False)
+        em.add_field('Total Characters', len(data.characters), inline=False)
+        em.add_field('Current Streak', f'{data.streak:,}', inline=False)
+        em.add_field('Total Matches', f'{data.total_matches:,}')
+        em.add_field('Total Wins', f'{data.wins:,}')
+        em.add_field('Total Loses', f'{data.loses:,}')
+        em.set_footer(text=f'Requested By: {ctx.author}')
+
+        await ctx.send(embed=em, reference=ctx.replied_reference)
+
     @base_game.group(name='character', aliases=('char',), invoke_without_command=True, case_insensitive=True)
     async def game_character(self, ctx: Context, *, character_name: str):
         """Shows info about a character based on its specific name.
@@ -501,131 +626,6 @@ class _Game(commands.Cog, name='Game'):
         await ctx.reply(
             f'Successfully toggled the character to **{"be" if data.obtainable is True else "not be"}** obtainable.'
         )
-
-    @base_game.command(name='fight')
-    @utils.lock()
-    async def game_fight(self, ctx: Context, *, member: disnake.Member):
-        """Challenge a member to a fight using one of your characters.
-
-        `member` **->** The member you want to challenge.
-
-        **NOTE:** This command can only be used in <#913330644875104306>
-        """
-
-        if self.check_channel(ctx) is False:
-            return
-
-        data1 = await self.get_user(ctx.author.id)
-        if not data1.characters:
-            return await ctx.reply('You don\'t have any characters.')
-        elif data1.coins < 1500:
-            return await ctx.reply(f'You must have at least **1,500** {self.coin_emoji}')
-        data2 = await self.get_user(member.id)
-        if not data2.characters:
-            return await ctx.reply(f'`{member}` doesn\'t have any characters.')
-        elif data2.coins < 1500:
-            return await ctx.reply(f'{member.mention} must have at least **1,500** {self.coin_emoji}')
-
-        view = utils.ConfirmView(ctx, react_user=member)
-        view.message = await ctx.send(
-            f'{ctx.author.mention} is challenging you to a fight, do you want to participate? {member.mention}',
-            view=view
-        )
-        await view.wait()
-        if view.response is False:
-            return await ctx.reply(f'{member.mention} does not want to fight you.')
-        await ctx.reply(
-            f'`{member}` has agreed to have a fight with you. '
-            'Please send the name of one of the characters you own that '
-            'you wish to use in this fight.'
-        )
-        try:
-            _p1 = await self.bot.wait_for(
-                'message',
-                check=lambda m: m.channel.id == ctx.channel.id and m.author.id == ctx.author.id,
-                timeout=30.0
-            )
-            p1 = _p1.content.lower()
-            __p1 = data1.characters.get(_p1.content.lower())
-            if __p1 is None:
-                return await _p1.reply('You do not own that character.')
-
-            await ctx.send(
-                f'{member.mention} Please send the name of one of the characters '
-                'that you own that you wish to use in this fight.'
-            )
-            _p2 = await self.bot.wait_for(
-                'message',
-                check=lambda m: m.channel.id == ctx.channel.id and m.author.id == member.id,
-                timeout=30.0
-            )
-            p2 = _p2.content.lower()
-            __p2 = data2.characters.get(_p2.content.lower())
-            if __p2 is None:
-                return await _p2.reply('You do not own that character.')
-        except TimeoutError:
-            return await ctx.reply('Somebody ran out of time while picking their character.')
-
-        p1: Characters = await Characters.find_one({'_id': p1})
-        if p1 is None:
-            return await ctx.reply(f'{ctx.author.mention} that character does not exist.')
-        p2: Characters = await Characters.find_one({'_id': p2})
-        if p2 is None:
-            return await ctx.reply(f'{member.mention} that character does not exist.')
-
-        lvl1 = 0
-        lvl2 = 0
-        for k, v in LEVELS.items():
-            if data1.characters[p1.name] >= k:
-                lvl1 = v[0]
-            else:
-                break
-        for k, v in LEVELS.items():
-            if data2.characters[p2.name] >= k:
-                lvl2 = v[0]
-            else:
-                break
-
-        p1.hp = p1.hp * lvl1
-        p1.lowest_dmg = p1.lowest_dmg * lvl1
-        p1.highest_dmg = p1.highest_dmg * lvl1
-
-        p2.hp = p2.hp * lvl2
-        p2.lowest_dmg = p2.lowest_dmg * lvl2
-        p2.highest_dmg = p2.highest_dmg * lvl2
-
-        pl = [(ctx.author, p1, lvl1), (member, p2, lvl2)]
-        for i in range(5):
-            random.shuffle(pl)
-
-        game = utils.Fight(
-            (pl[0][0], pl[0][1]),
-            (pl[1][0], pl[1][1]),
-            ctx
-        )
-        game.message = await ctx.send(f'{pl[0][0].mention} you start!', view=game)
-
-    @base_game.command(name='profile')
-    async def game_profile(self, ctx: Context, *, member: disnake.Member = None):
-        """Check someone's game profile.
-
-        `member` **->** The member you wish to see the profile of. If you want to see your own, then you can ignore this since it defaults to yourself.
-        """
-
-        member = member or ctx.author
-        data = await self.get_user(member.id)
-
-        em = disnake.Embed()
-        em.set_author(name=f'{member}\'s game profile', icon_url=member.display_avatar)
-        em.add_field('Coins', f'{data.coins:,} {self.coin_emoji}', inline=False)
-        em.add_field('Total Characters', len(data.characters), inline=False)
-        em.add_field('Current Streak', f'{data.streak:,}', inline=False)
-        em.add_field('Total Matches', f'{data.total_matches:,}')
-        em.add_field('Total Wins', f'{data.wins:,}')
-        em.add_field('Total Loses', f'{data.loses:,}')
-        em.set_footer(text=f'Requested By: {ctx.author}')
-
-        await ctx.send(embed=em, reference=ctx.replied_reference)
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
