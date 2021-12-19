@@ -216,7 +216,7 @@ class Moderation(commands.Cog):
 
     @commands.command(name='ban')
     @is_admin()
-    async def _ban(self, ctx: Context, member: disnake.User, *, reason: str):
+    async def _ban(self, ctx: Context, member: disnake.Member | disnake.User, *, reason: str):
         """Bans an user.
 
         `member` **->** The member to ban. If the member is not in the server you must provide their discord id.
