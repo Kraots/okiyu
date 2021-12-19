@@ -114,6 +114,10 @@ class GiveAwayCreationView(View):
         em.add_field(name='Prize', value=self.prize, inline=False)
         em.add_field(name='Duration', value=duration, inline=False)
         em.add_field(name='Message Requirements', value=f'{self.message_req:,}', inline=False)
+        em.set_footer(
+            text='It is recommended to set the duration the last since it '
+                 'will start counting down from the moment you set it.'
+        )
 
         return em
 
