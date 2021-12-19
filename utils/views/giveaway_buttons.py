@@ -106,9 +106,13 @@ class GiveAwayCreationView(View):
                 child.disabled = False
 
     def prepare_embed(self):
+        if self.expire_date is not None:
+            duration = utils.human_timedelta(self.expire_date, suffix=False)
+        else:
+            duration = str(self.expire_date)
         em = disnake.Embed(title='Giveaway Creation', color=utils.blurple)
         em.add_field(name='Prize', value=textwrap.shorten(str(self.prize), 1024), inline=False)
-        em.add_field(name='Duration', value=utils.human_timedelta(self.expire_date, suffix=False), inline=False)
+        em.add_field(name='Duration', value=duration, inline=False)
         em.add_field(name='Message Requirements', value=self.message_req, inline=False)
 
         if len(str(self.description)) > 1024:
