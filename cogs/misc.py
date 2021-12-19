@@ -354,8 +354,8 @@ class Misc(commands.Cog):
         )
         await ctx.send(embed=em, reference=ctx.replied_reference)
 
-    @created.command()
-    async def server(self, ctx: Context):
+    @created.command(name='server')
+    async def created_server(self, ctx: Context):
         """
         See the date when the server got created at and when it was made public.
 
@@ -369,6 +369,7 @@ class Misc(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         created_date = guild.created_at
         publiced_date = guild.get_member(302050872383242240).joined_at
+        members = [m for m in guild.members if not m.bot]
         em = disnake.Embed(colour=utils.red, title='Server Creation')
         em.add_field(
             name='Created At',
@@ -382,6 +383,7 @@ class Misc(commands.Cog):
                   f'(`{utils.human_timedelta(publiced_date)}`)',
             inline=False
         )
+        em.set_footer(text=f'There are currently {len(members)} members in the server')
         await ctx.send(embed=em, reference=ctx.replied_reference)
 
     @commands.command()
