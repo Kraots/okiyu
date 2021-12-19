@@ -21,9 +21,10 @@ __all__ = (
 class JoinGiveawayButton(disnake.ui.Button):
     def __init__(self, label: str = '0'):
         super().__init__(
-            label=f'🎉 {label} participants',
+            label=f'{label} participants',
             custom_id='ukiyo:giveaways:join_btn',
-            style=disnake.ButtonStyle.blurple
+            style=disnake.ButtonStyle.blurple,
+            emoji='🎉'
         )
 
     async def callback(self, inter: disnake.MessageInteraction):
@@ -53,7 +54,7 @@ class JoinGiveawayButton(disnake.ui.Button):
         data.participants.append(inter.author.id)
         await data.commit()
 
-        self.label = f'🎉 {len(data.participants)} participants'
+        self.label = f'{len(data.participants)} participants'
         view = self.view
         self.view.children[0] = self
         await inter.message.edit(view=view)
@@ -112,7 +113,7 @@ class GiveAwayCreationView(View):
         em = disnake.Embed(title='Giveaway Creation', color=utils.blurple)
         em.add_field(name='Prize', value=self.prize, inline=False)
         em.add_field(name='Duration', value=duration, inline=False)
-        em.add_field(name='Message Requirements', value=self.message_req, inline=False)
+        em.add_field(name='Message Requirements', value=f'{self.message_req:,}', inline=False)
 
         return em
 
@@ -243,7 +244,7 @@ class GiveAwayCreationView(View):
         )
         em.add_field(
             'Message Requirement',
-            f'You need a total of **{self.message_req}** messages in order to participate to this giveaway.',
+            f'You need a total of **{self.message_req:,}** messages in order to participate to this giveaway.',
             inline=False
         )
 
