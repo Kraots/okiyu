@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import textwrap
 from asyncio import TimeoutError
 from typing import TYPE_CHECKING
 
@@ -111,13 +110,10 @@ class GiveAwayCreationView(View):
         else:
             duration = str(self.expire_date)
         em = disnake.Embed(title='Giveaway Creation', color=utils.blurple)
-        em.add_field(name='Prize', value=textwrap.shorten(str(self.prize), 1024), inline=False)
+        em.add_field(name='Prize', value=self.prize, inline=False)
         em.add_field(name='Duration', value=duration, inline=False)
         em.add_field(name='Message Requirements', value=self.message_req, inline=False)
 
-        if len(str(self.description)) > 1024:
-            em.description = '\n**Hint:** Giveaway content reached embed field limitation, '\
-                             'this will not affect the content itself.'
         return em
 
     @button(label='Prize', style=disnake.ButtonStyle.blurple)
@@ -142,10 +138,14 @@ class GiveAwayCreationView(View):
         if msg.attachments:
             clean_content += f'\n{msg.attachments[0].url}'
 
-        self.prize = clean_content
+        c = None
+        if len(clean_content) > 1024:
+            c = 'Prize cannot be longer than **1024** characters...'
+        else:
+            self.prize = clean_content
 
         self.unlock_all()
-        await self.message.edit(embed=self.prepare_embed(), view=self)
+        await self.message.edit(content=c, embed=self.prepare_embed(), view=self)
 
     @button(label='Duration', style=disnake.ButtonStyle.blurple)
     async def set_duration(self, button: disnake.Button, inter: disnake.MessageInteraction):
