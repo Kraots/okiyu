@@ -30,10 +30,12 @@ class Marriages(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} You cannot marry yourself.')
         elif member.bot:
             return await ctx.reply(f'> {ctx.disagree} You cannot marry bots.')
+
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
         if data is not None:
             mem = guild.get_member(data.married_to)
             return await ctx.reply(f'> {ctx.disagree} You are already married to {mem.mention}')
+
         data: Marriage = await Marriage.find_one({'_id': member.id})
         if data is not None:
             mem = guild.get_member(data.married_to)
@@ -132,7 +134,7 @@ class Marriages(commands.Cog):
             return await ctx.reply(i)
         guild = self.bot.get_guild(913310006814859334)
         mem = guild.get_member(data.married_to)
-        em = disnake.Embed(title=f'Married to {mem.display_name}', colour=utils.blurple)
+        em = disnake.Embed(title=f'Married to `{mem.display_name}`', colour=utils.blurple)
         if member == ctx.author:
             i = 'You\'re married to'
         else:
