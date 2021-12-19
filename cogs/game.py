@@ -107,10 +107,7 @@ class _Game(commands.Cog, name='Game'):
         `member` **->** The member that you wish to set the coins for. Defaults to yourself.
         """
 
-        amount = amount \
-            .replace(',', '') \
-            .replace(' ', '') \
-            .replace('.', '')
+        amount = utils.format_num(amount)
         try:
             amount = int(amount)
         except ValueError:
@@ -132,10 +129,7 @@ class _Game(commands.Cog, name='Game'):
         `member` **->** The member that you wish to add the coins for. Defaults to yourself.
         """
 
-        amount = amount \
-            .replace(',', '') \
-            .replace(' ', '') \
-            .replace('.', '')
+        amount = utils.format_num(amount)
         try:
             amount = int(amount)
         except ValueError:

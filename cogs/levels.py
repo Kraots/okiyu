@@ -211,7 +211,7 @@ class Levels(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} User not in the database.')
 
         try:
-            amount = amount.replace(',', '')
+            amount = utils.format_num(amount)
             amount = int(amount)
         except ValueError:
             return await ctx.reply(f'> {ctx.disagree} The amount must be an integer.')
@@ -237,13 +237,14 @@ class Levels(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} User not in the database.')
 
         try:
-            amount = amount.replace(',', '')
+            amount = utils.format_num(amount)
             amount = int(amount)
         except ValueError:
             return await ctx.reply(f'> {ctx.disagree} The amount must be an integer.')
 
         usr_db.messages_count = amount
-        await ctx.send(content=f'Added `{amount:,}` messages to {member.mention}')
+        await usr_db.commit()
+        await ctx.send(content=f'Set the amount of messages for {member.mention} to `{amount:,}` messages.')
 
     @_msgs.command(name='reset')
     @utils.is_admin()

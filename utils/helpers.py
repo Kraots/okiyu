@@ -26,6 +26,7 @@ __all__ = (
     'run_in_executor',
     'clean_inter_content',
     'fail_embed',
+    'format_num',
 )
 
 allowed_letters = tuple(list(string.ascii_lowercase) + list(string.digits) + list(string.punctuation) + ['♡', ' ', '\\'])
@@ -260,3 +261,10 @@ def clean_inter_content(
 
 def fail_embed(description: str) -> disnake.Embed:
     return disnake.Embed(title='Uh-oh!', color=utils.red, description=description)
+
+
+def format_num(num: str):
+    return num \
+        .replace(',', '') \
+        .replace(' ', '') \
+        .replace('.', '')
