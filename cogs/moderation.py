@@ -640,7 +640,7 @@ class Moderation(commands.Cog):
         msg = await channel.fetch_message(gw.id)
         em = msg.embeds[0]
         em.color = utils.red
-        em.title = 'Giveaway Ended'
+        em.title = '🎁 Giveaway Ended'
         em.add_field('Winner', winner, inline=False)
 
         v = disnake.ui.View()
