@@ -97,7 +97,7 @@ class GiveAwayCreationView(View):
     def unlock_all(self):
         for child in self.children:
             if child.label == 'Confirm':
-                if self.description is not None:
+                if self.prize is not None:
                     child.disabled = False
                 else:
                     child.disabled = True
