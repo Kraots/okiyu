@@ -16,6 +16,7 @@ from .db_marriage import Marriage
 from .db_tickets import Ticket
 from .db_afks import AFK
 from .db_game import Game, Characters
+from .db_giveaways import GiveAway
 
 __all__ = (
     'Intro',
@@ -28,4 +29,5 @@ __all__ = (
     'AFK',
     'Game',
     'Characters',
+    'GiveAway',
 )
