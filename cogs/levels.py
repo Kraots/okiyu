@@ -197,7 +197,7 @@ class Levels(commands.Cog):
 
     @_msgs.command(name='add')
     @utils.is_admin()
-    async def msg_add(self, ctx: Context, member: disnake.Member, amount: str):
+    async def msg_add(self, ctx: Context, member: disnake.Member, *, amount: str):
         """Add a certain amount of messages for the member.
 
         `member` **->** The member to add the amount of messages messages to.
@@ -222,7 +222,7 @@ class Levels(commands.Cog):
 
     @_msgs.command(name='set')
     @utils.is_admin()
-    async def msg_set(self, ctx: Context, member: disnake.Member, amount: str):
+    async def msg_set(self, ctx: Context, member: disnake.Member, *, amount: str):
         """Set the amount of messages for the member.
 
         `member` **->** The member to set the amount of messages messages to.
