@@ -633,7 +633,7 @@ class Moderation(commands.Cog):
                     winner = 'No One.'
                     break
             else:
-                winner = f'{winner.mention} (`{winner}`)'
+                winner = f'{winner.mention} (`{winner.id}`)'
                 break
 
         channel = guild.get_channel(gw.channel_id)
@@ -657,7 +657,7 @@ class Moderation(commands.Cog):
 
         fmt = '⚠️ Giveaway Ended ⚠️'
         if winner != 'No One.':
-            fmt += f'\nCongratulations {winner}, you won 🎁 **{gw.prize}** 🎁'
+            fmt += f'\nCongratulations {winner}, you won **{gw.prize}**'
         else:
             fmt += '\nIt appears that no one that participated was still in the server. No winner.'
         await msg.reply(fmt)
