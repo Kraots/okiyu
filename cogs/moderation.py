@@ -678,7 +678,7 @@ class Moderation(commands.Cog):
         view = utils.GiveAwayCreationView(self.bot, ctx.author)
         view.message = await ctx.send(embed=view.prepare_embed(), view=view)
 
-    @base_giveaway.command(name='cancel')
+    @base_giveaway.command(name='cancel', aliases=('end',))
     @is_admin()
     async def giveaway_cancel(self, ctx: Context, *, giveaway_id: int):
         """Cancel a giveaway.
