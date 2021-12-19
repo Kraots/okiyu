@@ -394,6 +394,7 @@ class _Game(commands.Cog, name='Game'):
         elif data1.coins < 1500:
             em = utils.fail_embed(f'You must have at least **1,500** {self.coin_emoji}')
             return await ctx.reply(embed=em)
+
         data2 = await self.get_user(member.id)
         if not data2.characters:
             em = utils.fail_embed(f'`{member}` doesn\'t have any characters.')
