@@ -621,7 +621,7 @@ class Moderation(commands.Cog):
 
     async def end_giveaway(self, gw: GiveAway):
         guild = self.bot.get_guild(913310006814859334)
-        participants = gw.participants
+        participants = gw.participants + [0]
         random.shuffle(participants)
         while True:
             winner_id = random.choice(participants)
