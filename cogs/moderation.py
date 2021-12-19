@@ -693,6 +693,29 @@ class Moderation(commands.Cog):
         await self.end_giveaway(gw)
         await ctx.reply('Giveaway successfully ended.')
 
+    @base_giveaway.command(name='participants', aliases=('members',))
+    @is_mod()
+    async def giveaway_participants(self, ctx: Context, *, giveaway_id: int):
+        """Look at the participants of a specific giveaway.
+
+        `giveaway_id` **->** The id of the message of the giveaway.
+        """
+
+        data: GiveAway = await GiveAway.find_one({'_id': giveaway_id})
+        if data is None:
+            return await ctx.reply('Giveaway with that message id not found.')
+
+        guild = self.bot.get_guild(913310006814859334)
+        entries = []
+        for mem_id in data.participants:
+            mem = guild.get_member(mem_id)
+            if mem is None:
+                mem = f'[LEFT] (`{mem_id}`)'
+            entries.append(mem)
+
+        paginator = utils.SimplePages(ctx, entries=entries, compact=True)
+        await paginator.start(ref=True)
+
     @commands.Cog.listener()
     async def on_ready(self):
         async for gw in GiveAway.find():
@@ -701,7 +724,7 @@ class Moderation(commands.Cog):
             view.add_item(utils.JoinGiveawayButton(str(len(gw.participants))))
             self.bot.add_view(view, message_id=gw.id)
 
-    @tasks.loop(seconds=3.0)
+    @tasks.loop(seconds=30.0)
     async def check_giveaway(self):
         giveaways: list[GiveAway] = await GiveAway.find().sort('expire_date', 1).to_list(10)
         now = datetime.now()
