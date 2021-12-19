@@ -34,6 +34,7 @@ class Moderation(commands.Cog):
         )
 
         self.check_mutes.start()
+        self.check_giveaway.start()
 
     def jump_view(self, url: str) -> disnake.ui.View:
         view = disnake.ui.View()
@@ -707,6 +708,10 @@ class Moderation(commands.Cog):
         for gw in giveaways:
             if gw.expire_date <= now:
                 await self.end_giveaway(gw)
+
+    @check_giveaway.before_loop
+    async def wait_until_ready_(self):
+        await self.bot.wait_until_ready()
 
 
 def setup(bot: Ukiyo):
