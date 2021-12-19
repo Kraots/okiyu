@@ -662,7 +662,7 @@ class Moderation(commands.Cog):
         await msg.reply(fmt)
         await gw.delete()
 
-    @commands.command(name='giveaway', aliases=('gw',))
+    @commands.group(name='giveaway', aliases=('gw',), invoke_without_command=True, case_insensitive=True)
     @is_admin()
     async def base_giveaway(self, ctx: Context):
         """The base command for all the giveaway commands."""
