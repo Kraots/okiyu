@@ -197,6 +197,11 @@ class GiveAwayCreationView(View):
         else:
             clean_content = msg.content
 
+        clean_content = clean_content \
+            .replace(',', '') \
+            .replace(' ', '') \
+            .replace('.', '')
+
         c = None
         if clean_content is None:
             c = 'Message requirement cannot be empty.'
