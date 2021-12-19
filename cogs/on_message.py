@@ -145,10 +145,14 @@ class OnMessage(commands.Cog):
             return
 
         else:
+            if not message.attachments and not message.content:
+                return
+
+            content = f'```{message.content}```' if message.content else 'No content.'
             em = disnake.Embed(
                 color=utils.red,
                 description=f'Message deleted in <#{message.channel.id}> \n\n'
-                            f'**Content:** \n```{message.content}```',
+                            f'**Content:** \n{content}',
                 timestamp=datetime.datetime.utcnow()
             )
             em.set_author(name=f'{message.author}', icon_url=f'{message.author.display_avatar}')
