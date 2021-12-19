@@ -183,6 +183,9 @@ class OnMessage(commands.Cog):
         if before.author.id == self.bot._owner_id:
             return
         else:
+            if before.content == after.content:
+                return
+
             em = disnake.Embed(
                 color=utils.yellow,
                 description=f'Message edited in <#{before.channel.id}>\n\n**Before:**\n```{before.content}```\n\n**After:**\n```{after.content}```',  # noqa
