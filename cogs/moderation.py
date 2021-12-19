@@ -1,3 +1,4 @@
+import random
 import asyncio
 from datetime import datetime, timezone
 
@@ -14,7 +15,8 @@ from utils import (
     Mutes,
     format_dt,
     human_timedelta,
-    AnnouncementView
+    AnnouncementView,
+    GiveAway
 )
 
 from main import Ukiyo
@@ -616,6 +618,95 @@ class Moderation(commands.Cog):
             ],
             view=self.jump_view(ctx.message.jump_url)
         )
+
+    async def end_giveaway(self, gw: GiveAway):
+        guild = self.bot.get_guild(913310006814859334)
+        participants = gw.participants
+        random.shuffle(participants)
+        while True:
+            winner_id = random.choice(participants)
+            winner = guild.get_member(winner_id)
+            if winner is None:
+                participants.pop(participants.index(winner_id))
+                if len(participants) == 0:
+                    winner = 'No One.'
+                    break
+            else:
+                winner = f'{winner.mention} (`{winner}`)'
+                break
+
+        channel = guild.get_channel(gw.channel_id)
+        msg = await channel.fetch_message(gw.id)
+        em = msg.embeds[0]
+        em.color = utils.red
+        em.title = 'Giveaway Ended'
+        em.add_field('Winner', winner, inline=False)
+
+        v = disnake.ui.View()
+        for comp in msg.components:
+            for btn in comp.children:
+                btn = btn.to_dict()
+                del btn['type']
+                btn['disabled'] = True
+                btn['emoji'] = btn['emoji']['name']
+                button = disnake.ui.Button(**btn)
+                v.add_item(button)
+        await msg.edit(embed=em, view=v)
+        await msg.unpin(reason='Giveaway Ended.')
+
+        fmt = '⚠️ Giveaway Ended ⚠️'
+        if winner != 'No One.':
+            fmt += f'\nCongratulations {winner}, you won 🎁 **{gw.prize}** 🎁'
+        else:
+            fmt += '\nIt appears that no one that participated was still in the server. No winner.'
+        await msg.reply(fmt)
+        await gw.delete()
+
+    @commands.command(name='giveaway', aliases=('gw',))
+    @is_admin()
+    async def base_giveaway(self, ctx: Context):
+        """The base command for all the giveaway commands."""
+
+        await ctx.send_help('gw')
+
+    @base_giveaway.command(name='create')
+    @is_admin()
+    async def giveaway_create(self, ctx: Context):
+        """Create a giveaway. The giveaway message is sent and pinned in <#913331371282423808>"""
+
+        view = utils.GiveAwayCreationView(self.bot, ctx.author)
+        view.message = await ctx.send(embed=view.prepare_embed(), view=view)
+
+    @base_giveaway.command(name='cancel')
+    @is_admin()
+    async def giveaway_cancel(self, ctx: Context, *, giveaway_id: int):
+        """Cancel a giveaway.
+
+        `giveaway_id` **->** The id of the message of the giveaway.
+        """
+
+        gw = await GiveAway.find_one({'_id': giveaway_id})
+        if gw is None:
+            return await ctx.reply('Giveaway with that message id not found.')
+
+        await self.end_giveaway(gw)
+        await ctx.reply('Giveaway successfully ended.')
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        async for gw in GiveAway.find():
+            gw: GiveAway
+            view = disnake.ui.View(timeout=None)
+            view.add_item(utils.JoinGiveawayButton(str(len(gw.participants))))
+            self.bot.add_view(view, message_id=gw.id)
+
+    @tasks.loop(seconds=3.0)
+    async def check_giveaway(self):
+        giveaways: list[GiveAway] = await GiveAway.find().sort('expire_date', 1).to_list(10)
+        now = datetime.now()
+        for gw in giveaways:
+            if gw.expire_date <= now:
+                await self.end_giveaway(gw)
 
 
 def setup(bot: Ukiyo):

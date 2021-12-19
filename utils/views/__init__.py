@@ -11,3 +11,4 @@ from .confirm_buttons import *  # noqa
 from .wikipedia import *  # noqa
 from .urban import UrbanDictionaryPageSource  # noqa
 from .game_fight import *  # noqa
+from .giveaway_buttons import *  # noqa
