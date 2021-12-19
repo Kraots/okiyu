@@ -236,7 +236,7 @@ class GiveAwayCreationView(View):
         em = disnake.Embed(
             colour=utils.green,
             title='🎁 New Giveaway',
-            description='Press the button below that contains the reaction 🎉 to participate.'
+            description='Press the button below that contains the 🎉 to participate.'
         )
         em.add_field(
             'Prize',

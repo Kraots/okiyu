@@ -655,7 +655,7 @@ class Moderation(commands.Cog):
         await msg.edit(embed=em, view=v)
         await msg.unpin(reason='Giveaway Ended.')
 
-        fmt = '⚠️ Giveaway Ended ⚠️'
+        fmt = '**⚠️ Giveaway Ended ⚠️**'
         if winner != 'No One.':
             fmt += f'\nCongratulations {winner}, you won **{gw.prize}**'
         else:
