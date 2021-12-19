@@ -714,6 +714,7 @@ class Moderation(commands.Cog):
             entries.append(mem)
 
         paginator = utils.SimplePages(ctx, entries=entries, compact=True)
+        paginator.embed.title = 'Here are the participants of this giveaway'
         await paginator.start(ref=True)
 
     @commands.Cog.listener()
