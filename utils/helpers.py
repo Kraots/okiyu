@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-import string
+import string as st
 import asyncio
 import functools
 from pathlib import Path
@@ -21,7 +21,7 @@ __all__ = (
     'clean_code',
     'reraise',
     'inter_reraise',
-    'check_word',
+    'check_string',
     'check_username',
     'run_in_executor',
     'clean_inter_content',
@@ -29,7 +29,8 @@ __all__ = (
     'format_num',
 )
 
-allowed_letters = tuple(list(string.ascii_lowercase) + list(string.digits) + list(string.punctuation) + ['♡', ' ', '\\'])
+allowed_letters = tuple(list(st.ascii_lowercase) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
+punctuations_and_digits = tuple(list(st.punctuation) + list(st.digits))
 BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
 
 
@@ -136,13 +137,18 @@ async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
         await inter.response.send_message(fmt, ephemeral=True)
 
 
-def check_word(word: str = None) -> bool:
+def check_string(string: str = None) -> bool:
     """
-    If the return type is of bool ``True`` then it means that the word is a bad word, otherwise it's safe.
+    If the return type is of bool ``True`` then it means that the string contains a bad word, otherwise it's safe.
     """
 
-    if any([w for w in BAD_WORDS if w in str(word).lower()]):
+    string = str(string).lower().replace(' ', '')
+    for pad in punctuations_and_digits:
+        string.replace(pad, '')
+
+    if any([w for w in BAD_WORDS if w in string]):
         return True
+
     return False
 
 
@@ -166,7 +172,7 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str
             break
     if count >= 4:
         for _word in name.split():
-            if check_word(_word) is True:
+            if check_string(_word) is True:
                 count = 0
     if member is not None:
         if count < 4:
