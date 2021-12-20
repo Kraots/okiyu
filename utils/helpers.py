@@ -32,6 +32,14 @@ __all__ = (
 allowed_letters = tuple(list(st.ascii_lowercase) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
 punctuations_and_digits = tuple(list(st.punctuation) + list(st.digits))
 BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
+converted = {
+    '!': 'i',
+    '@': 'a',
+    '$': 's',
+    '0': 'o',
+    '1': 'i',
+    '3': 'e'
+}
 
 
 def time_phaser(seconds):
@@ -143,6 +151,9 @@ def check_string(string: str = None) -> bool:
     """
 
     string = str(string).lower().replace(' ', '')
+    for k, v in converted:
+        string.replace(k, v)
+
     for pad in punctuations_and_digits:
         string.replace(pad, '')
 
