@@ -151,7 +151,7 @@ def check_string(string: str = None) -> bool:
     """
 
     string = str(string).lower().replace(' ', '')
-    for k, v in converted:
+    for k, v in converted.items():
         string.replace(k, v)
 
     for pad in punctuations_and_digits:
