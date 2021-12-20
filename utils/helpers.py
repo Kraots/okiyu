@@ -145,7 +145,7 @@ async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
         await inter.response.send_message(fmt, ephemeral=True)
 
 
-def check_string(string: str = None) -> bool:
+def check_string(string: str) -> bool:
     """
     If the return type is of bool ``True`` then it means that the string contains a bad word, otherwise it's safe.
     """
@@ -157,7 +157,7 @@ def check_string(string: str = None) -> bool:
     for pad in punctuations_and_digits:
         string = string.replace(pad, '')
 
-    if any([w for w in BAD_WORDS if w in string]):
+    if any(w for w in BAD_WORDS if w in string):
         return True
 
     return False
@@ -182,8 +182,8 @@ async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str
         else:
             break
     if count >= 4:
-        for _word in name.split():
-            if check_string(_word) is True:
+        if name is not None:
+            if check_string(name) is True:
                 count = 0
     if member is not None:
         if count < 4:
