@@ -46,8 +46,8 @@ class OnMessage(commands.Cog):
         if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
             return
         guild = self.bot.get_guild(913310006814859334)
-        for word in message.content.split():
-            if utils.check_word(word) is True:
+        if message.content is not None:
+            if utils.check_string(message.content) is True:
                 ctx = await self.bot.get_context(message, cls=utils.Context)
                 await message.delete()
 
@@ -77,7 +77,7 @@ class OnMessage(commands.Cog):
                     new_roles = [role for role in message.author.roles
                                  if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
                                  ] + [muted_role]
-                    await message.author.edit(roles=new_roles, reason=f'[BAD WORD FILTER]: "{word}"')
+                    await message.author.edit(roles=new_roles, reason='[BAD WORD FILTER]')
 
                     try:
                         em = disnake.Embed(title='You have been muted!', color=utils.red)
