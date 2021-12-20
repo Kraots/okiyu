@@ -152,10 +152,10 @@ def check_string(string: str = None) -> bool:
 
     string = str(string).lower().replace(' ', '')
     for k, v in converted.items():
-        string.replace(k, v)
+        string = string.replace(k, v)
 
     for pad in punctuations_and_digits:
-        string.replace(pad, '')
+        string = string.replace(pad, '')
 
     if any([w for w in BAD_WORDS if w in string]):
         return True
