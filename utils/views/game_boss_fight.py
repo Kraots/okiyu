@@ -50,8 +50,8 @@ class BossFight(View):
         participant.total_damage += dmg
         self.participants[inter.author.id] = participant
 
-        self.embed.description = f'{inter.author.mention} just dealt **{dmg}** damage to the boss!\n\n' \
-                                 f'**BOSS HP:** {self.hp}'
+        self.embed.description = f'{inter.author.mention} just dealt **{dmg:,}** damage to the boss!\n\n' \
+                                 f'**BOSS HP:** {self.hp:,}'
         await inter.response.edit_message(embed=self.embed)
 
     @button(label='Join Fight', style=ButtonStyle.green)
