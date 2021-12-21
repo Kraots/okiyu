@@ -710,7 +710,7 @@ class _Game(commands.Cog, name='Game'):
     async def boss_fight(self):
         if self.last_message is not None:
             now = datetime.now(timezone.utc)
-            _time = self.last_message.created_at + relativedelta(minutes=30)
+            _time = self.last_message.created_at + relativedelta(minutes=5)
             if now <= _time:
                 em = disnake.Embed(
                     title='Evil Carrots',
