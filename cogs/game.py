@@ -49,7 +49,7 @@ class _Game(commands.Cog, name='Game'):
                 data.streak = 0
                 await data.commit()
 
-    async def get_user(self, uid: Context) -> Game:
+    async def get_user(self, uid: int) -> Game:
         data: Game = await Game.find_one({'_id': uid})
         if data is None:
             data = Game(
@@ -668,7 +668,7 @@ class _Game(commands.Cog, name='Game'):
     async def character_toggle(self, ctx: Context, *, character_name: str):
         """Toggle the character's obtainable status. What that means is that if this is toggled off, they can't be obtained anymore, but can still be used.
 
-        `character_name` **->** The full name of the character you want to remove.
+        `character_name` **->** The full name of the character you want to toggle the availability of.
         """
 
         data: Characters = await Characters.find_one({'_id': character_name.lower()})
