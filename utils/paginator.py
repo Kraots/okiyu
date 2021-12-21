@@ -384,6 +384,9 @@ class EmbedPaginator(disnake.ui.View):
     async def start(self):
         """Start paginating over the embeds."""
 
+        if len(self.embeds) == 1:
+            return await self.ctx.send(embed=self.embeds[0])
+
         embed = self.embeds[0]
         embed.set_footer(text=f'Page 1/{len(self.embeds)}')
         self.message = await self.ctx.send(embed=embed, view=self)
