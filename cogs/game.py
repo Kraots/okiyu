@@ -33,6 +33,8 @@ class _Game(commands.Cog, name='Game'):
         self.bot = bot
         self.coin_emoji = '🪙'
         self.in_game = []
+
+        self.boss_fight.start()
         self.last_message: disnake.Message = None
 
         self.streaks_check.start()
