@@ -33,6 +33,7 @@ class _Game(commands.Cog, name='Game'):
         self.bot = bot
         self.coin_emoji = '🪙'
         self.in_game = []
+        self.last_message: disnake.Message = None
 
         self.streaks_check.start()
 
@@ -697,6 +698,71 @@ class _Game(commands.Cog, name='Game'):
         data: Game = await Game.find_one({'_id': member.id})
         if data:
             await data.delete()
+
+    @commands.Cog.listener()
+    async def on_message(self, message: disnake.Message):
+        if message.channel.id == 913330644875104306:
+            self.last_message = message
+
+    @tasks.loop(minutes=30.0)
+    async def boss_fight(self):
+        if self.last_message is not None:
+            now = datetime.now()
+            _time = self.last_message.created_at + relativedelta(minutes=30)
+            if now <= _time:
+                em = disnake.Embed(
+                    title='Evil Carrots',
+                    description='An evil carrots has appeared! Press `Join Fight` '
+                                'to be able to fight this boss and earn coins.',
+                    color=utils.green
+                )
+                em.set_footer(text='You have exactly 2 minutes to fight this boss since its appearance time!')
+                view = utils.BossFight(self.bot, LEVELS, em)
+                msg = await self.last_message.channel.send(embed=em, view=view)
+                await view.wait()
+                if len(view.participants) == 0:
+                    await msg.edit(content='Oof... It seems no one wanted to fight the boss.', embed=None, view=None)
+                    return await msg.delete(delay=30.0)
+
+                guild = self.bot.get_guild(913310006814859334)
+                participant_ids = sorted(view.participants, key=lambda k: view.participants[k].total_damage, reverse=True)
+                awarded_first = False
+
+                for uid in participant_ids:
+                    participant = view.participants[uid]
+                    mem = guild.get_member(uid)
+                    if mem is None:
+                        return
+
+                    if awarded_first is False:
+                        new_xp = int(participant.total_damage * 0.3)
+                        em.title = 'Evil Carrots Defeated!'
+                        em.description = f'Congratulations {mem.mention}, ' \
+                                          'you have dealt the most damage in this' \
+                                         f'boss fight (**{participant.total_damage}** total damage dealt) ' \
+                                          'and have been awarded 3x more xp compared to the others.'  # noqa
+                        em.color = utils.red
+                        await msg.edit(embed=em, view=None)
+                        awarded_first = True
+                    else:
+                        new_xp = int(participant.total_damage * 0.1)
+
+                    if new_xp != 0:
+                        data: Game = await Game.find_one({'_id': uid})
+                        if data is None:
+                            return
+
+                        data.characters[participant.character_name] += new_xp
+                        await data.commit()
+                        await mem.send(
+                            'Hello, thank you for fighting the boss.\n'
+                            f'You have been rewarded with **{new_xp:,}xp** towards the character that you have used '
+                            'to fight against the boss.'
+                        )
+
+    @boss_fight.before_loop
+    async def before_boss_fight(self):
+        await self.bot.wait_until_ready()
 
 
 def setup(bot: Ukiyo):
