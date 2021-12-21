@@ -1,6 +1,6 @@
 import random
 from datetime import datetime, timezone
-from asyncio import TimeoutError
+from asyncio import TimeoutError, sleep
 from dateutil.relativedelta import relativedelta
 
 import disnake
@@ -719,7 +719,10 @@ class _Game(commands.Cog, name='Game'):
                 em.set_footer(text='You have exactly 2 minutes to fight this boss since its appearance time!')
                 view = utils.BossFight(self.bot, LEVELS, em)
                 msg = await self.last_message.channel.send(embed=em, view=view)
-                await view.wait()
+                await msg.pin()
+                await msg.channel.purge(limit=25, check=lambda m: m.is_system())
+                await sleep(120.0)
+                view.stop()
                 if len(view.participants) == 0:
                     await msg.edit(content='Oof... It seems no one wanted to fight the boss.', embed=None, view=None)
                     return await msg.delete(delay=30.0)
@@ -735,17 +738,17 @@ class _Game(commands.Cog, name='Game'):
                         return
 
                     if awarded_first is False:
-                        new_xp = int(participant.total_damage * 0.3)
+                        new_xp = int(participant.total_damage * 0.03)
                         em.title = 'Evil Carrots Defeated!'
                         em.description = f'Congratulations {mem.mention}, ' \
                                           'you have dealt the most damage in this' \
-                                         f'boss fight (**{participant.total_damage}** total damage dealt) ' \
+                                         f'boss fight (**{participant.total_damage:,}** total damage dealt) ' \
                                           'and have been awarded 3x more xp compared to the others.'  # noqa
                         em.color = utils.red
                         await msg.edit(embed=em, view=None)
                         awarded_first = True
                     else:
-                        new_xp = int(participant.total_damage * 0.1)
+                        new_xp = int(participant.total_damage * 0.01)
 
                     if new_xp != 0:
                         data: Game = await Game.find_one({'_id': uid})
