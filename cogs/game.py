@@ -770,6 +770,25 @@ class _Game(commands.Cog, name='Game'):
     async def before_boss_fight(self):
         await self.bot.wait_until_ready()
 
+    @base_game.command(name='boss')
+    async def game_boss(self, ctx: Context):
+        """See how much longer until the next boss fight begins.
+        The boss fight can only begin if there's been a message sent in the last 5 minutes before actually starting the boss fight.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if self.check_channel(ctx) is False:
+            return
+
+        em = disnake.Embed(
+            title='Time left until next boss fight',
+            description=f'Next boss fight is in `{utils.human_timedelta(self.boss_fight.next_iteration)}`',
+            color=utils.blurple
+        )
+        em.set_footer(text=f'Requested By: {ctx.author}')
+        await ctx.send(embed=em, reference=ctx.replied_reference)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(_Game(bot))
