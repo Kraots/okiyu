@@ -740,29 +740,28 @@ class _Game(commands.Cog, name='Game'):
                         return
 
                     if awarded_first is False:
-                        new_xp = int(participant.total_damage * 0.03)
+                        coins = int(participant.total_damage * 0.3)
                         em.title = 'Evil Carrots Defeated!'
                         em.description = f'Congratulations {mem.mention}, ' \
                                           'you have dealt the most damage in this' \
                                          f'boss fight (**{participant.total_damage:,}** total damage dealt) ' \
-                                          'and have been awarded 3x more xp compared to the others.'  # noqa
+                                          'and have been awarded 3x more coins compared to the others.'  # noqa
                         em.color = utils.red
                         await msg.edit(embed=em, view=None)
                         awarded_first = True
                     else:
-                        new_xp = int(participant.total_damage * 0.01)
+                        coins = int(participant.total_damage * 0.1)
 
-                    if new_xp != 0:
+                    if coins != 0:
                         data: Game = await Game.find_one({'_id': uid})
                         if data is None:
                             return
 
-                        data.characters[participant.character_name] += new_xp
+                        data.coins += coins
                         await data.commit()
                         await mem.send(
                             'Hello, thank you for fighting the boss.\n'
-                            f'You have been rewarded with **{new_xp:,}xp** towards the character that you have used '
-                            'to fight against the boss.'
+                            f'You have been rewarded with **{coins:,}** {self.coin_emoji}'
                         )
 
     @boss_fight.before_loop
