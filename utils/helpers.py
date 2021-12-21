@@ -29,7 +29,7 @@ __all__ = (
     'format_num',
 )
 
-allowed_letters = tuple(list(st.ascii_lowercase) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
+allowed_letters = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
 punctuations_and_digits = tuple(list(st.punctuation) + list(st.digits))
 BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
 converted = {
