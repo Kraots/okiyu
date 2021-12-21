@@ -1,5 +1,5 @@
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 from asyncio import TimeoutError
 from dateutil.relativedelta import relativedelta
 
@@ -707,7 +707,7 @@ class _Game(commands.Cog, name='Game'):
     @tasks.loop(minutes=30.0)
     async def boss_fight(self):
         if self.last_message is not None:
-            now = datetime.now()
+            now = datetime.now(timezone.utc)
             _time = self.last_message.created_at + relativedelta(minutes=30)
             if now <= _time:
                 em = disnake.Embed(
