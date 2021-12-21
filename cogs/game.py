@@ -723,6 +723,8 @@ class _Game(commands.Cog, name='Game'):
                 await msg.channel.purge(limit=25, check=lambda m: m.is_system())
                 await sleep(120.0)
                 view.stop()
+                await msg.unpin()
+                await msg.reply('Boss fight ended!')
                 if len(view.participants) == 0:
                     await msg.edit(content='Oof... It seems no one wanted to fight the boss.', embed=None, view=None)
                     return await msg.delete(delay=30.0)
