@@ -363,7 +363,11 @@ class Moderation(commands.Cog):
         new_roles = [role for role in member.roles
                      if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
                      ] + [muted_role]
-        await member.edit(roles=new_roles, reason=f'[MUTE] {ctx.author} ({ctx.author.id}): "{reason}"')
+        await member.edit(
+            roles=new_roles,
+            voice_channel=None,
+            reason=f'[MUTE] {ctx.author} ({ctx.author.id}): "{reason}"'
+        )
         try:
             em = disnake.Embed(title='You have been muted!', color=utils.red)
             em.description = f'**Muted By:** {ctx.author}\n' \
