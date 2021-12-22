@@ -21,6 +21,7 @@ __all__ = ('BossFight',)
 class Participant:
     total_damage: int = 0
     dmg: int = None
+    character_name: str = None
 
 
 class BossFight(View):
@@ -114,4 +115,5 @@ class BossFight(View):
 
             participant = Participant()
             participant.dmg = dmg
+            participant.character_name = char
             self.participants[inter.author.id] = participant
