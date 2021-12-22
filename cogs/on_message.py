@@ -116,7 +116,7 @@ class OnMessage(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         matches = re.findall(utils.invite_regex, message.content.lower())
         if matches and message.author.id != self.bot._owner:
-            if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for admin
+            if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for owner
                 return
             elif 913315033134542889 in (r.id for r in message.author.roles):  # Checks for admin
                 return
@@ -124,7 +124,7 @@ class OnMessage(commands.Cog):
             if len(matches) == 1:
                 _inv = matches[0].split('/')
                 inv = _inv[-1]
-                if inv in (invite.code for invite in await guild.invites()):
+                if any(invite for invite in await guild.invites() if invite.code == inv):
                     return
 
             ctx = await self.bot.get_context(message, cls=utils.Context)
