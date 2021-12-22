@@ -752,7 +752,7 @@ class _Game(commands.Cog, name='Game'):
                         em.description = f'Congratulations {mem.mention}, ' \
                                           'you have dealt the most damage in this' \
                                          f'boss fight (**{participant.total_damage:,}** total damage dealt) ' \
-                                          'and have been awarded 3x more coins compared to the others, and your character.' \
+                                          'and have been awarded 3x more coins compared to the others, and your character ' \
                                           'has gotten **30xp**'  # noqa
                         em.color = utils.red
                         await msg.edit(embed=em, view=None)
