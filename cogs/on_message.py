@@ -116,32 +116,85 @@ class OnMessage(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         matches = re.findall(utils.invite_regex, message.content.lower())
         if matches and message.author.id != self.bot._owner:
+            if 913310292505686046 in (r.id for r in message.author.roles):  # Checks for admin
+                return
+            elif 913315033134542889 in (r.id for r in message.author.roles):  # Checks for admin
+                return
+
             if len(matches) == 1:
                 _inv = matches[0].split('/')
                 inv = _inv[-1]
                 if inv in (invite.code for invite in await guild.invites()):
                     return
 
-            is_staff = False
-            if 913310292505686046 in (r.id for r in message.author.roles):  # Check for owner
-                is_staff = True
-            elif 913315033134542889 in (r.id for r in message.author.roles):  # Check for admin
-                is_staff = True
+            ctx = await self.bot.get_context(message, cls=utils.Context)
+            await message.delete()
+            _data = await utils.UserFriendlyTime(commands.clean_content).convert(
+                ctx, '30 minutes Invite that isn\'t towards ``Ukiyo`` found.'
+            )
+            muted_role = guild.get_role(913376647422545951)
+            duration = utils.human_timedelta(_data.dt, suffix=False)
+            data = utils.Mutes(
+                id=message.author.id,
+                muted_by=self.bot.user.id,
+                muted_until=_data.dt,
+                reason=_data.arg,
+                duration=duration,
+                filter=True
+            )
+            if 913315033684008971 in (r.id for r in message.author.roles):  # Checks for mod
+                data.is_mod = True
+            new_roles = [role for role in message.author.roles
+                         if role.id != 913315033684008971
+                         ] + [muted_role]
+            await message.author.edit(roles=new_roles, reason='[INVITE FILTER]')
 
-            if is_staff is False:
-                await message.delete()
-                invite_logs = guild.get_channel(913332511789178951)
-                em = disnake.Embed(
-                    title='New Invite Found!!',
-                    description=f'`{message.author}` sent an invite in {message.channel.mention}'
-                )
-                em.set_footer(text=f'User ID: {message.author.id}')
-                v = disnake.ui.View()
-                v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
-                await invite_logs.send(embed=em, view=v)
-                return await message.channel.send(
-                    f'Invites are not allowed! {message.author.mention}', delete_after=5.0
-                )
+            try:
+                em = disnake.Embed(title='You have been muted!', color=utils.red)
+                em.description = f'**Muted By:** {self.bot.user}\n' \
+                                 f'**Reason:** {_data.arg}\n' \
+                                 f'**Mute Duration:** `{duration}`\n' \
+                                 f'**Expire Date:** {utils.format_dt(_data.dt, "F")}'
+                em.set_footer(text='Muted in `Ukiyo`')
+                em.timestamp = datetime.datetime.now(datetime.timezone.utc)
+                await message.author.send(embed=em)
+            except disnake.Forbidden:
+                pass
+            _msg = await message.channel.send(
+                f'> ⚠️ **[INVITE]** {message.author.mention} has been muted for sending an invite '
+                f'until {utils.format_dt(_data.dt, "F")} (`{duration}`)'
+            )
+            data.jump_url = _msg.jump_url
+            await data.commit()
+            view = disnake.ui.View()
+            view.add_item(disnake.ui.Button(label='Jump!', url=_msg.jump_url))
+
+            invite_logs = guild.get_channel(913332511789178951)
+            em = disnake.Embed(
+                title='New Invite Found!!',
+                description=f'`{message.author}` sent an invite in {message.channel.mention}'
+            )
+            em.set_footer(text=f'User ID: {message.author.id}')
+            v = disnake.ui.View()
+            v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
+            await invite_logs.send(embed=em, view=v)
+            await message.channel.send(
+                f'Invites are not allowed! {message.author.mention}', delete_after=5.0
+            )
+
+            await utils.log(
+                self.bot.webhooks['mod_logs'],
+                title='[MUTE]',
+                fields=[
+                    ('Member', f'{message.author} (`{message.author.id}`)'),
+                    ('Reason', 'Invite Sent.'),
+                    ('Mute Duration', f'`{duration}`'),
+                    ('Expires At', utils.format_dt(_data.dt, "F")),
+                    ('By', f'{self.bot.user.mention} (`{self.bot.user.id}`)'),
+                    ('At', utils.format_dt(datetime.datetime.now(), 'F')),
+                ],
+                view=view
+            )
 
     @commands.Cog.listener('on_message_delete')
     async def on_message_delete(self, message: disnake.Message):
