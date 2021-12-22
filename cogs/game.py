@@ -247,8 +247,8 @@ class _Game(commands.Cog, name='Game'):
             )
             em.add_field('Level', lvl, inline=False)
             em.add_field('XP', _xp, inline=False)
-            em.add_field('Attack (DMG)', f'{character.lowest_dmg * _lvl} - {character.highest_dmg * _lvl}')
-            em.add_field('Health (HP)', character.hp * _lvl)
+            em.add_field('Attack (DMG)', f'{(character.lowest_dmg * _lvl):,} **-** {(character.highest_dmg * _lvl):,}')
+            em.add_field('Health (HP)', f'{(character.hp * _lvl):,}')
             em.add_field('Rarity', f'{character.rarity_level * "✮"}({character.rarity_level})')
 
             if character.rarity_level == 1:
@@ -535,8 +535,8 @@ class _Game(commands.Cog, name='Game'):
             description=f'*{data.description}*',
             color=utils.blurple
         )
-        em.add_field('Attack (DMG)', f'{data.lowest_dmg} - {data.highest_dmg}')
-        em.add_field('Health (HP)', data.hp)
+        em.add_field('Attack (DMG)', f'{data.lowest_dmg:,} **-** {data.highest_dmg:,}')
+        em.add_field('Health (HP)', f'{data.hp:,}')
         em.add_field('Rarity', f'{data.rarity_level * "✮"}({data.rarity_level})')
         em.add_field('Obtainable', 'Yes' if data.obtainable is True else 'No', inline=False)
         em.set_footer(text=f'Character added on {date}')
@@ -563,8 +563,8 @@ class _Game(commands.Cog, name='Game'):
                 description=f'*{data.description}*',
                 color=utils.blurple
             )
-            em.add_field('Attack (DMG)', f'{data.lowest_dmg} - {data.highest_dmg}')
-            em.add_field('Health (HP)', data.hp)
+            em.add_field('Attack (DMG)', f'{data.lowest_dmg:,} **-** {data.highest_dmg:,}')
+            em.add_field('Health (HP)', f'{data.hp:,}')
             em.add_field('Rarity', f'{data.rarity_level * "✮"}({data.rarity_level})')
             em.set_footer(text=f'Character added on {date}')
 
