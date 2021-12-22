@@ -116,6 +116,12 @@ class OnMessage(commands.Cog):
         guild = self.bot.get_guild(913310006814859334)
         matches = re.findall(utils.invite_regex, message.content.lower())
         if matches and message.author.id != self.bot._owner:
+            if len(matches) == 1:
+                _inv = matches[0].split('/')
+                inv = _inv[-1]
+                if inv in (invite.code for invite in await guild.invites()):
+                    return
+
             is_staff = False
             if 913310292505686046 in (r.id for r in message.author.roles):  # Check for owner
                 is_staff = True
