@@ -104,8 +104,8 @@ class Fight(disnake.ui.View):
     def _data(self) -> str:
         data = inspect.cleandoc(
             f'''
-            `{self.p1.display_name} (lvl {self.p1_lvl} '{self._p1.name.title()}')` **==> {self.hp[self.p1]} hp**
-            `{self.p2.display_name} (lvl {self.p2_lvl} '{self._p2.name.title()}')` **==> {self.hp[self.p2]} hp**
+            `{self.p1.display_name} (lvl {self.p1_lvl} '{self._p1.name.title()}')` **==> {self.hp[self.p1]:,} hp**
+            `{self.p2.display_name} (lvl {self.p2_lvl} '{self._p2.name.title()}')` **==> {self.hp[self.p2]:,} hp**
             '''
         )
         return data
@@ -147,7 +147,7 @@ class Fight(disnake.ui.View):
         await self.check_health()
         if self.ended is False:
             await self.message.edit(
-                content=f'{self._data}\n\n**{p.display_name}** chose to fight and dealt `{dmg}` damage. '
+                content=f'{self._data}\n\n**{p.display_name}** chose to fight and dealt `{dmg:,}` damage. '
                         f'Your turn now: {self.turn.mention}'
             )
 
