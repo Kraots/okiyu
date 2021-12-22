@@ -738,16 +738,22 @@ class _Game(commands.Cog, name='Game'):
                 for uid in participant_ids:
                     participant = view.participants[uid]
                     mem = guild.get_member(uid)
-                    if mem is None:
+                    data: Game = await Game.find_one({'_id': uid})
+                    if data is None:
+                        return
+
+                    elif mem is None:
                         return
 
                     if awarded_first is False:
                         coins = int(participant.total_damage * 0.3)
+                        data.characters[participant.character_name] += 30
                         em.title = 'Evil Carrots Defeated!'
                         em.description = f'Congratulations {mem.mention}, ' \
                                           'you have dealt the most damage in this' \
                                          f'boss fight (**{participant.total_damage:,}** total damage dealt) ' \
-                                          'and have been awarded 3x more coins compared to the others.'  # noqa
+                                          'and have been awarded 3x more coins compared to the others, and your character.' \
+                                          'has gotten **30xp**'  # noqa
                         em.color = utils.red
                         await msg.edit(embed=em, view=None)
                         awarded_first = True
@@ -755,10 +761,6 @@ class _Game(commands.Cog, name='Game'):
                         coins = int(participant.total_damage * 0.1)
 
                     if coins != 0:
-                        data: Game = await Game.find_one({'_id': uid})
-                        if data is None:
-                            return
-
                         data.coins += coins
                         await data.commit()
                         await mem.send(
