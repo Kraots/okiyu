@@ -124,7 +124,7 @@ class OnMessage(commands.Cog):
             if len(matches) == 1:
                 _inv = matches[0].split('/')
                 inv = _inv[-1]
-                if any(invite for invite in await guild.invites() if invite.code == inv):
+                if any(invite for invite in await guild.invites() if invite.code.lower() == inv):
                     return
 
             ctx = await self.bot.get_context(message, cls=utils.Context)
