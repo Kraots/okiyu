@@ -178,9 +178,6 @@ class OnMessage(commands.Cog):
             v = disnake.ui.View()
             v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
             await invite_logs.send(embed=em, view=v)
-            await message.channel.send(
-                f'Invites are not allowed! {message.author.mention}', delete_after=5.0
-            )
 
             await utils.log(
                 self.bot.webhooks['mod_logs'],
