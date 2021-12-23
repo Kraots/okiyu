@@ -798,9 +798,7 @@ class _Game(commands.Cog, name='Game'):
 
         await ctx.message.add_reaction(ctx.thumb)
 
-        self.boss_fight.cancel()
-        self.boss_fight.start()
-        await self.boss_fight()
+        self.boss_fight.restart()
 
 
 def setup(bot: Ukiyo):
