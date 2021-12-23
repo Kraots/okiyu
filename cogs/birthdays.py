@@ -95,7 +95,7 @@ class Birthdays(commands.Cog):
 
         await ctx.reply(
             'Please send your exact location in order to get your timezone.\n'
-            'The format in which you must send this must be **Region/Capital**. (e.g: Europe/London)'
+            'The format in which you must send this must be **Region/Capital**. (e.g: Europe/London, America/Sacramento, etc...)'
         )
         try:
             _birthday_timezone = await self.bot.wait_for(
