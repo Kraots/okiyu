@@ -19,7 +19,7 @@ class Featured(commands.Cog):
     async def display_emoji(self) -> str:
         return '💡'
 
-    @commands.command(name='timediff', aliases=('diff', 'compare',))
+    @commands.command(name='timediff')
     async def time_difference(self, ctx: Context, time1: str, time2: str):
         """Compare 2 dates. The format in which you give this must be **day/month/year**.
 
