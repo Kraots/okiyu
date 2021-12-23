@@ -17,7 +17,7 @@ class Featured(commands.Cog):
 
     @property
     async def display_emoji(self) -> str:
-        return '💡'
+        return '⭐'
 
     @commands.command(name='timediff')
     async def time_difference(self, ctx: Context, date1: str, date2: str):
