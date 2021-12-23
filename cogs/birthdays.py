@@ -132,6 +132,8 @@ class Birthdays(commands.Cog):
         data.timezone = birthday_timezone.zone
 
         now = datetime.now()
+        now.month = birthday_date.month
+        now.day = birthday_date.day
         offset = birthday_timezone.utcoffset(now)
         seconds = offset.total_seconds()
         next_birthday = now + relativedelta(years=1, seconds=seconds)
