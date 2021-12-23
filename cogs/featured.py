@@ -42,7 +42,7 @@ class Featured(commands.Cog):
             description=f'The difference between **{_time1}** and **{_time2}** is `{diff}`'
         )
 
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
 
 def setup(bot: Ukiyo):

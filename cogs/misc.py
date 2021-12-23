@@ -106,7 +106,7 @@ class Misc(commands.Cog):
 
         ping = disnake.Embed(title="Pong!", description="_Pinging..._", color=utils.blurple)
         start = time.time() * 1000
-        msg = await ctx.send(embed=ping, reference=ctx.replied_reference)
+        msg = await ctx.better_reply(embed=ping)
         end = time.time() * 1000
         ping = disnake.Embed(
             title="Pong!",
@@ -135,7 +135,7 @@ class Misc(commands.Cog):
             color=utils.blurple
         )
         uptime.set_footer(text=f'Bot made by: {self.bot._owner}')
-        await ctx.send(embed=uptime, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=uptime)
 
     @commands.command(name='invite', aliases=('inv',))
     async def _invite(self, ctx: Context):
@@ -148,7 +148,7 @@ class Misc(commands.Cog):
                 and ctx.author.id != self.bot._owner_id:
             return
 
-        await ctx.send('https://discord.gg/fQ6Nb4ac9x', reference=ctx.replied_reference)
+        await ctx.better_reply('https://discord.gg/fQ6Nb4ac9x')
 
     @commands.command(aliases=('ad',))
     async def serverad(self, ctx: Context):
@@ -165,7 +165,7 @@ class Misc(commands.Cog):
         ad = disnake.Embed(color=utils.blurple, title='Here\'s the ad to the server:', description=SERVER_AD)
         ad.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
 
-        await ctx.send(embed=ad, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=ad)
 
     @commands.group(
         name='rules', invoke_without_command=True, case_insensitive=True, aliases=('rule',)
@@ -197,7 +197,7 @@ class Misc(commands.Cog):
                 return await ctx.reply(f'> {ctx.disagree} Rule does not exist!')
         em.set_footer(text='NOTE: Breaking any of these rules will result in a mute, or in the worst case, a ban.')
 
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
     @server_rules.command(name='add')
     @utils.is_admin()
@@ -329,7 +329,7 @@ class Misc(commands.Cog):
         em = disnake.Embed(colour=utils.blurple, title=f'`{member.display_name}`\'s avatar')
         em.set_image(url=member.display_avatar)
         em.set_footer(text=f'Requested By: {ctx.author}')
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
     @commands.group(invoke_without_command=True, case_insensitive=True)
     async def created(self, ctx: Context, *, user: disnake.User = None):
@@ -352,7 +352,7 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(user.created_at, "F")} '
                         f'(`{utils.human_timedelta(user.created_at)}`)'
         )
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
     @created.command(name='server')
     async def created_server(self, ctx: Context):
@@ -384,7 +384,7 @@ class Misc(commands.Cog):
             inline=False
         )
         em.set_footer(text=f'There are currently {len(members)} members in the server')
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
     @commands.command()
     async def joined(self, ctx: Context, *, member: disnake.Member = None):
@@ -407,7 +407,7 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(member.joined_at, "F")} '
                         f'(`{utils.human_timedelta(member.joined_at)}`)'
         )
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
     @commands.command(name='ticket')
     @commands.cooldown(1, 60.0, commands.BucketType.member)
@@ -519,7 +519,7 @@ class Misc(commands.Cog):
                 if member == ctx.author:
                     return await ctx.reply(f'> {ctx.disagree} You are not muted.')
                 else:
-                    return await ctx.reply(f'> {ctx.disagree} `{member}` is not muted.')
+                    return await ctx.better_reply(f'> {ctx.disagree} `{member}` is not muted.')
             em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=member, icon_url=member.display_avatar)
             em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
@@ -528,7 +528,7 @@ class Misc(commands.Cog):
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
-            await ctx.reply(embed=em)
+            await ctx.better_reply(embed=em)
 
     def append_choices(
         self,
@@ -695,7 +695,7 @@ class Misc(commands.Cog):
                 usrs = '\n'.join(all_status[entry]['users'])
                 message += f"{all_status[entry]['emoji']} {usrs}\n\n"
 
-        await ctx.send(message, reference=ctx.replied_reference)
+        await ctx.better_reply(message)
 
     @commands.group(name='afk', invoke_without_command=True, case_insensitive=True)
     async def _afk(self, ctx: Context, *, reason: str = None):

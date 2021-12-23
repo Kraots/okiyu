@@ -129,20 +129,24 @@ class Marriages(commands.Cog):
         if data is None:
             if member == ctx.author:
                 i = f'> {ctx.disagree} You\'re not married to anyone.'
+                fn = ctx.reply
             else:
                 i = f'> {ctx.disagree} {member.mention} is not married to anyone.'
-            return await ctx.reply(i)
+                fn = ctx.better_reply
+            return await fn(i)
         guild = self.bot.get_guild(913310006814859334)
         mem = guild.get_member(data.married_to)
         em = disnake.Embed(title=f'Married to `{mem.display_name}`', colour=utils.blurple)
         if member == ctx.author:
             i = 'You\'re married to'
+            fn = ctx.reply
         else:
             i = f'{member.mention} is married to'
+            fn = ctx.better_reply
         em.description = f'{i} {mem.mention} ' \
                          f'since {utils.format_dt(data.married_since, "F")} ' \
                          f'(`{utils.human_timedelta(data.married_since)}`)'
-        await ctx.reply(embed=em)
+        await fn(embed=em)
 
     @commands.command(name='kiss')
     async def _kiss(self, ctx: Context, *, member: disnake.Member):

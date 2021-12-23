@@ -47,14 +47,14 @@ class Intros(commands.Cog):
         data: Intro = await Intro.find_one({'_id': member.id})
         if data is None:
             if member.id == self.bot._owner_id:
-                return await ctx.reply('🤫 🤫 🤫')
+                return await ctx.better_reply('🤫 🤫 🤫')
             if member == ctx.author:
-                return await ctx.reply(
+                return await ctx.better_reply(
                     f'> {ctx.disagree} You don\'t have an intro. '
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
             else:
-                return await ctx.reply(
+                return await ctx.better_reply(
                     f'> {ctx.disagree} `{member}` doesn\'t have an intro. '
                     'Please contact a staff member to unverify them! This is a bug.'
                 )
@@ -81,7 +81,7 @@ class Intros(commands.Cog):
         em.add_field(name='Likes', value=data.likes)
         em.add_field(name='Dislikes', value=data.dislikes)
         em.set_footer(text=f'Requested by: {ctx.author}')
-        await ctx.reply(embed=em, view=view)
+        await ctx.better_reply(embed=em, view=view)
 
     @commands.command(name='unverify')
     @is_mod()
