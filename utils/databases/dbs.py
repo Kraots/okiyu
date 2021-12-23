@@ -25,3 +25,7 @@ database5 = cluster5['Ukiyo2']  # Marriages
 key6 = os.getenv('MONGODBKEY6')
 cluster6 = motor.motor_asyncio.AsyncIOMotorClient(key6)
 database6 = cluster6['Ukiyo3']  # Game
+
+key7 = os.getenv('MONGODBKEY7')
+cluster7 = motor.motor_asyncio.AsyncIOMotorClient(key7)
+database7 = cluster7['Ukiyo3']  # Birthdays
