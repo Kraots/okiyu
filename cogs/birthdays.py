@@ -157,9 +157,9 @@ class Birthdays(commands.Cog):
         await view.wait()
         if view.response is True:
             await data.delete()
-            await view.message.edit('Successfully removed your birthday.')
+            await view.message.edit(content='Successfully removed your birthday.')
         else:
-            await view.message.edit('Did not remove your birthday.')
+            await view.message.edit(content='Did not remove your birthday.')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
