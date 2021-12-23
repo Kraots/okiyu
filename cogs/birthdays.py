@@ -17,6 +17,7 @@ class Birthdays(commands.Cog):
 
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.check_birthday.start()
 
     @property
     def display_emoji(self) -> str:
