@@ -85,7 +85,7 @@ async def reraise(ctx: utils.Context, error):
     elif isinstance(error, commands.errors.MissingRequiredArgument):
         _missing_args = list(ctx.command.clean_params)
         missing_args = [f'`{arg}`' for arg in _missing_args[_missing_args.index(error.param.name):]]
-        return await ctx.send(
+        return await ctx.reply(
             f">>> {ctx.disagree} You are missing the following required arguments for this command:\n "
             f"\u2800\u2800{utils.human_join(missing_args, final='and')}\n\n"
             "If you don't know how to use this command, please type "
@@ -94,12 +94,12 @@ async def reraise(ctx: utils.Context, error):
         )
 
     elif isinstance(error, commands.errors.MemberNotFound):
-        await ctx.send(f"> {ctx.disagree} Could not find member.")
+        await ctx.reply(f"> {ctx.disagree} Could not find member.")
         ctx.command.reset_cooldown(ctx)
         return
 
     elif isinstance(error, commands.errors.UserNotFound):
-        await ctx.send(f"> {ctx.disagree} Could not find user.")
+        await ctx.reply(f"> {ctx.disagree} Could not find user.")
         ctx.command.reset_cooldown(ctx)
         return
 
@@ -122,7 +122,7 @@ async def reraise(ctx: utils.Context, error):
                     "here is the error:**",
             embed=em
         )
-        await ctx.send(f'> {ctx.disagree} An error occurred')
+        await ctx.reply(f'> {ctx.disagree} An error occurred')
 
 
 async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
