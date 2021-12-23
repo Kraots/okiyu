@@ -127,7 +127,7 @@ class Birthdays(commands.Cog):
         now = datetime.now()
         offset = birthday_timezone.utcoffset(now)
         seconds = offset.total_seconds()
-        next_birthday = now + relativedelta(year=1, seconds=seconds)
+        next_birthday = now + relativedelta(years=1, seconds=seconds)
         data.next_birthday = next_birthday
 
         await data.commit()
