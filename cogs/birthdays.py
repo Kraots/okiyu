@@ -131,7 +131,7 @@ class Birthdays(commands.Cog):
         try:
             birthday_timezone = pytz.timezone(_birthday_timezone.content.replace(' ', '_'))
         except pytz.UnknownTimeZoneError:
-            return await ctx.reply('That timezone does not exist.')
+            return await _birthday_timezone.reply('That timezone does not exist.')
         data.timezone = birthday_timezone.zone.replace('_', ' ')
 
         now = datetime.now()
