@@ -32,7 +32,7 @@ class Featured(commands.Cog):
 
         time1: datetime = datetime.strptime(time1, '%d/%m/%Y')
         time2: datetime = datetime.strptime(time2, '%d/%m/%Y')
-        diff = utils.human_timedelta(time2, source=time1, suffix=False)
+        diff = utils.human_timedelta(time2, source=time1, suffix=False, accuracy=4)
 
         _time1 = time1.strftime('%d %B %Y')
         _time2 = time2.strftime('%d %B %Y')
