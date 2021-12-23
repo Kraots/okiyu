@@ -151,6 +151,7 @@ class Birthdays(commands.Cog):
         await ctx.reply('Your birthday has been set.')
 
     @base_birthday.command(name='remove')
+    @utils.lock()
     async def birthday_remove(self, ctx: Context):
         """Remove your birthday, if you have it set.
 
