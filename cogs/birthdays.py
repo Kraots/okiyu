@@ -35,7 +35,7 @@ class Birthdays(commands.Cog):
                 guild = self.bot.get_guild(913310006814859334)
                 channel = guild.get_channel(923681449490669628)
                 mem = guild.get_member(data.id)
-                next_birthday = data.next_birthday.strtime('%d %B %Y')
+                next_birthday = data.next_birthday.strfime('%d %B %Y')
 
                 em = disnake.Embed(title=f'Happy birthday {mem.name}!!! :tada: :tada:', color=mem.color)
                 em.set_image(url='https://cdn.discordapp.com/attachments/787359417674498088/901940653762687037/happy_bday.gif')
