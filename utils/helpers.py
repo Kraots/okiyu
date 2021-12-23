@@ -27,6 +27,7 @@ __all__ = (
     'clean_inter_content',
     'fail_embed',
     'format_num',
+    'check_channel',
 )
 
 allowed_letters = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
@@ -285,3 +286,10 @@ def format_num(num: str):
         .replace(',', '') \
         .replace(' ', '') \
         .replace('.', '')
+
+
+def check_channel(ctx):
+    if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+            and ctx.author.id != 374622847672254466:
+        return False
+    return True

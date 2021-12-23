@@ -72,7 +72,12 @@ class Birthdays(commands.Cog):
         """Set your birthday.
 
         `date` **->** The exact date when you were born. The format in which you set this is **day/month/year**.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
         """
+
+        if utils.check_channel(ctx) is False:
+            return
 
         data: Birthday = await Birthday.find_one({'_id': ctx.author.id})
         if data is None:
@@ -117,7 +122,13 @@ class Birthdays(commands.Cog):
 
     @base_birthday.command(name='remove')
     async def birthday_remove(self, ctx: Context):
-        """Remove your birthday, if you have it set."""
+        """Remove your birthday, if you have it set.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if utils.check_channel(ctx) is False:
+            return
 
         data: Birthday = await Birthday.find_one({'_id': ctx.author.id})
         if data is None:
