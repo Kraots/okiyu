@@ -356,6 +356,7 @@ class _Game(commands.Cog, name='Game'):
         await data.commit()
 
     @base_game.command(name='fight')
+    @utils.lock()
     async def game_fight(self, ctx: Context, *, member: disnake.Member):
         """Challenge a member to a fight using one of your characters.
 

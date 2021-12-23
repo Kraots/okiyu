@@ -19,6 +19,7 @@ class Marriages(commands.Cog):
         return '❤️'
 
     @commands.command()
+    @utils.lock()
     async def marry(self, ctx: Context, *, member: disnake.Member):
         """Marry the member if they want to and if you're/they're not taken by somebody else already.
 
@@ -76,6 +77,7 @@ class Marriages(commands.Cog):
             await msg.delete()
 
     @commands.command()
+    @utils.lock()
     async def divorce(self, ctx: Context):
         """Divorce the person you're married with in case you're married with anybody."""
 
