@@ -172,7 +172,13 @@ class Birthdays(commands.Cog):
 
     @base_birthday.command(name='top', aliases=('upcoming',))
     async def bday_top(self, ctx: Context):
-        """See top 5 upcoming birthdays."""
+        """See top 5 upcoming birthdays.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if utils.check_channel(ctx) is False:
+            return
 
         index = 0
 
