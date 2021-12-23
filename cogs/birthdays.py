@@ -151,8 +151,14 @@ class Birthdays(commands.Cog):
         if data is None:
             return await ctx.reply('You did not set your birthday.')
 
-        await data.delete()
-        await ctx.reply('Successfully removed your birthday.')
+        view = utils.ConfirmView(ctx)
+        view.message = await ctx.reply('Are you sure you want to remove your birthday?')
+        await view.wait()
+        if view.response is True:
+            await data.delete()
+            await view.message.edit('Successfully removed your birthday.')
+        else:
+            await view.message.edit('Did not remove your birthday.')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
