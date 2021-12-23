@@ -44,6 +44,10 @@ class Birthdays(commands.Cog):
                 msg = await channel.send(mem.mention, embed=em)
                 await msg.add_reaction('🍰')
 
+    @check_birthday.before_loop
+    async def before_loop(self):
+        await self.bot.wait_until_ready()
+
     @commands.group(name='birthday', aliases=('bday',), invoke_without_command=True, case_insensitive=True)
     async def base_birthday(self, ctx: Context, *, member: disnake.Member = None):
         """See how much time left there is until the member's birthday, if they set it.
