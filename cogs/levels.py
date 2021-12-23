@@ -41,48 +41,50 @@ class Levels(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474) or ctx.author.id == self.bot._owner_id:
-            member = member or ctx.author
-            if member.bot:
-                return await ctx.better_reply(f'> {ctx.disagree} Bot\'s do not have levels!')
-            data: Level = await Level.find_one({'_id': member.id})
-            if data is None:
-                return await ctx.better_reply(f'> {ctx.disagree} User not in the database!')
+        if utils.check_channel(ctx) is False:
+            return
 
-            rank = 0
-            rankings: list[Level] = await Level.find().sort('xp', -1).to_list(100000)
-            for _rank in rankings:
-                rank += 1
-                if data.id == _rank.id:
-                    break
+        member = member or ctx.author
+        if member.bot:
+            return await ctx.better_reply(f'> {ctx.disagree} Bot\'s do not have levels!')
+        data: Level = await Level.find_one({'_id': member.id})
+        if data is None:
+            return await ctx.better_reply(f'> {ctx.disagree} User not in the database!')
 
-            lvl = 0
+        rank = 0
+        rankings: list[Level] = await Level.find().sort('xp', -1).to_list(100000)
+        for _rank in rankings:
+            rank += 1
+            if data.id == _rank.id:
+                break
+
+        lvl = 0
+        xp = data.xp
+        while True:
+            if xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
+                break
+            lvl += 1
+        xp -= ((50 * ((lvl - 1)**2)) + (50 * (lvl - 1)))
+        if xp < 0:
+            lvl = lvl - 1
             xp = data.xp
-            while True:
-                if xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
-                    break
-                lvl += 1
             xp -= ((50 * ((lvl - 1)**2)) + (50 * (lvl - 1)))
-            if xp < 0:
-                lvl = lvl - 1
-                xp = data.xp
-                xp -= ((50 * ((lvl - 1)**2)) + (50 * (lvl - 1)))
-            if str(xp).endswith(".0"):
-                x = str(xp).replace(".0", "")
-                x = int(x)
-            else:
-                x = int(xp)
+        if str(xp).endswith(".0"):
+            x = str(xp).replace(".0", "")
+            x = int(x)
+        else:
+            x = int(xp)
 
-            current_xp = x
-            needed_xp = int(200 * ((1 / 2) * lvl))
-            percent = round(float(current_xp * 100 / needed_xp), 2)
-            guild = self.bot.get_guild(913310006814859334)
-            members_count = len([m for m in guild.members if not m.bot])
+        current_xp = x
+        needed_xp = int(200 * ((1 / 2) * lvl))
+        percent = round(float(current_xp * 100 / needed_xp), 2)
+        guild = self.bot.get_guild(913310006814859334)
+        members_count = len([m for m in guild.members if not m.bot])
 
-            rank_card = await utils.create_rank_card(
-                member, lvl, rank, members_count, current_xp, needed_xp, percent
-            )
-            await ctx.better_reply(file=rank_card)
+        rank_card = await utils.create_rank_card(
+            member, lvl, rank, members_count, current_xp, needed_xp, percent
+        )
+        await ctx.better_reply(file=rank_card)
 
     @level_cmd.command(name='set')
     @utils.is_owner()
@@ -115,36 +117,38 @@ class Levels(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474) or ctx.author.id == self.bot._owner_id:
-            entries = []
-            index = 0
-            guild = self.bot.get_guild(913310006814859334)
-            top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
-            async for res in Level.find().sort('xp', -1):
-                res: Level
-                index += 1
-                lvl = 0
-                while True:
-                    if res.xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
-                        break
-                    lvl += 1
-                user = guild.get_member(res.id)
-                if index in (1, 2, 3):
-                    place = top_3_emojis[index]
-                else:
-                    place = f'`#{index:,}`'
+        if utils.check_channel(ctx) is False:
+            return
 
-                if user == ctx.author:
-                    to_append = (f"**{place} {user.name} (YOU)**", f"Level: `{lvl}`\nTotal XP: `{res.xp:,}`")
-                    entries.append(to_append)
-                else:
-                    to_append = (f"{place} {user.name}", f"Level: `{lvl}`\nTotal XP: `{res.xp:,}`")
-                    entries.append(to_append)
+        entries = []
+        index = 0
+        guild = self.bot.get_guild(913310006814859334)
+        top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
+        async for res in Level.find().sort('xp', -1):
+            res: Level
+            index += 1
+            lvl = 0
+            while True:
+                if res.xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
+                    break
+                lvl += 1
+            user = guild.get_member(res.id)
+            if index in (1, 2, 3):
+                place = top_3_emojis[index]
+            else:
+                place = f'`#{index:,}`'
 
-            source = utils.FieldPageSource(entries, per_page=10)
-            source.embed.title = 'Rank Leaderboard'
-            pages = utils.RoboPages(source, ctx=ctx)
-            await pages.start()
+            if user == ctx.author:
+                to_append = (f"**{place} {user.name} (YOU)**", f"Level: `{lvl}`\nTotal XP: `{res.xp:,}`")
+                entries.append(to_append)
+            else:
+                to_append = (f"{place} {user.name}", f"Level: `{lvl}`\nTotal XP: `{res.xp:,}`")
+                entries.append(to_append)
+
+        source = utils.FieldPageSource(entries, per_page=10)
+        source.embed.title = 'Rank Leaderboard'
+        pages = utils.RoboPages(source, ctx=ctx)
+        await pages.start()
 
     @commands.group(
         name='messages', invoke_without_command=True, case_insensitive=True, aliases=('msg',)
