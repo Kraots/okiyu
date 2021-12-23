@@ -281,9 +281,9 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
-        if after.content.lower().startswith(('!e', '!eval')):
-            ctx = await self.bot.get_context(after, cls=utils.Context)
-            cmd = self.bot.get_command(after.content.lower().replace('!', ''))
+        ctx = await self.bot.get_context(after, cls=utils.Context)
+        cmd = self.bot.get_command(after.content.lower().replace('!', ''))
+        if after.content.lower().startswith(('!e', '!eval', '!jsk', '!jishaku')):
             await after.add_reaction('🔁')
             try:
                 await self.bot.wait_for(
@@ -299,6 +299,8 @@ class OnMessage(commands.Cog):
                     await curr.delete()
                 await after.clear_reaction('🔁')
                 await cmd.invoke(ctx)
+        elif cmd is not None:
+            await cmd.invoke(ctx)
 
 
 def setup(bot: Ukiyo):
