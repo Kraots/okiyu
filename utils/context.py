@@ -39,3 +39,9 @@ class Context(commands.Context):
             await self._state.http.send_typing(channel.id)
         except disnake.Forbidden:
             pass
+
+    async def reply(self, *args, **kwargs):
+        if self.replied_reference is not None:
+            return await self.send(*args, **kwargs)
+        else:
+            return await super().reply(*args, **kwargs)
