@@ -153,7 +153,7 @@ class Birthdays(commands.Cog):
             return await ctx.reply('You did not set your birthday.')
 
         view = utils.ConfirmView(ctx)
-        view.message = await ctx.reply('Are you sure you want to remove your birthday?')
+        view.message = await ctx.reply('Are you sure you want to remove your birthday?', view=view)
         await view.wait()
         if view.response is True:
             await data.delete()
