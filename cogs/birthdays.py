@@ -19,7 +19,7 @@ class Birthdays(commands.Cog):
         self.bot = bot
 
     @property
-    async def display_emoji(self) -> str:
+    def display_emoji(self) -> str:
         return '🍰'
 
     @tasks.loop(seconds=30.0)

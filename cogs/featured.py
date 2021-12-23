@@ -16,7 +16,7 @@ class Featured(commands.Cog):
         self.bot = bot
 
     @property
-    async def display_emoji(self) -> str:
+    def display_emoji(self) -> str:
         return '⭐'
 
     @commands.command(name='timediff')
