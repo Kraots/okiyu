@@ -54,7 +54,7 @@ class Birthdays(commands.Cog):
         data: Birthday = await Birthday.find_one({'_id': member.id})
         if data is None:
             if member.id == ctx.author.id:
-                return await ctx.reply(f'`{member}` you did not set your birthday.')
+                return await ctx.reply('You did not set your birthday.')
             else:
                 return await ctx.better_reply(f'`{member}` did not set their birthday.')
 
