@@ -60,9 +60,21 @@ class Birthdays(commands.Cog):
                 return await ctx.better_reply(f'`{member}` did not set their birthday.')
 
         em = disnake.Embed(title=f'`{member}`\'s birthday', color=utils.blurple)
-        em.add_field('Birthday date', data.birthday_date.strftime('%d %B %Y'), inline=False)
-        em.add_field('Time left until their next birthday', utils.human_timedelta(data.next_birthday), inline=False)
-        em.add_field('Timezone', data.timezone)
+        em.add_field(
+            'Birthday date',
+            data.birthday_date.strftime('%d %B %Y'),
+            inline=False
+        )
+        em.add_field(
+            'Time left until their next birthday',
+            utils.human_timedelta(data.next_birthday, accuracy=1, suffix=False),
+            inline=False
+        )
+        em.add_field(
+            'Timezone',
+            data.timezone,
+            inline=False
+        )
         em.set_footer(text=f'Requested by: {ctx.author}')
 
         await ctx.better_reply(embed=em)
@@ -95,7 +107,7 @@ class Birthdays(commands.Cog):
 
         await ctx.reply(
             'Please send your exact location in order to get your timezone.\n'
-            'The format in which you must send this must be **Region/Capital**. (e.g: Europe/London, America/Sacramento, etc...)'
+            'The format in which you must send this must be **Region/Capital**. (e.g: Europe/London, America/Monterrey, etc...)'
         )
         try:
             _birthday_timezone = await self.bot.wait_for(
