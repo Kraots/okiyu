@@ -22,6 +22,10 @@ class Context(commands.Context):
     def disagree(self) -> disnake.PartialEmoji:
         return disnake.PartialEmoji(name='disagree', id=913895999125196860)
 
+    @property
+    def thumb(self) -> disnake.PartialEmoji:
+        return disnake.PartialEmoji(name='thumb', id=923542820273418290)
+
     @disnake.utils.cached_property
     def replied_reference(self):
         ref = self.message.reference

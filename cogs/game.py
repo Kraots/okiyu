@@ -772,7 +772,7 @@ class _Game(commands.Cog, name='Game'):
     async def before_boss_fight(self):
         await self.bot.wait_until_ready()
 
-    @base_game.command(name='boss')
+    @base_game.group(name='boss', invoke_without_command=True, case_insensitive=True)
     async def game_boss(self, ctx: Context):
         """See how much longer until the next boss fight begins.
         The boss fight can only begin if there's been a message sent in the last 5 minutes before actually starting the boss fight.
@@ -790,6 +790,17 @@ class _Game(commands.Cog, name='Game'):
         )
         em.set_footer(text=f'Requested By: {ctx.author}')
         await ctx.send(embed=em, reference=ctx.replied_reference)
+
+    @game_boss.command(name='start', aliases=('s',))
+    @utils.is_owner()
+    async def boss_start(self, ctx: Context):
+        """Start the boss fight earlier. This also means that the timer until the next boss fight will be reset."""
+
+        await ctx.message.add_reaction(ctx.thumb)
+
+        self.boss_fight.stop()
+        self.boss_fight.start()
+        await self.boss_fight()
 
 
 def setup(bot: Ukiyo):
