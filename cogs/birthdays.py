@@ -93,6 +93,9 @@ class Birthdays(commands.Cog):
 
         `date` **->** The exact date when you were born. The format in which you set this is **day/month/year**.
 
+        **Example:**
+        `!birthday set 24/08/2005`
+
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
