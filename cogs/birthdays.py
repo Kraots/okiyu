@@ -168,6 +168,29 @@ class Birthdays(commands.Cog):
         else:
             await view.message.edit(content='Did not remove your birthday.')
 
+    @base_birthday.command(name='top', aliases=('upcoming',))
+    async def bday_top(self, ctx: Context):
+        """See top 5 upcoming birthdays."""
+
+        index = 0
+
+        def format_date(dt1):
+            return f'Birthday in `{utils.human_timedelta(dt1, accuracy=6)}`'
+
+        em = disnake.Embed(color=disnake.Color.blurple(), title='***Top `5` upcoming birthdays***\n _ _ ')
+
+        datas: list[Birthday] = await Birthday.find().sort('', 1).to_list(5)
+        for data in datas:
+            user = self.bot.get_user(data.id)
+            index += 1
+            em.add_field(
+                name=f"`{index}`. _ _ _ _ {user.name}",
+                value=f'Birthday in `{utils.human_timedelta(data.birthday_date, accuracy=6)}`',
+                inline=False
+            )
+
+        await ctx.send(embed=em)
+
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
         data: Birthday = await Birthday.find_one({'_id': member.id})
