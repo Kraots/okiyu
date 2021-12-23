@@ -74,7 +74,7 @@ class Birthdays(commands.Cog):
         )
         em.add_field(
             'Time left until their next birthday',
-            utils.human_timedelta(data.next_birthday, accuracy=4, suffix=False),
+            utils.human_timedelta(data.next_birthday, accuracy=6, suffix=False),
             inline=False
         )
         em.add_field(
