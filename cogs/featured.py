@@ -30,8 +30,13 @@ class Featured(commands.Cog):
         `!timediff 24/08/2005 23/12/2021` **->** This will show the exact difference (not hour/sec precise) between 23rd December 2021 and 25th August 2005 (also the owner's birthday :flushed:)
         """  # noqa
 
-        time1 = datetime.strptime(date1, '%d/%m/%Y')
-        time2 = datetime.strptime(date2, '%d/%m/%Y')
+        try:
+            time1 = datetime.strptime(date1, '%d/%m/%Y')
+            time2 = datetime.strptime(date2, '%d/%m/%Y')
+        except ValueError:
+            return await ctx.reply(
+                'One of the dates you have given does not match the format in which a date should be given.'
+            )
         diff = utils.human_timedelta(time2, source=time1, suffix=False, accuracy=4)
 
         _time1 = time1.strftime('%d %B %Y')
