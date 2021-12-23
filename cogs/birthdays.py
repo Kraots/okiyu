@@ -114,7 +114,7 @@ class Birthdays(commands.Cog):
 
         await ctx.reply(
             'Please send your exact location in order to get your timezone.\n'
-            'The format in which you must send this must be **Region/Capital**. (e.g: Europe/London, America/Monterrey, etc...)'
+            'The format in which you must send this must be **Region/Capital**. (e.g: Europe/London, America/Los Angeles, etc...)'
         )
         try:
             _birthday_timezone = await self.bot.wait_for(
@@ -125,8 +125,11 @@ class Birthdays(commands.Cog):
         except TimeoutError:
             return await ctx.reply('Ran out of time.')
 
+        if _birthday_timezone.content is None:
+            return await ctx.reply('You didn\'t give a valid timezone.')
+
         try:
-            birthday_timezone = pytz.timezone(_birthday_timezone.content)
+            birthday_timezone = pytz.timezone(_birthday_timezone.content.replace(' ', '_'))
         except pytz.UnknownTimeZoneError:
             return await ctx.reply('That timezone does not exist.')
         data.timezone = birthday_timezone.zone
