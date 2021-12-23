@@ -63,12 +63,6 @@ class _Game(commands.Cog, name='Game'):
 
         return data
 
-    def check_channel(self, ctx: Context) -> bool:
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
-            return False
-        return True
-
     @commands.group(name='game', aliases=('g',), invoke_without_command=True, case_insensitive=True)
     async def base_game(self, ctx: Context):
         """Base command for all the `game` commands. To see the commands, please type `!help game`
@@ -76,7 +70,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is True:
+        if utils.check_channel(ctx) is True:
             await ctx.send_help('game')
 
     @base_game.group(name='coins', invoke_without_command=True, case_insensitive=True)
@@ -86,7 +80,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -153,7 +147,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -185,7 +179,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -206,7 +200,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -273,7 +267,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         em = disnake.Embed(title='Box Shop', color=utils.blurple)
@@ -313,7 +307,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         boxes = {
@@ -370,7 +364,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         if member.id in self.in_game:
@@ -493,7 +487,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         member = member or ctx.author
@@ -520,7 +514,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         character_name = character_name.lower()
@@ -550,7 +544,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         embeds = []
@@ -780,7 +774,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if self.check_channel(ctx) is False:
+        if utils.check_channel(ctx) is False:
             return
 
         em = disnake.Embed(

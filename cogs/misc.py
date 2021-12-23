@@ -100,8 +100,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         ping = disnake.Embed(title="Pong!", description="_Pinging..._", color=utils.blurple)
@@ -125,8 +124,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         uptime = disnake.Embed(
@@ -144,8 +142,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         await ctx.better_reply('https://discord.gg/fQ6Nb4ac9x')
@@ -157,8 +154,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         await ctx.message.delete()
@@ -321,8 +317,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """  # noqa
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         member = member or ctx.author
@@ -340,8 +335,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """  # noqa
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         user = user or ctx.author
@@ -362,8 +356,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         guild = self.bot.get_guild(913310006814859334)
@@ -395,8 +388,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """  # noqa
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         member = member or ctx.author
@@ -577,8 +569,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """  # noqa
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         guild = self.bot.get_guild(913310006814859334)
@@ -812,8 +803,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         try:
@@ -837,8 +827,7 @@ class Misc(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and ctx.author.id != self.bot._owner_id:
+        if utils.check_channel(ctx) is False:
             return
 
         url = 'http://api.urbandictionary.com/v0/define'
