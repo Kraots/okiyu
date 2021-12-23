@@ -36,7 +36,9 @@ class Birthdays(commands.Cog):
                 channel = guild.get_channel(923681449490669628)
                 mem = guild.get_member(data.id)
                 next_birthday = data.next_birthday.strftime('%d %B %Y')
-                age = utils.human_timedelta(data.birthday_date, accuracy=1, suffix=False)
+                age = utils.human_timedelta(data.birthday_date, accuracy=1, suffix=False) \
+                    .replace(' years', '') \
+                    .replace(' year', '')
 
                 em = disnake.Embed(title=f'Happy {age}th birthday {mem.name}!!! :tada: :tada:', color=mem.color)
                 em.set_image(url='https://cdn.discordapp.com/attachments/787359417674498088/901940653762687037/happy_bday.gif')
