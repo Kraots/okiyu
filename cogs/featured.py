@@ -23,7 +23,7 @@ class Featured(commands.Cog):
     async def time_difference(self, ctx: Context, time1: str, time2: str):
         """Compare 2 dates. The format in which you give this must be **day/month/year**.
 
-        `time1` **->** The greater time you want to compare time2 to. That means that this must be later than **time2**.
+        `time1` **->** The greater time you want to compare time2 to. That means that this must be younger(later) than **time2**.
         `time2` **->** The earliest time you want to compare time1 to. That means that this must be the older(earlier) than **time1**
 
         **Example:**
