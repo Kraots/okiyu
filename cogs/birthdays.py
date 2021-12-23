@@ -36,8 +36,9 @@ class Birthdays(commands.Cog):
                 channel = guild.get_channel(923681449490669628)
                 mem = guild.get_member(data.id)
                 next_birthday = data.next_birthday.strftime('%d %B %Y')
+                age = utils.human_timedelta(data.birthday_date, accuracy=1, suffix=False)
 
-                em = disnake.Embed(title=f'Happy birthday {mem.name}!!! :tada: :tada:', color=mem.color)
+                em = disnake.Embed(title=f'Happy {age}th birthday {mem.name}!!! :tada: :tada:', color=mem.color)
                 em.set_image(url='https://cdn.discordapp.com/attachments/787359417674498088/901940653762687037/happy_bday.gif')
                 em.set_footer(text=f'Your next birthday is on {next_birthday}')
 
@@ -71,7 +72,7 @@ class Birthdays(commands.Cog):
         )
         em.add_field(
             'Time left until their next birthday',
-            utils.human_timedelta(data.next_birthday, accuracy=1, suffix=False),
+            utils.human_timedelta(data.next_birthday, accuracy=4, suffix=False),
             inline=False
         )
         em.add_field(
