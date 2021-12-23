@@ -88,7 +88,7 @@ class Birthdays(commands.Cog):
             birthday_date = datetime.strptime(date, '%d/%m/%Y')
         except ValueError:
             return await ctx.reply(
-                'The format in which you gave your birthday date does not match the one you\'re supposed to give it in.\n'
+                'The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
                 'Doing `!help birthday set` will show you the correct format.'
             )
         data.birthday_date = birthday_date
