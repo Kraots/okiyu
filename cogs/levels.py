@@ -167,7 +167,7 @@ class Levels(commands.Cog):
         em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{member.display_name}\'s message stats', icon_url=member.display_avatar)
         em.add_field(name='Total Messages', value=f"`{user_db.messages_count:,}`")
-        em.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
+        em.set_footer(text=f'Requested by: {ctx.author}')
         await ctx.better_reply(embed=em)
 
     @_msgs.command(name='leaderboard', aliases=('top', 'lb',))

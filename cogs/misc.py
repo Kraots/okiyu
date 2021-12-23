@@ -159,7 +159,7 @@ class Misc(commands.Cog):
 
         await ctx.message.delete()
         ad = disnake.Embed(color=utils.blurple, title='Here\'s the ad to the server:', description=SERVER_AD)
-        ad.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
+        ad.set_footer(text=f'Requested by: {ctx.author}')
 
         await ctx.better_reply(embed=ad)
 
