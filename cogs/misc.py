@@ -106,7 +106,7 @@ class Misc(commands.Cog):
 
         ping = disnake.Embed(title="Pong!", description="_Pinging..._", color=utils.blurple)
         start = time.time() * 1000
-        msg = await ctx.send(embed=ping)
+        msg = await ctx.send(embed=ping, reference=ctx.replied_reference)
         end = time.time() * 1000
         ping = disnake.Embed(
             title="Pong!",
@@ -135,7 +135,7 @@ class Misc(commands.Cog):
             color=utils.blurple
         )
         uptime.set_footer(text=f'Bot made by: {self.bot._owner}')
-        await ctx.send(embed=uptime)
+        await ctx.send(embed=uptime, reference=ctx.replied_reference)
 
     @commands.command(name='invite', aliases=('inv',))
     async def _invite(self, ctx: Context):
@@ -148,7 +148,7 @@ class Misc(commands.Cog):
                 and ctx.author.id != self.bot._owner_id:
             return
 
-        await ctx.send('https://discord.gg/fQ6Nb4ac9x')
+        await ctx.send('https://discord.gg/fQ6Nb4ac9x', reference=ctx.replied_reference)
 
     @commands.command(aliases=('ad',))
     async def serverad(self, ctx: Context):
@@ -695,7 +695,7 @@ class Misc(commands.Cog):
                 usrs = '\n'.join(all_status[entry]['users'])
                 message += f"{all_status[entry]['emoji']} {usrs}\n\n"
 
-        await ctx.send(message)
+        await ctx.send(message, reference=ctx.replied_reference)
 
     @commands.group(name='afk', invoke_without_command=True, case_insensitive=True)
     async def _afk(self, ctx: Context, *, reason: str = None):
