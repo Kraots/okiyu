@@ -134,7 +134,7 @@ class Birthdays(commands.Cog):
         now = datetime.now()
         offset = birthday_timezone.utcoffset(now)
         seconds = offset.total_seconds()
-        next_birthday = birthday_date + relativedelta(year=now.year, seconds=seconds)
+        next_birthday = birthday_date - relativedelta(year=now.year, seconds=seconds)
         if now > next_birthday:
             next_birthday += relativedelta(years=1)
         data.next_birthday = next_birthday
