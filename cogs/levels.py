@@ -44,10 +44,10 @@ class Levels(commands.Cog):
         if ctx.channel.id in (913330644875104306, 913332335473205308, 913445987102654474) or ctx.author.id == self.bot._owner_id:
             member = member or ctx.author
             if member.bot:
-                return await ctx.reply(f'> {ctx.disagree} Bot\'s do not have levels!')
+                return await ctx.better_reply(f'> {ctx.disagree} Bot\'s do not have levels!')
             data: Level = await Level.find_one({'_id': member.id})
             if data is None:
-                return await ctx.reply(f'> {ctx.disagree} User not in the database!')
+                return await ctx.better_reply(f'> {ctx.disagree} User not in the database!')
 
             rank = 0
             rankings: list[Level] = await Level.find().sort('xp', -1).to_list(100000)
@@ -82,7 +82,7 @@ class Levels(commands.Cog):
             rank_card = await utils.create_rank_card(
                 member, lvl, rank, members_count, current_xp, needed_xp, percent
             )
-            await ctx.reply(file=rank_card)
+            await ctx.better_reply(file=rank_card)
 
     @level_cmd.command(name='set')
     @utils.is_owner()
@@ -159,12 +159,12 @@ class Levels(commands.Cog):
 
         user_db: Level = await Level.find_one({'_id': member.id})
         if user_db is None:
-            return await ctx.reply(f'`{member.display_name}` sent no messages.')
+            return await ctx.better_reply(f'`{member.display_name}` sent no messages.')
         em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{member.display_name}\'s message stats', icon_url=member.display_avatar)
         em.add_field(name='Total Messages', value=f"`{user_db.messages_count:,}`")
         em.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
-        await ctx.send(embed=em)
+        await ctx.better_reply(embed=em)
 
     @_msgs.command(name='leaderboard', aliases=('top', 'lb',))
     async def msg_top(self, ctx: Context):

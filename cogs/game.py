@@ -302,7 +302,7 @@ class _Game(commands.Cog, name='Game'):
             'This box will get you characters that have a rarity of ✮✮✮✮✮(5)',
             inline=False
         )
-        await ctx.reply(embed=em)
+        await ctx.better_reply(embed=em)
 
     @game_shop.command(name='buy')
     async def shop_buy(self, ctx: Context, box_rarity: str):
@@ -509,7 +509,7 @@ class _Game(commands.Cog, name='Game'):
         em.add_field('Total Loses', f'{data.loses:,}')
         em.set_footer(text=f'Requested By: {ctx.author}')
 
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
     @base_game.group(name='character', aliases=('char',), invoke_without_command=True, case_insensitive=True)
     async def game_character(self, ctx: Context, *, character_name: str):
@@ -541,7 +541,7 @@ class _Game(commands.Cog, name='Game'):
         em.add_field('Obtainable', 'Yes' if data.obtainable is True else 'No', inline=False)
         em.set_footer(text=f'Character added on {date}')
 
-        await ctx.reply(embed=em)
+        await ctx.better_reply(embed=em)
 
     @game_character.command(name='all')
     async def character_all(self, ctx: Context):
@@ -572,7 +572,7 @@ class _Game(commands.Cog, name='Game'):
 
         if len(embeds) == 0:
             em = utils.fail_embed('There are currently no obtainable characters.')
-            return await ctx.reply(embed=em)
+            return await ctx.better_reply(embed=em)
 
         pag = utils.EmbedPaginator(ctx, embeds)
         await pag.start()
@@ -789,7 +789,7 @@ class _Game(commands.Cog, name='Game'):
             color=utils.blurple
         )
         em.set_footer(text=f'Requested By: {ctx.author}')
-        await ctx.send(embed=em, reference=ctx.replied_reference)
+        await ctx.better_reply(embed=em)
 
     @game_boss.command(name='start', aliases=('s',))
     @utils.is_owner()
