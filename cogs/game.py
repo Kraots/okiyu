@@ -726,11 +726,11 @@ class _Game(commands.Cog, name='Game'):
                 await sleep(120.0)
                 view.stop()
                 await msg.unpin()
-                await msg.reply('Boss fight ended!')
                 if len(view.participants) == 0:
                     await msg.edit(content='Oof... It seems no one wanted to fight the boss.', embed=None, view=None)
                     return await msg.delete(delay=30.0)
 
+                await msg.reply('Boss fight ended!')
                 guild = self.bot.get_guild(913310006814859334)
                 participant_ids = sorted(view.participants, key=lambda k: view.participants[k].total_damage, reverse=True)
                 awarded_first = False
