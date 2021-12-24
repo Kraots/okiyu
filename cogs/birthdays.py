@@ -141,11 +141,11 @@ class Birthdays(commands.Cog):
                     )
                 except disnake.Forbidden:
                     pass
-                await ctx.author.kick('User does not match age requirements.')
+                await ctx.author.kick(reason='User does not match age requirements.')
             await view.message.delete()
             try:
                 await ctx.message.delete()
-            except disnake.NotFound:
+            except disnake.HTTPException:
                 pass
             return
         data.birthday_date = birthday_date
