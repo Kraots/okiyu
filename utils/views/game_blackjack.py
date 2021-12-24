@@ -262,3 +262,12 @@ class BlackJack(View):
         em.color = utils.yellow
         self.disable_buttons()
         await self.message.edit(embed=em, view=self)
+
+    async def interaction_check(self, interaction: MessageInteraction) -> bool:
+        if interaction.author.id != self.user.id:
+            await interaction.response.send_message(
+                'You are not playing in this game! To start a blackjack game of your own please type `!game blackjack <amount>`',
+                ephemeral=True
+            )
+            return False
+        return True
