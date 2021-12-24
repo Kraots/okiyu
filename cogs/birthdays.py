@@ -185,10 +185,6 @@ class Birthdays(commands.Cog):
             return
 
         index = 0
-
-        def format_date(dt1):
-            return f'Birthday in `{utils.human_timedelta(dt1, accuracy=6)}`'
-
         em = disnake.Embed(color=disnake.Color.blurple(), title='***Top `5` upcoming birthdays***\n _ _ ')
 
         datas: list[Birthday] = await Birthday.find().sort('next_birthday', 1).to_list(5)
