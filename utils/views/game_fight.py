@@ -114,9 +114,11 @@ class Fight(disnake.ui.View):
         winner = None
         if self.hp[self.p1] <= 0:
             winner = self.p2
+            loser = self.p1
             winner_charact = self._p2
         elif self.hp[self.p2] <= 0:
             winner = self.p1
+            loser = self.p2
             winner_charact = self._p1
 
         if winner is not None:
@@ -130,7 +132,7 @@ class Fight(disnake.ui.View):
                         f'\n{self.turn.mention} you lost **1,500** 🪙!',
                 view=self
             )
-            await self.award(winner.id, self.turn.id, winner_charact)
+            await self.award(winner.id, loser.id, winner_charact)
             self.stop()
 
     @disnake.ui.button(label='Fight', style=disnake.ButtonStyle.red)
