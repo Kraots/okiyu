@@ -165,6 +165,6 @@ class Fight(disnake.ui.View):
                     f'{self.turn.mention} you won **2,500** 🪙 and your character gets **25xp**!',
             view=self
         )
-        winner_charact = self._p1 if p == self.p1 else self._p2
-        await self.award(p.id, self.turn.id, winner_charact)
+        winner_charact = self._p2 if p == self.p1 else self._p1
+        await self.award(self.turn.id, p.id, winner_charact)
         self.stop()
