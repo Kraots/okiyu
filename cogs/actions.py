@@ -46,6 +46,50 @@ class Actions(commands.Cog):
 
         await ctx.reply(mems, embed=em)
 
+    @commands.command(name='slap')
+    async def _slap(self, ctx: Context, members: commands.Greedy[disnake.Member] = None):
+        """Give somebody a slap <:slap:914791660980953098>
+
+        `members` **->** The people you want to slap. Can be more than just one, or none.
+        """
+
+        mems = []
+        if members is not None:
+            for mem in members:
+                if mem.id == self.bot._owner_id:
+                    mem = ctx.author
+                mems.append(mem)
+        mems = mems or None
+
+        em = disnake.Embed(color=utils.red)
+        em.set_image(
+            url='https://cdn.discordapp.com/attachments/855126816271106061/894624778906910740/slap_gif.gif'
+        )
+
+        await ctx.reply(mems, embed=em)
+
+    @commands.command(name='kill')
+    async def _kill(self, ctx: Context, members: commands.Greedy[disnake.Member] = None):
+        """Kill somebody 🪦
+
+        `members` **->** The people you want to kill. Can be more than just one, or none.
+        """
+
+        mems = []
+        if members is not None:
+            for mem in members:
+                if mem.id == self.bot._owner_id:
+                    mem = ctx.author
+                mems.append(mem)
+        mems = mems or None
+
+        em = disnake.Embed(color=utils.red)
+        em.set_image(
+            url='https://cdn.discordapp.com/attachments/750160852380024893/751229626952581170/tenor_8.gif'
+        )
+
+        await ctx.reply(mems, embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Actions(bot))
