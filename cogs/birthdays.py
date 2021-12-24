@@ -39,7 +39,19 @@ class Birthdays(commands.Cog):
                 next_birthday = data.next_birthday.strftime('%d %B %Y')
                 age = utils.human_timedelta(data.birthday_date, source=_now, accuracy=1, suffix=False) \
                     .replace(' years', '') \
-                    .replace(' year', '')
+                    .replace(' year', '') \
+                    .replace(' ', '')
+
+                if age == '20':
+                    if mem.id != self.bot._owner_id:
+                        staff_roles = (913310292505686046, 913315033134542889, 913315033684008971)
+                        if any(r for r in staff_roles if r in (role.id for role in mem.roles)) is False:
+                            await mem.send(
+                                'Hello! Happy birthday for turning 20 years of age, but sadly, that also means you no longer meet '
+                                'the age requirements of `Ukiyo`, therefore, you have been banned (people can\'t age backwards yk).\n'
+                                'Apologies for the inconvenience, and once again, happy birthday. :tada: :tada:'
+                            )
+                            return await mem.kick(reason='User birthday and turned 20y/o+')
 
                 em = disnake.Embed(title=f'Happy {age}th birthday {mem.name}!!! :tada: :tada:', color=mem.color)
                 em.set_image(url='https://cdn.discordapp.com/attachments/787359417674498088/901940653762687037/happy_bday.gif')
@@ -114,6 +126,22 @@ class Birthdays(commands.Cog):
                 'The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
                 'Doing `!help birthday set` will show you the correct format.'
             )
+        if birthday_date.year not in range(2002, 2008):
+            view = utils.ConfirmView(ctx)
+            view.message = await ctx.reply(
+                f'Are you sure you were born in the year **{birthday_date.year}**?',
+                view=view
+            )
+            await view.wait()
+            if view.response is True:
+                try:
+                    await ctx.author.send(
+                        f'> {ctx.disagree} You have been kicked from `Ukiyo` for not meeting the age requirements. \n'
+                        'This server is only for people between **14-19**'
+                    )
+                except disnake.Forbidden:
+                    pass
+                await ctx.author.kick('User does not match age requirements.')
         data.birthday_date = birthday_date
 
         await ctx.reply(
