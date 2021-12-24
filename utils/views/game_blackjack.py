@@ -219,9 +219,11 @@ class BlackJack(View):
     async def hit_btn(self, button: Button, inter: MessageInteraction):
         await inter.response.defer()
 
+        await self.check_blackjack()
         self.deck.give_random_card(self.player, 1)
         await self.check_blackjack()
         self.deck.give_random_card(self.dealer, 1)
+        await self.check_blackjack()
 
     @button(label='Stand', style=ButtonStyle.blurple)
     async def stand_btn(self, button: Button, inter: MessageInteraction):
