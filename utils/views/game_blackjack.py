@@ -168,7 +168,7 @@ class BlackJack(View):
     async def tie(self, reason: str):
         data: Game = await Game.find_one({'_id': self.user.id})
         em = self.prepare_embed(end=True)
-        em.description = '**You Tied! You tied with the dealer.**\n' \
+        em.description = f'**You Tied! {reason}**\n' \
                          f'Your coins haven\'t changed. You still have **{data.coins:,}** 🪙'
         em.color = utils.yellow
         self.disable_buttons()
