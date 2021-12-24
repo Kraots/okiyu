@@ -282,17 +282,17 @@ class _Game(commands.Cog, name='Game'):
             inline=False
         )
         em.add_field(
-            f'Rare Box — 60,000 {self.coin_emoji}',
+            f'Rare Box — 250,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮✮(3)',
             inline=False
         )
         em.add_field(
-            f'Epic Box — 250,000 {self.coin_emoji}',
+            f'Epic Box — 750,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮✮✮(4)',
             inline=False
         )
         em.add_field(
-            f'Legendary Box — 750,000 {self.coin_emoji}',
+            f'Legendary Box — 1,500,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮✮✮✮(5)',
             inline=False
         )
@@ -311,11 +311,11 @@ class _Game(commands.Cog, name='Game'):
             return
 
         boxes = {
-            'common': (1, 2500),
-            'uncommon': (2, 10000),
-            'rare': (3, 60000),
-            'epic': (4, 250000),
-            'legendary': (5, 750000)
+            'common': (1, 2_500),
+            'uncommon': (2, 10_000),
+            'rare': (3, 250_000),
+            'epic': (4, 750_000),
+            'legendary': (5, 1_500_000)
         }
         box: tuple | None = boxes.get(box_rarity.lower())
         if box is None:
