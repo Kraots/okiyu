@@ -165,7 +165,7 @@ class BlackJack(View):
         await self.message.edit(embed=em, view=self)
         self.stop()
 
-    async def tie(self):
+    async def tie(self, reason: str):
         data: Game = await Game.find_one({'_id': self.user.id})
         em = self.prepare_embed(end=True)
         em.description = '**You Tied! You tied with the dealer.**\n' \
