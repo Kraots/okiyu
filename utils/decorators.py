@@ -3,6 +3,7 @@ import functools
 from typing import Callable
 from weakref import WeakValueDictionary
 
+import disnake
 from disnake.ext import commands
 
 from .context import Context
@@ -83,6 +84,10 @@ def lock() -> Callable | None:
         async def inner(self: Callable, ctx: Context, *args, **kwargs) -> Callable | None:
             lock = func.__locks.setdefault(ctx.author.id, asyncio.Lock())
             if lock.locked():
+                try:
+                    await ctx.message.delete(delay=5.0)
+                except disnake.HTTPException:
+                    pass
                 await ctx.reply(
                     'You are already using this command! Please wait until you complete it first.',
                     delete_after=5.0
