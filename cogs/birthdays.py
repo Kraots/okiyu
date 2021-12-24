@@ -51,7 +51,7 @@ class Birthdays(commands.Cog):
     async def before_loop(self):
         await self.bot.wait_until_ready()
 
-    @commands.group(name='birthday', aliases=('bday',), invoke_without_command=True, case_insensitive=True)
+    @commands.group(name='birthday', aliases=('bday', 'b-day',), invoke_without_command=True, case_insensitive=True)
     async def base_birthday(self, ctx: Context, *, member: disnake.Member = None):
         """See how much time left there is until the member's birthday, if they set it.
 
@@ -197,7 +197,7 @@ class Birthdays(commands.Cog):
             index += 1
             em.add_field(
                 name=f"`{index}`. _ _ _ _ {user.name}",
-                value=f'Birthday in `{utils.human_timedelta(data.next_birthday, accuracy=6)}`',
+                value=f'Birthday in `{utils.human_timedelta(data.next_birthday, accuracy=3)}`',
                 inline=False
             )
 
