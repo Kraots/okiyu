@@ -165,10 +165,10 @@ class _Game(commands.Cog, name='Game'):
         await data.commit()
         em = disnake.Embed(
             title='Daily Claimed',
-            description=f'You have successfully claimed your daily and got `{coins}` {self.coin_emoji}',
+            description=f'You have successfully claimed your daily and got `{coins:,}` {self.coin_emoji}',
             color=utils.green
         )
-        em.set_footer(text=f'Current Streak: {data.streak - 1}')
+        em.set_footer(text=f'Current Streak: {(data.streak - 1):,}')
 
         await ctx.reply(embed=em)
 
@@ -184,7 +184,7 @@ class _Game(commands.Cog, name='Game'):
 
         data = await self.get_user(ctx.author.id)
         em = disnake.Embed(
-            description=f'Your current daily streak is `{data.streak}`',
+            description=f'Your current daily streak is `{data.streak:,}`',
             color=utils.blurple
         )
         em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
