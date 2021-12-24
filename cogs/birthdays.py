@@ -195,9 +195,11 @@ class Birthdays(commands.Cog):
         for data in datas:
             user = self.bot.get_user(data.id)
             index += 1
+            next_birthday_date = data.next_birthday.strftime('%d %B %Y')
+            next_birthday = utils.human_timedelta(data.next_birthday, accuracy=3)
             em.add_field(
                 name=f"`{index}`. _ _ _ _ {user.name}",
-                value=f'Birthday in `{utils.human_timedelta(data.next_birthday, accuracy=3)}`',
+                value=f'Birthday in `{next_birthday}` ( **{next_birthday_date}** )',
                 inline=False
             )
 
