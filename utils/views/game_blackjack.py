@@ -191,7 +191,9 @@ class BlackJack(View):
                     f'than the dealer (`{self.dealer.card_value}`)'
                 )
             elif self.player.card_value == self.dealer.card_value:
-                return await self.tie()
+                return await self.tie(
+                    f'Both you and the dealer had {self.player.card_value} cards.'
+                )
 
         if self.dealer.card_value > 21:
             if self.player.card_value > 21:
