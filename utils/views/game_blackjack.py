@@ -212,10 +212,18 @@ class BlackJack(View):
                 'You had over 21 cards and the dealer did not.'
             )
         elif self.dealer.card_value == 21:
+            if self.player.card_value == 21:
+                return await self.tie(
+                    'Both you and the dealer had reached 21 cards.'
+                )
             return await self.lose(
                 'The dealer reached the score of 21 before you.'
             )
         elif self.player.card_value == 21:
+            if self.dealer.card_value == 21:
+                return await self.tie(
+                    'Both you and the dealer had reached 21 cards.'
+                )
             return await self.win(
                 'You reached the score of 21 before the dealer.'
             )
