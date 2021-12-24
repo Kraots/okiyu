@@ -312,8 +312,8 @@ class _Game(commands.Cog, name='Game'):
 
         boxes = {
             'common': (1, 2500),
-            'uncommon': (2, 60000),
-            'rare': (3, 30000),
+            'uncommon': (2, 10000),
+            'rare': (3, 60000),
             'epic': (4, 250000),
             'legendary': (5, 750000)
         }
