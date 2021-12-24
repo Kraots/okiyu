@@ -217,8 +217,6 @@ class BlackJack(View):
             return await self.win(
                 'You reached the score of 21 before the dealer.'
             )
-        elif self.player.card_value == self.dealer.card_value:
-            return await self.tie()
         else:
             return await self.message.edit(embed=self.prepare_embed())
 
