@@ -181,6 +181,10 @@ class BlackJack(View):
         self.dealer.calculate_card_value()
 
         if end is True:
+            if self.dealer.card_value > 21:
+                return await self.win(
+                    'The dealer had over 21 cards.'
+                )
             if self.player.card_value > self.dealer.card_value:
                 return await self.win(
                     f'You stood with a higher score (`{self.player.card_value}`) '
@@ -196,35 +200,15 @@ class BlackJack(View):
                     f'Both you and the dealer had {self.player.card_value} cards.'
                 )
 
-        if self.dealer.card_value > 21:
-            if self.player.card_value > 21:
-                return await self.tie(
-                    'Both you and the dealer had over 21 cards.'
-                )
-            return await self.win(
-                'The dealer had over 21 cards.'
-            )
-        elif self.player.card_value > 21:
-            if self.dealer.card_value > 21:
-                return await self.tie(
-                    'Both you and the dealer had over 21 cards.'
-                )
+        if self.player.card_value > 21:
             return await self.lose(
                 'You had over 21 cards and the dealer did not.'
             )
         elif self.dealer.card_value == 21:
-            if self.player.card_value == 21:
-                return await self.tie(
-                    'Both you and the dealer had reached 21 cards.'
-                )
             return await self.lose(
                 'The dealer reached the score of 21 before you.'
             )
         elif self.player.card_value == 21:
-            if self.dealer.card_value == 21:
-                return await self.tie(
-                    'Both you and the dealer had reached 21 cards.'
-                )
             return await self.win(
                 'You reached the score of 21 before the dealer.'
             )
@@ -236,9 +220,8 @@ class BlackJack(View):
         await inter.response.defer()
 
         self.deck.give_random_card(self.player, 1)
-        self.deck.give_random_card(self.dealer, 1)
-
         await self.check_blackjack()
+        self.deck.give_random_card(self.dealer, 1)
 
     @button(label='Stand', style=ButtonStyle.blurple)
     async def stand_btn(self, button: Button, inter: MessageInteraction):
