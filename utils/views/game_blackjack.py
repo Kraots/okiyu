@@ -217,6 +217,12 @@ class BlackJack(View):
                 'You reached the score of 21 before the dealer.'
             )
         else:
+            while self.dealer.card_value > 21:
+                cards = len(self.dealer.cards)
+                self.dealer.cards = []
+                self.deck.shuffle()
+                self.deck.give_random_card(self.dealer, cards)
+
             return await self.message.edit(embed=self.prepare_embed())
 
     @button(label='Hit', style=ButtonStyle.blurple)
