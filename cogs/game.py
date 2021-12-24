@@ -801,7 +801,12 @@ class _Game(commands.Cog, name='Game'):
         """Start a game of blackjack by betting some of your coins.
 
         `amount` **->** The amount you wish to bet.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
         """
+
+        if utils.check_channel(ctx) is False:
+            return
 
         amount = amount.lower()
         data = await self.get_user(ctx.author.id)
