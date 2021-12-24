@@ -827,6 +827,7 @@ class _Game(commands.Cog, name='Game'):
 
         view = utils.BlackJack(ctx.author, self.bot, amount)
         view.message = await ctx.reply(embed=view.prepare_embed(), view=view)
+        await view.wait()
 
 
 def setup(bot: Ukiyo):
