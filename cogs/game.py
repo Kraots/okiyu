@@ -104,7 +104,7 @@ class _Game(commands.Cog, name='Game'):
         `member` **->** The member that you wish to set the coins for. Defaults to yourself.
         """
 
-        amount = utils.format_num(amount)
+        amount = utils.format_amount(amount)
         try:
             amount = int(amount)
         except ValueError:
@@ -126,7 +126,7 @@ class _Game(commands.Cog, name='Game'):
         `member` **->** The member that you wish to add the coins for. Defaults to yourself.
         """
 
-        amount = utils.format_num(amount)
+        amount = utils.format_amount(amount)
         try:
             amount = int(amount)
         except ValueError:
@@ -794,6 +794,36 @@ class _Game(commands.Cog, name='Game'):
         await ctx.message.add_reaction(ctx.thumb)
 
         self.boss_fight.restart()
+
+    @base_game.command(name='blackjack', aliases=('bj',))
+    @utils.lock()
+    async def game_blackjack(self, ctx: Context, *, amount: str):
+        """Start a game of blackjack by betting some of your coins.
+
+        `amount` **->** The amount you wish to bet.
+        """
+
+        amount = amount.lower()
+        data = await self.get_user(ctx.author.id)
+        if amount == 'all':
+            amount = data.coins
+        else:
+            amount = utils.format_amount(amount)
+            try:
+                amount = int(amount)
+            except ValueError:
+                em = utils.fail_embed('The amount must be a number.')
+                return await ctx.reply(embed=em)
+
+        if amount < 200:
+            em = utils.fail_embed('The amount must be greater than **200**.')
+            return await ctx.reply(embed=em)
+        elif amount > data.coins:
+            em = utils.fail_embed('You don\'t have that many coins.')
+            return await ctx.reply(embed=em)
+
+        view = utils.BlackJack(ctx.author, self.bot, amount)
+        view.message = await ctx.reply(embed=view.prepare_embed(), view=view)
 
 
 def setup(bot: Ukiyo):
