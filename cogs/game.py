@@ -282,7 +282,7 @@ class _Game(commands.Cog, name='Game'):
             inline=False
         )
         em.add_field(
-            f'Rare Box — 250,000 {self.coin_emoji}',
+            f'Rare Box — 300,000 {self.coin_emoji}',
             'This box will get you characters that have a rarity of ✮✮✮(3)',
             inline=False
         )
@@ -313,7 +313,7 @@ class _Game(commands.Cog, name='Game'):
         boxes = {
             'common': (1, 2_500),
             'uncommon': (2, 10_000),
-            'rare': (3, 250_000),
+            'rare': (3, 300_000),
             'epic': (4, 750_000),
             'legendary': (5, 1_500_000)
         }
