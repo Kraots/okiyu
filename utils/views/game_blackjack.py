@@ -147,7 +147,7 @@ class BlackJack(View):
         await data.commit()
         em = self.prepare_embed(end=True)
         em.description = f'**You Win! {reason}**\n'\
-                         f'You won **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins}** 🪙'
+                         f'You won **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins:,}** 🪙'
         em.color = utils.green
         self.disable_buttons()
         await self.message.edit(embed=em, view=self)
@@ -159,7 +159,7 @@ class BlackJack(View):
         await data.commit()
         em = self.prepare_embed(end=True)
         em.description = f'**You Lost! {reason}**\n'\
-                         f'You lost **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins}** 🪙'
+                         f'You lost **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins:,}** 🪙'
         em.color = utils.red
         self.disable_buttons()
         await self.message.edit(embed=em, view=self)
@@ -169,7 +169,7 @@ class BlackJack(View):
         data: Game = await Game.find_one({'_id': self.user.id})
         em = self.prepare_embed(end=True)
         em.description = '**You Tied! You tied with the dealer.**\n' \
-                         f'Your coins haven\'t changed. You still have **{data.coins}** 🪙'
+                         f'Your coins haven\'t changed. You still have **{data.coins:,}** 🪙'
         em.color = utils.yellow
         self.disable_buttons()
         await self.message.edit(embed=em, view=self)
@@ -238,7 +238,7 @@ class BlackJack(View):
         await data.commit()
         em = self.prepare_embed(end=True)
         em.description = '**You ended the game.**\n' \
-                         f'You lost **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins}** 🪙'
+                         f'You lost **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins:,}** 🪙'
         em.color = utils.yellow
         self.disable_buttons()
         await self.message.edit(embed=em, view=self)
@@ -250,7 +250,7 @@ class BlackJack(View):
         await data.commit()
         em = self.prepare_embed(end=True)
         em.description = '**You didn\'t respond in time.**\n' \
-                         f'You lost **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins}** 🪙'
+                         f'You lost **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins:,}** 🪙'
         em.color = utils.yellow
         self.disable_buttons()
         await self.message.edit(embed=em, view=self)
