@@ -197,7 +197,7 @@ class GiveAwayCreationView(View):
         else:
             clean_content = msg.content
 
-        clean_content = utils.format_num(clean_content)
+        clean_content = utils.format_amount(clean_content)
 
         c = None
         if clean_content is None:

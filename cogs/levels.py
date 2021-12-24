@@ -215,7 +215,7 @@ class Levels(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} User not in the database.')
 
         try:
-            amount = utils.format_num(amount)
+            amount = utils.format_amount(amount)
             amount = int(amount)
         except ValueError:
             return await ctx.reply(f'> {ctx.disagree} The amount must be an integer.')
@@ -241,7 +241,7 @@ class Levels(commands.Cog):
             return await ctx.reply(f'> {ctx.disagree} User not in the database.')
 
         try:
-            amount = utils.format_num(amount)
+            amount = utils.format_amount(amount)
             amount = int(amount)
         except ValueError:
             return await ctx.reply(f'> {ctx.disagree} The amount must be an integer.')

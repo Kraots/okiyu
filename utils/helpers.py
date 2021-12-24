@@ -26,7 +26,7 @@ __all__ = (
     'run_in_executor',
     'clean_inter_content',
     'fail_embed',
-    'format_num',
+    'format_amount',
     'check_channel',
 )
 
@@ -281,7 +281,7 @@ def fail_embed(description: str) -> disnake.Embed:
     return disnake.Embed(title='Uh-oh!', color=utils.red, description=description)
 
 
-def format_num(num: str):
+def format_amount(num: str):
     return num \
         .replace(',', '') \
         .replace(' ', '') \
