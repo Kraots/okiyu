@@ -58,7 +58,7 @@ class Actions(commands.Cog):
             for mem in members:
                 if mem.id == self.bot._owner_id:
                     mem = ctx.author
-                mems.append(mem)
+                mems.append(mem.mention)
         mems = mems or None
 
         em = disnake.Embed(color=utils.red)
@@ -80,7 +80,7 @@ class Actions(commands.Cog):
             for mem in members:
                 if mem.id == self.bot._owner_id:
                     mem = ctx.author
-                mems.append(mem)
+                mems.append(mem.mention)
         mems = mems or None
 
         em = disnake.Embed(color=utils.red)
