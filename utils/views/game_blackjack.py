@@ -194,10 +194,18 @@ class BlackJack(View):
                 return await self.tie()
 
         if self.dealer.card_value > 21:
+            if self.player.card_value > 21:
+                return await self.tie(
+                    'Both you and the dealer had over 21 cards.'
+                )
             return await self.win(
                 'The dealer had over 21 cards.'
             )
         elif self.player.card_value > 21:
+            if self.dealer.card_value > 21:
+                return await self.tie(
+                    'Both you and the dealer had over 21 cards.'
+                )
             return await self.lose(
                 'You had over 21 cards and the dealer did not.'
             )
