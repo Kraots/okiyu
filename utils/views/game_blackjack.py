@@ -117,6 +117,7 @@ class BlackJack(View):
     def prepare_embed(self, end: bool = False) -> disnake.Embed:
         em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{self.user.display_name}\'s blackjack game', icon_url=self.user.display_avatar)
+        em.set_footer(text='K, Q, J = 10  |  A = 1 or 11')
         em.add_field(
             f'{self.user.display_name} (Player)',
             f'Cards - {" ".join([str(card) for card in self.player.cards])}\n'
