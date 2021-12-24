@@ -256,7 +256,7 @@ class _Game(commands.Cog, name='Game'):
             elif character.rarity_level == 5:
                 legendaries.append(em)
 
-        embeds = uncommons + commons + rares + epics + legendaries
+        embeds = commons + uncommons + rares + epics + legendaries
         paginator = utils.EmbedPaginator(ctx, embeds)
         await paginator.start()
 
