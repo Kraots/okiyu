@@ -35,8 +35,9 @@ class Birthdays(commands.Cog):
                 guild = self.bot.get_guild(913310006814859334)
                 channel = guild.get_channel(923681449490669628)
                 mem = guild.get_member(data.id)
+                _now = datetime.now() + relativedelta(days=3)  # Use this as source so it doesn't fail to say the right age for the people in UTC- timezones.
                 next_birthday = data.next_birthday.strftime('%d %B %Y')
-                age = utils.human_timedelta(data.birthday_date, accuracy=1, suffix=False) \
+                age = utils.human_timedelta(data.birthday_date, source=_now, accuracy=1, suffix=False) \
                     .replace(' years', '') \
                     .replace(' year', '')
 
