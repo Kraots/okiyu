@@ -146,7 +146,7 @@ class BlackJack(View):
         data.coins += self.bet_amount
         await data.commit()
         em = self.prepare_embed(end=True)
-        em.description = f'**You Win! {reason}**\n'\
+        em.description = f'**You Win! {reason}**\n' \
                          f'You won **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins:,}** 🪙'
         em.color = utils.green
         self.disable_buttons()
@@ -158,7 +158,7 @@ class BlackJack(View):
         data.coins -= self.bet_amount
         await data.commit()
         em = self.prepare_embed(end=True)
-        em.description = f'**You Lost! {reason}**\n'\
+        em.description = f'**You Lost! {reason}**\n' \
                          f'You lost **{self.bet_amount:,}** 🪙 and now have a total of **{data.coins:,}** 🪙'
         em.color = utils.red
         self.disable_buttons()
