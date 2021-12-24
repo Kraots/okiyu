@@ -111,8 +111,8 @@ class BlackJack(View):
         self.deck = Deck()
         self.player = Player()
         self.dealer = Player(is_dealer=True)
-        self.deck.give_random_card(self.dealer, 1)
-        self.deck.give_random_card(self.player, 1)
+        self.deck.give_random_card(self.dealer, 2)
+        self.deck.give_random_card(self.player, 2)
 
     def prepare_embed(self, end: bool = False) -> disnake.Embed:
         em = disnake.Embed(color=utils.blurple)
