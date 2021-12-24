@@ -201,6 +201,10 @@ class BlackJack(View):
                 )
 
         if self.player.card_value > 21:
+            if self.dealer.card_value > 21:
+                return await self.lose(
+                    'You had over 21 cards, the dealer did too but you didn\'t stand.'
+                )
             return await self.lose(
                 'You had over 21 cards and the dealer did not.'
             )
