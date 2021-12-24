@@ -59,7 +59,7 @@ class Actions(commands.Cog):
                 if mem.id == self.bot._owner_id:
                     mem = ctx.author
                 mems.append(mem.mention)
-        mems = mems or None
+        mems = ' '.join(mems) if mems else None
 
         em = disnake.Embed(color=utils.red)
         em.set_image(
@@ -81,7 +81,7 @@ class Actions(commands.Cog):
                 if mem.id == self.bot._owner_id:
                     mem = ctx.author
                 mems.append(mem.mention)
-        mems = mems or None
+        mems = ' '.join(mems) if mems else None
 
         em = disnake.Embed(color=utils.red)
         em.set_image(
