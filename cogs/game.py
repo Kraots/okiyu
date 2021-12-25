@@ -811,7 +811,7 @@ class _Game(commands.Cog, name='Game'):
         amount = amount.lower()
         data = await self.get_user(ctx.author.id)
         if amount == 'all':
-            amount = 30000 if data.coins >= 30000 else data.coins
+            amount = 5000 if data.coins >= 5000 else data.coins
         else:
             amount = utils.format_amount(amount)
             try:
@@ -826,8 +826,8 @@ class _Game(commands.Cog, name='Game'):
         elif amount > data.coins:
             em = utils.fail_embed('You don\'t have that many coins.')
             return await ctx.reply(embed=em)
-        elif amount > 30000:
-            em = utils.fail_embed(f'You can\'t bet more than **30,000** {self.coin_emoji}')
+        elif amount > 5000:
+            em = utils.fail_embed(f'You can\'t bet more than **5,000** {self.coin_emoji}')
             return await ctx.reply(embed=em)
 
         view = utils.BlackJack(ctx.author, self.bot, amount)
