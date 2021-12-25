@@ -201,7 +201,7 @@ class BlackJack(View):
                     'The dealer went over 21 and busted.'
                 )
             elif self.dealer.card_value == 21:
-                return await self.win(
+                return await self.lose(
                     'The dealer got to 21 before you.'
                 )
             elif self.player.card_value > self.dealer.card_value:
