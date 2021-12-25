@@ -42,7 +42,7 @@ class Featured(commands.Cog):
             return await ctx.reply(
                 'One of the dates you have given does not match the format in which a date should be given.'
             )
-        diff = utils.human_timedelta(time2, source=time1, suffix=False, accuracy=4)
+        diff = utils.human_timedelta(time2, source=time1, suffix=False, accuracy=5)
 
         _time1 = time1.strftime('%d %B %Y')
         _time2 = time2.strftime('%d %B %Y')
