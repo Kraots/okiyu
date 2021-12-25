@@ -282,7 +282,7 @@ class OnMessage(commands.Cog):
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
         ctx = await self.bot.get_context(after, cls=utils.Context)
-        cmd = self.bot.get_command(after.content)
+        cmd = self.bot.get_command(after.content.replace('!', ''))
         if cmd is None:
             return
 
