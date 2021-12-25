@@ -128,7 +128,7 @@ class BlackJack(View):
         if end is False:
             em.add_field(
                 f'{self.bot.user.display_name} (Dealer)',
-                f'Cards - {" ".join([str(card) for card in self.dealer.cards[0:-1]])} `{hyperlink.format("?")}`\n'
+                f'Cards - {" ".join([str(card) for card in self.dealer.cards[0:-1]])} {hyperlink.format("?")}\n'
                 f'Total - ` ? `'
             )
         else:
