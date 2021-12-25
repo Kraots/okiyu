@@ -77,7 +77,7 @@ class Developer(commands.Cog):
         return '⚒️'
 
     @commands.command(name='eval', aliases=['e'])
-    async def _eval(self, ctx: Context, *, code: str = None):
+    async def _eval(self, ctx: Context, *, code: str):
         """Evaluate code.
 
         `code` **->** The code to evaluate.
@@ -93,9 +93,6 @@ class Developer(commands.Cog):
         \u2800 • ``_message`` **->** The ``disnake.Message`` object of the command.
         \u2800 • ``utils`` **->** The bot's ``utils`` custom package.
         """
-
-        if code is None:
-            return await ctx.send("Please give code that you want to evaluate!")
 
         code = clean_code(code)
 
