@@ -176,11 +176,16 @@ class BlackJack(View):
         await self.message.edit(embed=em, view=self)
         self.stop()
 
+    def dealers_play(self):
+        self.dealer.calculate_card_value()
+        while self.dealer.card_value < 17:
+            self.deck.give_random_card(self.dealer, 1)
+
     async def check_blackjack(self, end: bool = False):
         self.player.calculate_card_value()
-        self.dealer.calculate_card_value()
 
         if end is True:
+            self.dealers_play()
             if self.dealer.card_value > 21:
                 return await self.win(
                     'The dealer had over 21 cards.'
@@ -222,6 +227,14 @@ class BlackJack(View):
                 self.dealer.cards = []
                 self.deck.shuffle()
                 self.deck.give_random_card(self.dealer, cards)
+                if self.dealer.card_value > 21:
+                    return await self.win(
+                        'The dealer had over 21 cards.'
+                    )
+                elif self.dealer.card_value == 21:
+                    return await self.lose(
+                        'The dealer reached the score of 21 before you.'
+                    )
 
             return await self.message.edit(embed=self.prepare_embed())
 
@@ -230,8 +243,6 @@ class BlackJack(View):
         await inter.response.defer()
 
         self.deck.give_random_card(self.player, 1)
-        self.deck.give_random_card(self.dealer, 1)
-
         await self.check_blackjack()
 
     @button(label='Stand', style=ButtonStyle.blurple)
