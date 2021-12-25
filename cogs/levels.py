@@ -25,7 +25,7 @@ class Levels(commands.Cog):
             if message.author.id == self.bot._owner_id:
                 data.xp += 30
             else:
-                if message.channel.id in (913330644875104306, 913335107564208158):
+                if message.channel.id not in (913330644875104306, 913335107564208158):
                     data.xp += 5
             data.messages_count += 1
             await data.commit()
