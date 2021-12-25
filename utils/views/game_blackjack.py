@@ -120,7 +120,7 @@ class BlackJack(View):
             self.deck.give_random_card(self.player, 2)
             self.deck.give_random_card(self.dealer, 2)
 
-            if self.dealer.card_value > 19 and self.player.card_value > 19:
+            if self.dealer.card_value > 19 or self.player.card_value > 19:
                 continue
             break
 
