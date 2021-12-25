@@ -281,12 +281,17 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
+        if after.content is None:
+            return
+        elif after.content[0] not in ('!', '?'):
+            return
+
         ctx = await self.bot.get_context(after, cls=utils.Context)
-        cmd = self.bot.get_command(after.content.replace('!', ''))
+        cmd = self.bot.get_command(after.content.replace('!', '').replace('?', ''))
         if cmd is None:
             return
 
-        if after.content.lower().startswith(('!e', '!eval', '!jsk', '!jishaku')):
+        if after.content.lower()[1:].startswith(('e', 'eval', 'jsk', 'jishaku')):
             await after.add_reaction('🔁')
             try:
                 await self.bot.wait_for(
