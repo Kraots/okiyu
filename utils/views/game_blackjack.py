@@ -213,10 +213,6 @@ class BlackJack(View):
             return await self.lose(
                 'You had over 21 cards and the dealer did not.'
             )
-        elif self.dealer.card_value == 21:
-            return await self.lose(
-                'The dealer reached the score of 21 before you.'
-            )
         elif self.player.card_value == 21:
             return await self.win(
                 'You reached the score of 21 before the dealer.'
@@ -227,14 +223,6 @@ class BlackJack(View):
                 self.dealer.cards = []
                 self.deck.shuffle()
                 self.deck.give_random_card(self.dealer, cards)
-                if self.dealer.card_value > 21:
-                    return await self.win(
-                        'The dealer had over 21 cards.'
-                    )
-                elif self.dealer.card_value == 21:
-                    return await self.lose(
-                        'The dealer reached the score of 21 before you.'
-                    )
 
             return await self.message.edit(embed=self.prepare_embed())
 
