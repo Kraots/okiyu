@@ -110,11 +110,19 @@ class BlackJack(View):
         self.bot = bot
         self.bet_amount = bet_amount
 
-        self.deck = Deck()
-        self.player = Player()
-        self.dealer = Player(is_dealer=True)
-        self.deck.give_random_card(self.player, 2)
-        self.deck.give_random_card(self.dealer, 2)
+        self.build_table()
+
+    def build_table(self):
+        while True:
+            self.deck = Deck()
+            self.player = Player()
+            self.dealer = Player(is_dealer=True)
+            self.deck.give_random_card(self.player, 2)
+            self.deck.give_random_card(self.dealer, 2)
+
+            if self.dealer.card_value < 19 or self.player.card_value < 19:
+                continue
+            break
 
     def prepare_embed(self, end: bool = False) -> disnake.Embed:
         em = disnake.Embed(color=utils.blurple)
@@ -190,7 +198,7 @@ class BlackJack(View):
             self.dealers_play()
             if self.dealer.card_value > 21:
                 return await self.win(
-                    'The dealer had over 21 cards.'
+                    'The dealer went over 21 and busted.'
                 )
             if self.player.card_value > self.dealer.card_value:
                 return await self.win(
@@ -208,12 +216,8 @@ class BlackJack(View):
                 )
 
         if self.player.card_value > 21:
-            if self.dealer.card_value > 21:
-                return await self.lose(
-                    'You had over 21 cards, the dealer did too but you didn\'t stand.'
-                )
             return await self.lose(
-                'You had over 21 cards and the dealer did not.'
+                'You went over 21 and busted.'
             )
         elif self.player.card_value == 21:
             return await self.win(
