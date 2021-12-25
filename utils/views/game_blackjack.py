@@ -217,7 +217,7 @@ class BlackJack(View):
                 'You reached the score of 21 before the dealer.'
             )
         else:
-            while self.dealer.card_value > 21:
+            if self.dealer.card_value > 21:
                 cards = len(self.dealer.cards)
                 self.dealer.cards = []
                 self.deck.shuffle()
