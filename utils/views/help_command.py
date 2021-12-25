@@ -125,6 +125,7 @@ class FrontPageSource(menus.PageSource):
 
     def format_page(self, menu: HelpMenu, page):
         embed = disnake.Embed(title='Bot Help', color=utils.blurple)
+        embed.set_footer(text=f'TIP: You can also use "{"!" if menu.ctx.clean_prefix == "?" else "?"}" as prefix')
         embed.description = inspect.cleandoc(
             f"""
             Hello! Welcome to the help page.
