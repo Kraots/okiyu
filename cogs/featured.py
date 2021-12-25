@@ -59,7 +59,7 @@ class Featured(commands.Cog):
     async def ticket_cmd(self, ctx: Context):
         """Create a ticket."""
 
-        total_tickets = await utils.Ticket.find({'user_id': ctx.author.id}).sort('ticket_id', -1).to_list(5)
+        total_tickets = await Ticket.find({'user_id': ctx.author.id}).sort('ticket_id', -1).to_list(5)
         if len(total_tickets) == 5:
             return await ctx.reply('You already have a max of `5` tickets created!')
         ticket_id = '1' if not total_tickets else str(int(total_tickets[0].ticket_id) + 1)
