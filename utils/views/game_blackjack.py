@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 
 __all__ = ('BlackJack',)
 
+hyperlink = '[`{0}`](https://cdn.discordapp.com/attachments/787359417674498088/924239039790477322/rickroll.gif "{0}")'
+
 
 class Player:
     def __init__(self, is_dealer=False) -> None:
@@ -59,8 +61,7 @@ class Card:
         self.name = name
 
     def __str__(self):
-        card = f'{self.suit} {self.name}'
-        return f'[`{card}`](https://cdn.discordapp.com/attachments/787359417674498088/924239039790477322/rickroll.gif "{card}")'
+        return hyperlink.format(f'{self.suit} {self.name}')
 
 
 class Deck:
@@ -127,7 +128,7 @@ class BlackJack(View):
         if end is False:
             em.add_field(
                 f'{self.bot.user.display_name} (Dealer)',
-                f'Cards - {" ".join([str(card) for card in self.dealer.cards[0:-1]])} `?`\n'
+                f'Cards - {" ".join([str(card) for card in self.dealer.cards[0:-1]])} `{hyperlink.format("?")}`\n'
                 f'Total - ` ? `'
             )
         else:
