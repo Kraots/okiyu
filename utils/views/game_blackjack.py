@@ -200,7 +200,11 @@ class BlackJack(View):
                 return await self.win(
                     'The dealer went over 21 and busted.'
                 )
-            if self.player.card_value > self.dealer.card_value:
+            elif self.dealer.card_value == 21:
+                return await self.win(
+                    'The dealer got to 21 before you.'
+                )
+            elif self.player.card_value > self.dealer.card_value:
                 return await self.win(
                     f'You stood with a higher score (`{self.player.card_value}`) '
                     f'than the dealer (`{self.dealer.card_value}`)'
@@ -221,7 +225,7 @@ class BlackJack(View):
             )
         elif self.player.card_value == 21:
             return await self.win(
-                'You reached the score of 21 before the dealer.'
+                'You got to 21.'
             )
         else:
             return await self.message.edit(embed=self.prepare_embed())
