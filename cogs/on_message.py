@@ -282,7 +282,10 @@ class OnMessage(commands.Cog):
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
         ctx = await self.bot.get_context(after, cls=utils.Context)
-        cmd = self.bot.get_command(after.content.lower().replace('!', ''))
+        cmd = self.bot.get_command(after.content)
+        if cmd is None:
+            return
+
         if after.content.lower().startswith(('!e', '!eval', '!jsk', '!jishaku')):
             await after.add_reaction('🔁')
             try:
@@ -299,8 +302,8 @@ class OnMessage(commands.Cog):
                     await curr.delete()
                 await after.clear_reaction('🔁')
                 await cmd.invoke(ctx)
-        elif cmd is not None:
-            await cmd.invoke(ctx)
+            return
+        await cmd.invoke(ctx)
 
 
 def setup(bot: Ukiyo):
