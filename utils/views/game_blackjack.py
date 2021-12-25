@@ -59,7 +59,8 @@ class Card:
         self.name = name
 
     def __str__(self):
-        return f'`{self.suit} {self.name}`'
+        card = f'{self.suit} {self.name}'
+        return f'[`{card}`](https://cdn.discordapp.com/attachments/787359417674498088/924239039790477322/rickroll.gif "{card}")'
 
 
 class Deck:
