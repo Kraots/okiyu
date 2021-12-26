@@ -17,6 +17,7 @@ class Ukiyo(commands.Bot):
         super().__init__(
             help_command=PaginatedHelpCommand(),
             command_prefix=('!', '?',),
+            strip_after_prefix=True,
             case_insensitive=True,
             intents=disnake.Intents.all(),
             allowed_mentions=disnake.AllowedMentions(
