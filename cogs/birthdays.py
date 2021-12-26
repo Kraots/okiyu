@@ -136,7 +136,7 @@ class Birthdays(commands.Cog):
             if view.response is True:
                 try:
                     await ctx.author.send(
-                        f'> {ctx.disagree} You have been kicked from `Ukiyo` for not meeting the age requirements. \n'
+                        f'{ctx.denial} You have been kicked from `Ukiyo` for not meeting the age requirements. \n'
                         'This server is only for people between **14-19**'
                     )
                 except disnake.Forbidden:

@@ -62,13 +62,13 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _name.reply(f'> {ctx.disagree} Name too long. Type `!intro` to redo.')
+            return await _name.reply(f'{ctx.denial} Name too long. Type `!intro` to redo.')
         elif len(name) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _name.reply(f'> {ctx.disagree} You did not say what your name is! Type `!intro` to redo.')
+            return await _name.reply(f'{ctx.denial} You did not say what your name is! Type `!intro` to redo.')
 
         await _name.reply('What\'s your age?')
         while True:
@@ -76,19 +76,19 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 _age = await bot.wait_for('message', timeout=180.0, check=check)
                 age = int(_age.content)
             except (ValueError, TypeError):
-                await ctx.send(f'> {ctx.disagree} Must be a number.')
+                await ctx.send(f'{ctx.denial} Must be a number.')
             except TimeoutError:
                 try:
                     bot.verifying.pop(bot.verifying.index(user_id))
                 except (IndexError, ValueError):
                     pass
                 try:
-                    return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
+                    return await ctx.reply(f'{ctx.denial} Ran out of time. Type `!intro` to redo.')
                 except disnake.Forbidden:
                     return
             else:
                 if age < 14 or age > 19:
-                    await ctx.send(f'> {ctx.disagree} Sorry! This dating server is only for people between the ages of 14-19.')
+                    await ctx.send(f'{ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.')
                     try:
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
@@ -121,13 +121,13 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _gender.reply(f'> {ctx.disagree} Gender too long. Type `!intro` to redo.')
+            return await _gender.reply(f'{ctx.denial} Gender too long. Type `!intro` to redo.')
         elif len(gender) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _gender.reply(f'> {ctx.disagree} You did not say what your gender is! Type `!intro` to redo.')
+            return await _gender.reply(f'{ctx.denial} You did not say what your gender is! Type `!intro` to redo.')
 
         await _gender.reply('Where are you from?')
         _location = await bot.wait_for('message', timeout=180.0, check=check)
@@ -137,20 +137,20 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _location.reply(f'> {ctx.disagree} Location too long. Type `!intro` to redo.')
+            return await _location.reply(f'{ctx.denial} Location too long. Type `!intro` to redo.')
         elif len(location) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _location.reply(f'> {ctx.disagree} You did not say what your location is! Type `!intro` to redo.')
+            return await _location.reply(f'{ctx.denial} You did not say what your location is! Type `!intro` to redo.')
 
         await _location.reply('Dms? `open` | `closed` | `ask`')
         while True:
             _dms = await bot.wait_for('message', timeout=180.0, check=check)
             dms = _dms.content
             if dms.lower() not in ('open', 'closed', 'ask'):
-                await _dms.reply(f'> {ctx.disagree} Must only be `open` | `closed` | `ask`')
+                await _dms.reply(f'{ctx.denial} Must only be `open` | `closed` | `ask`')
             else:
                 break
 
@@ -159,7 +159,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
             _looking = await bot.wait_for('message', timeout=180.0, check=check)
             looking = _looking.content
             if looking.lower() not in ('yes', 'no'):
-                await _looking.reply(f'> {ctx.disagree} Must only be `yes` | `no`')
+                await _looking.reply(f'{ctx.denial} Must only be `yes` | `no`')
             else:
                 break
 
@@ -175,20 +175,20 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await ctx.reply(f'> {ctx.disagree} Sexuality too long. Type `!intro` to redo.')
+            return await ctx.reply(f'{ctx.denial} Sexuality too long. Type `!intro` to redo.')
         elif len(sexuality) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _sexuality.reply(f'> {ctx.disagree} You did not say what your sexuality is! Type `!intro` to redo.')
+            return await _sexuality.reply(f'{ctx.denial} You did not say what your sexuality is! Type `!intro` to redo.')
 
         await _sexuality.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
         while True:
             _status = await bot.wait_for('message', timeout=180.0, check=check)
             status = _status.content
             if status.lower() not in ('single', 'taken', 'complicated'):
-                await _status.reply(f'> {ctx.disagree} Must only be `single` | `taken` | `complicated`')
+                await _status.reply(f'{ctx.denial} Must only be `single` | `taken` | `complicated`')
             else:
                 break
 
@@ -200,14 +200,14 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _likes.reply(f'> {ctx.disagree} You like too many things. Please don\'t go above 1024 '
+            return await _likes.reply(f'{ctx.denial} You like too many things. Please don\'t go above 1024 '
                                       'characters next time. Type `!intro` to redo.')
         elif len(likes) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _likes.reply(f'> {ctx.disagree} You did not say what you like! Type `!intro` to redo.')
+            return await _likes.reply(f'{ctx.denial} You did not say what you like! Type `!intro` to redo.')
 
         await _likes.reply('What do you dislike?')
         _dislikes = await bot.wait_for('message', timeout=180.0, check=check)
@@ -217,21 +217,21 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _dislikes.reply(f'> {ctx.disagree} You dislike too many things. Please don\'t go above 1024 '
+            return await _dislikes.reply(f'{ctx.denial} You dislike too many things. Please don\'t go above 1024 '
                                          'characters next time. Type `!intro` to redo.')
         elif len(dislikes) == 0:
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return await _dislikes.reply(f'> {ctx.disagree} You did not say what you dislike! Type `!intro` to redo.')
+            return await _dislikes.reply(f'{ctx.denial} You did not say what you dislike! Type `!intro` to redo.')
     except TimeoutError:
         try:
             bot.verifying.pop(bot.verifying.index(user_id))
         except (IndexError, ValueError):
             pass
         try:
-            return await ctx.reply(f'> {ctx.disagree} Ran out of time. Type `!intro` to redo.')
+            return await ctx.reply(f'{ctx.denial} Ran out of time. Type `!intro` to redo.')
         except disnake.Forbidden:
             return
     else:

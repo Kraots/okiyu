@@ -173,7 +173,7 @@ class GiveAwayCreationView(View):
             duration = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, content + ' -')
             self.expire_date = duration.dt
         except commands.BadArgument as e:
-            c = f'> {ctx.disagree} {e}'
+            c = f'{ctx.denial} {e}'
 
         self.unlock_all()
         await self.message.edit(content=c, embed=self.prepare_embed(), view=self)
