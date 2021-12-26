@@ -28,6 +28,7 @@ __all__ = (
     'fail_embed',
     'format_amount',
     'check_channel',
+    'check_perms',
 )
 
 allowed_letters = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
@@ -292,5 +293,25 @@ async def check_channel(ctx: utils.Context):
     if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
             and ctx.author.id != 374622847672254466:
         await ctx.reply(f'{ctx.denial} Sorry! This command can only be used in <#913330644875104306>', delete_after=10.0)
+        return False
+    return True
+
+
+async def check_perms(
+    ctx: utils.Context,
+    member: disnake.Member,
+    *,
+    reason: str = 'That member is above or equal to you. Cannot do that.'
+):
+    if ctx.author.id == 374622847672254466:
+        return True
+    elif member.id == 374622847672254466:
+        await ctx.reply(
+            f'{ctx.denial} That member is above or equal to you. '
+            'Cannot do that. (above in this case you sub bottom <:kek:913339277939720204>)'
+        )
+        return False
+    elif ctx.author.top_role <= member.top_role:
+        await ctx.reply(f'{ctx.denial} {reason}')
         return False
     return True
