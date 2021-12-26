@@ -288,8 +288,9 @@ def format_amount(num: str):
         .replace('.', '')
 
 
-def check_channel(ctx):
+async def check_channel(ctx: utils.Context):
     if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
             and ctx.author.id != 374622847672254466:
+        await ctx.reply('Sorry! This command can only be used in <#913330644875104306>', delete_after=10.0)
         return False
     return True

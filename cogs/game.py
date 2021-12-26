@@ -70,7 +70,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is True:
+        if await utils.check_channel(ctx) is True:
             await ctx.send_help('game')
 
     @base_game.group(name='coins', invoke_without_command=True, case_insensitive=True)
@@ -80,7 +80,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -147,7 +147,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -179,7 +179,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -200,7 +200,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         data = await self.get_user(ctx.author.id)
@@ -267,7 +267,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         em = disnake.Embed(title='Box Shop', color=utils.blurple)
@@ -307,7 +307,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         boxes = {
@@ -365,7 +365,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         if member.id in self.in_game:
@@ -488,7 +488,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         member = member or ctx.author
@@ -515,7 +515,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         character_name = character_name.lower()
@@ -545,7 +545,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         embeds = []
@@ -775,7 +775,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         em = disnake.Embed(
@@ -805,7 +805,7 @@ class _Game(commands.Cog, name='Game'):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         amount = amount.lower()
