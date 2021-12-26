@@ -5,18 +5,16 @@ import string as st
 import asyncio
 import functools
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional, Callable
+from typing import Callable
 
 import disnake
 
 import utils
 
-if TYPE_CHECKING:
-    from main import Ukiyo
-
 __all__ = (
     'time_phaser',
     'clean_code',
+    'check_profanity',
     'check_string',
     'check_username',
     'run_in_executor',
@@ -64,9 +62,19 @@ def clean_code(content):
         return content
 
 
-def check_string(string: str) -> bool:
+def check_profanity(string: str) -> bool:
     """
-    If the return type is of bool ``True`` then it means that the string contains a bad word, otherwise it's safe.
+    If the return type is of bool ``True`` then it means that the
+    string contains a bad word, otherwise ``False`` if it's safe.
+
+    Parameters
+    ----------
+        string: :class:`str`
+            The string to check if it contains a bad word.
+
+    Return
+    ------
+        True | False
     """
 
     string = str(string).lower().replace(' ', '')
@@ -76,54 +84,74 @@ def check_string(string: str) -> bool:
     for pad in punctuations_and_digits:
         string = string.replace(pad, '')
 
-    if any(w for w in BAD_WORDS if w in string):
-        return True
-
-    return False
+    return any(w for w in BAD_WORDS if w in string)
 
 
-async def check_username(bot: Ukiyo, *, member: disnake.Member = None, word: str = None) -> Optional[bool]:
+def check_string(string: str, *, limit: str = 4) -> bool:
     """
-    If the return type is of bool ``True`` then it means that the word is invalid, otherwise it's good.
+    If the return type of bool is ``True`` then it means that the word has
+    less allowed characters in a row than the limit, otherwise ``False``
+    if the string meets the required limit.
+
+    Parameters
+    ----------
+        string: :class:`str`
+            The string to check if it has enough allowed characters in a row.
+
+        limit: :class:`int`
+            The limit for which to check the lenght of the allowed letters in a row within the string.
+            Defaults to 4.
+
+    Return
+    ------
+        True | False
     """
 
-    if member:
-        if member.id == bot._owner_id or member.bot:
-            return
-    name = word or member.display_name.lower()
     count = 0
-    for letter in name:
-        if count < 4:
+    for letter in string:
+        if count < limit:
             if letter not in allowed_letters:
                 count = 0
             else:
                 count += 1
         else:
             break
-    if count >= 4:
-        if name is not None:
-            if check_string(name) is True:
-                count = 0
-    if member is not None:
-        if count < 4:
-            kraots: utils.InvalidName = await utils.InvalidName.find_one({'_id': bot._owner_id})
-            kraots.last_pos += 1
-            await kraots.commit()
-            new_nick = f'UnpingableName{kraots.last_pos}'
-            await member.edit(nick=new_nick, reason='username not pingable, is a bad word or is too short')
-            try:
-                return await member.send(
-                    'Your name has too few pingable letters in a row, '
-                    f'is a bad word or is too short (minimum is **4**) so I changed it to `{new_nick}`\n'
-                    'You can always change your nickname by using the command `!nick new_nick` in <#913330644875104306>'
-                )
-            except disnake.Forbidden:
-                return
-    else:
-        if count < 4:
-            return True
-        else:
-            return False
+
+    return True if count < limit else False
+
+
+async def check_username(member: disnake.Member):
+    """
+    Check the ``member``'s display name, if all the checks pass,
+    he's ignored, otherwise, his nickname gets changed.
+
+    Parameters
+    ----------
+        member: :class:`disnake.Member`
+            The member to check if their display name is shorter
+            than ``limit`` and if they have any bad word in it.
+    """
+
+    if member.id == 374622847672254466 or member.bot:
+        return
+    name = member.display_name.lower()
+    res = check_string(name) or check_profanity(name)
+    if res is False:
+        return
+
+    kraots: utils.InvalidName = await utils.InvalidName.find_one({'_id': 374622847672254466})
+    kraots.last_pos += 1
+    await kraots.commit()
+    new_nick = f'UnpingableName{kraots.last_pos}'
+    await member.edit(nick=new_nick, reason='username not pingable, is a bad word or is too short')
+    try:
+        return await member.send(
+            'Your name has too few pingable letters in a row, '
+            f'is a bad word or is too short (minimum is **4**) so I changed it to `{new_nick}`\n'
+            'You can always change your nickname by using the command `!nick new_nick` in <#913330644875104306>'
+        )
+    except disnake.Forbidden:
+        return
 
 
 def run_in_executor(func: Callable):

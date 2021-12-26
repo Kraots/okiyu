@@ -21,7 +21,7 @@ class Welcome(commands.Cog):
             await member.add_roles(bot_role, reason='Bot Account.')
             return
 
-        await utils.check_username(self.bot, member=member)
+        await utils.check_username(member=member)
         unverified_role = guild.get_role(913329062347423775)
         await member.add_roles(unverified_role)
 

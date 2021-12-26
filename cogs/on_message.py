@@ -47,7 +47,7 @@ class OnMessage(commands.Cog):
             return
         guild = self.bot.get_guild(913310006814859334)
         if message.content is not None:
-            if utils.check_string(message.content) is True:
+            if utils.check_profanity(message.content) is True:
                 ctx = await self.bot.get_context(message, cls=utils.Context)
                 await message.delete()
 
@@ -259,7 +259,7 @@ class OnMessage(commands.Cog):
 
             await self.check_bad_word(after)
             await self.check_invite(after)
-            await utils.check_username(self.bot, member=after.author)
+            await utils.check_username(after.author)
             await asyncio.sleep(0.5)
             try:
                 btn = disnake.ui.View()
@@ -277,7 +277,7 @@ class OnMessage(commands.Cog):
             if message.guild and message.content != '':
                 await self.check_bad_word(message)
                 await self.check_invite(message)
-                await utils.check_username(self.bot, member=message.author)
+                await utils.check_username(message.author)
 
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
