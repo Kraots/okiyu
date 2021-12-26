@@ -230,7 +230,7 @@ class OnMessage(commands.Cog):
                 await self.bot.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(message, cls=utils.Context)
-                await self.bot.reraise(ctx, e)
+                await ctx.reraise(e)
 
     @commands.Cog.listener('on_message_edit')
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
@@ -267,7 +267,7 @@ class OnMessage(commands.Cog):
                 await self.bot.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
                 ctx = await self.bot.get_context(after, cls=utils.Context)
-                await self.bot.reraise(ctx, e)
+                await ctx.reraise(e)
 
     @commands.Cog.listener('on_message')
     async def on_message(self, message: disnake.Message):

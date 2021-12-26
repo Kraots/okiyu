@@ -1,7 +1,11 @@
+import asyncio
 from aiohttp import ClientSession
+from traceback import format_exception
 
 import disnake
 from disnake.ext import commands
+
+import utils
 
 __all__ = ('Context',)
 
@@ -79,3 +83,59 @@ class Context(commands.Context):
             await self.reply(f'{self.denial} {reason}')
             return False
         return True
+
+    async def reraise(self, error):
+        if isinstance(error, commands.NotOwner):
+            await self.send(f'{self.denial} You do not own this bot, this is an owner only command.', delete_after=8)
+            await asyncio.sleep(7.5)
+            await self.message.delete()
+
+        elif isinstance(error, commands.CommandOnCooldown):
+            return await self.send(
+                f'{self.denial} You are on cooldown, **`{utils.time_phaser(error.retry_after)}`** remaining.'
+            )
+
+        elif isinstance(error, commands.DisabledCommand):
+            return await self.reply('This command is currently disabled!')
+
+        elif isinstance(error, commands.errors.MissingRequiredArgument):
+            _missing_args = list(self.command.clean_params)
+            missing_args = [f'`{arg}`' for arg in _missing_args[_missing_args.index(error.param.name):]]
+            return await self.reply(
+                f"{self.denial} You are missing the following required arguments for this command:\n "
+                f"\u2800\u2800{utils.human_join(missing_args, final='and')}\n\n"
+                "If you don't know how to use this command, please type "
+                f"`!help {self.command.qualified_name}` for more information on how to use it and what each "
+                "argument means."
+            )
+
+        elif isinstance(error, commands.errors.MemberNotFound):
+            await self.reply(f"{self.denial} Could not find member.")
+            self.command.reset_cooldown(self)
+            return
+
+        elif isinstance(error, commands.errors.UserNotFound):
+            await self.reply(f"{self.denial} Could not find user.")
+            self.command.reset_cooldown(self)
+            return
+
+        elif isinstance(error, commands.errors.CheckFailure):
+            self.command.reset_cooldown(self)
+            return
+
+        elif (
+            isinstance(error, commands.TooManyArguments) or
+            isinstance(error, commands.BadArgument) or
+            isinstance(error, commands.CommandNotFound)
+        ):
+            return
+
+        else:
+            get_error = "".join(format_exception(error, error, error.__traceback__))
+            em = disnake.Embed(description=f'```py\n{get_error}\n```')
+            await self.bot._owner.send(
+                content=f"**An error occurred with the command `{self.command}`, "
+                        "here is the error:**",
+                embed=em
+            )
+            await self.reply(f'{self.denial} An error occurred')

@@ -43,7 +43,7 @@ class ViewIntro(disnake.ui.View):
         self.uid = uid
 
     async def on_error(self, error, item, inter):
-        await self.bot.inter_reraise(self.bot, inter, item, error)
+        await self.bot.inter_reraise(inter, item, error)
 
     @disnake.ui.button(label='View Intro', style=disnake.ButtonStyle.blurple)
     async def view_intro(self, button: disnake.Button, inter: disnake.MessageInteraction):

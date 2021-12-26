@@ -60,7 +60,7 @@ class Fight(disnake.ui.View):
         return True
 
     async def on_error(self, error: Exception, item, interaction):
-        return await self.bot.reraise(self.ctx, error)
+        await self.ctx.reraise(error)
 
     async def on_timeout(self):
         for item in self.children:
