@@ -46,7 +46,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
                 pass
-            return
+            return await view.message.edit(content='Aborted.')
 
     def check(m):
         return m.channel.id == ctx.channel.id and m.author.id == user_id
