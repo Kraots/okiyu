@@ -2,6 +2,7 @@ import os
 import aiohttp
 import datetime
 from typing import Optional
+from traceback import format_exception
 
 import disnake
 from disnake.ext import commands
@@ -28,9 +29,6 @@ class Ukiyo(commands.Bot):
         self.add_check(self.check_dms)
 
         self._owner_id = 374622847672254466
-        self.reraise = utils.reraise
-        self.inter_reraise = utils.inter_reraise
-
         self.added_views = False
         self.webhooks = {}
         self.execs = {}
@@ -160,6 +158,25 @@ class Ukiyo(commands.Bot):
                 await ctx.send('Commands do not work in dm channels. Please use commands only in <#913330644875104306>')
                 return False
         return True
+
+    async def inter_reraise(self, inter, item: disnake.ui.Item, error):
+        disagree = '<:disagree:913895999125196860>'
+        get_error = "".join(format_exception(error, error, error.__traceback__))
+        em = disnake.Embed(description=f'```py\n{get_error}\n```')
+        await self._owner.send(
+            content="**An error occurred with a view for the user "
+                    f"`{inter.author}` (**{inter.author.id}**), "
+                    "here is the error:**\n"
+                    f"`View:` **{item.view.__class__}**\n"
+                    f"`Item Type:` **{item.type}**\n"
+                    f"`Item Row:` **{item.row or '0'}**",
+            embed=em
+        )
+        fmt = f'> {disagree} An error occurred'
+        if inter.response.is_done():
+            await inter.followup.send(fmt, ephemeral=True)
+        else:
+            await inter.response.send_message(fmt, ephemeral=True)
 
 
 Ukiyo().run(TOKEN)

@@ -448,7 +448,7 @@ class Moderation(commands.Cog):
     async def mute_cmd_error(self, ctx: Context, error):
         if isinstance(error, commands.BadArgument):
             return await ctx.reply(f'{ctx.denial} {error}')
-        await self.bot.reraise(ctx, error)
+        await ctx.reraise(error)
 
     @tasks.loop(seconds=15.0)
     async def check_mutes(self):

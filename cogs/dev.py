@@ -30,6 +30,7 @@ class QuitButton(disnake.ui.View):
     ):
         super().__init__(timeout=timeout)
         self.ctx = ctx
+        self.bot = ctx.bot
         self.delete_after = delete_after
         self.message = None
 
@@ -43,7 +44,7 @@ class QuitButton(disnake.ui.View):
         return True
 
     async def on_error(self, error, item, inter):
-        await self.bot.inter_reraise(self.bot, inter, item, error)
+        await self.bot.inter_reraise(inter, item, error)
 
     async def on_timeout(self):
         if self.delete_after is False:

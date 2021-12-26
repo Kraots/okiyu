@@ -303,7 +303,7 @@ class Verify(View):
         self.bot = bot
 
     async def on_error(self, error, item, inter):
-        await self.bot.inter_reraise(self.bot, inter, item, error)
+        await self.bot.inter_reraise(inter, item, error)
 
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):

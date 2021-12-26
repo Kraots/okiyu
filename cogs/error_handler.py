@@ -19,7 +19,7 @@ class ErrorHandler(commands.Cog):
             if cog._get_overridden_method(cog.cog_command_error) is not None:
                 return
 
-        await self.bot.reraise(ctx, error)
+        await ctx.reraise(error)
 
 
 def setup(bot: Ukiyo):

@@ -5,11 +5,9 @@ import string as st
 import asyncio
 import functools
 from pathlib import Path
-from traceback import format_exception
 from typing import TYPE_CHECKING, Optional, Callable
 
 import disnake
-from disnake.ext import commands
 
 import utils
 
@@ -19,8 +17,6 @@ if TYPE_CHECKING:
 __all__ = (
     'time_phaser',
     'clean_code',
-    'reraise',
-    'inter_reraise',
     'check_string',
     'check_username',
     'run_in_executor',
@@ -66,83 +62,6 @@ def clean_code(content):
         return "\n".join(content.split("\n")[1:])[:-3]
     else:
         return content
-
-
-async def reraise(ctx: utils.Context, error):
-    if isinstance(error, commands.NotOwner):
-        await ctx.send(f'{ctx.denial} You do not own this bot, this is an owner only command.', delete_after=8)
-        await asyncio.sleep(7.5)
-        await ctx.message.delete()
-
-    elif isinstance(error, commands.CommandOnCooldown):
-        return await ctx.send(
-            f'{ctx.denial} You are on cooldown, **`{time_phaser(error.retry_after)}`** remaining.'
-        )
-
-    elif isinstance(error, commands.DisabledCommand):
-        return await ctx.reply('This command is currently disabled!')
-
-    elif isinstance(error, commands.errors.MissingRequiredArgument):
-        _missing_args = list(ctx.command.clean_params)
-        missing_args = [f'`{arg}`' for arg in _missing_args[_missing_args.index(error.param.name):]]
-        return await ctx.reply(
-            f"{ctx.denial} You are missing the following required arguments for this command:\n "
-            f"\u2800\u2800{utils.human_join(missing_args, final='and')}\n\n"
-            "If you don't know how to use this command, please type "
-            f"`!help {ctx.command.qualified_name}` for more information on how to use it and what each "
-            "argument means."
-        )
-
-    elif isinstance(error, commands.errors.MemberNotFound):
-        await ctx.reply(f"{ctx.denial} Could not find member.")
-        ctx.command.reset_cooldown(ctx)
-        return
-
-    elif isinstance(error, commands.errors.UserNotFound):
-        await ctx.reply(f"{ctx.denial} Could not find user.")
-        ctx.command.reset_cooldown(ctx)
-        return
-
-    elif isinstance(error, commands.errors.CheckFailure):
-        ctx.command.reset_cooldown(ctx)
-        return
-
-    elif (
-        isinstance(error, commands.TooManyArguments) or
-        isinstance(error, commands.BadArgument) or
-        isinstance(error, commands.CommandNotFound)
-    ):
-        return
-
-    else:
-        get_error = "".join(format_exception(error, error, error.__traceback__))
-        em = disnake.Embed(description=f'```py\n{get_error}\n```')
-        await ctx.bot._owner.send(
-            content=f"**An error occurred with the command `{ctx.command}`, "
-                    "here is the error:**",
-            embed=em
-        )
-        await ctx.reply(f'{ctx.denial} An error occurred')
-
-
-async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
-    disagree = '<:disagree:913895999125196860>'
-    get_error = "".join(format_exception(error, error, error.__traceback__))
-    em = disnake.Embed(description=f'```py\n{get_error}\n```')
-    await bot._owner.send(
-        content="**An error occurred with a view for the user "
-                f"`{inter.author}` (**{inter.author.id}**), "
-                "here is the error:**\n"
-                f"`View:` **{item.view.__class__}**\n"
-                f"`Item Type:` **{item.type}**\n"
-                f"`Item Row:` **{item.row or '0'}**",
-        embed=em
-    )
-    fmt = f'> {disagree} An error occurred'
-    if inter.response.is_done():
-        await inter.followup.send(fmt, ephemeral=True)
-    else:
-        await inter.response.send_message(fmt, ephemeral=True)
 
 
 def check_string(string: str) -> bool:
