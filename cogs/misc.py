@@ -280,8 +280,7 @@ class Misc(commands.Cog):
         `new_nickname` **->** The new nickname you wish to change to.
         """
 
-        res = await utils.check_username(self.bot, word=new_nickname)
-        if res is True:
+        if utils.check_string(new_nickname) is True:
             return await ctx.reply(
                 f'{ctx.denial} Cannot change your nickname because the nickname you chose '
                 'has too less pingable characters, is a bad word or is too short (minimum is **4**).'
@@ -296,8 +295,7 @@ class Misc(commands.Cog):
     async def remove_nick(self, ctx: Context):
         """Removes your nickname."""
 
-        res = await utils.check_username(self.bot, word=ctx.author.name)
-        if res is True:
+        if utils.check_string(ctx.author.name) is True:
             return await ctx.reply(
                 f'{ctx.denial} Cannot remove your nickname because your username '
                 'has too less pingable characters, is a bad word or is too short (minimum is **4**).'
