@@ -112,7 +112,7 @@ class Birthdays(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         data: Birthday = await Birthday.find_one({'_id': ctx.author.id})
@@ -193,7 +193,7 @@ class Birthdays(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         data: Birthday = await Birthday.find_one({'_id': ctx.author.id})
@@ -216,7 +216,7 @@ class Birthdays(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         index = 0

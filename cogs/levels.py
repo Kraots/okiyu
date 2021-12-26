@@ -41,7 +41,7 @@ class Levels(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         member = member or ctx.author
@@ -117,7 +117,7 @@ class Levels(commands.Cog):
         **NOTE:** This command can only be used in <#913330644875104306>
         """
 
-        if utils.check_channel(ctx) is False:
+        if await utils.check_channel(ctx) is False:
             return
 
         entries = []
