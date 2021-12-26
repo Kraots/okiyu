@@ -96,8 +96,8 @@ class Levels(commands.Cog):
         """
 
         member = member or ctx.author
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         if level < 0:
             return await ctx.reply(f'{ctx.denial} Level cannot be less than `0`')
@@ -208,8 +208,8 @@ class Levels(commands.Cog):
         `amount` **->** The amount of messages to add.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
         usr_db: Level = await Level.find_one({'_id': member.id})
         if usr_db is None:
             return await ctx.reply(f'{ctx.denial} User not in the database.')
@@ -233,8 +233,8 @@ class Levels(commands.Cog):
         `amount` **->** The amount of messages to set.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         usr_db: Level = await Level.find_one({'_id': member.id})
         if usr_db is None:
@@ -258,8 +258,8 @@ class Levels(commands.Cog):
         `member` **->** The member for who to reset the total messages count for.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         usr_db: Level = await Level.find_one({'_id': member.id})
         if usr_db is None:

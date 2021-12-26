@@ -224,8 +224,8 @@ class Moderation(commands.Cog):
         """
 
         if isinstance(member, disnake.Member):
-            if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-                return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+            if utils.check_perms(ctx, member) is False:
+                return
 
         try:
             await member.send(f'> ⚠️ Hello! Sadly, you have been **banned** from `Ukiyo` for **{reason}**. Goodbye 👋')
@@ -285,8 +285,8 @@ class Moderation(commands.Cog):
         `reason` **->** The reason you're kicking the member.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         try:
             await member.send(f'> ⚠️ Hello! Sadly, you have been **kicked** from `Ukiyo` for **{reason}**. Goodbye 👋')
@@ -326,16 +326,8 @@ class Moderation(commands.Cog):
         `!mute @carrot 1 Jan coolest person alive` (will mute them until 1 January, next year, or this one, depending whether this date has passed. You can also directly specify the year.)
         """  # noqa
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(
-                f'{ctx.denial} That member is above or equal to you. '
-                'Cannot do that.'
-            )
-        elif member.id == self.bot._owner_id and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(
-                f'{ctx.denial} That member is above or equal to you. '
-                'Cannot do that. (above in this case you bottom sub <:kek:913339277939720204>)'
-            )
+        if utils.check_perms(ctx, member) is False:
+            return
 
         usr = await Mutes.find_one({'_id': member.id})
         if usr is not None:
@@ -517,8 +509,8 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to make an admin.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         guild = self.bot.get_guild(913310006814859334)
         if 913315033134542889 in (r.id for r in member.roles):
@@ -545,8 +537,8 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to make a moderator.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         guild = self.bot.get_guild(913310006814859334)
         if 913315033684008971 in (r.id for r in member.roles):
@@ -580,8 +572,8 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to remove admin from.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         if 913315033134542889 not in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{member}` is not an admin!')
@@ -606,8 +598,8 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to remove the moderator from.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
+        if utils.check_perms(ctx, member) is False:
+            return
 
         if 913315033684008971 not in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{member}` is not a moderator!')

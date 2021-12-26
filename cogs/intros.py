@@ -6,7 +6,8 @@ from utils import (
     Intro,
     create_intro,
     is_mod,
-    lock
+    lock,
+    check_perms
 )
 
 from main import Ukiyo
@@ -91,8 +92,12 @@ class Intros(commands.Cog):
         `member` **->** The member you want to unverify.
         """
 
-        if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'{ctx.denial} You cannot unverify somebody that is a higher or equal role than you.')
+        if check_perms(
+            ctx,
+            member,
+            reason='You cannot unverify somebody that is a higher or equal role than you.'
+        ) is False:
+            return
 
         guild = self.bot.get_guild(913310006814859334)
         unverified_role = guild.get_role(913329062347423775)
