@@ -92,7 +92,7 @@ class Intros(commands.Cog):
         `member` **->** The member you want to unverify.
         """
 
-        if check_perms(
+        if await check_perms(
             ctx,
             member,
             reason='You cannot unverify somebody that is a higher or equal role than you.'

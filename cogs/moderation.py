@@ -224,7 +224,7 @@ class Moderation(commands.Cog):
         """
 
         if isinstance(member, disnake.Member):
-            if utils.check_perms(ctx, member) is False:
+            if await utils.check_perms(ctx, member) is False:
                 return
 
         try:
@@ -285,7 +285,7 @@ class Moderation(commands.Cog):
         `reason` **->** The reason you're kicking the member.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         try:
@@ -326,7 +326,7 @@ class Moderation(commands.Cog):
         `!mute @carrot 1 Jan coolest person alive` (will mute them until 1 January, next year, or this one, depending whether this date has passed. You can also directly specify the year.)
         """  # noqa
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         usr = await Mutes.find_one({'_id': member.id})
@@ -509,7 +509,7 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to make an admin.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         guild = self.bot.get_guild(913310006814859334)
@@ -537,7 +537,7 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to make a moderator.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         guild = self.bot.get_guild(913310006814859334)
@@ -572,7 +572,7 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to remove admin from.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         if 913315033134542889 not in (r.id for r in member.roles):
@@ -598,7 +598,7 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to remove the moderator from.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         if 913315033684008971 not in (r.id for r in member.roles):

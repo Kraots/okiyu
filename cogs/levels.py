@@ -96,7 +96,7 @@ class Levels(commands.Cog):
         """
 
         member = member or ctx.author
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         if level < 0:
@@ -208,7 +208,7 @@ class Levels(commands.Cog):
         `amount` **->** The amount of messages to add.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
         usr_db: Level = await Level.find_one({'_id': member.id})
         if usr_db is None:
@@ -233,7 +233,7 @@ class Levels(commands.Cog):
         `amount` **->** The amount of messages to set.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         usr_db: Level = await Level.find_one({'_id': member.id})
@@ -258,7 +258,7 @@ class Levels(commands.Cog):
         `member` **->** The member for who to reset the total messages count for.
         """
 
-        if utils.check_perms(ctx, member) is False:
+        if await utils.check_perms(ctx, member) is False:
             return
 
         usr_db: Level = await Level.find_one({'_id': member.id})
