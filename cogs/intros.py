@@ -7,7 +7,6 @@ from utils import (
     create_intro,
     is_mod,
     lock,
-    check_perms
 )
 
 from main import Ukiyo
@@ -92,8 +91,7 @@ class Intros(commands.Cog):
         `member` **->** The member you want to unverify.
         """
 
-        if await check_perms(
-            ctx,
+        if await ctx.check_perms(
             member,
             reason='You cannot unverify somebody that is a higher or equal role than you.'
         ) is False:
