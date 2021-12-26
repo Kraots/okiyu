@@ -71,13 +71,13 @@ def clean_code(content):
 
 async def reraise(ctx: utils.Context, error):
     if isinstance(error, commands.NotOwner):
-        await ctx.send(f'> {ctx.disagree} You do not own this bot, this is an owner only command.', delete_after=8)
+        await ctx.send(f'{ctx.denial} You do not own this bot, this is an owner only command.', delete_after=8)
         await asyncio.sleep(7.5)
         await ctx.message.delete()
 
     elif isinstance(error, commands.CommandOnCooldown):
         return await ctx.send(
-            f'> {ctx.disagree} You are on cooldown, **`{time_phaser(error.retry_after)}`** remaining.'
+            f'{ctx.denial} You are on cooldown, **`{time_phaser(error.retry_after)}`** remaining.'
         )
 
     elif isinstance(error, commands.DisabledCommand):
@@ -87,7 +87,7 @@ async def reraise(ctx: utils.Context, error):
         _missing_args = list(ctx.command.clean_params)
         missing_args = [f'`{arg}`' for arg in _missing_args[_missing_args.index(error.param.name):]]
         return await ctx.reply(
-            f">>> {ctx.disagree} You are missing the following required arguments for this command:\n "
+            f"{ctx.denial} You are missing the following required arguments for this command:\n "
             f"\u2800\u2800{utils.human_join(missing_args, final='and')}\n\n"
             "If you don't know how to use this command, please type "
             f"`!help {ctx.command.qualified_name}` for more information on how to use it and what each "
@@ -95,12 +95,12 @@ async def reraise(ctx: utils.Context, error):
         )
 
     elif isinstance(error, commands.errors.MemberNotFound):
-        await ctx.reply(f"> {ctx.disagree} Could not find member.")
+        await ctx.reply(f"{ctx.denial} Could not find member.")
         ctx.command.reset_cooldown(ctx)
         return
 
     elif isinstance(error, commands.errors.UserNotFound):
-        await ctx.reply(f"> {ctx.disagree} Could not find user.")
+        await ctx.reply(f"{ctx.denial} Could not find user.")
         ctx.command.reset_cooldown(ctx)
         return
 
@@ -123,7 +123,7 @@ async def reraise(ctx: utils.Context, error):
                     "here is the error:**",
             embed=em
         )
-        await ctx.reply(f'> {ctx.disagree} An error occurred')
+        await ctx.reply(f'{ctx.denial} An error occurred')
 
 
 async def inter_reraise(bot: Ukiyo, inter, item: disnake.ui.Item, error):
@@ -291,6 +291,6 @@ def format_amount(num: str):
 async def check_channel(ctx: utils.Context):
     if ctx.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
             and ctx.author.id != 374622847672254466:
-        await ctx.reply('Sorry! This command can only be used in <#913330644875104306>', delete_after=10.0)
+        await ctx.reply(f'{ctx.denial} Sorry! This command can only be used in <#913330644875104306>', delete_after=10.0)
         return False
     return True

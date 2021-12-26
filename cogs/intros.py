@@ -31,7 +31,7 @@ class Intros(commands.Cog):
 
         if ctx.author.id in self.bot.verifying:
             return await ctx.send(
-                f'> {ctx.disagree} Please complete your current intro before making another one!'
+                f'{ctx.denial} Please complete your current intro before making another one!'
             )
         self.bot.verifying.append(ctx.author.id)
         await create_intro(self.bot.webhooks['mod_logs'], ctx, self.bot)
@@ -50,12 +50,12 @@ class Intros(commands.Cog):
                 return await ctx.better_reply('🤫 🤫 🤫')
             if member == ctx.author:
                 return await ctx.better_reply(
-                    f'> {ctx.disagree} You don\'t have an intro. '
+                    f'{ctx.denial} You don\'t have an intro. '
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
             else:
                 return await ctx.better_reply(
-                    f'> {ctx.disagree} `{member}` doesn\'t have an intro. '
+                    f'{ctx.denial} `{member}` doesn\'t have an intro. '
                     'Please contact a staff member to unverify them! This is a bug.'
                 )
         guild = self.bot.get_guild(913310006814859334)
@@ -92,7 +92,7 @@ class Intros(commands.Cog):
         """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'> {ctx.disagree} You cannot unverify somebody that is a higher or equal role than you.')
+            return await ctx.reply(f'{ctx.denial} You cannot unverify somebody that is a higher or equal role than you.')
 
         guild = self.bot.get_guild(913310006814859334)
         unverified_role = guild.get_role(913329062347423775)

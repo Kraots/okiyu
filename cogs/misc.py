@@ -171,7 +171,7 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
-            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set. Please contact an admin about this!')
+            return await ctx.reply(f'{ctx.denial} There are currently no rules set. Please contact an admin about this!')
         em = disnake.Embed(title='Rules', color=utils.blurple)
 
         if rule is None:
@@ -182,12 +182,12 @@ class Misc(commands.Cog):
                     em.description += f'\n\n`{index + 1}.` {rule}'
         else:
             if rule <= 0:
-                return await ctx.reply(f'> {ctx.disagree} Rule cannot be equal or less than `0`')
+                return await ctx.reply(f'{ctx.denial} Rule cannot be equal or less than `0`')
             try:
                 _rule = rules.rules[rule - 1]
                 em.description = f'`{rule}.` {_rule}'
             except IndexError:
-                return await ctx.reply(f'> {ctx.disagree} Rule does not exist!')
+                return await ctx.reply(f'{ctx.denial} Rule does not exist!')
         em.set_footer(text='NOTE: Breaking any of these rules will result in a mute, or in the worst case, a ban.')
 
         await ctx.better_reply(embed=em)
@@ -223,7 +223,7 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
-            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set.')
+            return await ctx.reply(f'{ctx.denial} There are currently no rules set.')
         elif rule == 0:
             return await ctx.reply('Rule cannot be ``0``')
 
@@ -246,14 +246,14 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
-            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set.')
+            return await ctx.reply(f'{ctx.denial} There are currently no rules set.')
         else:
             if rule <= 0:
-                return await ctx.reply(f'> {ctx.disagree} Rule cannot be equal or less than `0`')
+                return await ctx.reply(f'{ctx.denial} Rule cannot be equal or less than `0`')
             try:
                 rules.rules.pop(rule - 1)
             except IndexError:
-                return await ctx.reply(f'> {ctx.disagree} Rule does not exist!')
+                return await ctx.reply(f'{ctx.denial} Rule does not exist!')
             await rules.commit()
 
         await ctx.reply(f'> 👌 Successfully **removed** rule `{rule}`.')
@@ -265,7 +265,7 @@ class Misc(commands.Cog):
 
         rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
         if rules is None:
-            return await ctx.reply(f'> {ctx.disagree} There are currently no rules set.')
+            return await ctx.reply(f'{ctx.denial} There are currently no rules set.')
         else:
             await rules.delete()
 
@@ -283,7 +283,7 @@ class Misc(commands.Cog):
         res = await utils.check_username(self.bot, word=new_nickname)
         if res is True:
             return await ctx.reply(
-                f'> {ctx.disagree} Cannot change your nickname because the nickname you chose '
+                f'{ctx.denial} Cannot change your nickname because the nickname you chose '
                 'has too less pingable characters, is a bad word or is too short.'
             )
         elif len(new_nickname) > 32:
@@ -299,7 +299,7 @@ class Misc(commands.Cog):
         res = await utils.check_username(self.bot, word=ctx.author.name)
         if res is True:
             return await ctx.reply(
-                f'> {ctx.disagree} Cannot remove your nickname because your username '
+                f'{ctx.denial} Cannot remove your nickname because your username '
                 'has too less pingable characters, is a bad word or is too short.'
             )
         await ctx.author.edit(nick=None)
@@ -432,7 +432,7 @@ class Misc(commands.Cog):
                         f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
             if len(entries) == 0:
-                return await ctx.reply(f'> {ctx.disagree} There are no current mutes.')
+                return await ctx.reply(f'{ctx.denial} There are no current mutes.')
 
             source = FieldPageSource(entries, per_page=5)
             source.embed.color = utils.blurple
@@ -443,9 +443,9 @@ class Misc(commands.Cog):
             mute: Mutes = await Mutes.find_one({'_id': member.id})
             if mute is None:
                 if member == ctx.author:
-                    return await ctx.reply(f'> {ctx.disagree} You are not muted.')
+                    return await ctx.reply(f'{ctx.denial} You are not muted.')
                 else:
-                    return await ctx.better_reply(f'> {ctx.disagree} `{member}` is not muted.')
+                    return await ctx.better_reply(f'{ctx.denial} `{member}` is not muted.')
             em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=member, icon_url=member.display_avatar)
             em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
@@ -522,7 +522,7 @@ class Misc(commands.Cog):
                 return await ctx.reply('Master, you forgot that you didn\'t make an intro? 🥺 🥺')
             else:
                 return await ctx.reply(
-                    f'> {ctx.disagree} Couldn\'t find a match because you don\'t have an intro. '
+                    f'{ctx.denial} Couldn\'t find a match because you don\'t have an intro. '
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
         elif data.status.lower() == 'taken':

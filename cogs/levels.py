@@ -46,10 +46,10 @@ class Levels(commands.Cog):
 
         member = member or ctx.author
         if member.bot:
-            return await ctx.better_reply(f'> {ctx.disagree} Bot\'s do not have levels!')
+            return await ctx.better_reply(f'{ctx.denial} Bot\'s do not have levels!')
         data: Level = await Level.find_one({'_id': member.id})
         if data is None:
-            return await ctx.better_reply(f'> {ctx.disagree} User not in the database!')
+            return await ctx.better_reply(f'{ctx.denial} User not in the database!')
 
         rank = 0
         rankings: list[Level] = await Level.find().sort('xp', -1).to_list(100000)
@@ -97,10 +97,10 @@ class Levels(commands.Cog):
 
         member = member or ctx.author
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
 
         if level < 0:
-            return await ctx.reply(f'> {ctx.disagree} Level cannot be less than `0`')
+            return await ctx.reply(f'{ctx.denial} Level cannot be less than `0`')
 
         xp = ((50 * ((level - 1)**2)) + (50 * (level - 1)))
         data: Level = await Level.find_one({'_id': member.id})
@@ -108,7 +108,7 @@ class Levels(commands.Cog):
             data.xp = xp
             await data.commit()
             return await ctx.reply(f'Successfully set `{member}` to level **{level}**')
-        await ctx.reply(f'> {ctx.disagree} Member not in the database.')
+        await ctx.reply(f'{ctx.denial} Member not in the database.')
 
     @level_cmd.command(name='leaderboard', aliases=('lb', 'top',))
     async def level_top(self, ctx: Context):
@@ -209,16 +209,16 @@ class Levels(commands.Cog):
         """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
         usr_db: Level = await Level.find_one({'_id': member.id})
         if usr_db is None:
-            return await ctx.reply(f'> {ctx.disagree} User not in the database.')
+            return await ctx.reply(f'{ctx.denial} User not in the database.')
 
         try:
             amount = utils.format_amount(amount)
             amount = int(amount)
         except ValueError:
-            return await ctx.reply(f'> {ctx.disagree} The amount must be an integer.')
+            return await ctx.reply(f'{ctx.denial} The amount must be an integer.')
 
         usr_db.messages_count += amount
         await usr_db.commit()
@@ -234,17 +234,17 @@ class Levels(commands.Cog):
         """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
 
         usr_db: Level = await Level.find_one({'_id': member.id})
         if usr_db is None:
-            return await ctx.reply(f'> {ctx.disagree} User not in the database.')
+            return await ctx.reply(f'{ctx.denial} User not in the database.')
 
         try:
             amount = utils.format_amount(amount)
             amount = int(amount)
         except ValueError:
-            return await ctx.reply(f'> {ctx.disagree} The amount must be an integer.')
+            return await ctx.reply(f'{ctx.denial} The amount must be an integer.')
 
         usr_db.messages_count = amount
         await usr_db.commit()
@@ -259,11 +259,11 @@ class Levels(commands.Cog):
         """
 
         if ctx.author.top_role <= member.top_role and ctx.author.id != self.bot._owner_id:
-            return await ctx.reply(f'> {ctx.disagree} That member is above or equal to you. Cannot do that.')
+            return await ctx.reply(f'{ctx.denial} That member is above or equal to you. Cannot do that.')
 
         usr_db: Level = await Level.find_one({'_id': member.id})
         if usr_db is None:
-            return await ctx.reply(f'> {ctx.disagree} User not in the database.')
+            return await ctx.reply(f'{ctx.denial} User not in the database.')
 
         view = utils.ConfirmView(ctx, f"{ctx.author.mention} Did not react in time.")
         view.message = msg = await ctx.send(
