@@ -8,10 +8,10 @@ __all__ = (
 
 class ConfirmView(disnake.ui.View):
     """
-    This class is a view with `Confirm` and `Cancel` buttons,
+    This class is a view with `Yes` and `No` buttons,
     this checks which button the user has pressed and returns
     True via the self.response if the button they clicked was
-    Confirm else False if the button they clicked is Cancel.
+    Yes else False if the button they clicked is No.
     """
 
     def __init__(self, ctx, new_message: str = 'Time Expired.', react_user: disnake.Member = None, *, timeout=180.0):
@@ -66,11 +66,11 @@ class ConfirmView(disnake.ui.View):
 
 class ConfirmViewDMS(disnake.ui.View):
     """
-    This class is a view with `Confirm` and `Cancel` buttons
+    This class is a view with `Yes` and `No` buttons
     which only works in dms, this checks which button the user
     has pressed and returns True via the self.response if the
-    button they clicked was Confirm else False if the button
-    they clicked is Cancel.
+    button they clicked was Yes else False if the button
+    they clicked is No.
     """
 
     def __init__(self, ctx, *, timeout=180.0, new_message: str = 'Time Expired.'):
