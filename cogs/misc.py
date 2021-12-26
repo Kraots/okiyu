@@ -284,7 +284,7 @@ class Misc(commands.Cog):
         if res is True:
             return await ctx.reply(
                 f'{ctx.denial} Cannot change your nickname because the nickname you chose '
-                'has too less pingable characters, is a bad word or is too short.'
+                'has too less pingable characters, is a bad word or is too short (minimum is **4**).'
             )
         elif len(new_nickname) > 32:
             return await ctx.reply('Nickname has too many characters! (maximum is **32**)')
@@ -300,7 +300,7 @@ class Misc(commands.Cog):
         if res is True:
             return await ctx.reply(
                 f'{ctx.denial} Cannot remove your nickname because your username '
-                'has too less pingable characters, is a bad word or is too short.'
+                'has too less pingable characters, is a bad word or is too short (minimum is **4**).'
             )
         await ctx.author.edit(nick=None)
         await ctx.reply('I have removed your nickname.')
