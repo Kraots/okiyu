@@ -503,7 +503,7 @@ class Moderation(commands.Cog):
         elif data.is_mod is True:
             mod_role = guild.get_role(913315033684008971)  # Check for mod
             new_roles += [mod_role]
-        await member.edit(roles=new_roles, reason=f'[{action.title()}] {action.title()} by {ctx.author} ({ctx.author.id})')
+        await member.edit(roles=new_roles, reason=f'[{action.upper()}] {action.title()} by {ctx.author} ({ctx.author.id})')
         if send_feedback is True:
             try:
                 await member.send(f'Hello, you have been **un{fmt}** in `Ukiyo` by **{ctx.author}**')
@@ -513,7 +513,7 @@ class Moderation(commands.Cog):
             await ctx.reply(f'> 👌 Successfully **un{fmt}** {member.mention}')
         await utils.log(
             self.bot.webhooks['mod_logs'],
-            title=f'[{action.title()}]',
+            title=f'[{action.upper()}]',
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
                 (f'{"Mute" if action == "unmute" else "Block"} Duration', f'`{data.duration}`'),
