@@ -1,5 +1,6 @@
 import random
 import asyncio
+from typing import Literal
 from datetime import datetime, timezone
 
 import disnake
@@ -306,6 +307,145 @@ class Moderation(commands.Cog):
             view=self.jump_view(ctx.message.jump_url)
         )
 
+    async def apply_mute_or_block(
+        self,
+        action: Literal['mute', 'block'],
+        ctx: Context,
+        member: disnake.Member,
+        *,
+        time_and_reason: UserFriendlyTime(commands.clean_content)
+    ):
+        if await ctx.check_perms(member) is False:
+            return
+
+        fmt = 'muted' if action == 'mute' else 'blocked'
+        kwargs = {}
+        if action == 'mute':
+            kwargs['muted'] = True
+        else:
+            kwargs['blocked'] = True
+
+        usr: Mutes = await Mutes.find_one({'_id': member.id})
+        if usr is not None:
+            if usr.blocked is True:
+                return await ctx.reply(f'`{member}` is already **blocked**.')
+            elif usr.muted is True:
+                return await ctx.reply(f'`{member}` is already **muted**.')
+
+        time = time_and_reason.dt
+        reason = time_and_reason.arg
+        duration = human_timedelta(time, suffix=False)
+        data = Mutes(
+            id=member.id,
+            muted_by=ctx.author.id,
+            muted_until=time,
+            reason=reason,
+            duration=duration,
+            **kwargs,
+        )
+        if 913310292505686046 in (r.id for r in member.roles):  # Checks for owner
+            data.is_owner = True
+        elif 913315033134542889 in (r.id for r in member.roles):  # Checks for admin
+            data.is_admin = True
+        elif 913315033684008971 in (r.id for r in member.roles):  # Checks for mod
+            data.is_mod = True
+
+        guild = self.bot.get_guild(913310006814859334)
+        muted_role_id = 913376647422545951
+        blocked_role_id = 924941473089224784
+        role = guild.get_role(muted_role_id) if action == 'mute' else guild.get_role(blocked_role_id)
+        new_roles = [role for role in member.roles
+                     if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
+                     ] + [role]
+        await member.edit(
+            roles=new_roles,
+            voice_channel=None,
+            reason=f'[{action.upper()}] {ctx.author} ({ctx.author.id}): "{reason}"'
+        )
+        try:
+            em = disnake.Embed(title=f'You have been {fmt}!', color=utils.red)
+            em.description = f'**{fmt.title()} By:** {ctx.author}\n' \
+                             f'**Reason:** {reason}\n' \
+                             f'**{action.title()} Duration:** `{human_timedelta(time, suffix=False)}`\n' \
+                             f'**Expire Date:** {format_dt(time, "F")}'
+            em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
+            em.timestamp = datetime.now(timezone.utc)
+            await member.send(embed=em)
+        except disnake.Forbidden:
+            pass
+        _msg = await ctx.reply(
+            f'> 👌 📨 Applied **{action}** to {member.mention} '
+            f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
+        )
+        data.jump_url = _msg.jump_url
+        await data.commit()
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title=f'[{action.upper()}]',
+            fields=[
+                ('Member', f'{member} (`{member.id}`)'),
+                ('Reason', reason),
+                (f'{action.upper()} Duration', f'`{duration}`'),
+                ('Expires At', format_dt(time, "F")),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                ('At', format_dt(datetime.now(), 'F')),
+            ],
+            view=self.jump_view(_msg.jump_url)
+        )
+
+    async def apply_unmute_or_unblock(
+        self,
+        action: Literal['unmute', 'unblock'],
+        ctx: Context,
+        *,
+        member: disnake.Member
+    ):
+        data: Mutes = await Mutes.find_one({'_id': member.id})
+        fmt = 'muted' if action == 'unmute' else 'blocked'
+        if data is None:
+            return await ctx.reply(f'`{member}` is not **{fmt}**!')
+
+        guild = self.bot.get_guild(913310006814859334)
+        muted_by = guild.get_member(data.muted_by)
+        if data.filter is False:
+            if ctx.author.id not in (data.muted_by, self.bot._owner_id):
+                if data.muted_by == self.bot._owner_id:
+                    return await ctx.reply(
+                        f'{member.mention} was **{fmt}** by `{muted_by}` which is in a higher role hierarcy than you. '
+                        f'Only staff members of the same role or above can **{action}** that person.'
+                    )
+
+        await data.delete()
+        new_roles = [role for role in member.roles if role.id not in (913376647422545951, 924941473089224784)]
+        if data.is_owner is True:
+            owner_role = guild.get_role(913310292505686046)  # Check for owner
+            new_roles += [owner_role]
+        elif data.is_admin is True:
+            admin_role = guild.get_role(913315033134542889)  # Check for admin
+            new_roles += [admin_role]
+        elif data.is_mod is True:
+            mod_role = guild.get_role(913315033684008971)  # Check for mod
+            new_roles += [mod_role]
+        await member.edit(roles=new_roles, reason=f'[{action.title()}] {action.title()} by {ctx.author} ({ctx.author.id})')
+        try:
+            await member.send(f'Hello, you have been **{action}ed** in `Ukiyo` by **{ctx.author}**')
+        except disnake.Forbidden:
+            pass
+
+        await ctx.reply(f'> 👌 Successfully **{fmt}ed** {member.mention}')
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title=f'[{action.title()}]',
+            fields=[
+                ('Member', f'{member} (`{member.id}`)'),
+                (f'{"Mute" if action == "unmute" else "Block"} Duration', f'`{data.duration}`'),
+                ('Left', f'`{human_timedelta(data.muted_until, suffix=False)}`'),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                ('At', format_dt(datetime.now(), 'F')),
+            ],
+            view=self.jump_view(ctx.message.jump_url)
+        )
+
     @commands.command(name='mute')
     @is_mod()
     async def mute_cmd(
@@ -326,69 +466,11 @@ class Moderation(commands.Cog):
         `!mute @carrot 1 Jan coolest person alive` (will mute them until 1 January, next year, or this one, depending whether this date has passed. You can also directly specify the year.)
         """  # noqa
 
-        if await ctx.check_perms(member) is False:
-            return
-
-        usr = await Mutes.find_one({'_id': member.id})
-        if usr is not None:
-            return await ctx.reply(f'`{member}` is already muted.')
-
-        time = time_and_reason.dt
-        reason = time_and_reason.arg
-        duration = human_timedelta(time, suffix=False)
-        data = Mutes(
-            id=member.id,
-            muted_by=ctx.author.id,
-            muted_until=time,
-            reason=reason,
-            duration=duration,
-        )
-        if 913310292505686046 in (r.id for r in member.roles):  # Checks for owner
-            data.is_owner = True
-        elif 913315033134542889 in (r.id for r in member.roles):  # Checks for admin
-            data.is_admin = True
-        elif 913315033684008971 in (r.id for r in member.roles):  # Checks for mod
-            data.is_mod = True
-
-        guild = self.bot.get_guild(913310006814859334)
-        muted_role = guild.get_role(913376647422545951)
-        new_roles = [role for role in member.roles
-                     if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
-                     ] + [muted_role]
-        await member.edit(
-            roles=new_roles,
-            voice_channel=None,
-            reason=f'[MUTE] {ctx.author} ({ctx.author.id}): "{reason}"'
-        )
-        try:
-            em = disnake.Embed(title='You have been muted!', color=utils.red)
-            em.description = f'**Muted By:** {ctx.author}\n' \
-                             f'**Reason:** {reason}\n' \
-                             f'**Mute Duration:** `{human_timedelta(time, suffix=False)}`\n' \
-                             f'**Expire Date:** {format_dt(time, "F")}'
-            em.set_footer(text='Muted in `Ukiyo`')
-            em.timestamp = datetime.now(timezone.utc)
-            await member.send(embed=em)
-        except disnake.Forbidden:
-            pass
-        _msg = await ctx.reply(
-            f'> 👌 📨 Applied mute to {member.mention} '
-            f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
-        )
-        data.jump_url = _msg.jump_url
-        await data.commit()
-        await utils.log(
-            self.bot.webhooks['mod_logs'],
-            title='[MUTE]',
-            fields=[
-                ('Member', f'{member} (`{member.id}`)'),
-                ('Reason', reason),
-                ('Mute Duration', f'`{duration}`'),
-                ('Expires At', format_dt(time, "F")),
-                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
-                ('At', format_dt(datetime.now(), 'F')),
-            ],
-            view=self.jump_view(_msg.jump_url)
+        await self.apply_mute_or_block(
+            action='mute',
+            ctx=ctx,
+            member=member,
+            time_and_reason=time_and_reason
         )
 
     @commands.command(name='unmute')
@@ -399,53 +481,56 @@ class Moderation(commands.Cog):
         `member` **->** The member you want to unmute. If the member was muted by carrot then you can't do shit about it <:lipbite:914193306416742411> <:kek:913339277939720204>
         """  # noqa
 
-        data: Mutes = await Mutes.find_one({'_id': member.id})
-        if data is None:
-            return await ctx.reply(f'`{member}` is not muted!')
+        await self.apply_unmute_or_unblock(
+            action='unmute',
+            ctx=ctx,
+            member=member
+        )
 
-        guild = self.bot.get_guild(913310006814859334)
-        muted_by = guild.get_member(data.muted_by)
-        if data.filter is False:
-            if ctx.author.id not in (data.muted_by, self.bot._owner_id):
-                if data.muted_by == self.bot._owner_id:
-                    return await ctx.reply(
-                        f'{member.mention} was muted by `{muted_by}` which is in a higher role hierarcy than you. '
-                        'Only staff members of the same role or above can unmute that person.'
-                    )
+    @commands.command(name='block')
+    @is_mod()
+    async def block_cmd(
+        self,
+        ctx: Context,
+        member: disnake.Member,
+        *,
+        time_and_reason: UserFriendlyTime(commands.clean_content)
+    ):
+        """
+        Block somebody from seeing all of the channels.
 
-        await data.delete()
-        new_roles = [role for role in member.roles if role.id != 913376647422545951]
-        if data.is_owner is True:
-            owner_role = guild.get_role(913310292505686046)  # Check for owner
-            new_roles += [owner_role]
-        elif data.is_admin is True:
-            admin_role = guild.get_role(913315033134542889)  # Check for admin
-            new_roles += [admin_role]
-        elif data.is_mod is True:
-            mod_role = guild.get_role(913315033684008971)  # Check for mod
-            new_roles += [mod_role]
-        await member.edit(roles=new_roles, reason=f'[UNMUTE] Unmuted by {ctx.author} ({ctx.author.id})')
-        try:
-            await member.send(f'Hello, you have been **unmuted** in `Ukiyo` by **{ctx.author}**')
-        except disnake.Forbidden:
-            pass
+        `member` **->** The member you want to block.
+        `time_and_reason` **->** The time and the reason why you're blocking the member.
 
-        await ctx.reply(f'> 👌 Successfully unmuted {member.mention}')
-        await utils.log(
-            self.bot.webhooks['mod_logs'],
-            title='[UNMUTE]',
-            fields=[
-                ('Member', f'{member} (`{member.id}`)'),
-                ('Mute Duration', f'`{data.duration}`'),
-                ('Left', f'`{human_timedelta(data.muted_until, suffix=False)}`'),
-                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
-                ('At', format_dt(datetime.now(), 'F')),
-            ],
-            view=self.jump_view(ctx.message.jump_url)
+        **Example:**
+        `!block @carrot 2m coolest person alive`
+        `!block @carrot 1 Jan coolest person alive` (will block them until 1 January, next year, or this one, depending whether this date has passed. You can also directly specify the year.)
+        """  # noqa
+
+        await self.apply_mute_or_block(
+            action='mute',
+            ctx=ctx,
+            member=member,
+            time_and_reason=time_and_reason
+        )
+
+    @commands.command(name='unblock')
+    @is_mod()
+    async def unblock_cmd(self, ctx: Context, *, member: disnake.Member):
+        """Unblock somebody that is currently blocked.
+
+        `member` **->** The member you want to unblock. If the member was muted by carrot then you can't do shit about it <:lipbite:914193306416742411> <:kek:913339277939720204>
+        """  # noqa
+
+        await self.apply_unmute_or_unblock(
+            action='unmute',
+            ctx=ctx,
+            member=member
         )
 
     @mute_cmd.error
-    async def mute_cmd_error(self, ctx: Context, error):
+    @block_cmd.error
+    async def mute_or_block_cmd_error(self, ctx: Context, error):
         if isinstance(error, commands.BadArgument):
             return await ctx.reply(f'{ctx.denial} {error}')
         await ctx.reraise(error)

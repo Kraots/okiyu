@@ -20,6 +20,8 @@ class Mutes(Document):
     is_admin = BooleanField(default=False)
     is_mod = BooleanField(default=False)
     filter = BooleanField(default=False)
+    muted = BooleanField(default=False)
+    blocked = BooleanField(default=False)
 
     class Meta:
         collection_name = 'Mutes'
