@@ -487,11 +487,11 @@ class Moderation(commands.Cog):
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[{action.title()}] {action.title()} by {ctx.author} ({ctx.author.id})')
         try:
-            await member.send(f'Hello, you have been **{action}ed** in `Ukiyo` by **{ctx.author}**')
+            await member.send(f'Hello, you have been **un{fmt}** in `Ukiyo` by **{ctx.author}**')
         except disnake.Forbidden:
             pass
 
-        await ctx.reply(f'> 👌 Successfully **{fmt}ed** {member.mention}')
+        await ctx.reply(f'> 👌 Successfully **un{fmt}** {member.mention}')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title=f'[{action.title()}]',
