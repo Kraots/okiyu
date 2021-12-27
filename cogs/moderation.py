@@ -571,7 +571,7 @@ class Moderation(commands.Cog):
                 mem = guild.get_member(mute.muted_by)
                 await utils.log(
                     self.bot.webhooks['mod_logs'],
-                    title='[MUTE EXPIRED]',
+                    title=f'[{action.upper()} EXPIRED]',
                     fields=[
                         ('Member', _mem),
                         ('Reason', mute.reason),
