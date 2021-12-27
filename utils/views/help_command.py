@@ -149,7 +149,7 @@ class FrontPageSource(menus.PageSource):
                     '__**You do not type in the brackets!**__',
                 ),
                 (
-                    'An extra tip',
+                    '___***An extra tip***___',
                     'Some commands have subcommands, a good example of that is '
                     f'`{menu.ctx.clean_prefix}created server`, the parent command is "created" and '
                     'the subcommand is "server". Normally, when looking at the category\'s commands, '
