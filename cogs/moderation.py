@@ -359,7 +359,7 @@ class Moderation(commands.Cog):
                     send_feedback=False
                 )
                 msg = await ctx.send('Preparing to edit the block...')
-                ctx = await self.bot.get_context(msg, cls=Context)
+                _ctx = await self.bot.get_context(msg, cls=Context)
                 await msg.delete()
             elif usr.muted is True and action == 'mute':
                 if usr.filter is False:
@@ -390,7 +390,7 @@ class Moderation(commands.Cog):
                     send_feedback=False
                 )
                 msg = await ctx.send('Preparing to edit the mute...')
-                ctx = await self.bot.get_context(msg, cls=Context)
+                _ctx = await self.bot.get_context(msg, cls=Context)
                 await msg.delete()
             else:
                 _action = 'unblock' if action == 'mute' else 'unmute'
@@ -403,10 +403,10 @@ class Moderation(commands.Cog):
                 msg = await ctx.send(
                     f'Preparing to edit from {"mute" if action == "block" else "block"} to {action}...'
                 )
-                ctx = await self.bot.get_context(msg, cls=Context)
+                _ctx = await self.bot.get_context(msg, cls=Context)
                 await msg.delete()
 
-        time_and_reason = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
+        time_and_reason = await UserFriendlyTime(commands.clean_content).convert(_ctx, _time_and_reason)
         time = time_and_reason.dt
         reason = time_and_reason.arg
         duration = human_timedelta(time, suffix=False)
