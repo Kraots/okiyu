@@ -329,11 +329,11 @@ class Moderation(commands.Cog):
         usr: Mutes = await Mutes.find_one({'_id': member.id})
         if usr is not None:
             guild = self.bot.get_guild(913310006814859334)
-            muted_by = guild.get_member(data.muted_by)
+            muted_by = guild.get_member(usr.muted_by)
             if usr.blocked is True and action == 'block':
-                if data.filter is False:
-                    if ctx.author.id not in (data.muted_by, self.bot._owner_id):
-                        if data.muted_by == self.bot._owner_id:
+                if usr.filter is False:
+                    if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
+                        if usr.muted_by == self.bot._owner_id:
                             return await ctx.reply(
                                 f'{member.mention} was **{fmt}** by `{muted_by}` which is in a higher role hierarcy than you. '
                                 f'Only staff members of the same role or above can edit the **{action}** time and reason that person.'
@@ -352,9 +352,9 @@ class Moderation(commands.Cog):
                     )
                 await usr.delete()
             elif usr.muted is True and action == 'mute':
-                if data.filter is False:
-                    if ctx.author.id not in (data.muted_by, self.bot._owner_id):
-                        if data.muted_by == self.bot._owner_id:
+                if usr.filter is False:
+                    if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
+                        if usr.muted_by == self.bot._owner_id:
                             return await ctx.reply(
                                 f'{member.mention} was **{fmt}** by `{muted_by}` which is in a higher role hierarcy than you. '
                                 f'Only staff members of the same role or above can edit the **{action}** time and reason that person.'
