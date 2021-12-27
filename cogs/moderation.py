@@ -548,7 +548,7 @@ class Moderation(commands.Cog):
                     fmt = 'unblocked'
                 elif mute.muted is True:
                     action = 'mute'
-                    action = 'unmuted'
+                    fmt = 'unmuted'
 
                 if member:
                     _mem = f'{member} (`{member.id}`)'
