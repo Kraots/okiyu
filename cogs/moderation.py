@@ -326,6 +326,7 @@ class Moderation(commands.Cog):
             kwargs['blocked'] = True
 
         usr: Mutes = await Mutes.find_one({'_id': member.id})
+        _ctx = ctx
         if usr is not None:
             guild = self.bot.get_guild(913310006814859334)
             muted_by = guild.get_member(usr.muted_by)
