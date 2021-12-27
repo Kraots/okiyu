@@ -313,11 +313,12 @@ class Moderation(commands.Cog):
         ctx: Context,
         member: disnake.Member,
         *,
-        time_and_reason: UserFriendlyTime(commands.clean_content)
+        _time_and_reason: str
     ):
         if await ctx.check_perms(member) is False:
             return
 
+        data = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
         fmt = 'muted' if action == 'mute' else 'blocked'
         kwargs = {}
         if action == 'mute':
@@ -327,11 +328,36 @@ class Moderation(commands.Cog):
 
         usr: Mutes = await Mutes.find_one({'_id': member.id})
         if usr is not None:
-            if usr.blocked is True:
-                return await ctx.reply(f'`{member}` is already **blocked**.')
-            elif usr.muted is True:
-                return await ctx.reply(f'`{member}` is already **muted**.')
+            if usr.blocked is True and action == 'block':
+                view = utils.ConfirmView(ctx)
+                view.message = await ctx.reply(
+                    'That user is already blocked. Do you wish to renew their '
+                    f'block to **{human_timedelta(data.dt, suffix=False)}** and '
+                    f'with the new reason being **{data.arg}**?'
+                )
+                await view.wait()
+                if view.response is False:
+                    return await view.message.edit(
+                        content=f'Successfully aborted editing the block time and reason for {member.mention}'
+                    )
+                await usr.delete()
+            elif usr.muted is True and action == 'mute':
+                view = utils.ConfirmView(ctx)
+                view.message = await ctx.reply(
+                    'That user is already muted. Do you wish to renew their '
+                    f'mute to **{human_timedelta(data.dt, suffix=False)}** and '
+                    f'with the new reason being **{data.arg}**?'
+                )
+                await view.wait()
+                if view.response is False:
+                    return await view.message.edit(
+                        content=f'Successfully aborted editing the mute time and reason for {member.mention}'
+                    )
+                await usr.delete()
+            else:
+                await usr.delete()
 
+        time_and_reason = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
         time = time_and_reason.dt
         reason = time_and_reason.arg
         duration = human_timedelta(time, suffix=False)
@@ -453,7 +479,7 @@ class Moderation(commands.Cog):
         ctx: Context,
         member: disnake.Member,
         *,
-        time_and_reason: UserFriendlyTime(commands.clean_content)
+        time_and_reason: str
     ):
         """
         Mute somebody.
@@ -470,7 +496,7 @@ class Moderation(commands.Cog):
             action='mute',
             ctx=ctx,
             member=member,
-            time_and_reason=time_and_reason
+            _time_and_reason=time_and_reason
         )
 
     @commands.command(name='unmute')
@@ -494,7 +520,7 @@ class Moderation(commands.Cog):
         ctx: Context,
         member: disnake.Member,
         *,
-        time_and_reason: UserFriendlyTime(commands.clean_content)
+        time_and_reason: str
     ):
         """
         Block somebody from seeing all of the channels.
@@ -511,7 +537,7 @@ class Moderation(commands.Cog):
             action='block',
             ctx=ctx,
             member=member,
-            time_and_reason=time_and_reason
+            _time_and_reason=time_and_reason
         )
 
     @commands.command(name='unblock')
