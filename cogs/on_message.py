@@ -68,7 +68,8 @@ class OnMessage(commands.Cog):
                         muted_until=_data.dt,
                         reason=_data.arg,
                         duration=duration,
-                        filter=True
+                        filter=True,
+                        muted=True
                     )
                     if 913315033134542889 in (r.id for r in message.author.roles):  # Checks for admin
                         data.is_admin = True
@@ -140,7 +141,8 @@ class OnMessage(commands.Cog):
                 muted_until=_data.dt,
                 reason=_data.arg,
                 duration=duration,
-                filter=True
+                filter=True,
+                muted=True
             )
             if 913315033684008971 in (r.id for r in message.author.roles):  # Checks for mod
                 data.is_mod = True
