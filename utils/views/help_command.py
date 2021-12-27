@@ -148,6 +148,16 @@ class FrontPageSource(menus.PageSource):
                     'Now that you know the basics, it should be noted that...\n'
                     '__**You do not type in the brackets!**__',
                 ),
+                (
+                    'An extra tip',
+                    'Some commands have subcommands, a good example of that is '
+                    f'`{menu.ctx.clean_prefix}created server`, the parent command is "created" and '
+                    'the subcommand is "server". Normally, when looking at the category\'s commands, '
+                    'this does not show up, which is why you should always do '
+                    f'"{menu.ctx.clean_prefix}help <command>" on a command, that also tells you what each '
+                    'argument means and what it must be, some even have examples of how to use them '
+                    '("!help birthday set" for example).'
+                )
             )
 
             embed.add_field(name='How do I use this bot?', value='Reading the bot signature is pretty simple.')
