@@ -508,7 +508,7 @@ class Moderation(commands.Cog):
         """  # noqa
 
         await self.apply_mute_or_block(
-            action='mute',
+            action='block',
             ctx=ctx,
             member=member,
             time_and_reason=time_and_reason
@@ -523,7 +523,7 @@ class Moderation(commands.Cog):
         """  # noqa
 
         await self.apply_unmute_or_unblock(
-            action='unmute',
+            action='unblock',
             ctx=ctx,
             member=member
         )
@@ -543,9 +543,16 @@ class Moderation(commands.Cog):
                 guild = self.bot.get_guild(913310006814859334)
                 member = guild.get_member(mute.id)
                 _mem = f'**[LEFT]** (`{mute.id}`)'
+                if mute.blocked is True:
+                    action = 'block'
+                    fmt = 'unblocked'
+                elif mute.muted is True:
+                    action = 'mute'
+                    action = 'unmuted'
+
                 if member:
                     _mem = f'{member} (`{member.id}`)'
-                    new_roles = [role for role in member.roles if role.id != 913376647422545951]
+                    new_roles = [role for role in member.roles if role.id not in (913376647422545951, 924941473089224784)]
                     if mute.is_owner is True:
                         owner_role = guild.get_role(913310292505686046)  # Check for owner
                         new_roles += [owner_role]
@@ -555,9 +562,9 @@ class Moderation(commands.Cog):
                     elif mute.is_mod is True:
                         mod_role = guild.get_role(913315033684008971)  # Check for mod
                         new_roles += [mod_role]
-                    await member.edit(roles=new_roles, reason='[UNMUTE] Mute Expired.')
+                    await member.edit(roles=new_roles, reason=f'[{fmt.upper()}] {action.title()} Expired.')
                     try:
-                        await member.send('Hello, your mute in `Ukiyo` has expired. You have been unmuted.')
+                        await member.send(f'Hello, your **{action}** in `Ukiyo` has expired. You have been **{fmt}**.')
                     except disnake.Forbidden:
                         pass
                 await mute.delete()
@@ -568,7 +575,7 @@ class Moderation(commands.Cog):
                     fields=[
                         ('Member', _mem),
                         ('Reason', mute.reason),
-                        ('Mute Duration', f'`{mute.duration}`'),
+                        (f'{action.title()} Duration', f'`{mute.duration}`'),
                         ('By', mem.mention),
                         ('At', format_dt(datetime.now(), 'F')),
                     ],
