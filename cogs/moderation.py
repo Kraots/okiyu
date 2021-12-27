@@ -351,7 +351,11 @@ class Moderation(commands.Cog):
                     return await view.message.edit(
                         content=f'Successfully aborted editing the block time and reason for {member.mention}'
                     )
-                await usr.delete()
+                await self.apply_unmute_or_unblock(
+                    action='unblock',
+                    ctx=ctx,
+                    member=member
+                )
             elif usr.muted is True and action == 'mute':
                 if usr.filter is False:
                     if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
@@ -373,9 +377,18 @@ class Moderation(commands.Cog):
                     return await view.message.edit(
                         content=f'Successfully aborted editing the mute time and reason for {member.mention}'
                     )
-                await usr.delete()
+                await self.apply_unmute_or_unblock(
+                    action='unmute',
+                    ctx=ctx,
+                    member=member
+                )
             else:
-                await usr.delete()
+                _action = 'unblock' if action == 'mute' else 'unmute'
+                await self.apply_unmute_or_unblock(
+                    action=_action,
+                    ctx=ctx,
+                    member=member
+                )
 
         time_and_reason = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
         time = time_and_reason.dt
