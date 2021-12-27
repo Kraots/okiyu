@@ -318,7 +318,6 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        data = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
         fmt = 'muted' if action == 'mute' else 'blocked'
         kwargs = {}
         if action == 'mute':
@@ -330,6 +329,7 @@ class Moderation(commands.Cog):
         if usr is not None:
             guild = self.bot.get_guild(913310006814859334)
             muted_by = guild.get_member(usr.muted_by)
+            data = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
             if usr.blocked is True and action == 'block':
                 if usr.filter is False:
                     if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
@@ -358,6 +358,9 @@ class Moderation(commands.Cog):
                     member=member,
                     send_feedback=False
                 )
+                msg = await ctx.send('Preparing to edit the block...')
+                ctx = await self.bot.get_context(msg, cls=Context)
+                await msg.delete()
             elif usr.muted is True and action == 'mute':
                 if usr.filter is False:
                     if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
@@ -386,6 +389,9 @@ class Moderation(commands.Cog):
                     member=member,
                     send_feedback=False
                 )
+                msg = await ctx.send('Preparing to edit the mute...')
+                ctx = await self.bot.get_context(msg, cls=Context)
+                await msg.delete()
             else:
                 _action = 'unblock' if action == 'mute' else 'unmute'
                 await self.apply_unmute_or_unblock(
@@ -394,6 +400,11 @@ class Moderation(commands.Cog):
                     member=member,
                     send_feedback=False
                 )
+                msg = await ctx.send(
+                    f'Preparing to edit from {"mute" if action == "block" else "block"} to {action}...'
+                )
+                ctx = await self.bot.get_context(msg, cls=Context)
+                await msg.delete()
 
         time_and_reason = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
         time = time_and_reason.dt
