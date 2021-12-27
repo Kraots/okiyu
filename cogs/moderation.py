@@ -335,8 +335,9 @@ class Moderation(commands.Cog):
                     if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
                         if usr.muted_by == self.bot._owner_id:
                             return await ctx.reply(
-                                f'{member.mention} was **{fmt}** by `{muted_by}` which is in a higher role hierarcy than you. '
-                                f'Only staff members of the same role or above can edit the **{action}** time and reason that person.'
+                                f'{member.mention} was **{fmt}** by `{muted_by}` which is in a '
+                                'higher role hierarcy than you. Only staff members of the same '
+                                f'role or above can edit the **{action}** time and reason that person.'
                             )
 
                 view = utils.ConfirmView(ctx)
@@ -354,15 +355,17 @@ class Moderation(commands.Cog):
                 await self.apply_unmute_or_unblock(
                     action='unblock',
                     ctx=ctx,
-                    member=member
+                    member=member,
+                    send_feedback=False
                 )
             elif usr.muted is True and action == 'mute':
                 if usr.filter is False:
                     if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
                         if usr.muted_by == self.bot._owner_id:
                             return await ctx.reply(
-                                f'{member.mention} was **{fmt}** by `{muted_by}` which is in a higher role hierarcy than you. '
-                                f'Only staff members of the same role or above can edit the **{action}** time and reason that person.'
+                                f'{member.mention} was **{fmt}** by `{muted_by}` which is in a '
+                                'higher role hierarcy than you. Only staff members of the same '
+                                f'role or above can edit the **{action}** time and reason that person.'
                             )
 
                 view = utils.ConfirmView(ctx)
@@ -380,14 +383,16 @@ class Moderation(commands.Cog):
                 await self.apply_unmute_or_unblock(
                     action='unmute',
                     ctx=ctx,
-                    member=member
+                    member=member,
+                    send_feedback=False
                 )
             else:
                 _action = 'unblock' if action == 'mute' else 'unmute'
                 await self.apply_unmute_or_unblock(
                     action=_action,
                     ctx=ctx,
-                    member=member
+                    member=member,
+                    send_feedback=False
                 )
 
         time_and_reason = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
@@ -457,7 +462,8 @@ class Moderation(commands.Cog):
         action: Literal['unmute', 'unblock'],
         ctx: Context,
         *,
-        member: disnake.Member
+        member: disnake.Member,
+        send_feedback: bool = True
     ):
         data: Mutes = await Mutes.find_one({'_id': member.id})
         fmt = 'muted' if action == 'unmute' else 'blocked'
@@ -486,12 +492,13 @@ class Moderation(commands.Cog):
             mod_role = guild.get_role(913315033684008971)  # Check for mod
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[{action.title()}] {action.title()} by {ctx.author} ({ctx.author.id})')
-        try:
-            await member.send(f'Hello, you have been **un{fmt}** in `Ukiyo` by **{ctx.author}**')
-        except disnake.Forbidden:
-            pass
+        if send_feedback is True:
+            try:
+                await member.send(f'Hello, you have been **un{fmt}** in `Ukiyo` by **{ctx.author}**')
+            except disnake.Forbidden:
+                pass
 
-        await ctx.reply(f'> 👌 Successfully **un{fmt}** {member.mention}')
+            await ctx.reply(f'> 👌 Successfully **un{fmt}** {member.mention}')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title=f'[{action.title()}]',
