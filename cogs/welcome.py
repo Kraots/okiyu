@@ -43,15 +43,24 @@ class Welcome(commands.Cog):
 
         mute: utils.Mutes = await utils.Mutes.find_one({'_id': member.id})
         if mute is not None:
-            muted_role = guild.get_role(913376647422545951)
+            if mute.blocked is True:
+                action = 'block'
+                fmt = 'blocked'
+            elif mute.muted is True:
+                action = 'mute'
+                fmt = 'muted'
+
+            muted_role_id = 913376647422545951
+            blocked_role_id = 924941473089224784
+            role = guild.get_role(muted_role_id) if action == 'mute' else guild.get_role(blocked_role_id)
             mem = guild.get_member(mute.muted_by)
-            await member.add_roles(muted_role, reason='[MUTE EVASION] user joined but was still muted in the database')
-            em = disnake.Embed(title='You have been muted!', color=utils.red)
-            em.description = f'**Muted By:** {self.bot.user}\n' \
-                             f'**Reason:** Mute Evasion.\n' \
+            await member.add_roles(role, reason=f'[{action.title()} EVASION] user joined but was still {fmt} in the database')
+            em = disnake.Embed(title=f'You have been {fmt}!', color=utils.red)
+            em.description = f'**{fmt.title()} By:** {self.bot.user}\n' \
+                             f'**Reason:** {action.title} Evasion.\n' \
                              f'**Expire Date:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
-            em.set_footer(text='Muted in `Ukiyo`')
+            em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
             em.timestamp = datetime.now(timezone.utc)
             try:
                 await member.send(embed=em)
@@ -62,10 +71,10 @@ class Welcome(commands.Cog):
             view.add_item(disnake.ui.Button(label='Jump!', url=mute.jump_url))
             await utils.log(
                 self.bot.webhooks['mod_logs'],
-                title='[MUTE EVASION]',
+                title=f'[{action.upper()} EVASION]',
                 fields=[
                     ('Member', f'{member} (`{member.id}`)'),
-                    ('Reason', 'Mute Evasion.'),
+                    ('Reason', f'{action.title()} Evasion.'),
                     ('Expires At', utils.format_dt(mute.muted_until, 'F')),
                     ('Remaining', f'`{utils.human_timedelta(mute.muted_until, suffix=False)}`'),
                     ('By', f'{mem.mention} (`{mem.id}`)'),
