@@ -15,3 +15,4 @@ from .giveaway_buttons import *  # noqa
 from .game_boss_fight import *  # noqa
 from .game_blackjack import *  # noqa
 from .quit_button import *  # noqa
+from .link_button import *  # noqa
