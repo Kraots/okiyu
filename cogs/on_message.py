@@ -283,7 +283,7 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message_edit')
     async def repeat_command(self, before: disnake.Message, after: disnake.Message):
-        if after.content is None:
+        if not after.content:
             return
         elif after.content[0] not in ('!', '?'):
             return

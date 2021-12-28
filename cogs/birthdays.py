@@ -163,7 +163,7 @@ class Birthdays(commands.Cog):
         except TimeoutError:
             return await ctx.reply('Ran out of time.')
 
-        if _birthday_timezone.content is None:
+        if not _birthday_timezone.content:
             return await ctx.reply('You didn\'t give a valid timezone.')
 
         try:

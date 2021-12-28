@@ -583,7 +583,7 @@ class _Game(commands.Cog, name='Game'):
         await ctx.reply('What\'s the character\'s name?')
         try:
             _name = await self.bot.wait_for('message', check=check, timeout=45.0)
-            if _name.content is None:
+            if not _name.content:
                 return await ctx.reply('You did not give the character\'s name, cancelling.')
             name = _name.content.lower()
             data: Characters = await Characters.find_one({'_id': name})
@@ -592,31 +592,31 @@ class _Game(commands.Cog, name='Game'):
 
             await _name.reply('Please send the character\'s description.')
             _description = await self.bot.wait_for('message', check=check, timeout=120.0)
-            if _description.content is None:
+            if not _description.content:
                 return await ctx.reply('You did not give the character\'s description, cancelling.')
             description = _description.content
 
             await _description.reply('Please send the character\'s lowest attack points (lowest DMG).')
             _lowest_dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
-            if _lowest_dmg.content is None:
+            if not _lowest_dmg.content:
                 return await ctx.reply('You did not give the character\'s lowest attack points, cancelling.')
             lowest_dmg = int(_lowest_dmg.content)
 
             await _lowest_dmg.reply('Please send the character\'s highest attack points (highest DMG).')
             _highest_dmg = await self.bot.wait_for('message', check=check, timeout=45.0)
-            if _highest_dmg.content is None:
+            if not _highest_dmg.content:
                 return await ctx.reply('You did not give the character\'s highest attack points, cancelling.')
             highest_dmg = int(_highest_dmg.content)
 
             await _highest_dmg.reply('Please send the character\'s health points (HP).')
             _hp = await self.bot.wait_for('message', check=check, timeout=45.0)
-            if _hp.content is None:
+            if not _hp.content:
                 return await ctx.reply('You did not give the character\'s health points, cancelling.')
             hp = int(_hp.content)
 
             await _hp.reply('Please send the character\'s rarity level. (1-5)')
             _rarity = await self.bot.wait_for('message', check=check, timeout=45.0)
-            if _rarity.content is None:
+            if not _rarity.content:
                 return await ctx.reply('You did not give the character\'s rarity level, cancelling.')
             rarity_level = int(_rarity.content)
             if rarity_level < 1 or rarity_level > 5:
