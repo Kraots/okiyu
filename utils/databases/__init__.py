@@ -5,7 +5,8 @@ from .dbs import (  # noqa
     database4,
     database5,
     database6,
-    database7
+    database7,
+    database8
 )
 
 from .db_intros import Intro
@@ -19,6 +20,7 @@ from .db_afks import AFK
 from .db_game import Game, Characters
 from .db_giveaways import GiveAway
 from .db_bdays import Birthday
+from .db_confesscord import Restrictions
 
 __all__ = (
     'Intro',
@@ -33,4 +35,5 @@ __all__ = (
     'Characters',
     'GiveAway',
     'Birthday',
+    'Restrictions',
 )
