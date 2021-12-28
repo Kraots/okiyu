@@ -18,7 +18,12 @@ class Confesscord(commands.Cog):
             return True
         return any(r.id for r in ctx.author.roles if r in (913310292505686046, 913315033134542889, 913315033684008971))
 
-    @commands.group(name='confesscord', aliases=('confessions',), invoke_without_command=True, case_insensitive=True)
+    @commands.group(
+        name='confesscord',
+        aliases=('confessions', 'confess'),
+        invoke_without_command=True,
+        case_insensitive=True
+    )
     async def base_command(self, ctx: Context):
         """Base command for all confesscord commands."""
 
@@ -103,6 +108,7 @@ class Confesscord(commands.Cog):
             entries.append(to_append.format(mem, data.id, restricted_by))
 
         paginator = utils.SimplePages(ctx, entries, compact=True)
+        paginator.embed.title = 'Here are all the currently restricted members'
         await paginator.start(ref=True)
 
 
