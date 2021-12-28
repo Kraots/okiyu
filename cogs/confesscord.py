@@ -18,11 +18,11 @@ class Confesscord(commands.Cog):
             return True
         return any(r.id for r in ctx.author.roles if r in (913310292505686046, 913315033134542889, 913315033684008971))
 
-    @commands.group(name='confesscord', invoke_without_command=True, case_insensitive=True)
+    @commands.group(name='confesscord', aliases=('confessions',), invoke_without_command=True, case_insensitive=True)
     async def base_command(self, ctx: Context):
         """Base command for all confesscord commands."""
 
-        pass
+        await ctx.send_help('confesscord')
 
     @base_command.command(name='restrict')
     async def confesscord_restrict(self, ctx: Context, *, member: disnake.Member):
