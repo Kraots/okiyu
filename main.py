@@ -16,6 +16,7 @@ TOKEN = os.getenv('BOT_TOKEN')
 class Ukiyo(commands.Bot):
     def __init__(self):
         super().__init__(
+            max_messages=100000,
             help_command=PaginatedHelpCommand(),
             command_prefix=('!', '?',),
             strip_after_prefix=True,
