@@ -6,6 +6,7 @@ import asyncio
 import functools
 from pathlib import Path
 from typing import Callable
+from datetime import datetime
 
 import disnake
 
@@ -21,7 +22,12 @@ __all__ = (
     'clean_inter_content',
     'fail_embed',
     'format_amount',
+    'escape_markdown',
+    'remove_markdown',
+    'FIRST_JANUARY_1970',
 )
+
+FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
 
 allowed_letters = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
 punctuations_and_digits = tuple(list(st.punctuation) + list(st.digits))
@@ -227,8 +233,42 @@ def fail_embed(description: str) -> disnake.Embed:
     return disnake.Embed(title='Uh-oh!', color=utils.red, description=description)
 
 
-def format_amount(num: str):
+def format_amount(num: str) -> str:
     return num \
         .replace(',', '') \
         .replace(' ', '') \
         .replace('.', '')
+
+
+def escape_markdown(text: str) -> str:
+    r"""Escapes the markdown from the text. That means **hello** becomes \\*\\*hello\\*\\*
+
+    Parameters
+    ----------
+        text: :class:`str`
+            The text to escape the markdown from.
+
+    Return
+    ------
+        :class:`str`
+            The new string with the escaped markdown.
+    """
+
+    return disnake.utils.escape_markdown(text)
+
+
+def remove_markdown(text: str) -> str:
+    r"""Removes the markdown from the text. That means **hello** becomes hello
+
+    Parameters
+    ----------
+        text: :class:`str`
+            The text to remove the markdown from.
+
+    Return
+    ------
+        :class:`str`
+            The new string with the removed markdown.
+    """
+
+    return disnake.utils.remove_markdown(text)
