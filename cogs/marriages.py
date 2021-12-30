@@ -216,10 +216,10 @@ class Marriages(commands.Cog):
         else:
             filter1: Marriage = await Marriage.find({'adoptions': ctx.author.id}).to_list(1)
             filter2: Marriage = await Marriage.find({'adoptions': member.id}).to_list(1)
-            if filter1 is not None:
+            if filter1:
                 mem = ctx.ukiyo.get_member(filter1[0].id)
                 return await ctx.reply(f'{ctx.denial} You are already adopted by {mem.mention}')
-            elif filter2 is not None:
+            elif filter2:
                 mem = ctx.ukiyo.get_member(filter1[0].id)
                 return await ctx.reply(f'{ctx.denial} `{member}` is already adopted by {mem.mention}')
 
