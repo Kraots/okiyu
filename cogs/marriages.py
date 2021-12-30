@@ -326,7 +326,7 @@ class Marriages(commands.Cog):
             for adoption in data.adoptions:
                 mem = ctx.ukiyo.get_member(adoption)
                 adoptions.append(mem.mention)
-        adoptions_count = len(adopted_by)
+        adoptions_count = len(adoptions)
         adoptions = '\n'.join(adoptions) if len(adoptions) != 0 else 'No adoptions.'
 
         em.add_field('Married To', married_to, inline=False)
