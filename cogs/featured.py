@@ -65,9 +65,8 @@ class Featured(commands.Cog):
         ticket_id = '1' if not total_tickets else str(int(total_tickets[0].ticket_id) + 1)
         ch_name = f'{ctx.author.name}-ticket #' + ticket_id
 
-        g = self.bot.get_guild(913310006814859334)
-        categ = g.get_channel(914082225274912808)
-        channel = await g.create_text_channel(
+        categ = ctx.ukiyo.get_channel(914082225274912808)
+        channel = await ctx.ukiyo.create_text_channel(
             ch_name,
             category=categ,
             reason=f'Ticket Creation by {ctx.author} (ID: {ctx.author.id})'

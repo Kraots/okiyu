@@ -354,10 +354,9 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        guild = self.bot.get_guild(913310006814859334)
-        created_date = guild.created_at
-        publiced_date = guild.get_member(302050872383242240).joined_at
-        members = [m for m in guild.members if not m.bot]
+        created_date = ctx.ukiyo.created_at
+        publiced_date = ctx.ukiyo.get_member(302050872383242240).joined_at
+        members = [m for m in ctx.ukiyo.members if not m.bot]
         em = disnake.Embed(colour=utils.red, title='Server Creation')
         em.add_field(
             name='Created At',
@@ -413,7 +412,6 @@ class Misc(commands.Cog):
         if isinstance(ctx.channel, disnake.DMChannel):
             member = ctx.author
 
-        guild = self.bot.get_guild(913310006814859334)
         if member is None:
             entries = []
             index = 0
@@ -423,10 +421,10 @@ class Misc(commands.Cog):
                     continue
 
                 index += 1
-                key = guild.get_member(mute.id)
+                key = ctx.ukiyo.get_member(mute.id)
                 if key is None:
                     key = f'[LEFT] {mute.id}'
-                value = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
+                value = f'**Muted By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
                         f'**Reason:** {mute.reason}\n' \
                         f'**Mute Duration:** `{mute.duration}`\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -449,7 +447,7 @@ class Misc(commands.Cog):
                     return await ctx.better_reply(f'{ctx.denial} `{member}` is not muted.')
             em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=member, icon_url=member.display_avatar)
-            em.description = f'**Muted By:** {guild.get_member(mute.muted_by)}\n' \
+            em.description = f'**Muted By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
                              f'**Mute Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -468,7 +466,6 @@ class Misc(commands.Cog):
         if isinstance(ctx.channel, disnake.DMChannel):
             member = ctx.author
 
-        guild = self.bot.get_guild(913310006814859334)
         if member is None:
             entries = []
             index = 0
@@ -478,10 +475,10 @@ class Misc(commands.Cog):
                     continue
 
                 index += 1
-                key = guild.get_member(mute.id)
+                key = ctx.ukiyo.get_member(mute.id)
                 if key is None:
                     key = f'[LEFT] {mute.id}'
-                value = f'**Blocked By:** {guild.get_member(mute.muted_by)}\n' \
+                value = f'**Blocked By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
                         f'**Reason:** {mute.reason}\n' \
                         f'**Block Duration:** `{mute.duration}`\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -504,7 +501,7 @@ class Misc(commands.Cog):
                     return await ctx.better_reply(f'{ctx.denial} `{member}` is not blocked.')
             em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=member, icon_url=member.display_avatar)
-            em.description = f'**Blocked By:** {guild.get_member(mute.muted_by)}\n' \
+            em.description = f'**Blocked By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
                              f'**Block Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -562,10 +559,9 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        guild = self.bot.get_guild(913310006814859334)
         _ = await utils.Marriage.find_one({'_id': ctx.author.id})
         if _ is not None:
-            mem = guild.get_member(_.married_to)
+            mem = ctx.ukiyo.get_member(_.married_to)
             return await ctx.reply(f'You are already married to {mem.mention}')
 
         choices = []
@@ -642,7 +638,6 @@ class Misc(commands.Cog):
     async def check_staff(self, ctx: Context):
         """Check the staff members current status."""
 
-        guild = self.bot.get_guild(913310006814859334)
         message = ""
         all_status = {
             "online": {"users": [], "emoji": "<:status_online:916642281631670273>"},
@@ -651,7 +646,7 @@ class Misc(commands.Cog):
             "offline": {"users": [], "emoji": "<:status_offline:916642281593913354>"}
         }
 
-        for mem in guild.members:
+        for mem in ctx.ukiyo.members:
             if 913310292505686046 in (r.id for r in mem.roles):  # Checks for owner
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:

@@ -232,8 +232,8 @@ class Moderation(commands.Cog):
             await member.send(f'> ⚠️ Hello! Sadly, you have been **banned** from `Ukiyo` for **{reason}**. Goodbye 👋')
         except disnake.Forbidden:
             pass
-        guild = self.bot.get_guild(913310006814859334)
-        await guild.ban(
+
+        await ctx.ukiyo.ban(
             member,
             reason=f'{ctx.author} ({ctx.author.id}): "{reason}"',
             delete_message_days=0
@@ -259,11 +259,11 @@ class Moderation(commands.Cog):
         `user` **->** The user to unban. Must be their discord id.
         """
 
-        guild = self.bot.get_guild(913310006814859334)
         try:
-            await guild.unban(user, reason=f'Unban by {ctx.author} ({ctx.author.id})')
+            await ctx.ukiyo.unban(user, reason=f'Unban by {ctx.author} ({ctx.author.id})')
         except disnake.NotFound:
             return await ctx.reply(f'{ctx.denial} The user is not banned.')
+
         else:
             await ctx.reply(f'> 👌 Successfully unbanned `{user}`')
             await utils.log(
@@ -328,8 +328,7 @@ class Moderation(commands.Cog):
         usr: Mutes = await Mutes.find_one({'_id': member.id})
         _ctx = ctx
         if usr is not None:
-            guild = self.bot.get_guild(913310006814859334)
-            muted_by = guild.get_member(usr.muted_by)
+            muted_by = ctx.ukiyo.get_member(usr.muted_by)
             data = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
             if usr.blocked is True and action == 'block':
                 if usr.filter is False:
@@ -426,10 +425,9 @@ class Moderation(commands.Cog):
         elif 913315033684008971 in (r.id for r in member.roles):  # Checks for mod
             data.is_mod = True
 
-        guild = self.bot.get_guild(913310006814859334)
         muted_role_id = 913376647422545951
         blocked_role_id = 924941473089224784
-        role = guild.get_role(muted_role_id) if action == 'mute' else guild.get_role(blocked_role_id)
+        role = ctx.ukiyo.get_role(muted_role_id) if action == 'mute' else ctx.ukiyo.get_role(blocked_role_id)
         new_roles = [role for role in member.roles
                      if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
                      ] + [role]
@@ -482,8 +480,7 @@ class Moderation(commands.Cog):
         if data is None:
             return await ctx.reply(f'`{member}` is not **{fmt}**!')
 
-        guild = self.bot.get_guild(913310006814859334)
-        muted_by = guild.get_member(data.muted_by)
+        muted_by = ctx.ukiyo.get_member(data.muted_by)
         if data.filter is False:
             if ctx.author.id not in (data.muted_by, self.bot._owner_id):
                 if data.muted_by == self.bot._owner_id:
@@ -495,13 +492,13 @@ class Moderation(commands.Cog):
         await data.delete()
         new_roles = [role for role in member.roles if role.id not in (913376647422545951, 924941473089224784)]
         if data.is_owner is True:
-            owner_role = guild.get_role(913310292505686046)  # Check for owner
+            owner_role = ctx.ukiyo.get_role(913310292505686046)  # Check for owner
             new_roles += [owner_role]
         elif data.is_admin is True:
-            admin_role = guild.get_role(913315033134542889)  # Check for admin
+            admin_role = ctx.ukiyo.get_role(913315033134542889)  # Check for admin
             new_roles += [admin_role]
         elif data.is_mod is True:
-            mod_role = guild.get_role(913315033684008971)  # Check for mod
+            mod_role = ctx.ukiyo.get_role(913315033684008971)  # Check for mod
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[{action.upper()}] {action.title()} by {ctx.author} ({ctx.author.id})')
         if send_feedback is True:
@@ -682,10 +679,9 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        guild = self.bot.get_guild(913310006814859334)
         if 913315033134542889 in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{member}` is already an admin!')
-        admin_role = guild.get_role(913315033134542889)
+        admin_role = ctx.ukiyo.get_role(913315033134542889)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
         await utils.log(
@@ -710,10 +706,9 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        guild = self.bot.get_guild(913310006814859334)
         if 913315033684008971 in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{member}` is already a moderator!')
-        mod_role = guild.get_role(913315033684008971)
+        mod_role = ctx.ukiyo.get_role(913315033684008971)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
         await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
         await utils.log(
@@ -871,10 +866,9 @@ class Moderation(commands.Cog):
         if data is None:
             return await ctx.reply('Giveaway with that message id not found.')
 
-        guild = self.bot.get_guild(913310006814859334)
         entries = []
         for mem_id in data.participants:
-            mem = guild.get_member(mem_id)
+            mem = ctx.ukiyo.get_member(mem_id)
             if mem is None:
                 mem = f'[LEFT] (`{mem_id}`)'
             entries.append(mem)
