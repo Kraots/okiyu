@@ -283,7 +283,8 @@ class Marriages(commands.Cog):
         """
 
         member = member or ctx.author
-        em = disnake.Embed(title=f'{member.display_name}\'s family', color=utils.blurple)
+        em = disnake.Embed(color=utils.blurple)
+        em.set_author(name=f'{member.display_name}\'s family', icon_url=member.display_avatar)
         data: Marriage = await Marriage.find_one({'_id': member.id})
         if data is None:
             data: Marriage = await Marriage.find_one({'adoptions': member.id})
@@ -293,7 +294,11 @@ class Marriages(commands.Cog):
                 else:
                     return await ctx.reply(f'{member.mention} doesn\'t have a family :frowning:')
 
-        married_to = ctx.ukiyo.get_member(data.married_to).mention if data.married_to != 0 else 'No partner.'
+        married_to = 'No partner.'
+        if data.married_to != 0:
+            mem = ctx.ukiyo.get_member(data.married_to)
+            married_since = utils.human_timedelta(data.married_since, suffix=False)
+            married_to = f'{mem.mention} (married since `{married_since} ago`)'
         adoptions = []
         for adoption in data.adoptions:
             mem = ctx.ukiyo.get_member(adoption)
