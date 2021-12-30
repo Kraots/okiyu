@@ -59,7 +59,7 @@ class Welcome(commands.Cog):
             em.description = f'**{fmt.title()} By:** {self.bot.user}\n' \
                              f'**Reason:** {action.title} Evasion.\n' \
                              f'**Expire Date:** {utils.format_dt(mute.muted_until, "F")}\n' \
-                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
+                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
             em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
             em.timestamp = datetime.now(timezone.utc)
             try:

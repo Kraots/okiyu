@@ -517,7 +517,7 @@ class Moderation(commands.Cog):
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
                 (f'{"Mute" if action == "unmute" else "Block"} Duration', f'`{data.duration}`'),
-                ('Left', f'`{human_timedelta(data.muted_until, suffix=False)}`'),
+                ('Left', f'`{human_timedelta(data.muted_until, suffix=False, accuracy=6)}`'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
