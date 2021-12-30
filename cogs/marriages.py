@@ -249,7 +249,7 @@ class Marriages(commands.Cog):
         await view.wait()
         if view.response is False:
             return await view.message.edit(
-                f'{ctx.author.mention} It seems like {member.mention} does not want to be part of your family.'
+                content=f'{ctx.author.mention} It seems like {member.mention} does not want to be part of your family.'
             )
 
         data1.adoptions.append(member.id)
