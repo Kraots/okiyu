@@ -243,7 +243,8 @@ class Marriages(commands.Cog):
 
         view = utils.ConfirmView(ctx, react_user=member)
         view.message = await ctx.send(
-            f'{member.mention} do you wish to be part of {ctx.author.display_name}\'s family?'
+            f'{member.mention} do you wish to be part of {ctx.author.display_name}\'s family?',
+            view=view
         )
         await view.wait()
         if view.response is False:
