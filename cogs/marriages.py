@@ -311,6 +311,13 @@ class Marriages(commands.Cog):
         `member` **->** The member who's family you want to see. Defaults to you.
         """
 
+        if member.bot:
+            if member.id in (783587403716624416, 787596672128909323, 913415084179611678):
+                return await ctx.better_reply(
+                    f'{member.mention}\'s family will always be {self.bot._owner.mention}',
+                    allowed_mentions=disnake.AllowedMentions(users=False)
+                )
+
         member = member or ctx.author
         em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{member.display_name}\'s family', icon_url=member.display_avatar)
