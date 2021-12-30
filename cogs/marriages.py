@@ -308,7 +308,7 @@ class Marriages(commands.Cog):
                     return await ctx.reply(f'{member.mention} doesn\'t have a family :frowning:')
         adopted_by = []
         for uid in _adopted_by:
-            mem = ctx.ukiyo.get_member(uid)
+            mem = ctx.ukiyo.get_member(uid.id)
             adopted_by.append(mem.mention)
         adopted_by = ' and '.join(adopted_by) if len(adopted_by) != 0 else 'No one.'
 
