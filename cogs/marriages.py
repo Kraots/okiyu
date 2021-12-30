@@ -203,6 +203,7 @@ class Marriages(commands.Cog):
             data1 = Marriage(id=ctx.author.id)
         if len(data1.adoptions) > 7 and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'{ctx.denial} You cannot adopt more than **7** people.')
+
         data2: Marriage = await Marriage.find_one({'_id': member.id})
         if data2 is None:
             data2 = Marriage(id=member.id)
@@ -236,6 +237,7 @@ class Marriages(commands.Cog):
                     content=f'{ctx.author.mention} It seems like your partner did not want to adopt {member.mention}.'
                 )
             else:
+                data2: Marriage = await Marriage.find_one({'_id': data1.married_to})
                 data2.adoptions.append(member.id)
                 await data2.commit()
         data1.adoptions.append(member.id)
