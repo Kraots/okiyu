@@ -163,7 +163,7 @@ class Marriages(commands.Cog):
             fn = ctx.better_reply
         em.description = f'{i} {mem.mention} ' \
                          f'since {utils.format_dt(data.married_since, "F")} ' \
-                         f'(`{utils.human_timedelta(data.married_since)}`)'
+                         f'(`{utils.human_timedelta(data.married_since, accuracy=6)}`)'
         await fn(embed=em)
 
     @commands.command(name='kiss')
@@ -297,8 +297,8 @@ class Marriages(commands.Cog):
         married_to = 'No partner.'
         if data.married_to != 0:
             mem = ctx.ukiyo.get_member(data.married_to)
-            married_since = utils.human_timedelta(data.married_since, suffix=False)
-            married_to = f'{mem.mention} (married since `{married_since} ago`)'
+            married_since = utils.human_timedelta(data.married_since)
+            married_to = f'{mem.mention} (married since `{married_since}`)'
         adoptions = []
         for adoption in data.adoptions:
             mem = ctx.ukiyo.get_member(adoption)
