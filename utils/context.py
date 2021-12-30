@@ -34,6 +34,10 @@ class Context(commands.Context):
     def denial(self) -> str:
         return f'>>> {self.disagree}'
 
+    @property
+    def ukiyo(self) -> disnake.Guild:
+        return self.bot.get_guild(913310006814859334)
+
     @disnake.utils.cached_property
     def replied_reference(self) -> disnake.MessageReference | None:
         ref = self.message.reference

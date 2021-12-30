@@ -78,8 +78,7 @@ class Levels(commands.Cog):
         current_xp = x
         needed_xp = int(200 * ((1 / 2) * lvl))
         percent = round(float(current_xp * 100 / needed_xp), 2)
-        guild = self.bot.get_guild(913310006814859334)
-        members_count = len([m for m in guild.members if not m.bot])
+        members_count = len([m for m in ctx.ukiyo.members if not m.bot])
 
         rank_card = await utils.create_rank_card(
             member, lvl, rank, members_count, current_xp, needed_xp, percent
@@ -122,7 +121,6 @@ class Levels(commands.Cog):
 
         entries = []
         index = 0
-        guild = self.bot.get_guild(913310006814859334)
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
         async for res in Level.find().sort('xp', -1):
             res: Level
@@ -132,7 +130,7 @@ class Levels(commands.Cog):
                 if res.xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
                     break
                 lvl += 1
-            user = guild.get_member(res.id)
+            user = ctx.ukiyo.get_member(res.id)
             if index in (1, 2, 3):
                 place = top_3_emojis[index]
             else:
@@ -177,13 +175,12 @@ class Levels(commands.Cog):
         index = 0
         data = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
-        guild = self.bot.get_guild(913310006814859334)
 
         results: list[Level] = await Level.find().sort('messages_count', -1).to_list(100000)
         for result in results:
             if result.messages_count != 0:
                 index += 1
-                mem = guild.get_member(result.id)
+                mem = ctx.ukiyo.get_member(result.id)
                 if index in (1, 2, 3):
                     place = top_3_emojis[index]
                 else:

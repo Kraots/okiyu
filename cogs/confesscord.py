@@ -96,13 +96,12 @@ class Confesscord(commands.Cog):
     async def confesscord_restrictions(self, ctx: Context):
         """See all the currently restricted members."""
 
-        guild = self.bot.get_guild(913310006814859334)
         entries = []
         to_append = '{} (`{}`) by {}'
         async for data in Restrictions.find():
             data: Restrictions
-            restricted_by = guild.get_member(data.restricted_by)
-            mem = guild.get_member(data.id)
+            restricted_by = ctx.ukiyo.get_member(data.restricted_by)
+            mem = ctx.ukiyo.get_member(data.id)
             restricted_by = restricted_by.mention if restricted_by is not None else '**[LEFT]**'
             mem = mem.mention if mem is not None else '**[LEFT]**'
             entries.append(to_append.format(mem, data.id, restricted_by))

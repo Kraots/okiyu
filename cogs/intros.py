@@ -58,8 +58,7 @@ class Intros(commands.Cog):
                     f'{ctx.denial} `{member}` doesn\'t have an intro. '
                     'Please contact a staff member to unverify them! This is a bug.'
                 )
-        guild = self.bot.get_guild(913310006814859334)
-        intro_channel = guild.get_channel(913331578606854184)
+        intro_channel = ctx.ukiyo.get_channel(913331578606854184)
         msg = await intro_channel.fetch_message(data.message_id)
         if msg:
             view = disnake.ui.View()
@@ -97,11 +96,10 @@ class Intros(commands.Cog):
         ) is False:
             return
 
-        guild = self.bot.get_guild(913310006814859334)
-        unverified_role = guild.get_role(913329062347423775)
+        unverified_role = ctx.ukiyo.get_role(913329062347423775)
         data = await Intro.find_one({'_id': member.id})
         if data is not None:
-            intro_channel = guild.get_channel(913331578606854184)
+            intro_channel = ctx.ukiyo.get_channel(913331578606854184)
             msg = await intro_channel.fetch_message(data.message_id)
             if msg:
                 await msg.delete()
