@@ -251,6 +251,10 @@ class Marriages(commands.Cog):
             return await view.message.edit(
                 content=f'{ctx.author.mention} It seems like {member.mention} does not want to be part of your family.'
             )
+        else:
+            await view.message.edit(
+                content=f'{member.mention} You are now part of {ctx.author.display_name}\'s family.'
+            )
 
         data1.adoptions.append(member.id)
 
