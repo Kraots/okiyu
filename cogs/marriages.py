@@ -312,14 +312,15 @@ class Marriages(commands.Cog):
         adopted_by = ' and '.join(adopted_by) if len(adopted_by) != 0 else 'No one.'
 
         married_to = 'No partner.'
-        if data.married_to != 0:
-            mem = ctx.ukiyo.get_member(data.married_to)
-            married_since = utils.human_timedelta(data.married_since)
-            married_to = f'{mem.mention} (married since `{married_since}`)'
         adoptions = []
-        for adoption in data.adoptions:
-            mem = ctx.ukiyo.get_member(adoption)
-            adoptions.append(mem.mention)
+        if data is not None:
+            if data.married_to != 0:
+                mem = ctx.ukiyo.get_member(data.married_to)
+                married_since = utils.human_timedelta(data.married_since)
+                married_to = f'{mem.mention} (married since `{married_since}`)'
+            for adoption in data.adoptions:
+                mem = ctx.ukiyo.get_member(adoption)
+                adoptions.append(mem.mention)
         adoptions = '\n'.join(adoptions) if len(adoptions) != 0 else 'No adoptions.'
 
         em.add_field('Married To', married_to, inline=False)
