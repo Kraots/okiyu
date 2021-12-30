@@ -303,7 +303,7 @@ class Marriages(commands.Cog):
         for adoption in data.adoptions:
             mem = ctx.ukiyo.get_member(adoption)
             adoptions.append(mem.mention)
-        adoptions = adoptions if len(adoptions) != 0 else 'No adoptions.'
+        adoptions = '\n'.join(adoptions) if len(adoptions) != 0 else 'No adoptions.'
 
         em.add_field('Married To', married_to, inline=False)
         em.add_field('Adoptions', adoptions, inline=False)
