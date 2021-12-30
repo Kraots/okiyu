@@ -243,7 +243,7 @@ class Marriages(commands.Cog):
 
         view = utils.ConfirmView(ctx, react_user=member)
         view.message = await ctx.send(
-            f'{member.mention} do you wish to be part of {ctx.author.display_name}\'s family?',
+            f'{member.mention} do you wish to be part of **{ctx.author.display_name}**\'s family?',
             view=view
         )
         await view.wait()
@@ -253,7 +253,7 @@ class Marriages(commands.Cog):
             )
         else:
             await view.message.edit(
-                content=f'{member.mention} You are now part of {ctx.author.display_name}\'s family.'
+                content=f'{member.mention} You are now part of **{ctx.author.display_name}**\'s family.'
             )
 
         data1.adoptions.append(member.id)
