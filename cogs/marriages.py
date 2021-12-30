@@ -221,7 +221,7 @@ class Marriages(commands.Cog):
                 mem = ctx.ukiyo.get_member(filter1[0].id)
                 return await ctx.reply(f'{ctx.denial} You are already adopted by {mem.mention}')
             elif len(filter2) == 1:
-                mem = ctx.ukiyo.get_member(filter1[0].id)
+                mem = ctx.ukiyo.get_member(filter2[0].id)
                 return await ctx.reply(f'{ctx.denial} `{member}` is already adopted by {mem.mention}')
 
         if data1.married_to != 0:
