@@ -217,10 +217,10 @@ class Marriages(commands.Cog):
         else:
             filter1: Marriage = await Marriage.find({'adoptions': ctx.author.id}).to_list(1)
             filter2: Marriage = await Marriage.find({'adoptions': member.id}).to_list(1)
-            if filter1:
+            if len(filter1) == 1:
                 mem = ctx.ukiyo.get_member(filter1[0].id)
                 return await ctx.reply(f'{ctx.denial} You are already adopted by {mem.mention}')
-            elif filter2:
+            elif len(filter2) == 1:
                 mem = ctx.ukiyo.get_member(filter1[0].id)
                 return await ctx.reply(f'{ctx.denial} `{member}` is already adopted by {mem.mention}')
 
@@ -300,12 +300,17 @@ class Marriages(commands.Cog):
         em.set_author(name=f'{member.display_name}\'s family', icon_url=member.display_avatar)
         data: Marriage = await Marriage.find_one({'_id': member.id})
         if data is None:
-            data: Marriage = await Marriage.find_one({'adoptions': member.id})
-            if data is None:
+            if not data:
                 if member.id == ctx.author.id:
                     return await ctx.reply('You don\'t have a family :frowning:')
                 else:
                     return await ctx.reply(f'{member.mention} doesn\'t have a family :frowning:')
+        adopted_by = []
+        _adopted_by: Marriage = await Marriage.find({'adoptions': member.id}).to_list(2)
+        for uid in _adopted_by:
+            mem = ctx.ukiyo.get_member(uid)
+            adopted_by.append(mem.mention)
+        adopted_by = ' and '.join(adopted_by) if len(adopted_by) != 0 else 'No one.'
 
         married_to = 'No partner.'
         if data.married_to != 0:
@@ -320,6 +325,7 @@ class Marriages(commands.Cog):
 
         em.add_field('Married To', married_to, inline=False)
         em.add_field('Adoptions', adoptions, inline=False)
+        em.add_field('Adopted By', adopted_by, inline=False)
         em.set_footer(text=f'Requested By: {ctx.author}')
 
         await ctx.better_reply(embed=em)
