@@ -305,7 +305,7 @@ class Marriages(commands.Cog):
         em.set_author(name=f'{member.display_name}\'s family', icon_url=member.display_avatar)
         data: Marriage = await Marriage.find_one({'_id': member.id})
         _adopted_by: Marriage = await Marriage.find({'adoptions': member.id}).to_list(2)
-        if data is None and _adopted_by is None:
+        if data is None and len(_adopted_by) == 0:
             if member.id == ctx.author.id:
                 return await ctx.reply('You don\'t have a family :frowning:')
             else:
