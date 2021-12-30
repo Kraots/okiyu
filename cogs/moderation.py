@@ -345,7 +345,7 @@ class Moderation(commands.Cog):
                 view.message = await ctx.reply(
                     'That user is already blocked. Do you wish to renew their '
                     f'block to **{human_timedelta(data.dt, suffix=False)}** and '
-                    f'with the new reason being **{data.arg}**?',
+                    f'with the new reason being **{utils.remove_markdown(data.arg)}**?',
                     view=view
                 )
                 await view.wait()
@@ -376,7 +376,7 @@ class Moderation(commands.Cog):
                 view.message = await ctx.reply(
                     'That user is already muted. Do you wish to renew their '
                     f'mute to **{human_timedelta(data.dt, suffix=False)}** and '
-                    f'with the new reason being **{data.arg}**?',
+                    f'with the new reason being **{utils.remove_markdown(data.arg)}**?',
                     view=view
                 )
                 await view.wait()
