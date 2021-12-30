@@ -198,6 +198,11 @@ class Marriages(commands.Cog):
         `member` **->** The member you want to adopt.
         """
 
+        if member.id == ctx.author.id:
+            return await ctx.reply(f'{ctx.denial} You cannot adopt yourself.')
+        elif member.bot and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply(f'{ctx.denial} You cannot adopt bots.')
+
         partner = False
         data1: Marriage = await Marriage.find_one({'_id': ctx.author.id})
         if data1 is None:
@@ -292,7 +297,10 @@ class Marriages(commands.Cog):
                 data2.adoptions.remove(member.id)
                 await data2.commit()
         data.adoptions.remove(member.id)
-        await data.commit()
+        if len(data.adoptions) == 0 and data.married_to == 0:
+            await data.delete()
+        else:
+            await data.commit()
 
         await ctx.reply(f'You have unadopted {member.mention}')
 
