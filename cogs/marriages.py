@@ -240,6 +240,17 @@ class Marriages(commands.Cog):
                 data2: Marriage = await Marriage.find_one({'_id': data1.married_to})
                 data2.adoptions.append(member.id)
                 await data2.commit()
+
+        view = utils.ConfirmView(ctx, react_user=member)
+        view.message = await ctx.send(
+            f'{member.mention} do you wish to be part of {ctx.author.display_name}\'s family?'
+        )
+        await view.wait()
+        if view.response is False:
+            return await view.message.edit(
+                f'{ctx.author.mention} It seems like {member.mention} does not want to be part of your family.'
+            )
+
         data1.adoptions.append(member.id)
 
         await data1.commit()
