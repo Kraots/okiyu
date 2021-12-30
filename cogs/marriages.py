@@ -32,15 +32,29 @@ class Marriages(commands.Cog):
         elif member.bot:
             return await ctx.reply(f'{ctx.denial} You cannot marry bots.')
 
-        data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
-        if data is not None:
-            mem = guild.get_member(data.married_to)
-            return await ctx.reply(f'{ctx.denial} You are already married to {mem.mention}')
+        data1: Marriage = await Marriage.find_one({'_id': ctx.author.id})
+        if data1 is not None:
+            if data1.married_to != 0:
+                mem = guild.get_member(data1.married_to)
+                return await ctx.reply(f'{ctx.denial} You are already married to {mem.mention}')
+            elif member.id in data1.adoptions:
+                return await ctx.reply(
+                    f'{ctx.denial} You cannot marry the person that you adopted.'
+                )
+        else:
+            data1 = Marriage(id=ctx.author.id)
 
-        data: Marriage = await Marriage.find_one({'_id': member.id})
-        if data is not None:
-            mem = guild.get_member(data.married_to)
-            return await ctx.reply(f'{ctx.denial} `{member}` is already married to {mem.mention}')
+        data2: Marriage = await Marriage.find_one({'_id': member.id})
+        if data2 is not None:
+            if data2.married_to != 0:
+                mem = guild.get_member(data2.married_to)
+                return await ctx.reply(f'{ctx.denial} `{member}` is already married to {mem.mention}')
+            elif ctx.author.id in data2.adoptions:
+                return await ctx.reply(
+                    f'{ctx.denial} You cannot marry the person that adopted you.'
+                )
+        else:
+            data2 = Marriage(id=member.id)
 
         view = utils.ConfirmView(ctx, f'{ctx.denial} {member.mention} Did not react in time.', member)
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
@@ -48,16 +62,14 @@ class Marriages(commands.Cog):
         if view.response is True:
             taken_role = guild.get_role(913789939961954304)
             now = datetime.utcnow()
-            await Marriage(
-                id=ctx.author.id,
-                married_to=member.id,
-                married_since=now
-            ).commit()
-            await Marriage(
-                id=member.id,
-                married_to=ctx.author.id,
-                married_since=now
-            ).commit()
+
+            data1.married_to = member.id
+            data1.married_since = now
+            await data1.commit()
+
+            data2.married_to = ctx.author.id
+            data2.married_since = now
+            await data2.commit()
 
             new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939668385822] + [taken_role]
             new_roles_2 = [r for r in member.roles if not r.id == 913789939668385822] + [taken_role]
@@ -83,7 +95,7 @@ class Marriages(commands.Cog):
 
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
 
-        if data is None:
+        if data.married_to == 0:
             return await ctx.reply(f'{ctx.denial} You are not married to anyone.')
 
         else:
@@ -96,8 +108,19 @@ class Marriages(commands.Cog):
             if view.response is True:
                 single_role = guild.get_role(913789939668385822)
                 mem: Marriage = await Marriage.find_one({'_id': usr.id})
-                await data.delete()
-                await mem.delete()
+                if len(data.adoptions) == 0:
+                    await data.delete()
+                else:
+                    data.married_to = 0
+                    data.married_since = utils.FIRST_JANUARY_1970
+                    await data.commit()
+
+                if len(mem.adoptions) == 0:
+                    await data.delete()
+                else:
+                    mem.married_to = 0
+                    mem.married_since = utils.FIRST_JANUARY_1970
+                    await mem.commit()
 
                 new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939961954304] + [single_role]
                 new_roles_2 = [r for r in usr.roles if not r.id == 913789939961954304] + [single_role]
@@ -128,7 +151,7 @@ class Marriages(commands.Cog):
 
         member = member or ctx.author
         data: Marriage = await Marriage.find_one({'_id': member.id})
-        if data is None:
+        if data.married_to == 0:
             if member == ctx.author:
                 i = f'{ctx.denial} You\'re not married to anyone.'
                 fn = ctx.reply
@@ -136,6 +159,7 @@ class Marriages(commands.Cog):
                 i = f'{ctx.denial} {member.mention} is not married to anyone.'
                 fn = ctx.better_reply
             return await fn(i)
+
         guild = self.bot.get_guild(913310006814859334)
         mem = guild.get_member(data.married_to)
         em = disnake.Embed(title=f'Married to `{mem.display_name}`', colour=utils.blurple)
@@ -160,7 +184,7 @@ class Marriages(commands.Cog):
         """  # noqa
 
         data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
-        if data is None:
+        if data.married_to == 0:
             return await ctx.reply(f'You must be married to {member.mention} in order to kiss them.')
 
         if member.id != data.married_to:
