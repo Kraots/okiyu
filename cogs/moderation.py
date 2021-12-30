@@ -459,7 +459,7 @@ class Moderation(commands.Cog):
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
                 ('Reason', reason),
-                (f'{action.upper()} Duration', f'`{duration}`'),
+                (f'{action.title()} Duration', f'`{duration}`'),
                 ('Expires At', format_dt(time, "F")),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
