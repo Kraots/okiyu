@@ -299,13 +299,12 @@ class Marriages(commands.Cog):
         em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{member.display_name}\'s family', icon_url=member.display_avatar)
         data: Marriage = await Marriage.find_one({'_id': member.id})
-        if data is None:
-            _adopted_by: Marriage = await Marriage.find({'adoptions': member.id}).to_list(2)
-            if not _adopted_by:
-                if member.id == ctx.author.id:
-                    return await ctx.reply('You don\'t have a family :frowning:')
-                else:
-                    return await ctx.reply(f'{member.mention} doesn\'t have a family :frowning:')
+        _adopted_by: Marriage = await Marriage.find({'adoptions': member.id}).to_list(2)
+        if data is None and _adopted_by is None:
+            if member.id == ctx.author.id:
+                return await ctx.reply('You don\'t have a family :frowning:')
+            else:
+                return await ctx.reply(f'{member.mention} doesn\'t have a family :frowning:')
         adopted_by = []
         for uid in _adopted_by:
             mem = ctx.ukiyo.get_member(uid.id)
