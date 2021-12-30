@@ -14,12 +14,21 @@ class ConfirmView(disnake.ui.View):
     Yes else False if the button they clicked is No.
     """
 
-    def __init__(self, ctx, new_message: str = 'Time Expired.', react_user: disnake.Member = None, *, timeout=180.0):
+    def __init__(
+        self,
+        ctx,
+        new_message: str = 'Time Expired.',
+        react_user: disnake.Member = None,
+        *,
+        remove_view: bool = False,
+        timeout=180.0
+    ):
         super().__init__(timeout=timeout)
         self.ctx = ctx
         self.new_message = new_message
         self.member = react_user
         self.response = False
+        self.remove_view = remove_view
 
     async def interaction_check(self, interaction: disnake.MessageInteraction):
         check_for = self.ctx.author.id if self.member is None else self.member.id
@@ -38,7 +47,8 @@ class ConfirmView(disnake.ui.View):
         for item in self.children:
             item.disabled = True
             item.style = disnake.ButtonStyle.grey
-        await self.message.edit(content=self.new_message, embed=None, view=self)
+        view = None if self.remove_view is True else self
+        await self.message.edit(content=self.new_message, embed=None, view=view)
 
     @disnake.ui.button(label='Yes', style=disnake.ButtonStyle.green)
     async def yes_button(self, button: disnake.ui.Button, inter: disnake.Interaction):
@@ -49,7 +59,8 @@ class ConfirmView(disnake.ui.View):
             item.style = disnake.ButtonStyle.grey
             if item.label == button.label:
                 item.style = disnake.ButtonStyle.blurple
-        await self.message.edit(view=self)
+        view = None if self.remove_view is True else self
+        await self.message.edit(view=view)
         self.stop()
 
     @disnake.ui.button(label='No', style=disnake.ButtonStyle.red)
@@ -60,7 +71,8 @@ class ConfirmView(disnake.ui.View):
             item.style = disnake.ButtonStyle.grey
             if item.label == button.label:
                 item.style = disnake.ButtonStyle.blurple
-        await self.message.edit(view=self)
+        view = None if self.remove_view is True else self
+        await self.message.edit(view=view)
         self.stop()
 
 
