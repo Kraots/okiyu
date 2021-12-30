@@ -453,7 +453,7 @@ class Misc(commands.Cog):
                              f'**Reason:** {mute.reason}\n' \
                              f'**Mute Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
-                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
+                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.better_reply(embed=em)
 
@@ -508,7 +508,7 @@ class Misc(commands.Cog):
                              f'**Reason:** {mute.reason}\n' \
                              f'**Block Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
-                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`'
+                             f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
             em.set_footer(text=f'Requested By: {ctx.author}')
             await ctx.better_reply(embed=em)
 
