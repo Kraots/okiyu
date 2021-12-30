@@ -198,6 +198,7 @@ class Marriages(commands.Cog):
         `member` **->** The member you want to adopt.
         """
 
+        partner = False
         data1: Marriage = await Marriage.find_one({'_id': ctx.author.id})
         if data1 is None:
             data1 = Marriage(id=ctx.author.id)
@@ -237,9 +238,7 @@ class Marriages(commands.Cog):
                     content=f'{ctx.author.mention} It seems like your partner did not want to adopt {member.mention}.'
                 )
             else:
-                data2: Marriage = await Marriage.find_one({'_id': data1.married_to})
-                data2.adoptions.append(member.id)
-                await data2.commit()
+                partner = True
 
         view = utils.ConfirmView(ctx, react_user=member)
         view.message = await ctx.send(
@@ -256,6 +255,10 @@ class Marriages(commands.Cog):
                 content=f'{member.mention} You are now part of **{ctx.author.display_name}**\'s family.'
             )
 
+        if partner is True:
+            data2: Marriage = await Marriage.find_one({'_id': data1.married_to})
+            data2.adoptions.append(member.id)
+            await data2.commit()
         data1.adoptions.append(member.id)
 
         await data1.commit()
