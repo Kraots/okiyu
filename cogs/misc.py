@@ -834,7 +834,7 @@ class Misc(commands.Cog):
         pages = RoboPages(source=utils.UrbanDictionaryPageSource(data), ctx=ctx, compact=True)
         await pages.start()
 
-    @commands.command(name='choose', aliases=('pick',))
+    @commands.command(name='choose', aliases=('pick', 'random',))
     async def pick_random_shit(self, ctx: Context, *, choices: str):
         """Have the bot do a random pick from the choices that you give, each choice is separated by a `|`.
 
