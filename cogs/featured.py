@@ -129,15 +129,19 @@ class Featured(commands.Cog):
         users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.joined_at, reverse=True)
         entries = []
         for index, user in enumerate(users):
+            if index >= count:
+                break
+
             entries.append(
                 (
                     f'`#{index + 1}` {user.display_name}',
-                    f'Joined at {utils.format_dt(user.joined_at, "F")} (`{utils.human_timedelta(user.joined_at)}`)'
-                    f'Created at {utils.format_dt(user.created_at, "F")} (`{utils.human_timedelta(user.created_at)}`)'
+                    f'Joined at {utils.format_dt(user.joined_at, "F")} (`{utils.human_timedelta(user.joined_at)}`)\n'
+                    f'Created at {utils.format_dt(user.created_at, "F")} (`{utils.human_timedelta(user.created_at)}`)\n\n'
                 )
             )
 
         source = utils.FieldPageSource(entries, per_page=5)
+        source.embed.title = f'Here\'s the top of {count} newly joined members'
         paginator = utils.RoboPages(source, ctx=ctx, compact=True)
         await paginator.start()
 
