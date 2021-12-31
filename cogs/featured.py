@@ -122,10 +122,10 @@ class Featured(commands.Cog):
     async def new_members(self, ctx: Context, count: int = 3):
         """See the newest joined members, in order.
 
-        `count` **->** The amount of how many new users you want to see. The minimum is 3 and the maximum is 50. Defaults to 3.
+        `count` **->** The amount of how many new users you want to see. The minimum is 3 and it defaults to 3.
         """
 
-        count = min(max(count, 3), 50)
+        count = min(max(count, 3), ctx.ukiyo.member_count)
         users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.joined_at, reverse=True)
         entries = []
         for index, user in enumerate(users):
@@ -136,12 +136,12 @@ class Featured(commands.Cog):
                 (
                     f'`#{index + 1}` {user.display_name}',
                     f'Joined at {utils.format_dt(user.joined_at, "F")} (`{utils.human_timedelta(user.joined_at)}`)\n'
-                    f'Created at {utils.format_dt(user.created_at, "F")} (`{utils.human_timedelta(user.created_at)}`)\n\n'
+                    f'Created at {utils.format_dt(user.created_at, "F")} (`{utils.human_timedelta(user.created_at)}`)\n\n_ _'
                 )
             )
 
         source = utils.FieldPageSource(entries, per_page=5)
-        source.embed.title = f'Here\'s the top of {count} newly joined members'
+        source.embed.title = f'Here\'s the top of `{count}` newly joined members'
         paginator = utils.RoboPages(source, ctx=ctx, compact=True)
         await paginator.start()
 
