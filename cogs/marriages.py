@@ -185,11 +185,11 @@ class Marriages(commands.Cog):
 
         data = await self.get_user(ctx.author.id)
         if data.married_to == 0:
-            return await ctx.reply(f'You must be married to {member.mention} in order to kiss them.')
+            return await ctx.reply(f'{ctx.denial} You must be married to {member.mention} in order to kiss them.')
 
         if member.id != data.married_to:
             mem = self.bot.get_user(data.married_to)
-            return await ctx.reply(f'You cannot kiss `{member}`!! You can only kiss {mem.mention}')
+            return await ctx.reply(f'{ctx.denial} You cannot kiss `{member}`!! You can only kiss {mem.mention}')
 
         em = disnake.Embed(color=utils.red)
         em.set_image(url='https://cdn.discordapp.com/attachments/752148605753884792/754984869569888276/KIS.gif')
