@@ -346,7 +346,7 @@ class Marriages(commands.Cog):
                 married_to = f'{mem.mention} (married since `{married_since}`)'
             for adoption in data.adoptions:
                 mem = ctx.ukiyo.get_member(adoption)
-                adoptions.append(mem.mention)
+                adoptions.append(f'{mem.mention} (`{mem.display_name}`)')
         adoptions_count = len(adoptions)
         adoptions = '\n'.join(adoptions) if len(adoptions) != 0 else 'No adoptions.'
 
