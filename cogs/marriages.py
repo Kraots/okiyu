@@ -18,6 +18,20 @@ class Marriages(commands.Cog):
     def display_emoji(self) -> str:
         return '❤️'
 
+    @staticmethod
+    async def get_user(uid: int) -> Marriage:
+        data: Marriage = await Marriage.find_one({'_id': uid})
+        if data is None:
+            data = Marriage(
+                id=uid,
+                married_to=0,
+                married_since=utils.FIRST_JANUARY_1970,
+                adoptions=[]
+            )
+            await data.commit()
+
+        return data
+
     @commands.command()
     @utils.lock()
     async def marry(self, ctx: Context, *, member: disnake.Member):
@@ -31,29 +45,23 @@ class Marriages(commands.Cog):
         elif member.bot:
             return await ctx.reply(f'{ctx.denial} You cannot marry bots.')
 
-        data1: Marriage = await Marriage.find_one({'_id': ctx.author.id})
-        if data1 is not None:
-            if data1.married_to != 0:
-                mem = ctx.ukiyo.get_member(data1.married_to)
-                return await ctx.reply(f'{ctx.denial} You are already married to {mem.mention}')
-            elif member.id in data1.adoptions:
-                return await ctx.reply(
-                    f'{ctx.denial} You cannot marry the person that you adopted.'
-                )
-        else:
-            data1 = Marriage(id=ctx.author.id)
+        data1 = await self.get_user(ctx.author.id)
+        if data1.married_to != 0:
+            mem = ctx.ukiyo.get_member(data1.married_to)
+            return await ctx.reply(f'{ctx.denial} You are already married to {mem.mention}')
+        elif member.id in data1.adoptions:
+            return await ctx.reply(
+                f'{ctx.denial} You cannot marry the person that you adopted.'
+            )
 
-        data2: Marriage = await Marriage.find_one({'_id': member.id})
-        if data2 is not None:
-            if data2.married_to != 0:
-                mem = ctx.ukiyo.get_member(data2.married_to)
-                return await ctx.reply(f'{ctx.denial} `{member}` is already married to {mem.mention}')
-            elif ctx.author.id in data2.adoptions:
-                return await ctx.reply(
-                    f'{ctx.denial} You cannot marry the person that adopted you.'
-                )
-        else:
-            data2 = Marriage(id=member.id)
+        data2 = await self.get_user(member.id)
+        if data2.married_to != 0:
+            mem = ctx.ukiyo.get_member(data2.married_to)
+            return await ctx.reply(f'{ctx.denial} `{member}` is already married to {mem.mention}')
+        elif ctx.author.id in data2.adoptions:
+            return await ctx.reply(
+                f'{ctx.denial} You cannot marry the person that adopted you.'
+            )
 
         view = utils.ConfirmView(ctx, f'{ctx.denial} {member.mention} Did not react in time.', member)
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
@@ -98,9 +106,9 @@ class Marriages(commands.Cog):
     async def divorce(self, ctx: Context):
         """Divorce the person you're married with in case you're married with anybody."""
 
-        data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
+        data = await self.get_user(ctx.author.id)
 
-        if data is None or data.married_to == 0:
+        if data.married_to == 0:
             return await ctx.reply(f'{ctx.denial} You are not married to anyone.')
 
         else:
@@ -143,8 +151,8 @@ class Marriages(commands.Cog):
         """
 
         member = member or ctx.author
-        data: Marriage = await Marriage.find_one({'_id': member.id})
-        if data is None or data.married_to == 0:
+        data = await self.get_user(member.id)
+        if data.married_to == 0:
             if member == ctx.author:
                 i = f'{ctx.denial} You\'re not married to anyone.'
                 fn = ctx.reply
@@ -175,7 +183,7 @@ class Marriages(commands.Cog):
         If for some reason you don't know who you're married to, you are a complete jerk but luckily for you, there's the command `!marriedwho` which reminds you who you are married to, and for how long.
         """  # noqa
 
-        data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
+        data = await self.get_user(ctx.author.id)
         if data.married_to == 0:
             return await ctx.reply(f'You must be married to {member.mention} in order to kiss them.')
 
@@ -204,16 +212,11 @@ class Marriages(commands.Cog):
             return await ctx.reply(f'{ctx.denial} You cannot adopt bots.')
 
         partner = False
-        data1: Marriage = await Marriage.find_one({'_id': ctx.author.id})
-        if data1 is None:
-            data1 = Marriage(id=ctx.author.id)
+        data1 = await self.get_user(ctx.author.id)
         if len(data1.adoptions) > 7 and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'{ctx.denial} You cannot adopt more than **7** people.')
 
-        data2: Marriage = await Marriage.find_one({'_id': member.id})
-        if data2 is None:
-            data2 = Marriage(id=member.id)
-
+        data2 = await self.get_user(member.id)
         if ctx.author.id in data2.adoptions:
             return await ctx.reply(
                 f'{ctx.denial} You cannot adopt the person that adopted you, what are you, dumb???'
@@ -261,7 +264,7 @@ class Marriages(commands.Cog):
             )
 
         if partner is True:
-            data2: Marriage = await Marriage.find_one({'_id': data1.married_to})
+            data2 = await self.get_user(data1.married_to)
             data2.adoptions.append(member.id)
             await data2.commit()
         data1.adoptions.append(member.id)
@@ -277,12 +280,12 @@ class Marriages(commands.Cog):
         `member` **->** The member you want to not be adopted by you anymore.
         """
 
-        data: Marriage = await Marriage.find_one({'_id': ctx.author.id})
-        if data is None or len(data.adoptions) == 0:
+        data = await self.get_user(ctx.author.id)
+        if len(data.adoptions) == 0:
             return await ctx.reply(f'You\'ve never adopted {member.mention}.')
         elif data.married_to != 0:
             mem = ctx.ukiyo.get_member(data.married_to)
-            data2: Marriage = await Marriage.find_one({'_id': data.married_to})
+            data2 = await self.get_user(data.married_to)
             view = utils.ConfirmView(ctx, react_user=mem)
             view.message = await ctx.send(
                 f'{mem.mention} your partner wants to adopt {member.mention}. Do you agree?',
