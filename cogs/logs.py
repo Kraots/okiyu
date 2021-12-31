@@ -55,7 +55,7 @@ class Logs(commands.Cog):
             timestamp=datetime.datetime.utcnow(),
             color=disnake.Color.yellow()
         )
-        em.set_author(name=before, icon_url=before.display_avatar)
+        em.set_author(name=before.display_name, icon_url=before.display_avatar)
         em.set_thumbnail(url=after.display_avatar)
         em.set_footer(text=f'User ID: {after.id}')
 
@@ -104,7 +104,7 @@ class Logs(commands.Cog):
             return
 
         em = disnake.Embed(description=f'📥 **{member.mention} joined the server**', timestamp=datetime.datetime.utcnow(), color=disnake.Color.green())
-        em.set_author(name=member, icon_url=member.display_avatar)
+        em.set_author(name=member.display_name, icon_url=member.display_avatar)
         em.set_thumbnail(url=member.display_avatar)
         em.set_footer(text=f'Member ID: {member.id}')
         em.add_field(name='Account Creation', value=str(utils.human_timedelta(member.created_at)))
@@ -117,7 +117,7 @@ class Logs(commands.Cog):
             return
 
         em = disnake.Embed(description=f'📤 **{member.mention} left the server**', timestamp=datetime.datetime.utcnow(), color=disnake.Color.red())
-        em.set_author(name=member, icon_url=member.display_avatar)
+        em.set_author(name=member.display_name, icon_url=member.display_avatar)
         em.set_thumbnail(url=member.display_avatar)
         em.set_footer(text=f'User ID: {member.id}')
 
@@ -129,7 +129,7 @@ class Logs(commands.Cog):
             return
 
         em = disnake.Embed(description=f'👮‍♂️🔒 **{member.mention} was banned**', timestamp=datetime.datetime.utcnow(), color=disnake.Color.red())
-        em.set_author(name=member, icon_url=member.display_avatar)
+        em.set_author(name=member.display_name, icon_url=member.display_avatar)
         em.set_thumbnail(url=member.display_avatar)
         em.set_footer(text=f'User ID: {member.id}')
 
