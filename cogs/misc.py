@@ -834,6 +834,28 @@ class Misc(commands.Cog):
         pages = RoboPages(source=utils.UrbanDictionaryPageSource(data), ctx=ctx, compact=True)
         await pages.start()
 
+    @commands.command(name='choose', aliases=('pick',))
+    async def pick_random_shit(self, ctx: Context, *, choices: str):
+        """Have the bot do a random pick from the choices that you give, each choice is separated by a `|`.
+
+        `choices` **->** The choices you want the bot to randomly pick from. Must be more than one and separated by each other with a `|`
+        """
+
+        choices = choices.split('|')
+        picks = []
+        for choice in choices:
+            if choice:
+                pick = choice.strip()
+                picks.append(utils.remove_markdown(pick))
+        if len(picks) < 2:
+            return await ctx.reply('You need to give more than 1 choice.')
+
+        for i in range(9):
+            random.shuffle(picks)
+        pick = random.choice(picks)
+
+        await ctx.reply(f'I randomly have chosen `{pick}`')
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
