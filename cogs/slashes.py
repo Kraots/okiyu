@@ -18,10 +18,6 @@ class SlashCommands(commands.Cog):
         else:
             view = utils.SlashColours(inter)
             await inter.response.send_message('**Please use the select menu below:**', view=view, ephemeral=True)
-            
-    @commands.slash_command(name='uwumommyboobies', description='🤤🤤🤤')
-    async def caught_in_4k(self, inter: AppCmdInter):
-        await inter.response.send_message('https://tenor.com/view/brucedropemoff-4k-gif-20119847')
 
 
 def setup(bot: Ukiyo):
