@@ -75,7 +75,7 @@ class Logs(commands.Cog):
             return
 
         em = disnake.Embed(timestamp=datetime.datetime.utcnow(), color=disnake.Color.yellow())
-        em.set_author(name=before, icon_url=before.display_avatar)
+        em.set_author(name=before.display_name, icon_url=before.display_avatar)
         em.set_thumbnail(url=after.display_avatar)
         em.set_footer(text=f'Member ID: {after.id}')
 
