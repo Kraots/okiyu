@@ -800,7 +800,7 @@ class _Game(commands.Cog, name='Game'):
     async def game_blackjack(self, ctx: Context, *, amount: str):
         """Start a game of blackjack by betting some of your coins.
 
-        `amount` **->** The amount you wish to bet.
+        `amount` **->** The amount you wish to bet. The minimum must be 200 and the maximum 5,000.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """
@@ -820,14 +820,9 @@ class _Game(commands.Cog, name='Game'):
                 em = utils.fail_embed('The amount must be a number.')
                 return await ctx.reply(embed=em)
 
-        if amount < 200:
-            em = utils.fail_embed(f'The amount must be greater than **200** {self.coin_emoji}')
-            return await ctx.reply(embed=em)
-        elif amount > data.coins:
-            em = utils.fail_embed('You don\'t have that many coins.')
-            return await ctx.reply(embed=em)
-        elif amount > 5000:
-            em = utils.fail_embed(f'You can\'t bet more than **5,000** {self.coin_emoji}')
+        amount = min(max(amount, 200), 5000)
+        if amount > data.coins:
+            em = utils.fail_embed('You don\'t have enough coins.')
             return await ctx.reply(embed=em)
 
         view = utils.BlackJack(ctx.author, self.bot, amount)
