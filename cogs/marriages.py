@@ -42,7 +42,7 @@ class Marriages(commands.Cog):
 
         if ctx.author == member:
             return await ctx.reply(f'{ctx.denial} You cannot marry yourself.')
-        elif member.bot:
+        elif member.bot and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'{ctx.denial} You cannot marry bots.')
 
         data1 = await self.get_user(ctx.author.id)
