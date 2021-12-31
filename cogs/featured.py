@@ -141,7 +141,7 @@ class Featured(commands.Cog):
             )
 
         source = utils.FieldPageSource(entries, per_page=5)
-        source.embed.title = f'Here\'s the top of `{count}` newly joined members'
+        source.embed.title = f'Here\'s the top `{count}` newly joined members'
         paginator = utils.RoboPages(source, ctx=ctx, compact=True)
         await paginator.start()
 
