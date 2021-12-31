@@ -136,7 +136,7 @@ class Featured(commands.Cog):
                 (
                     f'`#{index + 1}` {user.display_name}',
                     f'Joined at {utils.format_dt(user.joined_at, "F")} (`{utils.human_timedelta(user.joined_at)}`)\n'
-                    f'Created at {utils.format_dt(user.created_at, "F")} (`{utils.human_timedelta(user.created_at)}`)\n\n_ _'
+                    f'Created at {utils.format_dt(user.created_at, "F")} (`{utils.human_timedelta(user.created_at)}`)\n\n'
                 )
             )
 
