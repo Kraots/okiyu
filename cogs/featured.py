@@ -129,13 +129,13 @@ class Featured(commands.Cog):
         users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.joined_at, reverse=True)
         entries = []
         for index, user in enumerate(users):
-            entries.append[
+            entries.append(
                 (
                     f'`#{index + 1}` {user.display_name}',
                     f'Joined at {utils.format_dt(user.joined_at, "F")} (`{utils.human_timedelta(user.joined_at)}`)'
                     f'Created at {utils.format_dt(user.created_at, "F")} (`{utils.human_timedelta(user.created_at)}`)'
                 )
-            ]
+            )
 
         source = utils.FieldPageSource(entries, per_page=5)
         paginator = utils.RoboPages(source, ctx=ctx, compact=True)
