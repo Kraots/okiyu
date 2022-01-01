@@ -252,7 +252,7 @@ class Logs(commands.Cog):
         if new_name is not None:
             em.add_field(name='Emoji Name Changed', value=f'`{old_name}` **->** `{new_name}`', inline=False)
         if added_emoji is not None:
-            em.add_field(name=r'\✅ Added Emoji', value=str(added_emoji), inline=False)
+            em.add_field(name=r'\✅ Added Emoji', value='`' + str(added_emoji) + '`', inline=False)
             em.set_thumbnail(url=emoji.url)
         if removed_emoji is not None:
             em.add_field(name=r'\❌ Removed Emoji', value=f'[`{removed_emoji[0]}`]({removed_emoji[1]})', inline=False)
