@@ -696,6 +696,7 @@ class Misc(commands.Cog):
             if data.is_afk is True:
                 return await ctx.reply('You are already ``AFK``!')
             reason = f'{reason} | {data.default}' if reason is not None else data.default
+            reason = reason.replace('*', '')  # Make sure it doesn't mess with the default bolding of the reason.
             data.reason = reason
             data.date = ctx.message.created_at
             data.message_id = ctx.message.id
@@ -722,6 +723,7 @@ class Misc(commands.Cog):
         """
 
         data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        default = default.replace('*', '')  # Make sure it doesn't mess with the default bolding of the reason.
         if data is None:
             await AFK(
                 id=ctx.author.id,
@@ -854,7 +856,7 @@ class Misc(commands.Cog):
             random.shuffle(picks)
         pick = random.choice(picks)
 
-        await ctx.reply(f'I randomly have chosen `{pick}`')
+        await ctx.reply(f'I have randomly chosen `{pick}`')
 
 
 def setup(bot: Ukiyo):
