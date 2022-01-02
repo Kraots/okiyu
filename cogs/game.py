@@ -356,7 +356,7 @@ class _Game(commands.Cog, name='Game'):
         await data.commit()
 
     @base_game.command(name='fight')
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def game_fight(self, ctx: Context, *, member: disnake.Member):
         """Challenge a member to a fight using one of your characters.
 
@@ -796,7 +796,7 @@ class _Game(commands.Cog, name='Game'):
         self.boss_fight.restart()
 
     @base_game.command(name='blackjack', aliases=('bj',))
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def game_blackjack(self, ctx: Context, *, amount: str):
         """Start a game of blackjack by betting some of your coins.
 

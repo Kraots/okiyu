@@ -100,7 +100,7 @@ class Birthdays(commands.Cog):
         await ctx.better_reply(embed=em)
 
     @base_birthday.command(name='set')
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def birthday_set(self, ctx: Context, date: str):
         """Set your birthday.
 
@@ -186,7 +186,7 @@ class Birthdays(commands.Cog):
         await ctx.reply('Your birthday has been set.')
 
     @base_birthday.command(name='remove')
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def birthday_remove(self, ctx: Context):
         """Remove your birthday, if you have it set.
 

@@ -33,7 +33,7 @@ class Marriages(commands.Cog):
         return data
 
     @commands.command()
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def marry(self, ctx: Context, *, member: disnake.Member):
         """Marry the member if they want to and if you're/they're not taken by somebody else already.
 
@@ -102,7 +102,7 @@ class Marriages(commands.Cog):
             await msg.delete()
 
     @commands.command()
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def divorce(self, ctx: Context):
         """Divorce the person you're married with in case you're married with anybody."""
 
@@ -199,7 +199,7 @@ class Marriages(commands.Cog):
         )
 
     @commands.command()
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def adopt(self, ctx: Context, *, member: disnake.Member):
         """Adopt someone.
 
@@ -273,7 +273,7 @@ class Marriages(commands.Cog):
         await ctx.reply(f'You have adopted {member.mention} :heart: :tada:')
 
     @commands.command()
-    @utils.lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def unadopt(self, ctx: Context, *, member: disnake.Member):
         """Unadopt a member.
 

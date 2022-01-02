@@ -102,6 +102,17 @@ class Context(commands.Context):
         elif isinstance(error, commands.DisabledCommand):
             return await self.reply('This command is currently disabled!')
 
+        elif isinstance(error, commands.MaxConcurrencyReached):
+            try:
+                await self.message.delete(delay=5.0)
+            except disnake.HTTPException:
+                pass
+            await self.reply(
+                'You are already using this command! Please wait until you complete it first.',
+                delete_after=5.0
+            )
+            return
+
         elif isinstance(error, commands.errors.MissingRequiredArgument):
             _missing_args = list(self.command.clean_params)
             missing_args = [f'`{arg}`' for arg in _missing_args[_missing_args.index(error.param.name):]]

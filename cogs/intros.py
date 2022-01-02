@@ -22,7 +22,7 @@ class Intros(commands.Cog):
         return '🙌'
 
     @commands.command()
-    @lock()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def intro(self, ctx: Context):
         """Create/Edit your intro.
 
