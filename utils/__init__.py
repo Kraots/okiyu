@@ -11,3 +11,4 @@ from .views import *  # noqa
 from .pillow import *  # noqa
 from .regex import *  # noqa
 from .errors import *  # noqa
+from .github import *  # noqa

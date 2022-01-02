@@ -858,6 +858,21 @@ class Misc(commands.Cog):
 
         await ctx.reply(f'I have randomly chosen `{pick}`')
 
+    @commands.command(name='source', aliases=('src',))
+    async def github_source(self, ctx: Context, *, command: str):
+        """Get the source on github for a command the bot has.
+
+        `command` **->** The command you want to see. Can either be a prefixed command or a slash command.
+        """
+
+        src = utils.GithubSource(self.bot.user.display_avatar, 15)
+        if command.lower() == 'help':
+            cmd = command
+        else:
+            cmd = self.bot.get_command(command) or self.bot.get_slash_command(command)
+        data = await src.get_source(cmd)
+        await ctx.better_reply(embed=data.embed, view=data.view)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
