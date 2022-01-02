@@ -859,13 +859,14 @@ class Misc(commands.Cog):
         await ctx.reply(f'I have randomly chosen `{pick}`')
 
     @commands.command(name='source', aliases=('src',))
+    @commands.is_owner()  # Owner only for now, maybe if i decide to make the bot's source public in the future it won't be anymore
     async def github_source(self, ctx: Context, *, command: str):
         """Get the source on github for a command the bot has.
 
         `command` **->** The command you want to see. Can either be a prefixed command or a slash command.
         """
 
-        src = utils.GithubSource(self.bot.user.display_avatar, 15)
+        src = utils.GithubSource(self.bot.user.display_avatar)
         if command.lower() == 'help':
             cmd = command
         else:
