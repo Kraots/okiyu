@@ -90,6 +90,22 @@ class Actions(commands.Cog):
 
         await ctx.reply(mems, embed=em)
 
+    @commands.command(name='bonk')
+    async def _bonk(self, ctx: Context, *, user: disnake.User):
+        """Bonk someone.
+
+        `user` **->** The user you want to bonk.
+        """
+
+        user = ctx.author if user.id == self.bot._owner_id else user
+
+        await ctx.message.add_reaction(ctx.thumb)
+        file = await utils.bonk_gif(user)
+        em = disnake.Embed(color=utils.red)
+        em.set_image(file=file)
+
+        await ctx.reply(user.mention, embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Actions(bot))
