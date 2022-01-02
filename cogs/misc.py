@@ -866,6 +866,9 @@ class Misc(commands.Cog):
         `command` **->** The command you want to see. Can either be a prefixed command or a slash command.
         """
 
+        if await ctx.check_channel() is False:
+            return
+
         src = utils.GithubSource(self.bot.user.display_avatar)
         if command.lower() == 'help':
             cmd = command
