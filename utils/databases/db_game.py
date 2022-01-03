@@ -1,4 +1,4 @@
-from . import database6
+from . import database6, GetDoc
 
 from umongo.fields import *
 from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance as Instance
@@ -8,7 +8,7 @@ instance = Instance(database6)
 
 
 @instance.register
-class Game(Document):
+class Game(Document, GetDoc):
     id = IntField(attribute='_id', required=True)
     coins = IntField(default=5000)
     characters = DictField(StrField(), IntField(), default={})  # CHARACTER_NAME: CHARACTER_XP
@@ -24,7 +24,7 @@ class Game(Document):
 
 
 @instance.register
-class Characters(Document):
+class Characters(Document, GetDoc):
     name = StrField(attribute='_id', required=True)
     description = StrField(required=True)
     lowest_dmg = IntField(required=True)

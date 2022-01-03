@@ -1,4 +1,4 @@
-from . import database1
+from . import database1, GetDoc
 
 from umongo.fields import *
 from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance as Instance
@@ -8,7 +8,7 @@ instance = Instance(database1)
 
 
 @instance.register
-class Intro(Document):
+class Intro(Document, GetDoc):
     id = IntField(attribute='_id', required=True)
 
     name = StrField(required=True)

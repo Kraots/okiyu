@@ -37,3 +37,9 @@ __all__ = (
     'Birthday',
     'Restrictions',
 )
+
+
+class GetDoc:
+    @classmethod
+    async def get(cls, id):
+        return await cls.find_one({'_id': id})

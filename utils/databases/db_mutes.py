@@ -1,4 +1,4 @@
-from . import database3
+from . import database3, GetDoc
 
 from umongo.fields import *
 from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance as Instance
@@ -8,7 +8,7 @@ instance = Instance(database3)
 
 
 @instance.register
-class Mutes(Document):
+class Mutes(Document, GetDoc):
     id = IntField(attribute='_id', required=True)
     muted_by = IntField(required=True)
     muted_until = DateTimeField(required=True)

@@ -1,4 +1,4 @@
-from . import database2
+from . import database2, GetDoc
 
 from umongo.fields import *
 from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance as Instance
@@ -8,7 +8,7 @@ instance = Instance(database2)
 
 
 @instance.register
-class Level(Document):
+class Level(Document, GetDoc):
     id = IntField(attribute='_id', required=True)
     xp = IntField(required=True)
     messages_count = IntField(required=True)

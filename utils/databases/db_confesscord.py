@@ -1,4 +1,4 @@
-from . import database8
+from . import database8, GetDoc
 
 from umongo.fields import *
 from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance as Instance
@@ -8,7 +8,7 @@ instance = Instance(database8)
 
 
 @instance.register
-class Restrictions(Document):
+class Restrictions(Document, GetDoc):
     id = IntField(attribute='_id', required=True)
     restricted_by = IntField(required=True)
 

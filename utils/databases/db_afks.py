@@ -1,4 +1,4 @@
-from . import database4
+from . import database4, GetDoc
 
 from umongo.fields import *
 from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance as Instance
@@ -8,7 +8,7 @@ instance = Instance(database4)
 
 
 @instance.register
-class AFK(Document):
+class AFK(Document, GetDoc):
     id = IntField(attribute='_id', required=True)
     reason = StrField(default=None)
     date = DateTimeField(default=None)
