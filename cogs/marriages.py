@@ -364,10 +364,10 @@ class Marriages(commands.Cog):
             await data.delete()
             mem = await Marriage.find_one({'married_to': member.id})
             await mem.delete()
-        data: Marriage = await Marriage.find({'adoptions': member.id})
+        data: Marriage = await Marriage.find({'adoptions': member.id}).to_list[0]
         if data:
-            data.adoptions.remove(member.id)
-            await data.commit()
+            data[0].adoptions.remove(member.id)
+            await data[0].commit()
 
 
 def setup(bot: Ukiyo):
