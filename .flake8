@@ -3,4 +3,5 @@ max-line-length = 160
 ignore = F403,
         E401,
         W504,
-        F405
+        F405,
+        E402

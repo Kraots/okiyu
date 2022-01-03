@@ -9,6 +9,18 @@ from .dbs import (  # noqa
     database8
 )
 
+
+class GetDoc:
+    @classmethod
+    async def get(cls, id):
+        """|coro|
+
+        This method is a shortcut for ``await .find_one({'_id': id})``
+        """
+
+        return await cls.find_one({'_id': id})
+
+
 from .db_intros import Intro
 from .db_rules import Rules
 from .db_mutes import Mutes
@@ -37,14 +49,3 @@ __all__ = (
     'Birthday',
     'Restrictions',
 )
-
-
-class GetDoc:
-    @classmethod
-    async def get(cls, id):
-        """|coro|
-
-        This method is a shortcut for ``await .find_one({'_id': id})``
-        """
-
-        return await cls.find_one({'_id': id})
