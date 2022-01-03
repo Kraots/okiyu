@@ -106,9 +106,9 @@ class Marriages(commands.Cog):
     async def divorce(self, ctx: Context):
         """Divorce the person you're married with in case you're married with anybody."""
 
-        data = await self.get_user(ctx.author.id)
+        data: Marriage = await Marriage.get(ctx.author.id)
 
-        if data.married_to == 0:
+        if data is None or data.married_to == 0:
             return await ctx.reply(f'{ctx.denial} You are not married to anyone.')
 
         else:
@@ -151,8 +151,8 @@ class Marriages(commands.Cog):
         """
 
         member = member or ctx.author
-        data = await self.get_user(member.id)
-        if data.married_to == 0:
+        data: Marriage = await Marriage.get(member.id)
+        if data is None or data.married_to == 0:
             if member == ctx.author:
                 i = f'{ctx.denial} You\'re not married to anyone.'
                 fn = ctx.reply
