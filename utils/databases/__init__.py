@@ -42,4 +42,9 @@ __all__ = (
 class GetDoc:
     @classmethod
     async def get(cls, id):
+        """|coro|
+
+        This method is a shortcut for ``await .find_one({'_id': id})``
+        """
+
         return await cls.find_one({'_id': id})
