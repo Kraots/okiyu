@@ -34,7 +34,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
     else:
         view = utils.ConfirmViewDMS
 
-    data = await utils.Intro.find_one({'_id': user_id})
+    data = await utils.Intro.get(user_id)
     to_update = False
     if data:
         to_update = True

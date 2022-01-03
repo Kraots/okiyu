@@ -62,7 +62,7 @@ class BossFight(View):
                 ephemeral=True
             )
 
-        data: Game = await Game.find_one({'_id': inter.author.id})
+        data: Game = await Game.get(inter.author.id)
         if data is None:
             return await inter.send(
                 'You don\'t have any characters. Cannot join this boss fight.',
@@ -101,7 +101,7 @@ class BossFight(View):
                     ephemeral=True
                 )
 
-            character: Characters = await Characters.find_one({'_id': char})
+            character: Characters = await Characters.get(char)
             for k, v in self.levels.items():
                 if char_xp >= k:
                     lvl = v[0]

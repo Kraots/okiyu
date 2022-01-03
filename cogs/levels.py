@@ -19,7 +19,7 @@ class Levels(commands.Cog):
     @commands.Cog.listener('on_message')
     async def update_data(self, message: disnake.Message):
         if not message.author.bot and message.guild:
-            data: Level = await Level.find_one({'_id': message.author.id})
+            data: Level = await Level.get(message.author.id)
             if data is None:
                 return await Level(id=message.author.id, xp=5, messages_count=1).commit()
             if message.author.id == self.bot._owner_id:
@@ -47,7 +47,7 @@ class Levels(commands.Cog):
         member = member or ctx.author
         if member.bot:
             return await ctx.better_reply(f'{ctx.denial} Bot\'s do not have levels!')
-        data: Level = await Level.find_one({'_id': member.id})
+        data: Level = await Level.get(member.id)
         if data is None:
             return await ctx.better_reply(f'{ctx.denial} User not in the database!')
 
@@ -102,7 +102,7 @@ class Levels(commands.Cog):
             return await ctx.reply(f'{ctx.denial} Level cannot be less than `0`')
 
         xp = ((50 * ((level - 1)**2)) + (50 * (level - 1)))
-        data: Level = await Level.find_one({'_id': member.id})
+        data: Level = await Level.get(member.id)
         if data is not None:
             data.xp = xp
             await data.commit()
@@ -159,7 +159,7 @@ class Levels(commands.Cog):
 
         member = member or ctx.author
 
-        user_db: Level = await Level.find_one({'_id': member.id})
+        user_db: Level = await Level.get(member.id)
         if user_db is None:
             return await ctx.better_reply(f'`{member.display_name}` sent no messages.')
         em = disnake.Embed(color=utils.blurple)
@@ -207,7 +207,7 @@ class Levels(commands.Cog):
 
         if await ctx.check_perms(member) is False:
             return
-        usr_db: Level = await Level.find_one({'_id': member.id})
+        usr_db: Level = await Level.get(member.id)
         if usr_db is None:
             return await ctx.reply(f'{ctx.denial} User not in the database.')
 
@@ -233,7 +233,7 @@ class Levels(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        usr_db: Level = await Level.find_one({'_id': member.id})
+        usr_db: Level = await Level.get(member.id)
         if usr_db is None:
             return await ctx.reply(f'{ctx.denial} User not in the database.')
 
@@ -258,7 +258,7 @@ class Levels(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        usr_db: Level = await Level.find_one({'_id': member.id})
+        usr_db: Level = await Level.get(member.id)
         if usr_db is None:
             return await ctx.reply(f'{ctx.denial} User not in the database.')
 
@@ -282,7 +282,7 @@ class Levels(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data = await Level.find_one({'_id': member.id})
+        data = await Level.get(member.id)
         if data:
             await data.delete()
 

@@ -72,7 +72,7 @@ class Birthdays(commands.Cog):
         """
 
         member = member or ctx.author
-        data: Birthday = await Birthday.find_one({'_id': member.id})
+        data: Birthday = await Birthday.get(member.id)
         if data is None:
             if member.id == ctx.author.id:
                 return await ctx.reply('You did not set your birthday.')
@@ -115,7 +115,7 @@ class Birthdays(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        data: Birthday = await Birthday.find_one({'_id': ctx.author.id})
+        data: Birthday = await Birthday.get(ctx.author.id)
         if data is None:
             data = Birthday(id=ctx.author.id)
 
@@ -196,7 +196,7 @@ class Birthdays(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        data: Birthday = await Birthday.find_one({'_id': ctx.author.id})
+        data: Birthday = await Birthday.get(ctx.author.id)
         if data is None:
             return await ctx.reply('You did not set your birthday.')
 
@@ -239,7 +239,7 @@ class Birthdays(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data: Birthday = await Birthday.find_one({'_id': member.id})
+        data: Birthday = await Birthday.get(member.id)
         if data is not None:
             await data.delete()
 

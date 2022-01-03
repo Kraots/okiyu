@@ -21,7 +21,7 @@ class TicketView(View):
     @disnake.ui.button(label='Close', emoji='<:trash:914081331762307093>', custom_id='ukiyo:tickets')
     async def close(self, button: Button, inter: disnake.MessageInteraction):
         await inter.response.defer()
-        ticket: utils.Ticket = await utils.Ticket.find_one({'_id': inter.channel.id})
+        ticket: utils.Ticket = await utils.Ticket.get(inter.channel.id)
         em = disnake.Embed(title='Ticket Closed', colour=utils.blurple)
         ticket_owner = inter.guild.get_member(ticket.owner_id)
         if inter.author.id == ticket.owner_id:

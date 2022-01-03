@@ -39,7 +39,7 @@ class Confesscord(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        data: Restrictions = await Restrictions.find_one({'_id': member.id})
+        data: Restrictions = await Restrictions.get(member.id)
         if data is not None:
             return await ctx.reply(
                 f'{ctx.denial} {member.mention} is already restricted from using confesscord.'
@@ -69,7 +69,7 @@ class Confesscord(commands.Cog):
         `user` **->** The user you want to give back access for using confesscord.
         """
 
-        data: Restrictions = await Restrictions.find_one({'_id': user.id})
+        data: Restrictions = await Restrictions.get(user.id)
         if data is None:
             return await ctx.reply(f'{ctx.denial} {user.mention} is not restricted.')
 

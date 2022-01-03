@@ -28,14 +28,14 @@ class JoinGiveawayButton(disnake.ui.Button):
         )
 
     async def callback(self, inter: disnake.MessageInteraction):
-        data: utils.GiveAway = await utils.GiveAway.find_one({'_id': inter.message.id})
+        data: utils.GiveAway = await utils.GiveAway.get(inter.message.id)
         if inter.author.id in data.participants:
             return await inter.response.send_message(
                 'You are already participating in this giveaway!',
                 ephemeral=True
             )
 
-        author_data: utils.Level = await utils.Level.find_one({'_id': inter.author.id})
+        author_data: utils.Level = await utils.Level.get(inter.author.id)
         if author_data is None:
             return await inter.response.send_message(
                 'You have never sent a message in the server. Cannot participate!',

@@ -153,7 +153,7 @@ class BlackJack(View):
             btn.disabled = True
 
     async def win(self, reason: str):
-        data: Game = await Game.find_one({'_id': self.user.id})
+        data: Game = await Game.get(self.user.id)
         data.coins += self.bet_amount
         await data.commit()
         em = self.prepare_embed(end=True)
@@ -165,7 +165,7 @@ class BlackJack(View):
         self.stop()
 
     async def lose(self, reason: str):
-        data: Game = await Game.find_one({'_id': self.user.id})
+        data: Game = await Game.get(self.user.id)
         data.coins -= self.bet_amount
         await data.commit()
         em = self.prepare_embed(end=True)
@@ -177,7 +177,7 @@ class BlackJack(View):
         self.stop()
 
     async def tie(self, reason: str):
-        data: Game = await Game.find_one({'_id': self.user.id})
+        data: Game = await Game.get(self.user.id)
         em = self.prepare_embed(end=True)
         em.description = f'**You Tied! {reason}**\n' \
                          f'Your coins haven\'t changed. You still have **{data.coins:,}** 🪙'
@@ -247,7 +247,7 @@ class BlackJack(View):
     async def forfeit_btn(self, button: Button, inter: MessageInteraction):
         await inter.response.defer()
 
-        data: Game = await Game.find_one({'_id': self.user.id})
+        data: Game = await Game.get(self.user.id)
         data.coins -= self.bet_amount
         await data.commit()
         em = self.prepare_embed(end=True)
@@ -259,7 +259,7 @@ class BlackJack(View):
         self.stop()
 
     async def on_timeout(self):
-        data: Game = await Game.find_one({'_id': self.user.id})
+        data: Game = await Game.get(self.user.id)
         data.coins -= self.bet_amount
         await data.commit()
         em = self.prepare_embed(end=True)

@@ -325,7 +325,7 @@ class Moderation(commands.Cog):
         else:
             kwargs['blocked'] = True
 
-        usr: Mutes = await Mutes.find_one({'_id': member.id})
+        usr: Mutes = await Mutes.get(member.id)
         _ctx = ctx
         if usr is not None:
             muted_by = ctx.ukiyo.get_member(usr.muted_by)
@@ -475,7 +475,7 @@ class Moderation(commands.Cog):
         member: disnake.Member,
         send_feedback: bool = True
     ):
-        data: Mutes = await Mutes.find_one({'_id': member.id})
+        data: Mutes = await Mutes.get(member.id)
         fmt = 'muted' if action == 'unmute' else 'blocked'
         if data is None:
             return await ctx.reply(f'`{member}` is not **{fmt}**!')
@@ -847,7 +847,7 @@ class Moderation(commands.Cog):
         `giveaway_id` **->** The id of the message of the giveaway.
         """
 
-        gw = await GiveAway.find_one({'_id': giveaway_id})
+        gw = await GiveAway.get(giveaway_id)
         if gw is None:
             return await ctx.reply('Giveaway with that message id not found.')
 
@@ -862,7 +862,7 @@ class Moderation(commands.Cog):
         `giveaway_id` **->** The id of the message of the giveaway.
         """
 
-        data: GiveAway = await GiveAway.find_one({'_id': giveaway_id})
+        data: GiveAway = await GiveAway.get(giveaway_id)
         if data is None:
             return await ctx.reply('Giveaway with that message id not found.')
 

@@ -86,8 +86,8 @@ class Fight(disnake.ui.View):
             self.turn = self.p1
 
     async def award(self, winner_id: int, loser_id: int, winner_character: utils.Characters):
-        winner_db: utils.Game = await utils.Game.find_one({'_id': winner_id})
-        loser_db: utils.Game = await utils.Game.find_one({'_id': loser_id})
+        winner_db: utils.Game = await utils.Game.get(winner_id)
+        loser_db: utils.Game = await utils.Game.get(loser_id)
         winner_db.characters[winner_character.name] += 25
 
         winner_db.coins += 2500

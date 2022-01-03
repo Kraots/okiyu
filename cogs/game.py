@@ -53,7 +53,7 @@ class _Game(commands.Cog, name='Game'):
                 await data.commit()
 
     async def get_user(self, uid: int) -> Game:
-        data: Game = await Game.find_one({'_id': uid})
+        data: Game = await Game.get(uid)
         if data is None:
             data = Game(
                 id=uid,
@@ -233,7 +233,7 @@ class _Game(commands.Cog, name='Game'):
                 _xp = str(xp - _curr) + '/' + str(needed_xp)
                 lvl = _lvl
 
-            character: Characters = await Characters.find_one({'_id': character_name})
+            character: Characters = await Characters.get(character_name)
             em = disnake.Embed(
                 title=f'`{character.name.title()}`',
                 description=f'*{character.description}*',
@@ -435,10 +435,10 @@ class _Game(commands.Cog, name='Game'):
         except TimeoutError:
             return await ctx.reply('Somebody ran out of time while picking their character.')
 
-        p1: Characters = await Characters.find_one({'_id': p1})
+        p1: Characters = await Characters.get(p1)
         if p1 is None:
             return await ctx.reply(f'{ctx.author.mention} that character does not exist.')
-        p2: Characters = await Characters.find_one({'_id': p2})
+        p2: Characters = await Characters.get(p2)
         if p2 is None:
             return await ctx.reply(f'{member.mention} that character does not exist.')
 
@@ -519,7 +519,7 @@ class _Game(commands.Cog, name='Game'):
             return
 
         character_name = character_name.lower()
-        data: Characters = await Characters.find_one({'_id': character_name})
+        data: Characters = await Characters.get(character_name)
         if data is None:
             em = utils.fail_embed('Character does not exist.')
             return await ctx.reply(embed=em)
@@ -586,7 +586,7 @@ class _Game(commands.Cog, name='Game'):
             if not _name.content:
                 return await ctx.reply('You did not give the character\'s name, cancelling.')
             name = _name.content.lower()
-            data: Characters = await Characters.find_one({'_id': name})
+            data: Characters = await Characters.get(name)
             if data is not None:
                 return await _name.reply('A character with that name already exists.')
 
@@ -648,7 +648,7 @@ class _Game(commands.Cog, name='Game'):
         `character_name` **->** The full name of the character you want to remove.
         """
 
-        data: Characters = await Characters.find_one({'_id': character_name.lower()})
+        data: Characters = await Characters.get(character_name.lower())
         if data is None:
             return await ctx.reply('Character does not exist.')
 
@@ -669,7 +669,7 @@ class _Game(commands.Cog, name='Game'):
         `character_name` **->** The full name of the character you want to toggle the availability of.
         """
 
-        data: Characters = await Characters.find_one({'_id': character_name.lower()})
+        data: Characters = await Characters.get(character_name.lower())
         if data is None:
             return await ctx.reply('Character does not exist.')
         data.obtainable = not data.obtainable
@@ -692,7 +692,7 @@ class _Game(commands.Cog, name='Game'):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data: Game = await Game.find_one({'_id': member.id})
+        data: Game = await Game.get(member.id)
         if data:
             await data.delete()
 
@@ -733,7 +733,7 @@ class _Game(commands.Cog, name='Game'):
                 for uid in participant_ids:
                     participant = view.participants[uid]
                     mem = guild.get_member(uid)
-                    data: Game = await Game.find_one({'_id': uid})
+                    data: Game = await Game.get(uid)
                     if data is None:
                         return
 

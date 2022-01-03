@@ -6,7 +6,6 @@ from utils import (
     Intro,
     create_intro,
     is_mod,
-    lock,
 )
 
 from main import Ukiyo
@@ -44,7 +43,7 @@ class Intros(commands.Cog):
         """
 
         member = member or ctx.author
-        data: Intro = await Intro.find_one({'_id': member.id})
+        data: Intro = await Intro.get(member.id)
         if data is None:
             if member.id == self.bot._owner_id:
                 return await ctx.better_reply('🤫 🤫 🤫')
@@ -97,7 +96,7 @@ class Intros(commands.Cog):
             return
 
         unverified_role = ctx.ukiyo.get_role(913329062347423775)
-        data = await Intro.find_one({'_id': member.id})
+        data = await Intro.get(member.id)
         if data is not None:
             intro_channel = ctx.ukiyo.get_channel(913331578606854184)
             msg = await intro_channel.fetch_message(data.message_id)
@@ -113,7 +112,7 @@ class Intros(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data = await Intro.find_one({'_id': member.id})
+        data = await Intro.get(member.id)
         if data:
             guild = self.bot.get_guild(913310006814859334)
             intro_channel = guild.get_channel(913331578606854184)

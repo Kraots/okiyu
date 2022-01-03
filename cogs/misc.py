@@ -48,7 +48,7 @@ class ViewIntro(disnake.ui.View):
     @disnake.ui.button(label='View Intro', style=disnake.ButtonStyle.blurple)
     async def view_intro(self, button: disnake.Button, inter: disnake.MessageInteraction):
         disagree = '<:disagree:913895999125196860>'
-        data: utils.Intro = await utils.Intro.find_one({'_id': self.uid})
+        data: utils.Intro = await utils.Intro.get(self.uid)
         guild = self.bot.get_guild(913310006814859334)
         member = guild.get_member(self.uid)
         if data is None:
@@ -169,7 +169,7 @@ class Misc(commands.Cog):
         `rule` **->** The number of the rule you wish to see.
         """
 
-        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        rules: Rules = await Rules.get(self.bot._owner_id)
         if rules is None:
             return await ctx.reply(f'{ctx.denial} There are currently no rules set. Please contact an admin about this!')
         em = disnake.Embed(title='Rules', color=utils.blurple)
@@ -200,7 +200,7 @@ class Misc(commands.Cog):
         `rule` **->** The rule to add.
         """
 
-        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        rules: Rules = await Rules.get(self.bot._owner_id)
         if rules is None:
             await Rules(
                 id=self.bot._owner_id,
@@ -221,7 +221,7 @@ class Misc(commands.Cog):
         `new_rule` **->** The new rule to replace it with.
         """
 
-        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        rules: Rules = await Rules.get(self.bot._owner_id)
         if rules is None:
             return await ctx.reply(f'{ctx.denial} There are currently no rules set.')
         elif rule == 0:
@@ -244,7 +244,7 @@ class Misc(commands.Cog):
         `rule` **->** The number of the rule to remove.
         """
 
-        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        rules: Rules = await Rules.get(self.bot._owner_id)
         if rules is None:
             return await ctx.reply(f'{ctx.denial} There are currently no rules set.')
         else:
@@ -263,7 +263,7 @@ class Misc(commands.Cog):
     async def server_rules_clear(self, ctx: Context):
         """Deletes all the rules."""
 
-        rules: Rules = await Rules.find_one({'_id': self.bot._owner_id})
+        rules: Rules = await Rules.get(self.bot._owner_id)
         if rules is None:
             return await ctx.reply(f'{ctx.denial} There are currently no rules set.')
         else:
@@ -397,7 +397,7 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data: AFK = await AFK.find_one({'_id': member.id})
+        data: AFK = await AFK.get(member.id)
         if data is not None:
             await data.delete()
 
@@ -439,7 +439,7 @@ class Misc(commands.Cog):
             paginator = RoboPages(source, ctx=ctx, compact=True)
             await paginator.start()
         else:
-            mute: Mutes = await Mutes.find_one({'_id': member.id})
+            mute: Mutes = await Mutes.get(member.id)
             if mute is None or mute.muted is False:
                 if member == ctx.author:
                     return await ctx.reply(f'{ctx.denial} You are not muted.')
@@ -493,7 +493,7 @@ class Misc(commands.Cog):
             paginator = RoboPages(source, ctx=ctx, compact=True)
             await paginator.start()
         else:
-            mute: Mutes = await Mutes.find_one({'_id': member.id})
+            mute: Mutes = await Mutes.get(member.id)
             if mute is None or mute.blocked is False:
                 if member == ctx.author:
                     return await ctx.reply(f'{ctx.denial} You are not blocked.')
@@ -559,7 +559,7 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        _ = await utils.Marriage.find_one({'_id': ctx.author.id})
+        _ = await utils.Marriage.get(ctx.author.id)
         if _ is not None:
             mem = ctx.ukiyo.get_member(_.married_to)
             return await ctx.reply(f'You are already married to {mem.mention}')
@@ -567,7 +567,7 @@ class Misc(commands.Cog):
         choices = []
         em = disnake.Embed(title='Matching... Please wait...', color=utils.blurple)
         msg = await ctx.reply(embed=em)
-        data: utils.Intro = await utils.Intro.find_one({'_id': ctx.author.id})
+        data: utils.Intro = await utils.Intro.get(ctx.author.id)
         if data is None:
             await msg.delete()
             if ctx.author.id == self.bot._owner_id:
@@ -680,7 +680,7 @@ class Misc(commands.Cog):
         `reason` **->** The reason you are ``AFK``. You can set a default by using `!afk default set`. For a list of commands for that, you can type `!help afk default`.
         """  # noqa
 
-        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        data: AFK = await AFK.get(ctx.author.id)
         if data is None:
             if reason is None:
                 return await ctx.reply('You must give the reason!')
@@ -709,7 +709,7 @@ class Misc(commands.Cog):
     async def _afk_default(self, ctx: Context):
         """See your default ``AFK`` reason, if you set any."""
 
-        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        data: AFK = await AFK.get(ctx.author.id)
         if data is None or data.default is None:
             return await ctx.reply('You don\'t have a default ``AFK`` reason set!')
 
@@ -722,7 +722,7 @@ class Misc(commands.Cog):
         `default` **->** The default reason you want to set for your ``AFK``.
         """
 
-        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        data: AFK = await AFK.get(ctx.author.id)
         default = default.replace('*', '')  # Make sure it doesn't mess with the default bolding of the reason.
         if data is None:
             await AFK(
@@ -739,7 +739,7 @@ class Misc(commands.Cog):
     async def _afk_default_remove(self, ctx: Context):
         """Removes your default ``AFK`` reason."""
 
-        data: AFK = await AFK.find_one({'_id': ctx.author.id})
+        data: AFK = await AFK.get(ctx.author.id)
         if data is None:
             return await ctx.reply('You don\'t have a default ``AFK`` reason set!')
         await data.delete()
@@ -751,7 +751,7 @@ class Misc(commands.Cog):
         if message.author.bot:
             return
 
-        data: AFK = await AFK.find_one({'_id': message.author.id})
+        data: AFK = await AFK.get(message.author.id)
         if data is not None:
             if data.is_afk is True and message.id != data.message_id:
                 await message.reply(
@@ -770,7 +770,7 @@ class Misc(commands.Cog):
                 return
 
         for user in message.mentions:
-            data: AFK = await AFK.find_one({'_id': user.id})
+            data: AFK = await AFK.get(user.id)
             if data is not None and data.is_afk is True:
                 await message.reply(
                     f'**{user}** is ``AFK`` **->** **"{data.reason}"** '

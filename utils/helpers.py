@@ -145,7 +145,7 @@ async def check_username(member: disnake.Member):
     if res is False:
         return
 
-    kraots: utils.InvalidName = await utils.InvalidName.find_one({'_id': 374622847672254466})
+    kraots: utils.InvalidName = await utils.InvalidName.get(374622847672254466)
     kraots.last_pos += 1
     await kraots.commit()
     new_nick = f'UnpingableName{kraots.last_pos}'

@@ -41,7 +41,7 @@ class Welcome(commands.Cog):
         msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{member_count}** member.\n\n\n_ _'
         await welcome_channel.send(msg, embed=welcome)
 
-        mute: utils.Mutes = await utils.Mutes.find_one({'_id': member.id})
+        mute: utils.Mutes = await utils.Mutes.get(member.id)
         if mute is not None:
             if mute.blocked is True:
                 action = 'block'

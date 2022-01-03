@@ -20,7 +20,7 @@ class Marriages(commands.Cog):
 
     @staticmethod
     async def get_user(uid: int) -> Marriage:
-        data: Marriage = await Marriage.find_one({'_id': uid})
+        data: Marriage = await Marriage.get(uid)
         if data is None:
             data = Marriage(
                 id=uid,
@@ -119,7 +119,7 @@ class Marriages(commands.Cog):
             await view.wait()
             if view.response is True:
                 single_role = ctx.ukiyo.get_role(913789939668385822)
-                mem: Marriage = await Marriage.find_one({'_id': usr.id})
+                mem: Marriage = await Marriage.get(usr.id)
                 await data.delete()
                 await mem.delete()
 
@@ -324,7 +324,7 @@ class Marriages(commands.Cog):
 
         em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{member.display_name}\'s family', icon_url=member.display_avatar)
-        data: Marriage = await Marriage.find_one({'_id': member.id})
+        data: Marriage = await Marriage.get(member.id)
         _adopted_by: Marriage = await Marriage.find({'adoptions': member.id}).to_list(2)
         if data is None and len(_adopted_by) == 0:
             if member.id == ctx.author.id:
@@ -359,7 +359,7 @@ class Marriages(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data = await Marriage.find_one({'_id': member.id})
+        data = await Marriage.get(member.id)
         if data:
             await data.delete()
             mem = await Marriage.find_one({'married_to': member.id})
