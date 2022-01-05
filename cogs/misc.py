@@ -3,6 +3,9 @@ import random
 import wikipedia
 from datetime import datetime, timezone
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 import disnake
 from disnake.ext import commands
 
@@ -877,7 +880,38 @@ class Misc(commands.Cog):
         data = await src.get_source(cmd)
         await ctx.better_reply(embed=data.embed, view=data.view)
 
-    @commands.command(name='genderstats', aliases=('genderratio', 'genders',))
+    @staticmethod
+    @utils.run_in_executor
+    def draw_pie(
+        males: int,
+        trans_males: int,
+        females: int,
+        trans_females: int,
+        other_gender: int
+    ) -> disnake.File:
+        fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect='equal'))
+        labels = 'Male', 'Trans Male', 'Female', 'Trans Female', 'Other Gender'
+        data = [males, trans_males, females, trans_females, other_gender]
+
+        def format_data(pct):
+            absolute = int(np.round(pct / 100. * np.sum(data)))
+            return f'{pct:.1f}%\n({absolute:,})'
+
+        wedges, texts, autotexts = ax.pie(data, autopct=lambda pct: format_data(pct), textprops=dict(color='w'))
+        ax.legend(
+            wedges, labels,
+            title='Genders',
+            loc='center left',
+            bbox_to_anchor=(1, 0, 0.5, 1)
+        )
+        plt.setp(autotexts, size=8, weight='bold')
+        ax.set_title('Gender Stats')
+
+        plt.savefig('gender_stats.png', bbox_inches='tight')
+        file = disnake.File('gender_stats.png')
+        return file
+
+    @commands.command(name='genderstats', aliases=('genderratio', 'genders', 'gender'))
     async def gender_stats(self, ctx: Context):
         """
         Shows how many cis males/females, how many trans males/females, and how many people of other gender there are in the server, based on their intros.
@@ -913,6 +947,9 @@ class Misc(commands.Cog):
         em.add_field('Females', f'{females:,}', inline=False)
         em.add_field('Trans Females', f'{trans_females:,}', inline=False)
         em.add_field('Other Gender', f'{other_gender:,}', inline=False)
+
+        file = await self.draw_pie(males, trans_males, females, trans_females, other_gender)
+        em.set_image(file=file)
 
         await ctx.better_reply(embed=em)
 

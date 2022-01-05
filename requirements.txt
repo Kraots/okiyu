@@ -15,3 +15,4 @@ pymongo==3.12.1
 umongo[motor]
 wikipedia
 pytz
+matplotlib
