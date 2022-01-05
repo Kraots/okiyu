@@ -903,7 +903,7 @@ class Misc(commands.Cog):
             bbox_to_anchor=(1, 0, 0.8, 1)
         )
         plt.setp(autotexts, size=8, weight='bold')
-        ax.set_title('Gender Stats')
+        ax.set_title('Ukiyo Gender Stats')
 
         plt.savefig('gender_stats.png', bbox_inches='tight')
         file = disnake.File('gender_stats.png')
