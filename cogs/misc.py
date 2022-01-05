@@ -877,6 +877,44 @@ class Misc(commands.Cog):
         data = await src.get_source(cmd)
         await ctx.better_reply(embed=data.embed, view=data.view)
 
+    @commands.command(name='genderstats', aliases=('genderratio', 'genders',))
+    async def gender_stats(self, ctx: Context):
+        """
+        Shows how many cis males/females, how many trans males/females, and how many people of other gender there are in the server, based on their intros.
+        """
+
+        females = 0
+        males = 0
+        trans_females = 0
+        trans_males = 0
+        other_gender = 0
+
+        async for intro in utils.Intro.find():
+            gender = intro.gender.lower()
+
+            if gender in ('male', 'm', 'boy', 'make'):
+                males += 1
+            elif gender in ('trans-male', 'trans male'):
+                trans_males += 1
+
+            elif gender in ('female', 'f', 'girl'):
+                females += 1
+            elif gender in ('trans-female', 'trans female'):
+                trans_females += 1
+
+            else:
+                other_gender += 1
+
+        em = disnake.Embed(color=utils.blurple, title='Here\'s the gender ratio in this server')
+        em.set_footer(text=f'Requested By: {ctx.author.id}')
+        em.add_field('Males', f'{males:,}', inline=False)
+        em.add_field('Trans Males', f'{trans_males:,}', inline=False)
+        em.add_field('Females', f'{females:,}', inline=False)
+        em.add_field('Trans Females', f'{trans_females:,}', inline=False)
+        em.add_field('Other Gender', f'{other_gender:,}', inline=False)
+
+        await ctx.better_reply(embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
