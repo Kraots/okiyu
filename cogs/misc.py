@@ -905,8 +905,9 @@ class Misc(commands.Cog):
             else:
                 other_gender += 1
 
-        em = disnake.Embed(color=utils.blurple, title='Here\'s the gender ratio in this server')
-        em.set_footer(text=f'Requested By: {ctx.author.id}')
+        em = disnake.Embed(color=utils.blurple, title='Here\'s the gender stats in this server')
+        em.set_footer(text=f'Requested By: {ctx.author}')
+
         em.add_field('Males', f'{males:,}', inline=False)
         em.add_field('Trans Males', f'{trans_males:,}', inline=False)
         em.add_field('Females', f'{females:,}', inline=False)
