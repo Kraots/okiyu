@@ -901,7 +901,7 @@ class Misc(commands.Cog):
         ax.legend(
             wedges, labels,
             title='Genders',
-            loc='center left',
+            loc='center',
             bbox_to_anchor=(1, 0, 0.5, 1)
         )
         plt.setp(autotexts, size=8, weight='bold')
