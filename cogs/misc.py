@@ -1,10 +1,8 @@
 import time
 import random
 import wikipedia
-from datetime import datetime, timezone
-
-import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime, timezone
 
 import disnake
 from disnake.ext import commands
@@ -890,19 +888,19 @@ class Misc(commands.Cog):
         other_gender: int
     ) -> disnake.File:
         fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect='equal'))
-        labels = 'Male', 'Trans Male', 'Female', 'Trans Female', 'Other Gender'
+        labels = (
+            f'Male ({males:,})', f'Trans Male ({trans_males:,})',
+            f'Female ({females:,})', f'Trans Female ({trans_females:,})',
+            f'Other Gender ({other_gender:,})'
+        )
         data = [males, trans_males, females, trans_females, other_gender]
 
-        def format_data(pct):
-            absolute = int(np.round(pct / 100. * np.sum(data)))
-            return f'{pct:.1f}%\n({absolute:,})'
-
-        wedges, texts, autotexts = ax.pie(data, autopct=lambda pct: format_data(pct), textprops=dict(color='w'))
+        wedges, texts, autotexts = ax.pie(data, autopct=lambda pct: f'{pct:.1f}%', textprops=dict(color='w'))
         ax.legend(
             wedges, labels,
             title='Genders',
             loc='center',
-            bbox_to_anchor=(1, 0, 0.5, 1)
+            bbox_to_anchor=(1, 0, 0.8, 1)
         )
         plt.setp(autotexts, size=8, weight='bold')
         ax.set_title('Gender Stats')
@@ -939,14 +937,8 @@ class Misc(commands.Cog):
             else:
                 other_gender += 1
 
-        em = disnake.Embed(color=utils.blurple, title='Here\'s the gender stats')
+        em = disnake.Embed(color=utils.blurple)
         em.set_footer(text=f'Requested By: {ctx.author}')
-
-        em.add_field('Males', f'{males:,}', inline=False)
-        em.add_field('Trans Males', f'{trans_males:,}', inline=False)
-        em.add_field('Females', f'{females:,}', inline=False)
-        em.add_field('Trans Females', f'{trans_females:,}', inline=False)
-        em.add_field('Other Gender', f'{other_gender:,}', inline=False)
 
         file = await self.draw_pie(males, trans_males, females, trans_females, other_gender)
         em.set_image(file=file)
