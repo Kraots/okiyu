@@ -939,7 +939,7 @@ class Misc(commands.Cog):
             else:
                 other_gender += 1
 
-        em = disnake.Embed(color=utils.blurple, title='Here\'s the gender stats in this server')
+        em = disnake.Embed(color=utils.blurple, title='Here\'s the gender stats')
         em.set_footer(text=f'Requested By: {ctx.author}')
 
         em.add_field('Males', f'{males:,}', inline=False)
