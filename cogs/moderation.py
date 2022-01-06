@@ -941,7 +941,7 @@ class Moderation(commands.Cog):
             return await ctx.reply(f'{ctx.denial} That bad word is already added in the list.')
 
         self.bot.bad_words[word] = ctx.author.id
-        data[word] = ctx.author.id
+        data.bad_words[word] = ctx.author.id
         await data.commit()
 
         await ctx.reply(f'Successfully **added** `{word}` to the bad words list.')
