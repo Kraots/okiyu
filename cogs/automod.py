@@ -158,7 +158,7 @@ class AutoMod(commands.Cog):
     async def on_message(self, message: disnake.Message):
         if message.author.id == self.bot._owner_id or \
                 913310292505686046 in (r.id for r in message.author.roles) or \
-                not message.content:
+                not message.content or message.bot:
             return
 
         for coro in self.coros.copy():
@@ -169,7 +169,7 @@ class AutoMod(commands.Cog):
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
         if after.author.id == self.bot._owner_id or \
                 913310292505686046 in (r.id for r in after.author.roles) or \
-                not after.content:
+                not after.content or after.bot:
             return
 
         for coro in self.coros.copy():
