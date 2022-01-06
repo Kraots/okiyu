@@ -20,7 +20,7 @@ class AutoMod(commands.Cog):
         self.user_cooldown = commands.CooldownMapping.from_cooldown(
             10, 13.0, commands.BucketType.user)  # Checks for member spam (10msg per 13s)
         self.words_cooldown = commands.CooldownMapping.from_cooldown(
-            3, 86400.0, commands.BucketType.user)  # Checks for bad words (3msg per 24h)
+            3, 18000.0, commands.BucketType.user)  # Checks for bad words (3msg per 5h)
         self.invite_cooldown = commands.CooldownMapping.from_cooldown(
             2, 18000.0, commands.BucketType.user)  # Checks for invites (2msg per 5h)
 
