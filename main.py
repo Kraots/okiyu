@@ -78,6 +78,7 @@ class Ukiyo(commands.Bot):
             self.add_view(utils.ColourButtonRoles(), message_id=913763496448110603)
             self.add_view(utils.ColourButtonRoles(), message_id=913763571853303858)
             self.add_view(utils.ColourButtonRoles(), message_id=913763639922659358)
+            self.add_view(utils.PronounsButtonRoles(), message_id=928684415452856381)
             self.add_view(utils.GenderButtonRoles(), message_id=913788066114719785)
             self.add_view(utils.AgeButtonRoles(), message_id=913788068031496192)
             self.add_view(utils.SexualityButtonRoles(), message_id=913788069373681685)
