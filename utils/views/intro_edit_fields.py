@@ -101,7 +101,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
 
         if value == 'age':
             try:
-                new_data = int(new_data.content)
+                new_data = int(new_data)
             except (ValueError, TypeError):
                 return await inter.send(f'{self.view.ctx.denial} Must be a number.', ephemeral=True)
             else:
