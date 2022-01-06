@@ -56,7 +56,7 @@ class Intros(commands.Cog):
 
         is_owner = True if ctx.author.id == self.bot._owner_id else False
         view = IntroFields(ctx, is_owner=is_owner)
-        await ctx.reply(
+        view.message = await ctx.reply(
             'Please select one of the fields that you wish to edit in your intro from the select menu below.',
             view=view
         )
