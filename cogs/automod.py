@@ -83,7 +83,7 @@ class AutoMod(commands.Cog):
             em.description = f'**Muted By:** {self.bot.user}\n' \
                              f'**Reason:** Automod: {_data.arg}\n' \
                              f'**Mute Duration:** `{duration}`\n' \
-                             f'**Expire Date:** {utils.format_dt(_data.dt, "F")}' \
+                             f'**Expire Date:** {utils.format_dt(_data.dt, "F")}\n' \
                              f'**Remaining:** {utils.human_timedelta(data.muted_until, suffix=False, accuracy=6)}'
             em.set_footer(text='Muted in `Ukiyo`')
             em.timestamp = datetime.datetime.now(datetime.timezone.utc)
