@@ -73,6 +73,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
         assert self.view is not None
         value = self.values[0]
         await inter.response.defer()
+        await self.view.message.delete()
         await self.view.ctx.message.delete()
 
         await inter.send(
@@ -184,7 +185,9 @@ class IntroField(disnake.ui.Select['IntroFields']):
         data.message_id = m.id
         await data.commit()
 
-        await inter.send(f'Successfully updated your `{value.title()}` field.', ephemeral=True)
+        v = disnake.ui.View()
+        v.add_item(disnake.ui.Button(label='Jump!', url=m.jump_url))
+        await inter.send(f'Successfully updated your `{value.title()}` field.', ephemeral=True, view=v)
 
 
 class IntroFields(CancelButton):
