@@ -22,7 +22,7 @@ class AutoMod(commands.Cog):
         self.words_cooldown = commands.CooldownMapping.from_cooldown(
             3, 86400.0, commands.BucketType.user)  # Checks for bad words (3msg per 24h)
         self.invite_cooldown = commands.CooldownMapping.from_cooldown(
-            2, 18000.0, commands.BucketType.user)  # Checks for invites (5msg per 5h)
+            2, 18000.0, commands.BucketType.user)  # Checks for invites (2msg per 5h)
 
     def get_mute_time(self, user_id) -> str:
         try:
