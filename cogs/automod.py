@@ -51,14 +51,19 @@ class AutoMod(commands.Cog):
     async def apply_action(self, message: disnake.Message, reason: str):
         user = message.author
         ctx = await self.bot.get_context(message, cls=utils.Context)
-        mute_time = self.get_mute_time(user.id)
+        time = self.get_mute_time(user.id)
+
+        action = 'muted'
+        _action = 'mute'
         kwargs = {'muted': True}
         role = ctx.ukiyo.get_role(913376647422545951)  # Mute
         if self.muted_amount_count[user.id] >= 3:  # Block if this is the user's 3rd time they get punished
-            role = ctx.ukiyo.get_role(924941473089224784)
+            action = 'blocked'
+            _action = 'block'
             kwargs = {'blocked': True}
+            role = ctx.ukiyo.get_role(924941473089224784)
 
-        _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{mute_time} {reason.title()}')
+        _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} {reason.title()}')
         duration = utils.human_timedelta(_data.dt, suffix=False)
         data = utils.Mutes(
             id=user.id,
@@ -79,19 +84,19 @@ class AutoMod(commands.Cog):
         await user.edit(roles=new_roles, reason=f'[AUTOMOD: {reason.upper()}]')
 
         try:
-            em = disnake.Embed(title='You have been muted!', color=utils.red)
-            em.description = f'**Muted By:** {self.bot.user}\n' \
+            em = disnake.Embed(title=f'You have been {action}!', color=utils.red)
+            em.description = f'**{action.title()} By:** {self.bot.user}\n' \
                              f'**Reason:** Automod: {_data.arg}\n' \
-                             f'**Mute Duration:** `{duration}`\n' \
+                             f'**{_action.title()} Duration:** `{duration}`\n' \
                              f'**Expire Date:** {utils.format_dt(_data.dt, "F")}\n' \
                              f'**Remaining:** {utils.human_timedelta(data.muted_until, suffix=False, accuracy=6)}'
-            em.set_footer(text='Muted in `Ukiyo`')
+            em.set_footer(text=f'{action.title()} in `Ukiyo`')
             em.timestamp = datetime.datetime.now(datetime.timezone.utc)
             await user.send(embed=em)
         except disnake.Forbidden:
             pass
         _msg = await message.channel.send(
-            f'> ⚠️ **[AUTOMOD: {reason.upper()}]** {user.mention} has been muted for **{reason.lower()}** '
+            f'> ⚠️ **[AUTOMOD: {reason.upper()}]** {user.mention} has been **{action}** for **{reason.lower()}** '
             f'until {utils.format_dt(_data.dt, "F")} (`{duration}`)'
         )
         data.jump_url = _msg.jump_url
@@ -100,11 +105,11 @@ class AutoMod(commands.Cog):
         view = utils.UrlButton('Jump!', _msg.jump_url)
         await utils.log(
             self.bot.webhooks['mod_logs'],
-            title='[AUTOMOD MUTE]',
+            title=f'[AUTOMOD {_action.upper()}]',
             fields=[
                 ('Member', f'{user} (`{user.id}`)'),
                 ('Reason', reason.title()),
-                ('Mute Duration', f'`{duration}`'),
+                (f'{_action.title()} Duration', f'`{duration}`'),
                 ('Expires At', utils.format_dt(_data.dt, "F")),
                 ('Remaining', f'`{utils.human_timedelta(data.muted_until, suffix=False, accuracy=6)}`'),
                 ('By', f'{self.bot.user.mention} (`{self.bot.user.id}`)'),
