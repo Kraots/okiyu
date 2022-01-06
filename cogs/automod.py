@@ -16,7 +16,7 @@ class AutoMod(commands.Cog):
 
         # (messages, seconds, user/member/channel)
         self.messages_cooldown = utils.CooldownByContent.from_cooldown(
-            13, 120.0, commands.BucketType.user)  # Checks for same content (13msg per 2m)
+            13, 60.0, commands.BucketType.user)  # Checks for same content (13msg per 1m)
         self.user_cooldown = commands.CooldownMapping.from_cooldown(
             10, 13.0, commands.BucketType.user)  # Checks for member spam (10msg per 13s)
         self.words_cooldown = commands.CooldownMapping.from_cooldown(
