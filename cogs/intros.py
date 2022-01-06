@@ -150,7 +150,7 @@ class Intros(commands.Cog):
             try:
                 msg = await intro_channel.fetch_message(data.message_id)
                 await msg.delete()
-            except disnake.Forbidden:
+            except disnake.HTTPException:
                 pass
             await data.delete()
 
