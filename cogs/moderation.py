@@ -17,7 +17,8 @@ from utils import (
     format_dt,
     human_timedelta,
     AnnouncementView,
-    GiveAway
+    GiveAway,
+    BadWords
 )
 
 from main import Ukiyo
@@ -896,6 +897,74 @@ class Moderation(commands.Cog):
     @check_giveaway.before_loop
     async def wait_until_ready_(self):
         await self.bot.wait_until_ready()
+
+    @commands.group(
+        name='badwords', aliases=('badword', 'words', 'word', 'bad'),
+        invoke_without_command=True, case_insensitive=True
+    )
+    @is_mod()
+    async def base_bad_words(self, ctx: Context):
+        """See a list of all the currently added bad words."""
+
+        data: BadWords = await BadWords.get(self.bot._owner_id)
+        if data is None or not data.bad_words:
+            return await ctx.reply(f'{ctx.denial} There are no currently added bad words.')
+
+        entries = []
+        for word, added_by_id in data.bad_words.items():
+            added_by = ctx.ukiyo.get_member(added_by_id)
+            added_by = f'**{added_by.display_name}#{added_by.tag}**' or '**[LEFT]**'
+            added_by = added_by + f' (`{added_by_id}`)'
+
+            entries.append(
+                f'`{word}` - added by {added_by}'
+            )
+
+        pag = utils.SimplePages(ctx, entries, compact=True)
+        pag.embed.title = 'Here\'s all the currently added bad words'
+        await pag.start(ref=True)
+
+    @base_bad_words.command(name='add')
+    @is_admin()
+    async def add_bad_word(self, ctx: Context, *, word: str):
+        """Adds a bad word to the existing bad words.
+
+        `word` **->** The word you want to add.
+        """
+
+        word = word.lower()
+        data: BadWords = await BadWords.get(self.bot._owner_id)
+        if data is None:
+            data = BadWords()
+
+        if word in [w for w in data.bad_words.keys()]:
+            return await ctx.reply(f'{ctx.denial} That bad word is already added in the list.')
+
+        self.bot.bad_words[word] = ctx.author.id
+        data[word] = ctx.author.id
+        await data.commit()
+
+        await ctx.reply(f'Successfully **added** `{word}` to the bad words list.')
+
+    @base_bad_words.command(name='remove')
+    @is_admin()
+    async def remove_bad_word(self, ctx: Context, *, word: str):
+        """Removes a bad word to the existing bad words.
+
+        `word` **->** The word you want to remove.
+        """
+
+        word = word.lower()
+        data: BadWords = await BadWords.get(self.bot._owner_id)
+        if data is None or not data.bad_words:
+            return await ctx.reply(f'{ctx.denial} There are no currently added bad words.')
+        elif word not in data.bad_words.keys():
+            return await ctx.reply(f'{ctx.denial} That word is not added in list of bad words.')
+
+        del data.bad_words[word]
+        del self.bot.bad_words[word]
+
+        await ctx.reply(f'Successfully **removed** `{word}` to the bad words list.')
 
 
 def setup(bot: Ukiyo):

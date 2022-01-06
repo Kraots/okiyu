@@ -34,6 +34,7 @@ class Ukiyo(commands.Bot):
         self.webhooks = {}
         self.execs = {}
         self.verifying = []
+        self.bad_words = {}
 
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'
@@ -106,6 +107,11 @@ class Ukiyo(commands.Bot):
             self.webhooks['logs'] = logs
             self.webhooks['mod_logs'] = mod_logs
             self.webhooks['message_logs'] = message_logs
+
+        data: utils.BadWords = await utils.BadWords.get(self._owner_id)
+        if data and data.bad_words:
+            for word, added_by in data.bad_words.items():
+                self.bad_words[word] = added_by
 
         print('Bot is ready!')
 

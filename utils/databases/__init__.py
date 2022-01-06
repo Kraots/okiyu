@@ -33,6 +33,7 @@ from .db_game import Game, Characters
 from .db_giveaways import GiveAway
 from .db_bdays import Birthday
 from .db_confesscord import Restrictions
+from .db_bad_words import BadWords
 
 __all__ = (
     'Intro',
@@ -48,4 +49,5 @@ __all__ = (
     'GiveAway',
     'Birthday',
     'Restrictions',
+    'BadWords',
 )

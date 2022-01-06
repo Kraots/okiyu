@@ -32,4 +32,4 @@ database7 = cluster7['Ukiyo3']  # Birthdays
 
 key8 = os.getenv('MONGODBKEY8')
 cluster8 = motor.motor_asyncio.AsyncIOMotorClient(key8)
-database8 = cluster8['Ukiyo4']  # Confesscord Restrictions
+database8 = cluster8['Ukiyo4']  # Confesscord Restrictions and Bad Words because confesscord is rarely used anyways
