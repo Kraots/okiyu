@@ -88,7 +88,9 @@ class IntroField(disnake.ui.Select['IntroFields']):
                 timeout=180.0
             )
         except TimeoutError:
+            self.view.stop()
             return
+        self.view.stop()
 
         new_data = msg.content
         try:
