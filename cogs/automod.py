@@ -156,7 +156,7 @@ class AutoMod(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
-        if message.bot or message.author.id == self.bot._owner_id or \
+        if message.author.bot or message.author.id == self.bot._owner_id or \
                 913310292505686046 in (r.id for r in message.author.roles) or \
                 not message.content:
             return
@@ -167,7 +167,7 @@ class AutoMod(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
-        if after.bot or after.author.id == self.bot._owner_id or \
+        if after.author.bot or after.author.id == self.bot._owner_id or \
                 913310292505686046 in (r.id for r in after.author.roles) or \
                 not after.content:
             return
