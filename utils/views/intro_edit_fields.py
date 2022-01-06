@@ -106,7 +106,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
         except disnake.HTTPException:
             pass
         value = value.lower()
-        data: utils.Intro = await utils.Intro.find_one({'_id': inter.author.id})
+        data: utils.Intro = await utils.Intro.get(inter.author.id)
 
         if value == 'age':
             try:

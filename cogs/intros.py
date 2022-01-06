@@ -47,7 +47,7 @@ class Intros(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        data: Intro = await Intro.find_one({'_id': ctx.author.id})
+        data: Intro = await Intro.get(ctx.author.id)
         if data is None:
             return await ctx.reply(
                 f'{ctx.denial} You don\'t have an intro. '
