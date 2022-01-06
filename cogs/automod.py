@@ -121,7 +121,7 @@ class AutoMod(commands.Cog):
             content_bucket.reset()
             return await self.apply_action(message, 'anti raid (repeated messages)')
 
-        user_bucket = self.user_cooldowns.get_bucket(message)
+        user_bucket = self.user_cooldown.get_bucket(message)
         if user_bucket.update_rate_limit(current):
             user_bucket.reset()
             return await self.apply_action(message, 'anti raid (spam)')
