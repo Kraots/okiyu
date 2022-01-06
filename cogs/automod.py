@@ -142,12 +142,22 @@ class AutoMod(commands.Cog):
 
         matches = re.findall(utils.invite_regex, message.content.lower())
         if matches:
+            guild = self.bot.get_guild(913310006814859334)
             if len(matches) == 1:
-                guild = self.bot.get_guild(913310006814859334)
                 _inv = matches[0].split('/')
                 inv = _inv[-1]
                 if any(invite for invite in await guild.invites() if invite.code.lower() == inv):
                     return
+
+            invite_logs = guild.get_channel(913332511789178951)
+            em = disnake.Embed(
+                title='New Invite Found!!',
+                description=f'`{message.author}` sent an invite in {message.channel.mention}'
+            )
+            em.set_footer(text=f'User ID: {message.author.id}')
+            v = disnake.ui.View()
+            v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
+            await invite_logs.send(embed=em, view=v)
 
             invite_bucket = self.invite_cooldown.get_bucket(message)
             if invite_bucket.update_rate_limit(current):
