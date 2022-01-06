@@ -134,7 +134,7 @@ class AutoMod(commands.Cog):
     async def anti_bad_words(self, message: disnake.Message):
         current = message.created_at.timestamp()
 
-        if utils.check_profanity(message.content):
+        if utils.check_profanity(message.content, bad_words=self.bot.bad_words.keys()):
             await message.delete()
 
             words_bucket = self.words_cooldown.get_bucket(message)
