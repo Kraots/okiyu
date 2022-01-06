@@ -30,18 +30,8 @@ __all__ = (
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
-
 allowed_letters = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
-punctuations_and_digits = tuple(list(st.punctuation) + list(st.digits))
 BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
-converted = {
-    '!': 'i',
-    '@': 'a',
-    '$': 's',
-    '0': 'o',
-    '1': 'i',
-    '3': 'e'
-}
 
 
 def time_phaser(seconds):
@@ -70,7 +60,7 @@ def clean_code(content):
         return content
 
 
-def check_profanity(string: str) -> bool:
+def check_profanity(string: str, *, bad_words: list = None) -> bool:
     """
     If the return type is of bool ``True`` then it means that the
     string contains a bad word, otherwise ``False`` if it's safe.
@@ -80,19 +70,18 @@ def check_profanity(string: str) -> bool:
         string: :class:`str`
             The string to check if it contains a bad word.
 
+        bad_words: :class:`list`
+            A list of the bad words to check for. If ``None``, will use the hardcoded ones from bad_words.txt
+
     Return
     ------
         True | False
     """
 
-    string = str(string).lower().replace(' ', '')
-    for k, v in converted.items():
-        string = string.replace(k, v)
+    bad_words = bad_words or BAD_WORDS
+    string = str(string).lower().replace(' ', '').replace('\n', '')
 
-    for pad in punctuations_and_digits:
-        string = string.replace(pad, '')
-
-    return any(w for w in BAD_WORDS if w in string)
+    return any(w for w in bad_words if w in string)
 
 
 def check_string(string: str, *, limit: str = 4) -> bool:
