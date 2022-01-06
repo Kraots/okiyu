@@ -967,6 +967,21 @@ class Moderation(commands.Cog):
 
         await ctx.reply(f'Successfully **removed** `{word}` to the bad words list.')
 
+    @base_bad_words.command(name='clear')
+    @is_owner()
+    async def clear_bad_word(self, ctx: Context):
+        """Clear the custom bad words. This deletes all of them."""
+
+        data: BadWords = await BadWords.get(self.bot._owner_id)
+        if data is None or not data.bad_words:
+            return await ctx.reply(f'{ctx.denial} There are no currently added bad words.')
+
+        data.bad_words = {}
+        self.bot.bad_words = {}
+        await data.commit()
+
+        await ctx.reply('Successfully **cleared** the bad words list.')
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Moderation(bot))
