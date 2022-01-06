@@ -39,7 +39,7 @@ class Intros(commands.Cog):
     @intro.command(name='edit')
     @commands.max_concurrency(1, commands.BucketType.user)
     async def intro_edit(self, ctx: Context):
-        """Edit a field in your intro.
+        """Edit a single field in your intro.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """
