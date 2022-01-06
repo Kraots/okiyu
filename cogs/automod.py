@@ -154,6 +154,7 @@ class AutoMod(commands.Cog):
                 if any(invite for invite in await guild.invites() if invite.code.lower() == inv):
                     return
 
+            await message.delete()
             invite_logs = guild.get_channel(913332511789178951)
             em = disnake.Embed(
                 title='New Invite Found!!',
