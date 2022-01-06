@@ -9,6 +9,7 @@ from typing import Callable
 from datetime import datetime
 
 import disnake
+from disnake.ext import commands
 
 import utils
 
@@ -25,6 +26,7 @@ __all__ = (
     'escape_markdown',
     'remove_markdown',
     'FIRST_JANUARY_1970',
+    'CooldownByContent',
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
@@ -272,3 +274,8 @@ def remove_markdown(text: str) -> str:
     """
 
     return disnake.utils.remove_markdown(text)
+
+
+class CooldownByContent(commands.CooldownMapping):
+    def _bucket_key(ctx, message):
+        return (message.channel.id, message.content.lower())
