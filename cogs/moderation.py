@@ -963,6 +963,7 @@ class Moderation(commands.Cog):
 
         del data.bad_words[word]
         del self.bot.bad_words[word]
+        await data.commit()
 
         await ctx.reply(f'Successfully **removed** `{word}` to the bad words list.')
 
