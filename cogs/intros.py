@@ -4,6 +4,7 @@ from disnake.ext import commands
 from utils import (
     Context,
     Intro,
+    IntroFields,
     create_intro,
     is_mod,
 )
@@ -20,7 +21,7 @@ class Intros(commands.Cog):
     def display_emoji(self) -> str:
         return '🙌'
 
-    @commands.command()
+    @commands.group(invoke_without_command=True, case_insensitive=True)
     @commands.max_concurrency(1, commands.BucketType.user)
     async def intro(self, ctx: Context):
         """Create/Edit your intro.
@@ -35,6 +36,32 @@ class Intros(commands.Cog):
         self.bot.verifying.append(ctx.author.id)
         await create_intro(self.bot.webhooks['mod_logs'], ctx, self.bot)
 
+    @intro.command(name='edit')
+    @commands.max_concurrency(1, commands.BucketType.user)
+    async def intro_edit(self, ctx: Context):
+        """Edit a field in your intro.
+
+        **NOTE:** This command can only be used in <#913330644875104306>
+        """
+
+        if await ctx.check_channel() is False:
+            return
+
+        data: Intro = await Intro.find_one({'_id': ctx.author.id})
+        if data is None:
+            return await ctx.reply(
+                f'{ctx.denial} You don\'t have an intro. '
+                'Please contact a staff member to unverify you! This is a bug.'
+            )
+
+        is_owner = True if ctx.author.id == self.bot._owner_id else False
+        view = IntroFields(ctx, is_owner=is_owner)
+        await ctx.reply(
+            'Please select one of the fields that you wish to edit in your intro from the select menu below.',
+            view=view
+        )
+        await view.wait()
+
     @commands.command(aliases=('wi',))
     async def whois(self, ctx: Context, *, member: disnake.Member = None):
         """Check somebody's intro!
@@ -48,7 +75,7 @@ class Intros(commands.Cog):
             if member.id == self.bot._owner_id:
                 return await ctx.better_reply('🤫 🤫 🤫')
             if member == ctx.author:
-                return await ctx.better_reply(
+                return await ctx.reply(
                     f'{ctx.denial} You don\'t have an intro. '
                     'Please contact a staff member to unverify you! This is a bug.'
                 )
