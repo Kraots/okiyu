@@ -69,6 +69,14 @@ class IntroField(disnake.ui.Select['IntroFields']):
         self.add_option(label='Likes')
         self.add_option(label='Dislikes')
 
+    async def delete_intro_message(self, data: utils.Intro):
+        channel = self.view.ctx.ukiyo.get_channel(913331578606854184)
+        try:
+            _msg = await channel.fetch_message(data.message_id)
+            await _msg.delete()
+        except disnake.HTTPException:
+            pass
+
     async def callback(self, inter: disnake.MessageInteraction):
         assert self.view is not None
         value = self.values[0]
@@ -98,6 +106,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
         except disnake.HTTPException:
             pass
         value = value.lower()
+        data: utils.Intro = await utils.Intro.find_one({'_id': inter.author.id})
 
         if value == 'age':
             try:
@@ -106,9 +115,10 @@ class IntroField(disnake.ui.Select['IntroFields']):
                 return await inter.send(f'{self.view.ctx.denial} Must be a number.', ephemeral=True)
             else:
                 if new_data < 14 or new_data > 19:
+                    await self.delete_intro_message(data)
                     try:
                         await inter.author.send(
-                            f'{self.viewctx.denial} Sorry! This dating server is only for people between the ages of 14-19.'
+                            f'{self.view.ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.'
                         )
                     except disnake.Forbidden:
                         pass
@@ -156,7 +166,6 @@ class IntroField(disnake.ui.Select['IntroFields']):
 
         if value == 'relationship status':
             value = 'status'
-        data: utils.Intro = await utils.Intro.find_one({'_id': inter.author.id})
         data[value] = new_data
 
         em = disnake.Embed(colour=inter.author.color)
@@ -175,13 +184,9 @@ class IntroField(disnake.ui.Select['IntroFields']):
         em.add_field(name='Likes', value=data.likes)
         em.add_field(name='Dislikes', value=data.dislikes)
 
-        channel = self.view.ctx.ukiyo.get_channel(913331578606854184)
-        try:
-            _msg = await channel.fetch_message(data.message_id)
-            await _msg.delete()
-        except disnake.HTTPException:
-            pass
+        await self.delete_intro_message(data)
 
+        channel = self.view.ctx.ukiyo.get_channel(913331578606854184)
         m = await channel.send(embed=em)
 
         data.message_id = m.id
