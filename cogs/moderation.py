@@ -343,7 +343,7 @@ class Moderation(commands.Cog):
                 view = utils.ConfirmView(ctx)
                 view.message = await ctx.reply(
                     'That user is already blocked. Do you wish to renew their '
-                    f'block to **{human_timedelta(data.dt, suffix=False)}** and '
+                    f'block to `{human_timedelta(data.dt, suffix=False)}` and '
                     f'with the new reason being **{utils.remove_markdown(data.arg)}**?',
                     view=view
                 )
@@ -374,7 +374,7 @@ class Moderation(commands.Cog):
                 view = utils.ConfirmView(ctx)
                 view.message = await ctx.reply(
                     'That user is already muted. Do you wish to renew their '
-                    f'mute to **{human_timedelta(data.dt, suffix=False)}** and '
+                    f'mute to `{human_timedelta(data.dt, suffix=False)}` and '
                     f'with the new reason being **{utils.remove_markdown(data.arg)}**?',
                     view=view
                 )
@@ -514,7 +514,7 @@ class Moderation(commands.Cog):
             fields=[
                 ('Member', f'{member} (`{member.id}`)'),
                 (f'{"Mute" if action == "unmute" else "Block"} Duration', f'`{data.duration}`'),
-                ('Left', f'`{human_timedelta(data.muted_until, suffix=False, accuracy=6)}`'),
+                ('Remaining', f'`{human_timedelta(data.muted_until, suffix=False, accuracy=6)}`'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
@@ -870,7 +870,7 @@ class Moderation(commands.Cog):
         for mem_id in data.participants:
             mem = ctx.ukiyo.get_member(mem_id)
             if mem is None:
-                mem = f'[LEFT] (`{mem_id}`)'
+                mem = f'**[LEFT]** (`{mem_id}`)'
             entries.append(mem)
 
         paginator = utils.SimplePages(ctx, entries=entries, compact=True)

@@ -107,7 +107,7 @@ class GiveAwayCreationView(View):
 
     def prepare_embed(self):
         if self.expire_date is not None:
-            duration = utils.human_timedelta(self.expire_date, suffix=False)
+            duration = utils.human_timedelta(self.expire_date, suffix=False, accuracy=4)
         else:
             duration = str(self.expire_date)
         em = disnake.Embed(title='Giveaway Creation', color=utils.blurple)

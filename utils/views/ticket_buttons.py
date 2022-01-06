@@ -27,17 +27,17 @@ class TicketView(View):
         if inter.author.id == ticket.owner_id:
             em.description = f'You closed ticket `#{ticket.ticket_id}` ' \
                              f'that you created on {utils.format_dt(ticket.created_at, "F")} ' \
-                             f'(`{utils.human_timedelta(ticket.created_at)}`)'
+                             f'(`{utils.human_timedelta(ticket.created_at, accuracy=6)}`)'
         else:
             em.description = f'You closed **{ticket_owner.name}**\'s ticket ' \
                              f'that was created on {utils.format_dt(ticket.created_at, "F")} ' \
-                             f'(`{utils.human_timedelta(ticket.created_at)}`)'
+                             f'(`{utils.human_timedelta(ticket.created_at, accuracy=6)}`)'
             em_2 = disnake.Embed(
                 colour=utils.blurple,
                 title='Ticket Closed',
                 description=f'Your ticket (`#{ticket.ticket_id}`) '
                             f'that you created on {utils.format_dt(ticket.created_at, "F")} '
-                            f'(`{utils.human_timedelta(ticket.created_at)}`)'
+                            f'(`{utils.human_timedelta(ticket.created_at, accuracy=6)}`)'
                             f'was closed by **{inter.author}**'
             )
             try:

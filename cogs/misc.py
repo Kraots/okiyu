@@ -340,7 +340,7 @@ class Misc(commands.Cog):
             title='Creation Date',
             description=f'{user.mention} created their account '
                         f'on {utils.format_dt(user.created_at, "F")} '
-                        f'(`{utils.human_timedelta(user.created_at)}`)'
+                        f'(`{utils.human_timedelta(user.created_at, accuracy=6)}`)'
         )
         await ctx.better_reply(embed=em)
 
@@ -362,13 +362,13 @@ class Misc(commands.Cog):
         em.add_field(
             name='Created At',
             value=f'{utils.format_dt(created_date, "F")} '
-                  f'(`{utils.human_timedelta(created_date)}`)',
+                  f'(`{utils.human_timedelta(created_date, accuracy=6)}`)',
             inline=False
         )
         em.add_field(
             name='Publiced At',
             value=f'{utils.format_dt(publiced_date, "F")} '
-                  f'(`{utils.human_timedelta(publiced_date)}`)',
+                  f'(`{utils.human_timedelta(publiced_date, accuracy=6)}`)',
             inline=False
         )
         em.set_footer(text=f'There are currently {len(members)} members in the server')
@@ -392,7 +392,7 @@ class Misc(commands.Cog):
             title='Join Date',
             description=f'{member.mention} joined the server '
                         f'on {utils.format_dt(member.joined_at, "F")} '
-                        f'(`{utils.human_timedelta(member.joined_at)}`)'
+                        f'(`{utils.human_timedelta(member.joined_at, accuracy=6)}`)'
         )
         await ctx.better_reply(embed=em)
 
@@ -429,7 +429,7 @@ class Misc(commands.Cog):
                         f'**Reason:** {mute.reason}\n' \
                         f'**Mute Duration:** `{mute.duration}`\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
-                        f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`\n\n'
+                        f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
             if len(entries) == 0:
                 return await ctx.reply(f'{ctx.denial} There are no current mutes.')
@@ -483,7 +483,7 @@ class Misc(commands.Cog):
                         f'**Reason:** {mute.reason}\n' \
                         f'**Block Duration:** `{mute.duration}`\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
-                        f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False)}`\n\n'
+                        f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`\n\n'
                 entries.append((f'`{index}`. {key}', value))
             if len(entries) == 0:
                 return await ctx.reply(f'{ctx.denial} There are no current blocks.')
@@ -758,7 +758,7 @@ class Misc(commands.Cog):
                 await message.reply(
                     'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
                     f'since {utils.format_dt(data.date, "F")} '
-                    f'(`{utils.human_timedelta(dt=data.date)}`)'
+                    f'(`{utils.human_timedelta(dt=data.date, accuracy=6)}`)'
                 )
                 if data.default is None:
                     await data.delete()
@@ -776,7 +776,7 @@ class Misc(commands.Cog):
                 await message.reply(
                     f'**{user}** is ``AFK`` **->** **"{data.reason}"** '
                     f'*since {utils.format_dt(data.date, "F")} '
-                    f'(`{utils.human_timedelta(dt=data.date)}`)*')
+                    f'(`{utils.human_timedelta(dt=data.date, accuracy=6)}`)*')
 
     @utils.run_in_executor
     def search_wiki(self, query):
