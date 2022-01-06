@@ -13,6 +13,7 @@ class Intro(Document, GetDoc):
 
     name = StrField(required=True)
     age = IntField(required=True)
+    pronouns = StrField(required=True)
     gender = StrField(required=True)
     location = StrField(required=True)
     dms = StrField(required=True)

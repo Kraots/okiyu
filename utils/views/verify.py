@@ -110,6 +110,26 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                     break
 
         await _age.reply(
+            'What are your pronouns? '
+            '(e.g: he/him, she/her, they/them, he/they, she/they, etc...)\n'
+            '***Please be specific!***'
+        )
+        _pronouns = await bot.wait_for('message', timeout=180.0, check=check)
+        pronouns = _pronouns.content
+        if len(pronouns) > 100:
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
+            return await _pronouns.reply(f'{ctx.denial} Pronouns too long. Type `!intro` to redo.')
+        elif len(pronouns) == 0:
+            try:
+                bot.verifying.pop(bot.verifying.index(user_id))
+            except (IndexError, ValueError):
+                pass
+            return await _pronouns.reply(f'{ctx.denial} You did not say what your pronouns are! Type `!intro` to redo.')
+
+        await _pronouns.reply(
             'What\'s your gender? '
             '(e.g: male, female, non-binary, trans-male, trans-female, etc...)\n'
             '***Please be specific!***'
@@ -247,6 +267,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
         em.set_thumbnail(url=usr.display_avatar)
         em.add_field(name='Name', value=name)
         em.add_field(name='Age', value=age)
+        em.add_field(name='Pronouns', value=pronouns)
         em.add_field(name='Gender', value=gender)
         em.add_field(name='Location', value=location, inline=False)
         em.add_field(name='DMs', value=dms)
@@ -264,6 +285,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 id=user_id,
                 name=name,
                 age=age,
+                pronouns=pronouns,
                 gender=gender,
                 location=location,
                 dms=dms,
@@ -281,6 +303,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
 
             data.name = name
             data.age = age
+            data.pronouns = pronouns
             data.gender = gender
             data.location = location
             data.dms = dms

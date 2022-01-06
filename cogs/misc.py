@@ -71,6 +71,7 @@ class ViewIntro(disnake.ui.View):
         em.set_thumbnail(url=member.display_avatar)
         em.add_field(name='Name', value=data.name)
         em.add_field(name='Age', value=data.age)
+        em.add_field(name='Pronouns', value=data.pronouns)
         em.add_field(name='Gender', value=data.gender)
         em.add_field(name='Location', value=data.location, inline=False)
         em.add_field(name='DMs', value=data.dms)
