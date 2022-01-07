@@ -16,13 +16,13 @@ class AutoMod(commands.Cog):
 
         # (messages, seconds, user/member/channel)
         self.messages_cooldown = utils.CooldownByContent.from_cooldown(
-            13, 60.0, commands.BucketType.user)  # Checks for same content (13msg per 1m)
+            9, 25.0, commands.BucketType.user)  # Checks for same content (9msg per 25s)
         self.user_cooldown = commands.CooldownMapping.from_cooldown(
             10, 13.0, commands.BucketType.user)  # Checks for member spam (10msg per 13s)
         self.words_cooldown = commands.CooldownMapping.from_cooldown(
-            3, 18000.0, commands.BucketType.user)  # Checks for bad words (3msg per 5h)
+            3, 1800.0, commands.BucketType.user)  # Checks for bad words (3msg per 30m)
         self.invite_cooldown = commands.CooldownMapping.from_cooldown(
-            2, 18000.0, commands.BucketType.user)  # Checks for invites (2msg per 5h)
+            2, 900.0, commands.BucketType.user)  # Checks for invites (2msg per 15m)
 
     def get_mute_time(self, user_id) -> str:
         try:
