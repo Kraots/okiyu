@@ -1,7 +1,9 @@
 import re
 
 __all__ = (
-    'invite_regex',
+    'INVITE_REGEX',
+    'LANGUAGE_REGEX',
 )
 
-invite_regex = re.compile(r"(?:https?://)?discord(?:(?:app)?\.com/invite|\.gg)/?[a-zA-Z0-9]+/?")
+INVITE_REGEX = re.compile(r"(?:https?://)?discord(?:(?:app)?\.com/invite|\.gg)/?[a-zA-Z0-9]+/?")
+LANGUAGE_REGEX = re.compile(r"(\w*)\s*(?:```)(\w*)?([\s\S]*)(?:```$)")

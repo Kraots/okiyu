@@ -145,7 +145,7 @@ class AutoMod(commands.Cog):
     async def anti_invites(self, message: disnake.Message):
         current = message.created_at.timestamp()
 
-        matches = re.findall(utils.invite_regex, message.content.lower())
+        matches = re.findall(utils.INVITE_REGEX, message.content.lower())
         if matches:
             guild = self.bot.get_guild(913310006814859334)
             if len(matches) == 1:
