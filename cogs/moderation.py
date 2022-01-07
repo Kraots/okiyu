@@ -910,8 +910,10 @@ class Moderation(commands.Cog):
         if data is None or not data.bad_words:
             return await ctx.reply(f'{ctx.denial} There are no currently added bad words.')
 
+        sorted_ = [w for w in sorted(data.bad_words.keys())]
         entries = []
-        for word, added_by_id in data.bad_words.items():
+        for word in sorted_:
+            added_by_id = data.bad_words[word]
             added_by = ctx.ukiyo.get_member(added_by_id)
             added_by = f'**{added_by.display_name}#{added_by.tag}**' or '**[LEFT]**'
             added_by = added_by + f' (`{added_by_id}`)'
@@ -937,7 +939,7 @@ class Moderation(commands.Cog):
         if data is None:
             data = BadWords()
 
-        if word in [w for w in sorted(data.bad_words.keys())]:
+        if word in [w for w in data.bad_words.keys()]:
             return await ctx.reply(f'{ctx.denial} That bad word is already added in the list.')
 
         self.bot.bad_words[word] = ctx.author.id
