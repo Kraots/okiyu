@@ -12,6 +12,14 @@ from main import Ukiyo
 class OnMessage(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.github_client = utils.GithubClient(bot)
+
+    async def check_tokens(self, message: disnake.Message):
+        tokens = [token for token in utils.TOKEN_REGEX.findall(message.content) if utils.validate_token(token)]
+        if tokens and message.author.id != self.bot.user.id:
+            url = await self.github_client.create_gist('\n'.join(tokens), description='Discord tokens detected')
+            msg = f'{message.author.mention}, I have found tokens and sent them to <{url}> to be invalidated for you.'
+            return await message.channel.send(msg)
 
     @commands.Cog.listener('on_message_delete')
     async def on_message_delete(self, message: disnake.Message):
@@ -54,6 +62,8 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message_edit')
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
+        await self.check_tokens(after)
+
         if before.author.bot or not after.guild:
             return
         if before.author.id == self.bot._owner_id:
@@ -89,6 +99,8 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message')
     async def on_message(self, message: disnake.Message):
+        await self.check_tokens(message)
+
         if message.author.bot:
             return
         if message.author.id != self.bot._owner_id:
