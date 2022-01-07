@@ -32,11 +32,14 @@ class QuitButton(disnake.ui.View):
         await self.bot.inter_reraise(inter, item, error)
 
     async def on_timeout(self):
-        if self.delete_after is False:
-            return await self.message.edit(view=None)
+        try:
+            if self.delete_after is False:
+                return await self.message.edit(view=None)
 
-        await self.message.delete()
-        await self.ctx.message.delete()
+            await self.message.delete()
+            await self.ctx.message.delete()
+        except disnake.HTTPException:
+            pass
 
     @disnake.ui.button(label='Quit', style=disnake.ButtonStyle.red)
     async def quit(self, button: disnake.ui.Button, inter: disnake.Interaction):
