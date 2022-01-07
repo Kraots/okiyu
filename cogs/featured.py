@@ -1,4 +1,3 @@
-import random
 from datetime import datetime
 
 import disnake
@@ -20,7 +19,6 @@ class Featured(commands.Cog):
 
     def __init__(self, bot: Ukiyo):
         self.bot = bot
-        self.github_client = utils.GithubClient(bot)
 
     @property
     def display_emoji(self) -> str:
@@ -146,89 +144,6 @@ class Featured(commands.Cog):
         source.embed.title = f'Here\'s the top `{count}` newly joined members'
         paginator = utils.RoboPages(source, ctx=ctx, compact=True)
         await paginator.start()
-
-    @commands.command(name='run', aliases=('code',))
-    @commands.cooldown(1, 2.0, commands.BucketType.guild)
-    async def run_code(self, ctx: Context, *, code: str):
-        r"""Runs the code and returns the result, must be in a codeblock with the markdown of the desired language.
-
-        `code` **->** The code to run.
-
-        **Example:**
-        \u2800\`\`\`language
-        \u2800code
-        \u2800\`\`\`
-        """
-
-        if await ctx.check_channel() is False:
-            return
-
-        matches = utils.LANGUAGE_REGEX.findall(code)
-        if not matches:
-            rand = (
-                'Your code is not wrapped inside a codeblock.',
-                'You forgot your codeblock.',
-                'Missing the codeblock.',
-            )
-            return await ctx.reply(random.choice(rand))
-
-        lang = matches[0][0] or matches[0][1]
-        if not lang:
-            rand = (
-                'You did not specify the language markdown in your codeblock.',
-                'Missing the language markdown in your codeblock.',
-                'Your codeblock is missing the language markdown.',
-            )
-            return await ctx.reply(random.choice(rand))
-
-        code = matches[0][2]
-        await ctx.trigger_typing()
-        _res = await self.bot.session.post(
-            'https://emkc.org/api/v1/piston/execute',
-            json={'language': lang, 'source': code}
-        )
-        res = await _res.json()
-        if 'message' in res:
-            em = disnake.Embed(
-                title='An error occured while running the code',
-                description=res['message']
-            )
-            return await ctx.reply(embed=em)
-
-        output = res['output']
-        if len(output) > 500:
-            content = utils.GistContent(f'```{res["language"]}\n' + output + '\n```')
-            url = await self.github_client.create_gist(
-                content.source,
-                description=f'(`{ctx.author.id}` {ctx.author}) code result',
-                filename='code_output.txt',
-                public=False
-            )
-            msg = await ctx.reply(f'Your output was too long so I sent it to <{url}>')
-            data = self.bot.execs.get(ctx.author.id)
-            if data is None:
-                self.bot.execs[ctx.author.id] = {ctx.command.name: msg}
-            else:
-                self.bot.execs[ctx.author.id][ctx.command.name] = msg
-            return
-
-        em = disnake.Embed(
-            title=f'Ran your {res["language"]} code',
-            color=utils.blurple
-        )
-        output = output[:500].strip()
-        lines = output.splitlines()
-        shortened = (len(lines) > 15)
-        output = "\n".join(lines[:15])
-        output += shortened * '\n\n**Output shortened**'
-        em.add_field(name='Output', value=output or '**<No output>**')
-
-        msg = await ctx.reply(embed=em)
-        data = self.bot.execs.get(ctx.author.id)
-        if data is None:
-            self.bot.execs[ctx.author.id] = {ctx.command.name: msg}
-        else:
-            self.bot.execs[ctx.author.id][ctx.command.name] = msg
 
 
 def setup(bot: Ukiyo):
