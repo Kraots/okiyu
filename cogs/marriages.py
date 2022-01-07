@@ -268,7 +268,7 @@ class Marriages(commands.Cog):
             )
 
         if partner is True:
-            data2 = await self.get_user(data1.married_to)
+            data2: Marriage = await Marriage.get(data1.married_to)
             data2.adoptions.append(member.id)
             await data2.commit()
 
@@ -298,7 +298,7 @@ class Marriages(commands.Cog):
             return await ctx.reply(f'You\'ve never adopted {member.mention}.')
         elif data.married_to != 0:
             mem = ctx.ukiyo.get_member(data.married_to)
-            data2 = await self.get_user(data.married_to)
+            data2: Marriage = await Marriage.get(data.married_to)
             view = utils.ConfirmView(ctx, react_user=mem)
             view.message = await ctx.send(
                 f'{mem.mention} your partner wants to adopt {member.mention}. Do you agree?',
