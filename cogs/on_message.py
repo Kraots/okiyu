@@ -107,7 +107,9 @@ class OnMessage(commands.Cog):
         if cmd is None:
             return
 
-        if after.content.lower()[1:].startswith(('e', 'eval', 'jsk', 'jishaku')):
+        if after.content.lower()[1:].startswith(('e', 'eval', 'jsk', 'jishaku')) and \
+            after.author.id == self.bot._owner_id or \
+                after.content.lower()[1:].startswith(('run', 'code')):
             await after.add_reaction('🔁')
             try:
                 await self.bot.wait_for(
