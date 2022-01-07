@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import re
-import string as st
+import base64
 import asyncio
+import binascii
 import functools
+import string as st
 from pathlib import Path
 from typing import Callable
 from datetime import datetime
@@ -27,6 +29,7 @@ __all__ = (
     'remove_markdown',
     'FIRST_JANUARY_1970',
     'CooldownByContent',
+    'validate_token',
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
@@ -268,3 +271,14 @@ def remove_markdown(text: str) -> str:
 class CooldownByContent(commands.CooldownMapping):
     def _bucket_key(ctx, message):
         return (message.channel.id, message.content.lower())
+
+
+def validate_token(token):
+    try:
+        # Just check if the first part validates as a user ID
+        (user_id, _, _) = token.split('.')
+        user_id = int(base64.b64decode(user_id, validate=True))
+    except (ValueError, binascii.Error):
+        return False
+    else:
+        return True
