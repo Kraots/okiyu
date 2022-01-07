@@ -1017,7 +1017,7 @@ class Misc(commands.Cog):
             return
 
         em = disnake.Embed(
-            title=f'Ran your {res["language"]} code',
+            title=f'Ran your `{res["language"]}` code',
             color=utils.blurple
         )
         output = output[:500].strip()
