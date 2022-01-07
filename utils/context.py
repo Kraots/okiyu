@@ -90,12 +90,12 @@ class Context(commands.Context):
 
     async def reraise(self, error):
         if isinstance(error, commands.NotOwner):
-            await self.send(f'{self.denial} You do not own this bot, this is an owner only command.', delete_after=8)
+            await self.reply(f'{self.denial} You do not own this bot, this is an owner only command.', delete_after=8)
             await asyncio.sleep(7.5)
             await self.message.delete()
 
         elif isinstance(error, commands.CommandOnCooldown):
-            return await self.send(
+            return await self.reply(
                 f'{self.denial} You are on cooldown, **`{utils.time_phaser(error.retry_after)}`** remaining.'
             )
 
