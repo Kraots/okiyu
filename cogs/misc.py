@@ -959,9 +959,9 @@ class Misc(commands.Cog):
         `code` **->** The code to run.
 
         **Example:**
-        \u2800\`\`\`language
-        \u2800code
-        \u2800\`\`\`
+        \`\`\`language
+        code
+        \`\`\`
         """
 
         if await ctx.check_channel() is False:
