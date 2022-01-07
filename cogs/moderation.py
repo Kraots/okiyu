@@ -937,7 +937,7 @@ class Moderation(commands.Cog):
         if data is None:
             data = BadWords()
 
-        if word in [w for w in data.bad_words.keys()]:
+        if word in [w for w in sorted(data.bad_words.keys())]:
             return await ctx.reply(f'{ctx.denial} That bad word is already added in the list.')
 
         self.bot.bad_words[word] = ctx.author.id
