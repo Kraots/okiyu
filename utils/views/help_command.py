@@ -173,6 +173,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
         super().__init__(
             command_attrs={
                 'help': 'Shows help about the bot, a command, or a category',
+                'aliases': ('commands', 'cmds')
             }
         )
 
