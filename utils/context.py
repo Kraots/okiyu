@@ -95,8 +95,12 @@ class Context(commands.Context):
             await self.message.delete()
 
         elif isinstance(error, commands.CommandOnCooldown):
+            if error.retry_after > 60.0:
+                time = utils.time_phaser(error.retry_after)
+            else:
+                time = f'{error.retry_after:.2f}s'
             return await self.reply(
-                f'{self.denial} You are on cooldown, **`{utils.time_phaser(error.retry_after)}`** remaining.'
+                f'{self.denial} You are on cooldown, **`{time}`** remaining.'
             )
 
         elif isinstance(error, commands.DisabledCommand):
