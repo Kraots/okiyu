@@ -332,8 +332,7 @@ async def try_delete(
 
         message_id: Optional[:class:`int` | :class:`list[int]` | :class:`tuple[int]` | :class:`set[int]`]
             The message id for the message object to fetch, can also be a list of message ids.
-            If this is given, `channel` becomes required.
-            This gets ignored if `message` is not ``None``.
+            If this is given, `channel` becomes required. This gets ignored if `message` is not ``None``.
 
         delay: Optional[:class:`float` | :class:`int`]
             The time to wait in the background before deleting the message.
