@@ -307,10 +307,10 @@ def validate_token(token):
 
 
 async def try_delete(
-    messages: disnake.Message | list[disnake.Message] | tuple[disnake.Message] | set[disnake.Message] = None,
+    message: disnake.Message | list[disnake.Message] | tuple[disnake.Message] | set[disnake.Message] = None,
     *,
     channel: disnake.TextChannel | disnake.Thread = None,
-    message_id: int = None
+    message_id: int | list[int] = None
 ):
     """|coro|
 
@@ -319,17 +319,19 @@ async def try_delete(
 
     Parameters
     ----------
-        messages: Optional[:class:`disnake.Message` | :class:`list[disnake.Message]` |
+        message: Optional[:class:`disnake.Message` | :class:`list[disnake.Message]` |
         :class:`tuple[disnake.Message]` | :class:`set[disnake.Message]`]
-            The message to try and delete. If `channel` and `message_id` is not given, this is required.
+            The message to try and delete, can also be a list of message objects.
+            If `channel` and `message_id` is not given, this is required.
 
         channel: Optional[:class:`disnake.TextChannel`, :class:`disnake.Thread`]
             The channel from which to fetch the message object. If this is given, `message_id` becomes required.
-            This gets ignored if `messages` is not ``None``.
+            This gets ignored if `message` is not ``None``.
 
-        message_id: Optional[:class:`int`]
-            The message id for the message object to fetch. If this is given, `channel` becomes required.
-            This gets ignored if `messages` is not ``None``.
+        message_id: Optional[:class:`int` | :class:`list[int]`]
+            The message id for the message object to fetch, can also be a list of message ids.
+            If this is given, `channel` becomes required.
+            This gets ignored if `message` is not ``None``.
 
     Raises
     ------
@@ -342,23 +344,23 @@ async def try_delete(
         ``None``
     """
 
-    if messages is None and channel is None and message_id is None:
+    if message is None and channel is None and message_id is None:
         raise utils.MissingArgument(
             'You must give at least one argument or key-word argument for this function.'
         )
 
-    if messages is not None:
-        if isinstance(messages, disnake.Message):
+    if message is not None:
+        if isinstance(message, disnake.Message):
             try:
-                await messages.delete()
+                await message.delete()
             except disnake.HTTPException:
                 return
 
-        elif isinstance(messages, (list, tuple, set)):
-            for i, message in enumerate(messages):
+        elif isinstance(message, (list, tuple, set)):
+            for i, message in enumerate(message):
                 if not isinstance(message, disnake.Message):
                     raise TypeError(
-                        f"Expected value at index '{i}' to be of type 'disnake.Message', "
+                        f"Expected value at index '{i}' in 'message' to be of type 'disnake.Message', "
                         f"not {message.__class__}"
                     )
 
@@ -369,8 +371,8 @@ async def try_delete(
 
         else:
             raise TypeError(
-                "Argument 'messages' must be of type 'disnake.Message', 'list[disnake.Message]', "
-                f"'tuple[disnake.Message]' or 'set[disnake.Message]', not {messages.__class__}"
+                "Argument 'message' must be of type 'disnake.Message', 'list[disnake.Message]', "
+                f"'tuple[disnake.Message]' or 'set[disnake.Message]', not {message.__class__}"
             )
         return
 
@@ -390,14 +392,29 @@ async def try_delete(
                 "Argument 'channel_id' must be of type 'disnake.TextChannel' or 'disnake.Thread', "
                 f"not {channel.__class__}"
             )
-        elif not isinstance(message_id, int):
-            raise TypeError(
-                f"Argument 'message_id' must be of type 'int', not {message_id.__class__}"
-            )
 
-        else:
+        if isinstance(message_id, int):
             try:
                 message = await channel.fetch_message(message_id)
                 await message.delete()
             except disnake.HTTPException:
                 return
+
+        elif isinstance(message_id, list):
+            for i, mid in enumerate(message_id):
+                if not isinstance(mid, int):
+                    raise TypeError(
+                        f"Expected value at index '{i}' in 'message_id' to be of type 'int', "
+                        f"not {message.__class__}"
+                    )
+                try:
+                    message = await channel.fetch_message(mid)
+                    await message.delete()
+                except disnake.HTTPException:
+                    pass
+            return
+
+        else:
+            raise TypeError(
+                f"Argument 'message_id' must be of type 'int' or 'list[int]', not {message_id.__class__}"
+            )
