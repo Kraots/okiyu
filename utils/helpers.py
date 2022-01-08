@@ -42,7 +42,6 @@ EDGE_CASES = {
     '$': 's',
     '!': 'i',
     '9': 'g',
-    '()': 'o',
 }
 EDGE_TABLE = str.maketrans(EDGE_CASES)
 PUNCTUATIONS_AND_DIGITS = tuple(list(st.punctuation) + list(st.digits))
@@ -99,6 +98,7 @@ def check_profanity(string: str, *, bad_words: list = None) -> bool:
 
     if res is False:
         string = string.translate(EDGE_TABLE)  # Replace each edge character to its corresponding letter.
+        string = string.replace('()', 'o')  # Replace this manually because ``str.maketrans`` keys must be of lenght 1.
         res = any(w for w in bad_words if w in string)
 
         if res is False:
