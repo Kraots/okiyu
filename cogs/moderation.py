@@ -252,6 +252,12 @@ class Moderation(commands.Cog):
             view=self.jump_view(ctx.message.jump_url)
         )
 
+    @_ban.error
+    async def _ban_error(self, ctx: Context, error):
+        if isinstance(error, commands.BadUnionArgument):
+            return await ctx.reply(f'{ctx.denial} Could not find user.')
+        await ctx.reraise(error)
+
     @commands.command(name='unban')
     @is_admin()
     async def _unban(self, ctx: Context, *, user: disnake.User):
