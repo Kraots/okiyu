@@ -355,7 +355,12 @@ async def try_delete(
                 return
 
         elif isinstance(messages, (list, tuple, set)):
-            for message in messages:
+            for i, message in enumerate(messages):
+                if not isinstance(message, disnake.Message):
+                    raise TypeError(
+                        f"Expected value at index '{i}' to be of type 'disnake.Message', "
+                        f"not {message.__class__}"
+                    )
                 try:
                     await message.delete()
                 except disnake.HTTPException:
