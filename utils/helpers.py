@@ -30,6 +30,7 @@ __all__ = (
     'FIRST_JANUARY_1970',
     'CooldownByContent',
     'validate_token',
+    'try_delete',
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
@@ -303,3 +304,94 @@ def validate_token(token):
         return False
     else:
         return True
+
+
+async def try_delete(
+    messages: disnake.Message | list[disnake.Message] | tuple[disnake.Message] | set[disnake.Message] = None,
+    *,
+    channel: disnake.TextChannel | disnake.Thread = None,
+    message_id: int = None
+):
+    """|coro|
+
+    A helper function that tries to delete a :class:`disnake.Message` object
+    while silencing the errors that it may raise.
+
+    Parameters
+    ----------
+        messages: Optional[:class:`disnake.Message` | :class:`list[disnake.Message]` |
+        :class:`tuple[disnake.Message]` | :class:`set[disnake.Message]`]
+            The message to try and delete. If `channel` and `message_id` is not given, this is required.
+
+        channel: Optional[:class:`disnake.TextChannel`, :class:`disnake.Thread`]
+            The channel from which to fetch the message object. If this is given, `message_id` becomes required.
+            This gets ignored if `messages` is not ``None``.
+
+        message_id: Optional[:class:`int`]
+            The message id for the message object to fetch. If this is given, `channel` becomes required.
+            This gets ignored if `messages` is not ``None``.
+
+    Raises
+    ------
+        :class:`MissingArgument` if no arguments or key-word arguments have been given.
+
+        :class:`TypeError` if the type of an argument or key-word argument isn't any of the required ones.
+
+    Returns
+    -------
+        ``None``
+    """
+
+    if messages is None and channel is None and message_id is None:
+        raise utils.MissingArgument(
+            'You must give at least one argument or key-word argument for this function.'
+        )
+
+    if messages:
+        if isinstance(messages, disnake.Message):
+            try:
+                await messages.delete()
+            except disnake.HTTPException:
+                return
+
+        elif isinstance(messages, (list, tuple, set)):
+            for message in messages:
+                try:
+                    await message.delete()
+                except disnake.HTTPException:
+                    pass
+
+        else:
+            raise TypeError(
+                "Argument 'messages' must be of type 'disnake.Message', 'list[disnake.Message]', "
+                f"'tuple[disnake.Message]' or 'set[disnake.Message]', not {messages.__class__}"
+            )
+        return
+
+    if channel is not None and message_id is None:
+        raise utils.MissingArgument(
+            "If 'channel' is given, 'message_id' is required!"
+        )
+
+    elif message_id is not None and channel is None:
+        raise utils.MissingArgument(
+            "If 'message_id' is given, 'channel' is required!"
+        )
+
+    else:
+        if not isinstance(channel, (disnake.TextChannel, disnake.Thread)):
+            raise TypeError(
+                "Argument 'channel_id' must be of type 'disnake.TextChannel' or 'disnake.Thread', "
+                f"not {channel.__class__}"
+            )
+        elif not isinstance(message_id, int):
+            raise TypeError(
+                f"Argument 'message_id' must be of type 'int', not {message_id.__class__}"
+            )
+
+        else:
+            try:
+                message = await channel.fetch_message(message_id)
+                await message.delete()
+            except disnake.HTTPException:
+                return
