@@ -255,7 +255,7 @@ class Moderation(commands.Cog):
     @_ban.error
     async def _ban_error(self, ctx: Context, error):
         if isinstance(error, commands.BadUnionArgument):
-            return await ctx.reply(f'{ctx.denial} Could not find user.')
+            return await ctx.reply(f'{ctx.denial} Could not find member.')
         await ctx.reraise(error)
 
     @commands.command(name='unban')
