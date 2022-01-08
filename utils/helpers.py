@@ -31,6 +31,7 @@ __all__ = (
     'CooldownByContent',
     'validate_token',
     'try_delete',
+    'try_dm',
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
