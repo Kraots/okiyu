@@ -135,7 +135,7 @@ class AutoMod(commands.Cog):
         current = message.created_at.timestamp()
 
         if utils.check_profanity(message.content, bad_words=self.bot.bad_words.keys()):
-            await message.delete()
+            await utils.try_delete(message)
 
             words_bucket = self.words_cooldown.get_bucket(message)
             if words_bucket.update_rate_limit(current):
@@ -154,7 +154,7 @@ class AutoMod(commands.Cog):
                 if any(invite for invite in await guild.invites() if invite.code.lower() == inv):
                     return
 
-            await message.delete()
+            await utils.try_delete(message)
             invite_logs = guild.get_channel(913332511789178951)
             em = disnake.Embed(
                 title='New Invite Found!!',

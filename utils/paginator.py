@@ -5,7 +5,7 @@ import disnake
 from disnake import MessageInteraction
 from disnake.ext import menus
 
-from utils import Context
+from utils import Context, try_delete
 
 __all__ = (
     'RoboPages',
@@ -217,7 +217,7 @@ class RoboPages(disnake.ui.View):
                 await asyncio.sleep(5)
             else:
                 page = int(msg.content)
-                await msg.delete()
+                await try_delete(msg)
                 await self.show_checked_page(interaction, page - 1)
 
     @disnake.ui.button(label='Quit', style=disnake.ButtonStyle.red)
@@ -227,7 +227,7 @@ class RoboPages(disnake.ui.View):
         await interaction.response.defer()
         await interaction.delete_original_message()
         if self.quit_delete:
-            await self.ctx.message.delete()
+            await try_delete(self.ctx.message)
         self.stop()
 
 

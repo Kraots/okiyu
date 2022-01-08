@@ -298,9 +298,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
                 message_id=msg.id
             ).commit()
         else:
-            old_msg = await intro_channel.fetch_message(data.message_id)
-            if old_msg:
-                await old_msg.delete()
+            await utils.try_delete(channel=intro_channel, message_id=data.message_id)
 
             data.name = name
             data.age = age

@@ -158,7 +158,7 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        await ctx.message.delete()
+        await utils.try_delete(ctx.message)
         ad = disnake.Embed(color=utils.blurple, title='Here\'s the ad to the server:', description=SERVER_AD)
         ad.set_footer(text=f'Requested by: {ctx.author}')
 
@@ -573,7 +573,7 @@ class Misc(commands.Cog):
         msg = await ctx.reply(embed=em)
         data: utils.Intro = await utils.Intro.get(ctx.author.id)
         if data is None:
-            await msg.delete()
+            await utils.try_delete(msg)
             if ctx.author.id == self.bot._owner_id:
                 return await ctx.reply('Master, you forgot that you didn\'t make an intro? 🥺 🥺')
             else:

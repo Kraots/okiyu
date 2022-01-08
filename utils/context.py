@@ -1,4 +1,3 @@
-import asyncio
 from aiohttp import ClientSession
 from traceback import format_exception
 
@@ -65,6 +64,7 @@ class Context(commands.Context):
     async def check_channel(self) -> bool:
         if self.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
                 and self.author.id != 374622847672254466:
+            await utils.try_delete(self.message, delay=10.0)
             await self.reply(f'{self.denial} Sorry! This command can only be used in <#913330644875104306>', delete_after=10.0)
             return False
         return True
@@ -91,8 +91,8 @@ class Context(commands.Context):
     async def reraise(self, error):
         if isinstance(error, commands.NotOwner):
             await self.reply(f'{self.denial} You do not own this bot, this is an owner only command.', delete_after=8)
-            await asyncio.sleep(7.5)
-            await self.message.delete()
+            await utils.try_delete(self.message, delay=8)
+            return
 
         elif isinstance(error, commands.CommandOnCooldown):
             if error.retry_after > 60.0:
@@ -104,13 +104,11 @@ class Context(commands.Context):
             )
 
         elif isinstance(error, commands.DisabledCommand):
+            self.command.reset_cooldown(self)
             return await self.reply('This command is currently disabled!')
 
         elif isinstance(error, commands.MaxConcurrencyReached):
-            try:
-                await self.message.delete(delay=5.0)
-            except disnake.HTTPException:
-                pass
+            await utils.try_delete(self.message, delay=5.0)
             await self.reply(
                 'You are already using this command! Please wait until you complete it first.',
                 delete_after=5.0

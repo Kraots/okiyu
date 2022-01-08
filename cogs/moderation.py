@@ -1,5 +1,4 @@
 import random
-import asyncio
 from typing import Literal
 from datetime import datetime, timezone
 
@@ -63,7 +62,7 @@ class Moderation(commands.Cog):
         `amount` **->** The amount of messages to delete from the current channel.
         """
 
-        await ctx.message.delete()
+        await utils.try_delete(ctx.message)
         purged = await ctx.channel.purge(limit=amount)
         msg = await ctx.send(f'> {ctx.agree} Deleted `{len(purged):,}` messages')
         await utils.log(
@@ -77,11 +76,7 @@ class Moderation(commands.Cog):
             ],
             view=self.jump_view(ctx.message.jump_url)
         )
-        await asyncio.sleep(5.0)
-        try:
-            await msg.delete()
-        except disnake.HTTPException:
-            pass
+        await utils.try_delete(msg, delay=5.0)
 
     @commands.group(name='lock', invoke_without_command=True, case_insensitive=True)
     @is_mod()
@@ -367,7 +362,7 @@ class Moderation(commands.Cog):
                 )
                 msg = await ctx.send('Preparing to edit the block...')
                 _ctx = await self.bot.get_context(msg, cls=Context)
-                await msg.delete()
+                await utils.try_delete(msg)
             elif usr.muted is True and action == 'mute':
                 if usr.filter is False:
                     if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
@@ -398,7 +393,7 @@ class Moderation(commands.Cog):
                 )
                 msg = await ctx.send('Preparing to edit the mute...')
                 _ctx = await self.bot.get_context(msg, cls=Context)
-                await msg.delete()
+                await utils.try_delete(msg)
             else:
                 _action = 'unblock' if action == 'mute' else 'unmute'
                 await self.apply_unmute_or_unblock(
@@ -411,7 +406,7 @@ class Moderation(commands.Cog):
                     f'Preparing to edit from {"mute" if action == "block" else "block"} to {action}...'
                 )
                 _ctx = await self.bot.get_context(msg, cls=Context)
-                await msg.delete()
+                await utils.try_delete(msg)
 
         time_and_reason = await UserFriendlyTime(commands.clean_content).convert(_ctx, _time_and_reason)
         time = time_and_reason.dt

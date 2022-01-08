@@ -36,8 +36,7 @@ class QuitButton(disnake.ui.View):
             if self.delete_after is False:
                 return await self.message.edit(view=None)
 
-            await self.message.delete()
-            await self.ctx.message.delete()
+            await utils.try_delete((self.message, self.ctx.message))
         except disnake.HTTPException:
             pass
 
@@ -46,6 +45,5 @@ class QuitButton(disnake.ui.View):
         """Deletes the user's message along with the bot's message."""
 
         await inter.response.defer()
-        await self.message.delete()
-        await self.ctx.message.delete()
+        await utils.try_delete((self.message, self.ctx.message))
         self.stop()

@@ -99,11 +99,11 @@ class Marriages(commands.Cog):
             except disnake.HTTPException:
                 pass
             await ctx.send(f'`{ctx.author.display_name}` married `{member.display_name}`!!! :heart: :tada: :tada:')
-            await msg.delete()
+            await utils.try_delete(msg)
 
         elif view.response is False:
             await ctx.send(f'`{member.display_name}` does not want to marry you. {ctx.author.mention} :pensive: :fist:')
-            await msg.delete()
+            await utils.try_delete(msg)
 
     @commands.command()
     @commands.max_concurrency(1, commands.BucketType.user)

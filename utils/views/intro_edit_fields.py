@@ -38,16 +38,14 @@ class CancelButton(disnake.ui.View):
         if self.delete_after is False:
             return await self.message.edit(view=None)
 
-        await self.message.delete()
-        await self.ctx.message.delete()
+        await utils.try_delete((self.message, self.ctx.message))
 
     @disnake.ui.button(label='Cancel', style=disnake.ButtonStyle.red)
     async def quit(self, button: disnake.ui.Button, inter: disnake.Interaction):
         """Deletes the user's message along with the bot's message."""
 
         await inter.response.defer()
-        await self.message.delete()
-        await self.ctx.message.delete()
+        await utils.try_delete((self.message, self.ctx.message))
         self.stop()
 
 
@@ -71,18 +69,13 @@ class IntroField(disnake.ui.Select['IntroFields']):
 
     async def delete_intro_message(self, data: utils.Intro):
         channel = self.view.ctx.ukiyo.get_channel(913331578606854184)
-        try:
-            _msg = await channel.fetch_message(data.message_id)
-            await _msg.delete()
-        except disnake.HTTPException:
-            pass
+        await utils.try_delete(channel=channel, message_id=data.message_id)
 
     async def callback(self, inter: disnake.MessageInteraction):
         assert self.view is not None
         value = self.values[0]
         await inter.response.defer()
-        await self.view.message.delete()
-        await self.view.ctx.message.delete()
+        await utils.try_delete((self.view.message, self.view.ctx.message))
 
         await inter.send(
             f'Alright, please send the new info that you wish to update your `{value}` field to...',
@@ -101,10 +94,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
         self.view.stop()
 
         new_data = msg.content
-        try:
-            await msg.delete()
-        except disnake.HTTPException:
-            pass
+        await utils.try_delete(msg)
         value = value.lower()
         data: utils.Intro = await utils.Intro.get(inter.author.id)
 

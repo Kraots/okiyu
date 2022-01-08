@@ -10,7 +10,7 @@ import disnake
 from disnake import AppCmdInter, ButtonStyle
 from disnake.ui import View, Button, button
 
-from utils import Game, Characters
+from utils import Game, Characters, try_delete
 
 if TYPE_CHECKING:
     from main import Ukiyo
@@ -86,7 +86,7 @@ class BossFight(View):
                     ephemeral=True
                 )
         if datetime.now() < self.ends_date:
-            await msg.delete()
+            await try_delete(msg)
             if not msg.content:
                 return await inter.send(
                     'You must send a character\'s name.',

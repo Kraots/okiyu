@@ -7,6 +7,8 @@ from utils import (
     IntroFields,
     create_intro,
     is_mod,
+    try_delete,
+    try_dm
 )
 
 from main import Ukiyo
@@ -128,14 +130,11 @@ class Intros(commands.Cog):
         data = await Intro.get(member.id)
         if data is not None:
             intro_channel = ctx.ukiyo.get_channel(913331578606854184)
-            try:
-                msg = await intro_channel.fetch_message(data.message_id)
-                await msg.delete()
-            except disnake.Forbidden:
-                pass
+            await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()
         await member.edit(roles=[r for r in member.roles if r.id == 913376647422545951] + [unverified_role])
-        await member.send(
+        await try_dm(
+            member,
             'You have been unverified in `Ukiyo` by one of our staff members. '
             'Please be serious when you\'re making your intro!'
         )
@@ -147,11 +146,7 @@ class Intros(commands.Cog):
         if data:
             guild = self.bot.get_guild(913310006814859334)
             intro_channel = guild.get_channel(913331578606854184)
-            try:
-                msg = await intro_channel.fetch_message(data.message_id)
-                await msg.delete()
-            except disnake.HTTPException:
-                pass
+            await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()
 
 
