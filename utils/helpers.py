@@ -347,7 +347,7 @@ async def try_delete(
             'You must give at least one argument or key-word argument for this function.'
         )
 
-    if messages:
+    if messages is not None:
         if isinstance(messages, disnake.Message):
             try:
                 await messages.delete()
