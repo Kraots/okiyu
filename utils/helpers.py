@@ -33,8 +33,20 @@ __all__ = (
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
-allowed_letters = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
+ALLOWED_LETTERS = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
 BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
+EDGE_CASES = {
+    '@': 'a',
+    '0': 'o',
+    '1': 'i',
+    '$': 's',
+    '!': 'i',
+    '9': 'g',
+    '()': 'o',
+}
+EDGE_TABLE = str.maketrans(EDGE_CASES)
+PUNCTUATIONS_AND_DIGITS = tuple(list(st.punctuation) + list(st.digits))
+PAD_TABLE = str.maketrans({k: '' for k in PUNCTUATIONS_AND_DIGITS})
 
 
 def time_phaser(seconds):
@@ -83,8 +95,17 @@ def check_profanity(string: str, *, bad_words: list = None) -> bool:
 
     bad_words = bad_words or BAD_WORDS
     string = str(string).lower().replace(' ', '').replace('\n', '')
+    res = any(w for w in bad_words if w in string)
 
-    return any(w for w in bad_words if w in string)
+    if res is False:
+        string = string.translate(EDGE_TABLE)  # Replace each edge character to its corresponding letter.
+        res = any(w for w in bad_words if w in string)
+
+        if res is False:
+            string = string.translate(PAD_TABLE)  # Remove every punctuation and digit character.
+            res = any(w for w in bad_words if w in string)
+
+    return res
 
 
 def check_string(string: str, *, limit: str = 4) -> bool:
@@ -110,14 +131,14 @@ def check_string(string: str, *, limit: str = 4) -> bool:
     count = 0
     for letter in string:
         if count < limit:
-            if letter not in allowed_letters:
+            if letter not in ALLOWED_LETTERS:
                 count = 0
             else:
                 count += 1
         else:
             break
 
-    return True if count < limit else False
+    return count < limit
 
 
 async def check_username(member: disnake.Member):
