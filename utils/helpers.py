@@ -361,6 +361,7 @@ async def try_delete(
                         f"Expected value at index '{i}' to be of type 'disnake.Message', "
                         f"not {message.__class__}"
                     )
+
                 try:
                     await message.delete()
                 except disnake.HTTPException:
