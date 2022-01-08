@@ -1,9 +1,3 @@
-import asyncio
-import functools
-from typing import Callable
-from weakref import WeakValueDictionary
-
-import disnake
 from disnake.ext import commands
 
 from .context import Context
@@ -12,7 +6,6 @@ __all__ = (
     'is_owner',
     'is_admin',
     'is_mod',
-    'lock',
 )
 
 
@@ -66,37 +59,3 @@ def is_mod():
             return res
         return False
     return commands.check(pred)
-
-
-def lock() -> Callable | None:
-    """
-    Allows the user to only run one instance of the decorated command at a time.
-
-    Subsequent calls to the command from the same author are ignored until the command has completed invocation.
-
-    This decorator has to go before (below) the `command` decorator.
-    """
-
-    def wrap(func: Callable) -> Callable | None:
-        func.__locks = WeakValueDictionary()
-
-        @functools.wraps(func)
-        async def inner(self: Callable, ctx: Context, *args, **kwargs) -> Callable | None:
-            lock = func.__locks.setdefault(ctx.author.id, asyncio.Lock())
-            if lock.locked():
-                try:
-                    await ctx.message.delete(delay=5.0)
-                except disnake.HTTPException:
-                    pass
-                await ctx.reply(
-                    'You are already using this command! Please wait until you complete it first.',
-                    delete_after=5.0
-                )
-                return
-
-            async with func.__locks.setdefault(ctx.author.id, asyncio.Lock()):
-                return await func(self, ctx, *args, **kwargs)
-
-        return inner
-
-    return wrap
