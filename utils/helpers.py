@@ -337,7 +337,7 @@ async def try_delete(
 
         :class:`TypeError` if the type of an argument or key-word argument isn't any of the required ones.
 
-    Returns
+    Return
     -------
         ``None``
     """
