@@ -28,7 +28,8 @@ __all__ = (
     'escape_markdown',
     'remove_markdown',
     'FIRST_JANUARY_1970',
-    'CooldownByContent',
+    'CooldownByContentChannel',
+    'CooldownByContentUser',
     'validate_token',
     'try_delete',
     'try_dm',
@@ -291,9 +292,14 @@ def remove_markdown(text: str) -> str:
     return disnake.utils.remove_markdown(text)
 
 
-class CooldownByContent(commands.CooldownMapping):
+class CooldownByContentChannel(commands.CooldownMapping):
     def _bucket_key(ctx, message):
         return (message.channel.id, message.content.lower())
+
+
+class CooldownByContentUser(commands.CooldownMapping):
+    def _bucket_key(ctx, message):
+        return (message.author.id, message.content.lower())
 
 
 def validate_token(token):

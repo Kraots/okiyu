@@ -15,8 +15,10 @@ class AutoMod(commands.Cog):
         self.muted_amount_count = {}
 
         # (messages, seconds, user/member/channel)
-        self.messages_cooldown = utils.CooldownByContent.from_cooldown(
-            9, 25.0, commands.BucketType.user)  # Checks for same content (9msg per 25s)
+        self.messages_cooldown_user = utils.CooldownByContentUser.from_cooldown(
+            6, 15.0, commands.BucketType.user)  # Checks for same content from the same user (9msg per 25s)
+        self.messages_cooldown_channel = utils.CooldownByContentUser.from_cooldown(
+            17, 21.0, commands.BucketType.user)  # Checks for same content in the same channel (17msg per 21s)
         self.user_cooldown = commands.CooldownMapping.from_cooldown(
             10, 13.0, commands.BucketType.user)  # Checks for member spam (10msg per 13s)
         self.words_cooldown = commands.CooldownMapping.from_cooldown(
@@ -121,9 +123,14 @@ class AutoMod(commands.Cog):
     async def anti_raid(self, message: disnake.Message):
         current = message.created_at.timestamp()
 
-        content_bucket = self.messages_cooldown.get_bucket(message)
-        if content_bucket.update_rate_limit(current):
-            content_bucket.reset()
+        content_bucket_user = self.messages_cooldown_user.get_bucket(message)
+        if content_bucket_user.update_rate_limit(current):
+            content_bucket_user.reset()
+            return await self.apply_action(message, 'anti raid (repeated text)')
+
+        content_bucket_channel = self.messages_cooldown_channel.get_bucket(message)
+        if content_bucket_channel.update_rate_limit(current):
+            content_bucket_channel.reset()
             return await self.apply_action(message, 'anti raid (repeated text)')
 
         user_bucket = self.user_cooldown.get_bucket(message)
