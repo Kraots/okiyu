@@ -98,7 +98,7 @@ class Context(commands.Context):
             if error.retry_after > 60.0:
                 time = utils.time_phaser(error.retry_after)
             else:
-                time = f'{error.retry_after:.2f} {utils.plural(error.retry_after):second}'
+                time = f'{utils.plural(error.retry_after):second}'
             return await self.reply(
                 f'{self.denial} You are on cooldown, **`{time}`** remaining.'
             )
