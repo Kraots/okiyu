@@ -350,9 +350,7 @@ async def try_delete(
     """
 
     if message is None and channel is None and message_id is None:
-        raise utils.MissingArgument(
-            'You must give at least one argument or key-word argument for this function.'
-        )
+        return
 
     elif delay is not None and not isinstance(delay, (float, int)):
         raise TypeError(
