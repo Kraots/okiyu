@@ -294,12 +294,14 @@ def remove_markdown(text: str) -> str:
 
 class CooldownByContentChannel(commands.CooldownMapping):
     def _bucket_key(ctx, message):
-        return (message.channel.id, message.content.lower())
+        content = message.content.lower() or message.attachments[0].url if message.attachments else ''
+        return (message.channel.id, content)
 
 
 class CooldownByContentUser(commands.CooldownMapping):
     def _bucket_key(ctx, message):
-        return (message.author.id, message.content.lower())
+        content = message.content.lower() or message.attachments[0].url if message.attachments else ''
+        return (message.author.id, content)
 
 
 def validate_token(token):
