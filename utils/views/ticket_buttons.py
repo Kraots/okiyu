@@ -44,7 +44,7 @@ class TicketView(View):
                 await ticket_owner.send(embed=em_2)
             except disnake.Forbidden:
                 pass
-        await inter.author.send(embed=em)
+        await utils.try_dm(inter.author, embed=em)
         await inter.channel.delete(reason=f'Ticket Closed by {inter.author} (ID: {inter.author.id})')
         await ticket.delete()
         await utils.log(

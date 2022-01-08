@@ -106,12 +106,10 @@ class IntroField(disnake.ui.Select['IntroFields']):
             else:
                 if new_data < 14 or new_data > 19:
                     await self.delete_intro_message(data)
-                    try:
-                        await inter.author.send(
-                            f'{self.view.ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.'
-                        )
-                    except disnake.Forbidden:
-                        pass
+                    await utils.try_dm(
+                        inter.author,
+                        f'{self.view.ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.'
+                    )
                     await inter.author.kick(reason='User does not match age requirements.')
                     await utils.log(
                         self.view.ctx.bot.webhooks['mod_logs'],

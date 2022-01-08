@@ -135,13 +135,11 @@ class Birthdays(commands.Cog):
             )
             await view.wait()
             if view.response is True:
-                try:
-                    await ctx.author.send(
-                        f'{ctx.denial} You have been kicked from `Ukiyo` for not meeting the age requirements. \n'
-                        'This server is only for people between **14-19**'
-                    )
-                except disnake.Forbidden:
-                    pass
+                await utils.try_dm(
+                    ctx.author,
+                    f'{ctx.denial} You have been kicked from `Ukiyo` for not meeting the age requirements. \n'
+                    'This server is only for people between **14-19**'
+                )
                 await ctx.author.kick(reason='User does not match age requirements.')
             await utils.try_delete((view.message, ctx.message))
             return
