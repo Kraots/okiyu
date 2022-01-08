@@ -311,7 +311,8 @@ async def try_delete(
     message: disnake.Message | list[disnake.Message] | tuple[disnake.Message] | set[disnake.Message] = None,
     *,
     channel: disnake.TextChannel | disnake.Thread = None,
-    message_id: int | list[int] | tuple[int] | set[int] = None
+    message_id: int | list[int] | tuple[int] | set[int] = None,
+    delay: float | int = None
 ):
     """|coro|
 
@@ -334,6 +335,9 @@ async def try_delete(
             If this is given, `channel` becomes required.
             This gets ignored if `message` is not ``None``.
 
+        delay: Optional[:class:`float` | :class:`int`]
+            The time to wait in the background before deleting the message.
+
     Raises
     ------
         :class:`MissingArgument` if no arguments or key-word arguments have been given.
@@ -350,10 +354,16 @@ async def try_delete(
             'You must give at least one argument or key-word argument for this function.'
         )
 
+    elif delay is not None and not isinstance(delay, (float, int)):
+        raise TypeError(
+            "Argument 'delay' must be of time 'float' or 'int', "
+            f"not {delay.__class__}"
+        )
+
     if message is not None:
         if isinstance(message, disnake.Message):
             try:
-                await message.delete()
+                await message.delete(delay=delay)
             except disnake.HTTPException:
                 return
 
@@ -366,7 +376,7 @@ async def try_delete(
                     )
 
                 try:
-                    await message.delete()
+                    await message.delete(delay=delay)
                 except disnake.HTTPException:
                     pass
 
@@ -397,7 +407,7 @@ async def try_delete(
         if isinstance(message_id, int):
             try:
                 message = await channel.fetch_message(message_id)
-                await message.delete()
+                await message.delete(delay=delay)
             except disnake.HTTPException:
                 return
 
@@ -410,7 +420,7 @@ async def try_delete(
                     )
                 try:
                     message = await channel.fetch_message(mid)
-                    await message.delete()
+                    await message.delete(delay=delay)
                 except disnake.HTTPException:
                     pass
             return
