@@ -310,7 +310,7 @@ async def try_delete(
     message: disnake.Message | list[disnake.Message] | tuple[disnake.Message] | set[disnake.Message] = None,
     *,
     channel: disnake.TextChannel | disnake.Thread = None,
-    message_id: int | list[int] = None
+    message_id: int | list[int] | tuple[int] | set[int] = None
 ):
     """|coro|
 
@@ -328,7 +328,7 @@ async def try_delete(
             The channel from which to fetch the message object. If this is given, `message_id` becomes required.
             This gets ignored if `message` is not ``None``.
 
-        message_id: Optional[:class:`int` | :class:`list[int]`]
+        message_id: Optional[:class:`int` | :class:`list[int]` | :class:`tuple[int]` | :class:`set[int]`]
             The message id for the message object to fetch, can also be a list of message ids.
             If this is given, `channel` becomes required.
             This gets ignored if `message` is not ``None``.
@@ -400,7 +400,7 @@ async def try_delete(
             except disnake.HTTPException:
                 return
 
-        elif isinstance(message_id, list):
+        elif isinstance(message_id, (list, tuple, set)):
             for i, mid in enumerate(message_id):
                 if not isinstance(mid, int):
                     raise TypeError(
