@@ -92,7 +92,7 @@ class AutoMod(commands.Cog):
                              f'**Remaining:** {utils.human_timedelta(data.muted_until, suffix=False, accuracy=6)}'
             em.set_footer(text=f'{action.title()} in `Ukiyo`')
             em.timestamp = datetime.datetime.now(datetime.timezone.utc)
-            await user.send(embed=em)
+            await utils.try_dm(user, embed=em)
         except disnake.Forbidden:
             pass
         _msg = await message.channel.send(

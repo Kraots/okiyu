@@ -46,7 +46,8 @@ class Birthdays(commands.Cog):
                     if mem.id != self.bot._owner_id:
                         staff_roles = (913310292505686046, 913315033134542889, 913315033684008971)
                         if any(r for r in staff_roles if r in (role.id for role in mem.roles)) is False:
-                            await mem.send(
+                            await utils.try_dm(
+                                mem,
                                 'Hello! Happy birthday for turning 20 years of age, but sadly, that also means you no longer meet '
                                 'the age requirements of `Ukiyo`, therefore, you have been banned (people can\'t age backwards yk).\n'
                                 'Apologies for the inconvenience, and once again, happy birthday. :tada: :tada:'

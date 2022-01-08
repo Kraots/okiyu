@@ -62,10 +62,7 @@ class Welcome(commands.Cog):
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
             em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
             em.timestamp = datetime.now(timezone.utc)
-            try:
-                await member.send(embed=em)
-            except disnake.Forbidden:
-                pass
+            await utils.try_dm(member, embed=em)
 
             view = disnake.ui.View()
             view.add_item(disnake.ui.Button(label='Jump!', url=mute.jump_url))

@@ -758,7 +758,8 @@ class _Game(commands.Cog, name='Game'):
                     if coins != 0:
                         data.coins += coins
                         await data.commit()
-                        await mem.send(
+                        await utils.try_dm(
+                            mem,
                             'Hello, thank you for fighting the boss.\n'
                             f'You have been rewarded with **{coins:,}** {self.coin_emoji}'
                         )

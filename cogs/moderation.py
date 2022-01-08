@@ -224,10 +224,10 @@ class Moderation(commands.Cog):
             if await ctx.check_perms(member) is False:
                 return
 
-        try:
-            await member.send(f'> ⚠️ Hello! Sadly, you have been **banned** from `Ukiyo` for **{reason}**. Goodbye 👋')
-        except disnake.Forbidden:
-            pass
+        await utils.try_dm(
+            member,
+            f'> ⚠️ Hello! Sadly, you have been **banned** from `Ukiyo` for **{reason}**. Goodbye 👋'
+        )
 
         await ctx.ukiyo.ban(
             member,
@@ -291,10 +291,10 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        try:
-            await member.send(f'> ⚠️ Hello! Sadly, you have been **kicked** from `Ukiyo` for **{reason}**. Goodbye 👋')
-        except disnake.Forbidden:
-            pass
+        await utils.try_dm(
+            member,
+            f'> ⚠️ Hello! Sadly, you have been **kicked** from `Ukiyo` for **{reason}**. Goodbye 👋'
+        )
         await member.kick(reason=f'{ctx.author} ({ctx.author.id}): "{reason}"')
         await ctx.send(f'> 👌 Kicked `{member}` for **{reason}**')
         await utils.log(
@@ -438,17 +438,16 @@ class Moderation(commands.Cog):
             voice_channel=None,
             reason=f'[{action.upper()}] {ctx.author} ({ctx.author.id}): "{reason}"'
         )
-        try:
-            em = disnake.Embed(title=f'You have been {fmt}!', color=utils.red)
-            em.description = f'**{fmt.title()} By:** {ctx.author}\n' \
-                             f'**Reason:** {reason}\n' \
-                             f'**{action.title()} Duration:** `{human_timedelta(time, suffix=False)}`\n' \
-                             f'**Expire Date:** {format_dt(time, "F")}'
-            em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
-            em.timestamp = datetime.now(timezone.utc)
-            await member.send(embed=em)
-        except disnake.Forbidden:
-            pass
+
+        em = disnake.Embed(title=f'You have been {fmt}!', color=utils.red)
+        em.description = f'**{fmt.title()} By:** {ctx.author}\n' \
+                         f'**Reason:** {reason}\n' \
+                         f'**{action.title()} Duration:** `{human_timedelta(time, suffix=False)}`\n' \
+                         f'**Expire Date:** {format_dt(time, "F")}'
+        em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
+        em.timestamp = datetime.now(timezone.utc)
+        await utils.try_dm(member, embed=em)
+
         _msg = await ctx.reply(
             f'> 👌 📨 Applied **{action}** to {member.mention} '
             f'until {format_dt(time, "F")} (`{human_timedelta(time, suffix=False)}`)'
@@ -504,10 +503,10 @@ class Moderation(commands.Cog):
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[{action.upper()}] {action.title()} by {ctx.author} ({ctx.author.id})')
         if send_feedback is True:
-            try:
-                await member.send(f'Hello, you have been **un{fmt}** in `Ukiyo` by **{ctx.author}**')
-            except disnake.Forbidden:
-                pass
+            await utils.try_dm(
+                member,
+                f'Hello, you have been **un{fmt}** in `Ukiyo` by **{ctx.author}**'
+            )
 
             await ctx.reply(f'> 👌 Successfully **un{fmt}** {member.mention}')
         await utils.log(
@@ -640,10 +639,10 @@ class Moderation(commands.Cog):
                         mod_role = guild.get_role(913315033684008971)  # Check for mod
                         new_roles += [mod_role]
                     await member.edit(roles=new_roles, reason=f'[{fmt.upper()}] {action.title()} Expired.')
-                    try:
-                        await member.send(f'Hello, your **{action}** in `Ukiyo` has expired. You have been **{fmt}**.')
-                    except disnake.Forbidden:
-                        pass
+                    await utils.try_dm(
+                        member,
+                        f'Hello, your **{action}** in `Ukiyo` has expired. You have been **{fmt}**.'
+                    )
                 await mute.delete()
                 mem = guild.get_member(mute.muted_by)
                 await utils.log(
