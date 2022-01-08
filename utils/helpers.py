@@ -416,5 +416,63 @@ async def try_delete(
 
         else:
             raise TypeError(
-                f"Argument 'message_id' must be of type 'int' or 'list[int]', not {message_id.__class__}"
+                "Argument 'message_id' must be of type 'int', 'list[int]', "
+                f"'tuple[int]' or 'set[int]' not {message_id.__class__}"
             )
+
+
+async def try_dm(
+    user: disnake.Member | disnake.User | list[disnake.Member | disnake.User] |
+    tuple[disnake.Member | disnake.User] | set[disnake.Member | disnake.User],
+    *args,
+    **kwargs
+):
+    """|coro|
+
+    Try to dm a user or multiple users the same message while silencing whatever error it may raise.
+
+    Parameters
+    ----------
+        user: :class:`disnake.Member` | :class:`disnake.User` |
+        :class:`list[disnake.Member | disnake.User]` | :class:`tuple[disnake.Member | disnake.User]` |
+        :class:`set[disnake.Member | disnake.User]`
+            The user(s) to dm.
+
+        *args: The args of every ``.send`` method.
+        **kwargs: The kwargs of every ``.send`` method.
+
+    Raises
+    ------
+        :class:`TypeError` if the user isn't a Member or a User object, or a list, tuple or set of those two.
+
+    Return
+    ------
+        ``None``
+    """
+
+    if isinstance(user, (disnake.Member, disnake.User)):
+        try:
+            await user.send(*args, **kwargs)
+        except disnake.HTTPException:
+            return
+
+    elif isinstance(user, (list, tuple, set)):
+        for i, usr in enumerate(user):
+            if not isinstance(usr, (disnake.Member, disnake.User)):
+                raise TypeError(
+                    f"Expected value at index '{i}' in 'usr' to be of type "
+                    f"'disnake.Member' or 'disnake.User', not {usr.__class__}"
+                )
+
+            try:
+                await usr.send(*args, **kwargs)
+            except disnake.HTTPException:
+                pass
+        return
+
+    else:
+        raise TypeError(
+            "Argument 'user' must be of type 'disnake.Member', 'disnake.User', "
+            "'list[disnake.Member | disnake.User]', 'tuple[disnake.Member | disnake.User]' or "
+            f"'set[disnake.Member | disnake.User]' not {user.__class__}"
+        )
