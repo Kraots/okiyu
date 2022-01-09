@@ -1,2 +1,3 @@
-from .rank_card import create_rank_card  # noqa
+from .round_image import *  # noqa
+from .rank_card import *  # noqa
 from .bonk import *  # noqa
