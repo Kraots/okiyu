@@ -1056,9 +1056,9 @@ class Misc(commands.Cog):
         offset = tz.utcoffset(now) + now
         res = offset.strftime('%d %B %Y, %H:%M %p')
 
-        em = disnake.Embed(title=f'`{member.display_name}`\'s time')
-        em.add_field('Timezone', data.timezone)
-        em.add_field('Current Time', res)
+        em = disnake.Embed(title=f'`{member.display_name}`\'s time', color=utils.blurple)
+        em.add_field('Current Time', res, inline=False)
+        em.add_field('Timezone', data.timezone, inline=False)
         em.set_footer(text=f'Requested By: {member}')
 
         await ctx.better_reply(embed=em)
