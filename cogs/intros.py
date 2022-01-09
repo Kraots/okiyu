@@ -26,7 +26,7 @@ class Intros(commands.Cog):
     @commands.group(invoke_without_command=True, case_insensitive=True)
     @commands.max_concurrency(1, commands.BucketType.user)
     async def intro(self, ctx: Context):
-        """Create/Edit your intro.
+        """Create/Redo your intro.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """
