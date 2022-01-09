@@ -1051,7 +1051,7 @@ class Misc(commands.Cog):
             else:
                 return await ctx.reply(f'{member.mention} must set their birthday first.')
 
-        tz = pytz.timezone(data.timezone)
+        tz = pytz.timezone(data.timezone.replace(' ', '_'))
         now = datetime.now()
         offset = tz.utcoffset(now) + now
         res = offset.strftime('%d %B %Y, %H:%M %p')
