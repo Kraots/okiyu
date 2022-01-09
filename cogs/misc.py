@@ -1049,7 +1049,7 @@ class Misc(commands.Cog):
             if member.id == ctx.author.id:
                 return await ctx.reply('You must set your birthday if you want to see your current time.')
             else:
-                return await ctx.reply(f'{member.mention} must set their birthday if first.')
+                return await ctx.reply(f'{member.mention} must set their birthday first.')
 
         tz = pytz.timezone(data.timezone)
         now = datetime.now()
