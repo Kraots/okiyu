@@ -1,10 +1,15 @@
-import numpy as np
+from io import BytesIO
 
 from PIL import Image, ImageFont, ImageDraw
 
 import disnake
 
 import utils
+
+LARGE_DIAMETER = 250
+LARGE_MASK = Image.new('L', (LARGE_DIAMETER,) * 2)
+draw = ImageDraw.Draw(LARGE_MASK)
+draw.ellipse((0, 0, LARGE_DIAMETER, LARGE_DIAMETER), fill=255)
 
 GRAY = (48, 48, 48)
 ORANGE = (255, 128, 0)
@@ -45,26 +50,18 @@ def get_font(text, image):
     return font
 
 
-async def create_rank_card(user, level: int, rank: int, members_count: int, current_xp: int, needed_xp: int, percentage: float):
+async def create_rank_card(
+    user: disnake.Member,
+    level: int,
+    rank: int,
+    members_count: int,
+    current_xp: int,
+    needed_xp: int,
+    percentage: float
+):
     img = Image.new("RGBA", (1000, 350), GRAY)
 
-    if user.avatar is None:
-        await user.display_avatar.save(fp='avatar.png')
-    else:
-        await user.avatar.with_static_format('jpg').save(fp='avatar.png')
-    av = Image.open('avatar.png')
-    av = av.resize((250, 250))
-    h, w = av.size
-    npImage = np.array(av)
-    new_img = Image.new('L', av.size, 0)
-    draw = ImageDraw.Draw(new_img)
-    draw.pieslice([0, 0, h, w], 0, 360, fill=255)
-    np_new = np.array(new_img)
-    npImage = np.dstack((npImage, np_new))
-    final_img = Image.fromarray(npImage)
-    final_img.thumbnail((250, 250))
-    final_img.save('avatar.png')
-    av = Image.open('avatar.png').convert('RGBA')
+    av = Image.open(BytesIO(await user.display_avatar.read()))
 
     orange_line = Image.new("RGBA", (500, 10), ORANGE)
 
@@ -107,7 +104,7 @@ async def create_rank_card(user, level: int, rank: int, members_count: int, curr
     font = ImageFont.truetype(TTF_FONT, 35)
     draw.text((0, 0), f"     Level:\n        {level}", font=font)
 
-    img.paste(im=av, mask=av, box=(10, 50))
+    img.paste(av.resize((LARGE_DIAMETER,) * 2), (10, 50), mask=LARGE_MASK)
     img.paste(im=orange_line, box=(350, 100))
     img.paste(im=_user, mask=_user, box=(350, 50))
     img.paste(im=progressbar, mask=progressbar, box=(275, 250))
