@@ -1054,7 +1054,7 @@ class Misc(commands.Cog):
         tz = pytz.timezone(data.timezone.replace(' ', '_'))
         now = datetime.now()
         offset = tz.utcoffset(now) + now
-        res = offset.strftime('%d %B %Y, %H:%M %p')
+        res = offset.strftime('%d %B %Y, %I:%M %p')
 
         em = disnake.Embed(title=f'`{member.display_name}`\'s time information', color=utils.blurple)
         em.add_field('Current Time', res, inline=False)
