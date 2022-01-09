@@ -6,17 +6,14 @@ import disnake
 
 import utils
 
-LARGE_DIAMETER = 250
-LARGE_MASK = Image.new('L', (LARGE_DIAMETER,) * 2)
-draw = ImageDraw.Draw(LARGE_MASK)
-draw.ellipse((0, 0, LARGE_DIAMETER, LARGE_DIAMETER), fill=255)
-
 GRAY = (48, 48, 48)
 ORANGE = (255, 128, 0)
 TRANSPARENT = (0, 0, 0, 0)
 BLUE = (22, 160, 245)
 BLACK = (0, 0, 0)
 TTF_FONT = './assets/Milliard.otf'
+
+__all__ = ('create_rank_card',)
 
 
 @utils.run_in_executor
@@ -104,7 +101,7 @@ async def create_rank_card(
     font = ImageFont.truetype(TTF_FONT, 35)
     draw.text((0, 0), f"     Level:\n        {level}", font=font)
 
-    img.paste(av.resize((LARGE_DIAMETER,) * 2), (10, 50), mask=LARGE_MASK)
+    utils.paste_rounded_image(img, av, 250, (10, 50))
     img.paste(im=orange_line, box=(350, 100))
     img.paste(im=_user, mask=_user, box=(350, 50))
     img.paste(im=progressbar, mask=progressbar, box=(275, 250))

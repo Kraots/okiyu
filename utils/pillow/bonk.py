@@ -4,7 +4,9 @@ from concurrent import futures
 from io import BytesIO
 
 import disnake
-from PIL import Image, ImageDraw, ImageFile, ImageSequence
+from PIL import Image, ImageFile, ImageSequence
+
+from .round_image import paste_rounded_image
 
 __all__ = ('bonk_gif',)
 
@@ -12,15 +14,6 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 LARGE_DIAMETER = 110
 SMALL_DIAMETER = 80
-
-# Two masks, one for the normal size, and a smaller one for the final stage of the bonk
-LARGE_MASK = Image.new('L', (LARGE_DIAMETER,) * 2)
-draw = ImageDraw.Draw(LARGE_MASK)
-draw.ellipse((0, 0, LARGE_DIAMETER, LARGE_DIAMETER), fill=255)
-
-SMALL_MASK = Image.new('L', (SMALL_DIAMETER,) * 2)
-draw = ImageDraw.Draw(SMALL_MASK)
-draw.ellipse((0, 0, SMALL_DIAMETER, SMALL_DIAMETER), fill=255)
 
 BONK_GIF = Image.open('assets/yodabonk.gif')
 
@@ -40,22 +33,24 @@ def _generate_frame(
 
     if PFP_ENTRY_FRAME <= frame_number <= PFP_EXIT_FRAME:
         if frame_number == BONK_FRAME:
-            canvas.paste(
+            paste_rounded_image(
+                canvas,
                 pfps_by_size["small"],
+                SMALL_DIAMETER,
                 (
                     PFP_CENTRE[0] - SMALL_DIAMETER // 2,
                     PFP_CENTRE[1] - SMALL_DIAMETER // 2 + 10,  # Shift avatar down by 10 px in the bonk frame
-                ),
-                SMALL_MASK,
+                )
             )
         else:
-            canvas.paste(
+            paste_rounded_image(
+                canvas,
                 pfps_by_size["large"],
+                LARGE_DIAMETER,
                 (
                     PFP_CENTRE[0] - LARGE_DIAMETER // 2,
                     PFP_CENTRE[1] - LARGE_DIAMETER // 2,
-                ),
-                LARGE_MASK,
+                )
             )
 
     return canvas
