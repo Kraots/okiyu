@@ -1056,7 +1056,7 @@ class Misc(commands.Cog):
         offset = tz.utcoffset(now) + now
         res = offset.strftime('%d %B %Y, %H:%M %p')
 
-        em = disnake.Embed(title=f'`{member.display_name}`\'s time', color=utils.blurple)
+        em = disnake.Embed(title=f'`{member.display_name}`\'s time information', color=utils.blurple)
         em.add_field('Current Time', res, inline=False)
         em.add_field('Timezone', data.timezone, inline=False)
         em.set_footer(text=f'Requested By: {ctx.author}')
