@@ -1059,7 +1059,7 @@ class Misc(commands.Cog):
         em = disnake.Embed(title=f'`{member.display_name}`\'s time', color=utils.blurple)
         em.add_field('Current Time', res, inline=False)
         em.add_field('Timezone', data.timezone, inline=False)
-        em.set_footer(text=f'Requested By: {member}')
+        em.set_footer(text=f'Requested By: {ctx.author}')
 
         await ctx.better_reply(embed=em)
 
