@@ -1,3 +1,4 @@
+import pytz
 import time
 import random
 import wikipedia
@@ -14,7 +15,8 @@ from utils import (
     AFK,
     Mutes,
     RoboPages,
-    FieldPageSource
+    FieldPageSource,
+    Birthday
 )
 
 from main import Ukiyo
@@ -311,10 +313,10 @@ class Misc(commands.Cog):
     async def _av(self, ctx: Context, *, member: disnake.Member = None):
         """Check the avatar ``member`` has.
 
-        `member` **->** The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you if you don't provide this argument.
+        `member` **->** The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you.
 
         **NOTE:** This command can only be used in <#913330644875104306>
-        """  # noqa
+        """
 
         if await ctx.check_channel() is False:
             return
@@ -329,7 +331,7 @@ class Misc(commands.Cog):
     async def created(self, ctx: Context, *, user: disnake.User = None):
         """Check the date when the ``user`` created their account.
 
-        `user` **->** The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you if you don't provide this argument.
+        `user` **->** The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """  # noqa
@@ -381,7 +383,7 @@ class Misc(commands.Cog):
     async def joined(self, ctx: Context, *, member: disnake.Member = None):
         """Check the date when the ``member`` joined the server.
 
-        `member` **->** The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you if you don't provide this argument.
+        `member` **->** The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you.
 
         **NOTE:** This command can only be used in <#913330644875104306>
         """  # noqa
@@ -1033,6 +1035,33 @@ class Misc(commands.Cog):
             self.bot.execs[ctx.author.id] = {ctx.command.name: msg}
         else:
             self.bot.execs[ctx.author.id][ctx.command.name] = msg
+
+    @commands.command(name='time', aliases=('tz', 'timezone'))
+    async def user_time(self, ctx: Context, *, member: disnake.Member = None):
+        """See what the time is for a user. They must have their birthday set for this to work.
+
+        `member` **->** The member that you want to see the current time of. If you want to see your own time, you can ignore this since it defaults to you.
+        """
+
+        member = member or ctx.author
+        data: Birthday = await Birthday.get(member.id)
+        if data is None:
+            if member.id == ctx.author.id:
+                return await ctx.reply('You must set your birthday if you want to see your current time.')
+            else:
+                return await ctx.reply(f'{member.mention} must set their birthday if first.')
+
+        tz = pytz.timezone(data.timezone)
+        now = datetime.now()
+        offset = tz.utcoffset(now) + now
+        res = offset.strftime('%d %B %Y, %H:%M %p')
+
+        em = disnake.Embed(title=f'`{member.display_name}`\'s time')
+        em.add_field('Timezone', data.timezone)
+        em.add_field('Current Time', res)
+        em.set_footer(text=f'Requested By: {member}')
+
+        await ctx.better_reply(embed=em)
 
 
 def setup(bot: Ukiyo):
