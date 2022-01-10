@@ -215,7 +215,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
         await menu.start(ref=True)
 
     async def send_cog_help(self, cog):
-        entries = await self.filter_commands(cog.walk_commands(), sort=True)
+        entries = await self.filter_commands(cog.walk_commands(), sort=True, key=lambda c: c.qualified_name)
         menu = HelpMenu(GroupHelpPageSource(cog, entries, prefix=self.context.clean_prefix), ctx=self.context)
         await menu.start(ref=True)
 
@@ -248,7 +248,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
         if len(subcommands) == 0:
             return await self.send_command_help(group)
 
-        entries = await self.filter_commands(subcommands, sort=True)
+        entries = await self.filter_commands(subcommands, sort=True, key=lambda c: c.qualified_name)
         if len(entries) == 0:
             return await self.send_command_help(group)
 
