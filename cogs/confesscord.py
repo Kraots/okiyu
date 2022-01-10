@@ -14,6 +14,9 @@ class Confesscord(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
+    def display_emoji(self) -> str:
+        return '🕵️‍♂️'
+
     async def cog_check(self, ctx: Context) -> bool:
         if ctx.author.id == self.bot._owner_id:
             return True
