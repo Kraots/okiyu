@@ -662,7 +662,13 @@ class Moderation(commands.Cog):
     async def wait_until_ready(self):
         await self.bot.wait_until_ready()
 
-    @commands.group(name='make', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
+    @commands.group(
+        name='make',
+        invoke_without_command=True,
+        case_insensitive=True,
+        ignore_extra=False,
+        hidden=True
+    )
     @is_admin()
     async def staff_make(self, ctx: Context):
         """Shows the help for the `!make` command, used to add more staff members."""
@@ -723,7 +729,13 @@ class Moderation(commands.Cog):
             view=self.jump_view(ctx.message.jump_url)
         )
 
-    @commands.group(name='remove', invoke_without_command=True, case_insensitive=True, ignore_extra=False)
+    @commands.group(
+        name='remove',
+        invoke_without_command=True,
+        case_insensitive=True,
+        ignore_extra=False,
+        hidden=True
+    )
     @is_admin()
     async def staff_remove(self, ctx: Context):
         """Shows the help for the `!remove` command, used to remove a staff member from their position."""
@@ -825,7 +837,13 @@ class Moderation(commands.Cog):
         await msg.reply(fmt)
         await gw.delete()
 
-    @commands.group(name='giveaway', aliases=('gw',), invoke_without_command=True, case_insensitive=True)
+    @commands.group(
+        name='giveaway',
+        aliases=('gw',),
+        invoke_without_command=True,
+        case_insensitive=True,
+        hidden=True
+    )
     @is_admin()
     async def base_giveaway(self, ctx: Context):
         """The base command for all the giveaway commands."""

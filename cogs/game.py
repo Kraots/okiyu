@@ -28,7 +28,7 @@ LEVELS = {
 
 
 class _Game(commands.Cog, name='Game'):
-    """This category shows the base command for the game commands."""
+    """This category shows the commands for the game."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
         self.coin_emoji = '🪙'
@@ -63,7 +63,13 @@ class _Game(commands.Cog, name='Game'):
 
         return data
 
-    @commands.group(name='game', aliases=('g',), invoke_without_command=True, case_insensitive=True)
+    @commands.group(
+        name='game',
+        aliases=('g',),
+        invoke_without_command=True,
+        case_insensitive=True,
+        hidden=True
+    )
     async def base_game(self, ctx: Context):
         """Base command for all the `game` commands. To see the commands, please type `!help game`
 
@@ -71,7 +77,7 @@ class _Game(commands.Cog, name='Game'):
         """
 
         if await ctx.check_channel() is True:
-            await ctx.send_help('game')
+            await ctx.send_help('Game')
 
     @base_game.group(name='coins', invoke_without_command=True, case_insensitive=True)
     async def game_coins(self, ctx: Context):

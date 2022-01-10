@@ -22,12 +22,13 @@ class Confesscord(commands.Cog):
         name='confesscord',
         aliases=('confessions', 'confess'),
         invoke_without_command=True,
-        case_insensitive=True
+        case_insensitive=True,
+        hidde=True
     )
     async def base_command(self, ctx: Context):
         """Base command for all confesscord commands."""
 
-        await ctx.send_help('confesscord')
+        await ctx.send_help('Confesscord')
 
     @base_command.command(name='restrict')
     async def confesscord_restrict(self, ctx: Context, *, member: disnake.Member):
