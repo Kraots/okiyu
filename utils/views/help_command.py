@@ -62,7 +62,7 @@ class HelpSelectMenu(disnake.ui.Select['HelpMenu']):
             description = cog.description.split('\n', 1)[0] or None
             emoji = getattr(cog, 'display_emoji', None)
             self.add_option(
-                label=cog.qualified_name + ' (' + str(len(cog.get_commands())) + ')',
+                label=cog.qualified_name + ' [' + str(len(list(cog.walk_commands()))) + ']',
                 value=cog.qualified_name,
                 description=description,
                 emoji=emoji
@@ -183,7 +183,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
             if isinstance(error.original, disnake.HTTPException) and error.original.code == 50013:
                 return
 
-            await ctx.bot.reraise(ctx, error)
+            await ctx.reraise(error)
 
     def get_command_signature(self, command):
         parent = command.full_parent_name
@@ -200,7 +200,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
             cog = command.cog
             return cog.qualified_name if cog else '\U0010ffff'
 
-        entries: List[commands.Command] = await self.filter_commands(bot.commands, sort=True, key=key)
+        entries: List[commands.Command] = await self.filter_commands(bot.walk_commands(), sort=True, key=key)
 
         all_commands: Dict[commands.Cog, List[commands.Command]] = {}
         for name, children in itertools.groupby(entries, key=key):
@@ -215,7 +215,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
         await menu.start(ref=True)
 
     async def send_cog_help(self, cog):
-        entries = await self.filter_commands(cog.get_commands(), sort=True)
+        entries = await self.filter_commands(cog.walk_commands(), sort=True)
         menu = HelpMenu(GroupHelpPageSource(cog, entries, prefix=self.context.clean_prefix), ctx=self.context)
         await menu.start(ref=True)
 
@@ -244,7 +244,7 @@ class PaginatedHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed, reference=self.context.replied_reference)
 
     async def send_group_help(self, group):
-        subcommands = group.commands
+        subcommands = list(group.walk_commands())
         if len(subcommands) == 0:
             return await self.send_command_help(group)
 
