@@ -10,6 +10,7 @@ from main import Ukiyo
 
 
 class Confesscord(commands.Cog):
+    """Commands related to the confesscord bot."""
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
@@ -23,7 +24,7 @@ class Confesscord(commands.Cog):
         aliases=('confessions', 'confess'),
         invoke_without_command=True,
         case_insensitive=True,
-        hidde=True
+        hidden=True
     )
     async def base_command(self, ctx: Context):
         """Base command for all confesscord commands."""
