@@ -1,4 +1,3 @@
-import re
 import datetime
 
 import disnake
@@ -152,30 +151,27 @@ class AutoMod(commands.Cog):
     async def anti_invites(self, message: disnake.Message):
         current = message.created_at.timestamp()
 
-        matches = re.findall(utils.INVITE_REGEX, message.content.lower())
+        matches = utils.INVITE_REGEX.findall(message.content.replace(' ', ''))
         if matches:
             guild = self.bot.get_guild(913310006814859334)
-            if len(matches) == 1:
-                _inv = matches[0].split('/')
-                inv = _inv[-1]
-                if any(invite for invite in await guild.invites() if invite.code.lower() == inv):
-                    return
+            ukiyo_invites = [inv.code for inv in await guild.invites()]
+            if any(inv for inv in matches if inv not in ukiyo_invites):
+                await utils.try_delete(message)
+                invite_logs = guild.get_channel(913332511789178951)
+                em = disnake.Embed(
+                    title='New Invite Found!!',
+                    description=f'`{message.author}` sent an invite in {message.channel.mention}'
+                )
+                em.set_footer(text=f'User ID: {message.author.id}')
+                v = disnake.ui.View()
+                v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
+                await invite_logs.send(embed=em, view=v)
 
-            await utils.try_delete(message)
-            invite_logs = guild.get_channel(913332511789178951)
-            em = disnake.Embed(
-                title='New Invite Found!!',
-                description=f'`{message.author}` sent an invite in {message.channel.mention}'
-            )
-            em.set_footer(text=f'User ID: {message.author.id}')
-            v = disnake.ui.View()
-            v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
-            await invite_logs.send(embed=em, view=v)
-
-            invite_bucket = self.invite_cooldown.get_bucket(message)
-            if invite_bucket.update_rate_limit(current):
-                invite_bucket.reset()
-                return await self.apply_action(message, 'invite found')
+                invite_bucket = self.invite_cooldown.get_bucket(message)
+                if invite_bucket.update_rate_limit(current):
+                    invite_bucket.reset()
+                    return await self.apply_action(message, 'invite found')
+                return
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
