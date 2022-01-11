@@ -50,6 +50,17 @@ EDGE_TABLE = str.maketrans(EDGE_CASES)
 PUNCTUATIONS_AND_DIGITS = tuple(list(st.punctuation) + list(st.digits))
 PAD_TABLE = str.maketrans({k: '' for k in PUNCTUATIONS_AND_DIGITS})
 
+LETTERS_EMOJI = {
+    'a': '🇦', 'b': '🇧', 'c': '🇨', 'd': '🇩',
+    'e': '🇪', 'f': '🇫', 'g': '🇬', 'h': '🇭',
+    'i': '🇮', 'j': '🇯', 'k': '🇰', 'l': '🇱',
+    'm': '🇲', 'n': '🇳', 'o': '🇴', 'p': '🇵',
+    'q': '🇶', 'r': '🇷', 's': '🇸', 't': '🇹',
+    'u': '🇺', 'v': '🇻', 'w': '🇼', 'x': '🇽',
+    'y': '🇾', 'z': '🇿'
+}
+EMOJIS_TABLE = str.maketrans({v: k for k, v in LETTERS_EMOJI.items()})
+
 
 def time_phaser(seconds):
     output = ""
@@ -105,8 +116,12 @@ def check_profanity(string: str, *, bad_words: list = None) -> bool:
         res = any(w for w in bad_words if w in string)
 
         if res is False:
-            string = string.translate(PAD_TABLE)  # Remove every punctuation and digit character.
+            string = string.translate(EMOJIS_TABLE)  # Change every regional indicator emoji to its corresponding letter.
             res = any(w for w in bad_words if w in string)
+
+            if res is False:
+                string = string.translate(PAD_TABLE)  # Remove every punctuation and digit character.
+                res = any(w for w in bad_words if w in string)
 
     return res
 
