@@ -16,7 +16,7 @@ __all__ = (
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
-ALLOWED_CHARACTERS = tuple(list(st.punctuation) + list(st.ascii_letters) + list(st.digits) + list(st.whitespace))
+ALLOWED_CHARACTERS = tuple(st.printable)
 BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
 EDGE_CHARACTERS_CASES = {
     '@': 'a',
