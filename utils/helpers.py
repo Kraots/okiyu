@@ -33,6 +33,7 @@ __all__ = (
     'validate_token',
     'try_delete',
     'try_dm',
+    'LETTERS_TABLE',
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
@@ -59,6 +60,7 @@ LETTERS_EMOJI = {
     'u': '🇺', 'v': '🇻', 'w': '🇼', 'x': '🇽',
     'y': '🇾', 'z': '🇿'
 }
+LETTERS_TABLE = str.maketrans(LETTERS_EMOJI)
 EMOJIS_TABLE = str.maketrans({v: k for k, v in LETTERS_EMOJI.items()})
 
 

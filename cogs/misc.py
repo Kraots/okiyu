@@ -1170,6 +1170,15 @@ class Misc(commands.Cog):
             'the calculator command and enabled checking for expressions in messages automatically.'
         )
 
+    @commands.command()
+    async def emojify(self, ctx: Context, *, sentence: str):
+        """Emojifies the letters into emojis.
+
+        `sentence` **->** The sentence to emojify.
+        """
+
+        await ctx.reply(sentence.translate(utils.LETTERS_TABLE))
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
