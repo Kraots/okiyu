@@ -106,8 +106,10 @@ class IntroField(disnake.ui.Select['IntroFields']):
             else:
                 if new_data < 14 or new_data > 19:
                     if new_data < 14:
+                       fmt = 'KICK'
                        method = inter.author.kick
                     else:
+                       fmt = 'BAN'
                        method = inter.author.ban
                     await self.delete_intro_message(data)
                     await utils.try_dm(
@@ -117,7 +119,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
                     await method(reason='User does not match age requirements.')
                     await utils.log(
                         self.view.ctx.bot.webhooks['mod_logs'],
-                        title='[KICK]',
+                        title=f'[{fmt}]',
                         fields=[
                             ('Member', f'{inter.author} (`{inter.author.id}`)'),
                             ('Reason', f'User does not match age requirements. (`{new_data} y/o`)'),
