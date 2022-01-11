@@ -89,7 +89,9 @@ class Developer(commands.Cog):
                 ctx,
                 [result[i: i + 4000] for i in range(0, len(result), 4000)],
                 footer=f'Took {took}s',
-                quit_delete=True
+                quit_delete=True,
+                prefix='```py',
+                suffix='```'
             )
             return await pager.start()
         em = disnake.Embed(description=f'```py\n{result}\n```')
@@ -133,6 +135,38 @@ class Developer(commands.Cog):
         await ctx.reply(
             f'Successfully **{"enabled" if cmd.enabled is True else "disabled"}** the command `{cmd.qualified_name}`'
         )
+
+    @commands.command(name='history', aliases=('dmhistory',))
+    async def dm_history(self, ctx: Context, member: disnake.Member, limit: int = 100):
+        """Check the bot's dms with a member.
+
+        `member` **->** The member to check the dms for.
+        `limit` **->** The limit of how many messages to look up for. Defaults to 100.
+        """
+
+        dm = member.dm_channel or await member.create_dm()
+        entries = []
+        async for message in dm.history(limit=limit):
+            content = message.content or '[<NO TEXT>]'
+            entries.append(str(message.author.display_name) + ': ' + content + '\n')
+
+        title = f'Here\'s the dm history with `{member}`'
+        entries = entries[::-1]
+        entries = '\n'.join(entries)
+        if len(entries) > 500:
+            paginator = TextPage(
+                ctx,
+                [entries[i: i + 500] for i in range(0, len(entries), 500)],
+                quit_delete=True,
+                prefix='```yaml',
+                suffix='```'
+            )
+            paginator.embed.color = utils.blurple
+            paginator.embed.title = title
+            return await paginator.start()
+        view = utils.QuitButton(ctx, delete_after=True)
+        em = disnake.Embed(color=utils.blurple, title=title, description=f'```yaml\n{entries}\n```')
+        view.message = await ctx.send(embed=em, view=view)
 
 
 def setup(bot: Ukiyo):

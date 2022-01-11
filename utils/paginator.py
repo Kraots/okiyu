@@ -253,23 +253,44 @@ class FieldPageSource(menus.ListPageSource):
 
 
 class TextPageSource(menus.ListPageSource):
-    def __init__(self, entries):
+    def __init__(self, entries, *, prefix: str = '', suffix: str = '', has_footer: bool = False):
         super().__init__(entries, per_page=1)
         self.initial_page = True
+        self.prefix = prefix
+        self.suffix = suffix
+        self.has_footer = has_footer
 
     async def format_page(self, menu, entries):
         maximum = self.get_max_pages()
         if maximum > 1:
-            title = f'Page {menu.current_page + 1}/{maximum}'
-            menu.embed.title = title
+            fmt = f'Page {menu.current_page + 1}/{maximum}'
+            if self.has_footer is True:
+                menu.embed.title = fmt
+            else:
+                menu.embed.set_footer(text=fmt)
 
-        menu.embed.description = f'```py\n{entries}\n```'
+        menu.embed.description = f'{self.prefix}\n{entries}\n{self.suffix}'
         return menu.embed
 
 
 class TextPage(RoboPages):
-    def __init__(self, ctx, entries, *, footer: str = None, quit_delete: bool = False):
-        super().__init__(TextPageSource(entries), ctx=ctx, compact=True, quit_delete=quit_delete)
+    def __init__(
+        self,
+        ctx,
+        entries,
+        *,
+        footer: str = None,
+        quit_delete: bool = False,
+        prefix: str = '',
+        suffix: str = ''
+    ):
+        has_footer = False
+        if footer is not None:
+            has_footer = True
+        super().__init__(
+            TextPageSource(entries, prefix=prefix, suffix=suffix, has_footer=has_footer),
+            ctx=ctx, compact=True, quit_delete=quit_delete
+        )
         self.embed = disnake.Embed()
         if footer is not None:
             self.embed.set_footer(text=footer)
