@@ -1177,7 +1177,7 @@ class Misc(commands.Cog):
         `sentence` **->** The sentence to emojify.
         """
 
-        _sentence = sentence.replace(' ', '')
+        _sentence = sentence.lower().replace(' ', '')
         sentence = ''
         for word in _sentence:
             sentence += word + ' '
