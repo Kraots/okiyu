@@ -1086,15 +1086,20 @@ class Misc(commands.Cog):
         `expression` **->** The expresion you want to calculate (e.g: 1 + 1, etc...)
         """
 
-        operators = r'\+\-\/\*\(\)\^\÷\%'
+        if self.bot.calc_ternary is False:
+            cmd = self.bot.get_command('calc')
+            cmd.enabled = False
+            return await ctx.invoke(cmd, expression='1+1')
+        operators = r'\+\-\/\*\(\)\^\÷\%\×'
 
         if not any(m in expression for m in operators):
-            return
+            return await ctx.reply(f'{ctx.denial} Found an operator that doesn\'t exist.')
 
         for key, value in {
             '^': '**',
             '÷': '/',
             ' ': '',
+            '×': '*',
         }.items():
             expression = expression.replace(key, value)
 
@@ -1109,20 +1114,19 @@ class Misc(commands.Cog):
             match = re.search(regex, expression)
             content = ''.join(match.group())
             if not any(m in content for m in operators) or not content:
-                return
+                return await ctx.reply(f'{ctx.denial} Your expression doesn\'t contain any valid operators.')
 
         except AttributeError:
-            return
+            return await ctx.reply(f'{ctx.denial} Expression invalid.')
 
         em = disnake.Embed(color=utils.blurple)
         em.add_field(
-            name='I detected an expression in your message!',
+            name=f'`{ctx.author.display_name}`\'s calculator',
             value=f'```yaml\n"{content}"\n```',
             inline=False
         )
 
         try:
-            print(content)
             result = simpleeval.simple_eval(content, functions=functions)
             em.add_field(
                 name='Result: ',
@@ -1137,11 +1141,11 @@ class Misc(commands.Cog):
                       'is sad that there are no cookies, and you are sad that you have no friends.```'
             )
         except SyntaxError:
-            return
+            return await ctx.reply(f'{ctx.denial} Expression invalid.')
         try:
             await ctx.better_reply(embed=em)
         except disnake.HTTPException:
-            return
+            return await ctx.reply(f'{ctx.denial} The result of your operation was too long.')
 
     @calculator_.command(name='toggle')
     @utils.is_owner()

@@ -160,7 +160,7 @@ class OnMessage(commands.Cog):
     async def check_for_calc_expression(self, message: disnake.Message):
         if self.bot.calc_ternary is True:
             return
-        operators = r'\+\-\/\*\(\)\^\÷\%'
+        operators = r'\+\-\/\*\(\)\^\÷\%\×'
 
         if not any(m in message.content for m in operators):
             return
@@ -171,6 +171,7 @@ class OnMessage(commands.Cog):
             '^': '**',
             '÷': '/',
             ' ': '',
+            '×': '*',
         }.items():
             message.content = message.content.replace(key, value)
 
@@ -198,7 +199,6 @@ class OnMessage(commands.Cog):
         )
 
         try:
-            print(content)
             result = simpleeval.simple_eval(content, functions=functions)
             em.add_field(
                 name='Result: ',
