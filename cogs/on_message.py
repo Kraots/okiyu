@@ -197,6 +197,7 @@ class OnMessage(commands.Cog):
             value=f'```yaml\n"{content}"\n```',
             inline=False
         )
+        em.set_footer(text='To disable this ask one of the owners to use "!calculator toggle"')
 
         try:
             result = simpleeval.simple_eval(content, functions=functions)
