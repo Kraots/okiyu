@@ -153,7 +153,11 @@ class AutoMod(commands.Cog):
     async def anti_invites(self, message: disnake.Message):
         current = message.created_at.timestamp()
 
-        content = message.content.replace(' ', '').replace('\\', '')
+        _content = message.content.replace(' ', '').replace('\\', '')
+        content = ''
+        for letter in _content:
+            if letter in utils.ALLOWED_CHARACTERS:
+                content += letter
         matches = utils.INVITE_REGEX.findall(content)
         if matches:
             guild = self.bot.get_guild(913310006814859334)
