@@ -35,6 +35,7 @@ class Ukiyo(commands.Bot):
         self.execs = {}
         self.verifying = []
         self.bad_words = {}
+        self.calc_ternary = False
 
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'
@@ -112,6 +113,18 @@ class Ukiyo(commands.Bot):
         if data and data.bad_words:
             for word, added_by in data.bad_words.items():
                 self.bad_words[word] = added_by
+
+        data: utils.Constants = await utils.Constants.get()
+        if data is None:
+            data = await utils.Constants().commit()
+        self.calc_ternary = data.calculator_ternary
+        for cmd_name in data.disabled_commands:
+            cmd = self.get_command(cmd_name)
+            if cmd is None:
+                data.disabled_commands.remove(cmd_name)
+                await data.commit()
+            else:
+                cmd.enabled = False
 
         print('Bot is ready!')
 
