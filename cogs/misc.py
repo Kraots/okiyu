@@ -1183,7 +1183,7 @@ class Misc(commands.Cog):
         for word in _sentence:
             space = 1
             if word == ' ':
-                space = 4
+                space = 3
             sentence += word + (' ' * space)
         _numbers_table = {
             '0': '0️⃣',
