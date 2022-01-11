@@ -150,7 +150,7 @@ class Developer(commands.Cog):
             content = message.content or '[<NO TEXT>]'
             entries.append(str(message.author.display_name) + ': ' + content + '\n')
 
-        title = f'Here\'s the dm history with `{member}`'
+        title = f'Here\'s my dm history with `{member.display_name}`'
         entries = entries[::-1]
         entries = '\n'.join(entries)
         if len(entries) > 500:
