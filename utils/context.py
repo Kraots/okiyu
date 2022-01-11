@@ -140,6 +140,14 @@ class Context(commands.Context):
             self.command.reset_cooldown(self)
             return
 
+        elif isinstance(error, commands.ExpectedClosingQuoteError):
+            self.command.reset_cooldown(self)
+            return await self.reply(f'Expected closing `{error.close_quote}`')
+
+        elif isinstance(error, commands.InvalidEndOfQuotedStringError):
+            self.command.reset_cooldown(self)
+            return await self.reply(f'Expected space after ending the quote, not `{error.char}`')
+
         elif (
             isinstance(error, commands.TooManyArguments) or
             isinstance(error, commands.BadArgument) or
