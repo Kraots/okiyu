@@ -12,3 +12,4 @@ from .pillow import *  # noqa
 from .regex import *  # noqa
 from .errors import *  # noqa
 from .github import *  # noqa
+from .constants import *  # noqa
