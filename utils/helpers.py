@@ -6,12 +6,11 @@ import asyncio
 import binascii
 import functools
 import string as st
-from pathlib import Path
 from typing import Callable
-from datetime import datetime
 
 import disnake
 from disnake.ext import commands
+from .constants import *
 
 import utils
 
@@ -27,41 +26,12 @@ __all__ = (
     'format_amount',
     'escape_markdown',
     'remove_markdown',
-    'FIRST_JANUARY_1970',
     'CooldownByContentChannel',
     'CooldownByContentUser',
     'validate_token',
     'try_delete',
     'try_dm',
-    'LETTERS_TABLE',
 )
-
-FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
-ALLOWED_LETTERS = tuple(list(st.ascii_letters) + list(st.digits) + list(st.punctuation) + ['♡', ' '])
-BAD_WORDS = Path('./bad_words.txt').read_text().splitlines()
-EDGE_CASES = {
-    '@': 'a',
-    '0': 'o',
-    '1': 'i',
-    '$': 's',
-    '!': 'i',
-    '9': 'g',
-}
-EDGE_TABLE = str.maketrans(EDGE_CASES)
-PUNCTUATIONS_AND_DIGITS = tuple(list(st.punctuation) + list(st.digits))
-PAD_TABLE = str.maketrans({k: '' for k in PUNCTUATIONS_AND_DIGITS})
-
-LETTERS_EMOJI = {
-    'a': '🇦', 'b': '🇧', 'c': '🇨', 'd': '🇩',
-    'e': '🇪', 'f': '🇫', 'g': '🇬', 'h': '🇭',
-    'i': '🇮', 'j': '🇯', 'k': '🇰', 'l': '🇱',
-    'm': '🇲', 'n': '🇳', 'o': '🇴', 'p': '🇵',
-    'q': '🇶', 'r': '🇷', 's': '🇸', 't': '🇹',
-    'u': '🇺', 'v': '🇻', 'w': '🇼', 'x': '🇽',
-    'y': '🇾', 'z': '🇿'
-}
-LETTERS_TABLE = str.maketrans(LETTERS_EMOJI)
-EMOJIS_TABLE = str.maketrans({v: k for k, v in LETTERS_EMOJI.items()})
 
 
 def time_phaser(seconds):
@@ -109,11 +79,19 @@ def check_profanity(string: str, *, bad_words: list = None) -> bool:
     """
 
     bad_words = bad_words or BAD_WORDS
-    string = str(string).lower().replace(' ', '').replace('\n', '')
+    string = str(string).lower()
+    _string = string
+    string = ''
+
+    for letter in _string:
+        if letter in ALLOWED_CHARACTERS:
+            if letter not in st.whitespace:
+                string += letter
+
     res = any(w for w in bad_words if w in string)
 
     if res is False:
-        string = string.translate(EDGE_TABLE)  # Replace each edge character to its corresponding letter.
+        string = string.translate(EDGE_CHARACTERS_TABLE)  # Replace each edge character to its corresponding letter.
         string = string.replace('()', 'o')  # Replace this manually because ``str.maketrans`` keys must be of lenght 1.
         res = any(w for w in bad_words if w in string)
 
@@ -151,7 +129,7 @@ def check_string(string: str, *, limit: str = 4) -> bool:
     count = 0
     for letter in string:
         if count < limit:
-            if letter not in ALLOWED_LETTERS:
+            if letter not in ALLOWED_CHARACTERS:
                 count = 0
             else:
                 count += 1
