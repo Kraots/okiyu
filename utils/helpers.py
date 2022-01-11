@@ -31,6 +31,7 @@ __all__ = (
     'validate_token',
     'try_delete',
     'try_dm',
+    'remove_zalgos',
 )
 
 
@@ -60,6 +61,36 @@ def clean_code(content):
         return content
 
 
+def remove_zalgos(string: str, *, remove_whitespace: bool = False) -> str:
+    """Return a string with every zalgo character removed.
+
+    Parameters
+    ----------
+        string: :class:`str`
+            The string to remove zalgo from.
+
+        remove_whitespace: :class:`bool`
+            Whether to also remove any whitespace/newline character or not.
+
+    Return
+    ------
+        The new string with the removed zalgos.
+    """
+
+    _string = string
+    string = ''
+
+    for letter in _string:
+        if letter in ALLOWED_CHARACTERS:
+            if remove_whitespace is True:
+                if letter not in st.whitespace:
+                    string += letter
+            else:
+                string += letter
+
+    return string
+
+
 def check_profanity(string: str, *, bad_words: list = None) -> bool:
     """
     If the return type is of bool ``True`` then it means that the
@@ -80,13 +111,7 @@ def check_profanity(string: str, *, bad_words: list = None) -> bool:
 
     bad_words = bad_words or BAD_WORDS
     string = str(string).lower()
-    _string = string
-    string = ''
-
-    for letter in _string:
-        if letter in ALLOWED_CHARACTERS:
-            if letter not in st.whitespace:
-                string += letter
+    string = remove_zalgos(string, remove_whitespace=True)
 
     res = any(w for w in bad_words if w in string)
 
