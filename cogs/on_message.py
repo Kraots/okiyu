@@ -1,5 +1,8 @@
+import re
+import math
 import asyncio
 import datetime
+import simpleeval
 
 import disnake
 from disnake.ext import commands
@@ -7,6 +10,19 @@ from disnake.ext import commands
 import utils
 
 from main import Ukiyo
+
+functions = {
+    'sqrt': lambda x: math.sqrt(x),
+    'sin': lambda x: math.sin(x),
+    'cos': lambda x: math.cos(x),
+    'tan': lambda x: math.tan(x),
+    'ceil': lambda x: math.ceil(x),
+    'floor': lambda x: math.floor(x),
+    'sinh': lambda x: math.sinh(x),
+    'cosh': lambda x: math.cosh(x),
+    'tanh': lambda x: math.tanh(x),
+    'abs': lambda x: math.fabs(x)
+}
 
 
 class OnMessage(commands.Cog):
@@ -98,7 +114,7 @@ class OnMessage(commands.Cog):
                 await ctx.reraise(e)
 
     @commands.Cog.listener('on_message')
-    async def on_message(self, message: disnake.Message):
+    async def check_usernames_and_tokens(self, message: disnake.Message):
         await self.check_tokens(message)
 
         if message.author.bot:
@@ -139,6 +155,67 @@ class OnMessage(commands.Cog):
                 await cmd.invoke(ctx)
             return
         await cmd.invoke(ctx)
+
+    @commands.Cog.listener('on_message')
+    async def check_for_calc_expression(self, message: disnake.Message):
+        operators = r'\+\-\/\*\(\)\^\÷\%'
+
+        if not any(m in message.content for m in operators):
+            return
+        if message.author.bot:
+            return
+
+        for key, value in {
+            '^': '**',
+            '÷': '/',
+            ' ': '',
+        }.items():
+            message.content = message.content.replace(key, value)
+
+        try:
+            def parse(_match):
+                return _match.group().replace('(', '*(')
+
+            message.content = re.sub(re.compile(r'\d\('), parse, message.content)
+            regex = re.compile(
+                rf"({'|'.join(list(functions.keys()))})?([{operators}]+)?(\d+[{operators}]+)*(\d+)([{operators}]+)?"
+            )
+            match = re.search(regex, message.content)
+            content = ''.join(match.group())
+            if not any(m in content for m in operators) or not content:
+                return
+
+        except AttributeError:
+            return
+
+        em = disnake.Embed(color=utils.blurple)
+        em.add_field(
+            name='I detected an expression in your message!',
+            value=f'```yaml\n"{content}"\n```',
+            inline=False
+        )
+
+        try:
+            print(content)
+            result = simpleeval.simple_eval(content, functions=functions)
+            em.add_field(
+                name='Result: ',
+                value=f'```\n{result}\n```'
+            )
+
+        except ZeroDivisionError:
+            em.add_field(
+                name='Wow...you make me question my existance',
+                value='```yaml\nImagine you have zero cookies and you split them amongst 0 friends, '
+                      'how many cookies does each friend get? See, it doesn\'t make sense and Cookie Monster '
+                      'is sad that there are no cookies, and you are sad that you have no friends.```'
+            )
+        except SyntaxError:
+            return
+        try:
+            await message.reply(embed=em)
+        except disnake.HTTPException:
+            return
 
 
 def setup(bot: Ukiyo):

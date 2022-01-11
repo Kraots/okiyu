@@ -16,3 +16,4 @@ umongo[motor]
 wikipedia
 pytz
 matplotlib
+simpleeval
