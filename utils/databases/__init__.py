@@ -12,10 +12,11 @@ from .dbs import (  # noqa
 
 class GetDoc:
     @classmethod
-    async def get(cls, id):
+    async def get(cls, id=374622847672254466):
         """|coro|
 
         This method is a shortcut for ``await .find_one({'_id': id})``
+        If the ``id`` isn't given, then it will use the owner's id by default (374622847672254466)
         """
 
         return await cls.find_one({'_id': id})
@@ -34,6 +35,7 @@ from .db_giveaways import GiveAway
 from .db_bdays import Birthday
 from .db_confesscord import Restrictions
 from .db_bad_words import BadWords
+from .db_constants import Constants
 
 __all__ = (
     'Intro',
@@ -50,4 +52,5 @@ __all__ = (
     'Birthday',
     'Restrictions',
     'BadWords',
+    'Constants',
 )

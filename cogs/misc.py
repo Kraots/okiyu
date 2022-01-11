@@ -1,7 +1,10 @@
+import re
+import math
 import pytz
 import time
 import random
 import wikipedia
+import simpleeval
 import matplotlib.pyplot as plt
 from datetime import datetime, timezone
 
@@ -37,6 +40,19 @@ SERVER_AD = """
 
 ☀︎ Link: https://discord.gg/fQ6Nb4ac9x ☀︎
 """
+
+functions = {
+    'sqrt': lambda x: math.sqrt(x),
+    'sin': lambda x: math.sin(x),
+    'cos': lambda x: math.cos(x),
+    'tan': lambda x: math.tan(x),
+    'ceil': lambda x: math.ceil(x),
+    'floor': lambda x: math.floor(x),
+    'sinh': lambda x: math.sinh(x),
+    'cosh': lambda x: math.cosh(x),
+    'tanh': lambda x: math.tanh(x),
+    'abs': lambda x: math.fabs(x)
+}
 
 
 class ViewIntro(disnake.ui.View):
@@ -1062,6 +1078,98 @@ class Misc(commands.Cog):
         em.set_footer(text=f'Requested By: {ctx.author}')
 
         await ctx.better_reply(embed=em)
+
+    @commands.group(name='calculator', aliases=('calc',), invoke_without_command=True, case_insensitive=True)
+    async def calculator_(self, ctx: Context, *, expression: str):
+        """Do some math.
+
+        `expression` **->** The expresion you want to calculate (e.g: 1 + 1, etc...)
+        """
+
+        operators = r'\+\-\/\*\(\)\^\÷\%'
+
+        if not any(m in expression for m in operators):
+            return
+
+        for key, value in {
+            '^': '**',
+            '÷': '/',
+            ' ': '',
+        }.items():
+            expression = expression.replace(key, value)
+
+        try:
+            def parse(_match):
+                return _match.group().replace('(', '*(')
+
+            expression = re.sub(re.compile(r'\d\('), parse, expression)
+            regex = re.compile(
+                rf"({'|'.join(list(functions.keys()))})?([{operators}]+)?(\d+[{operators}]+)*(\d+)([{operators}]+)?"
+            )
+            match = re.search(regex, expression)
+            content = ''.join(match.group())
+            if not any(m in content for m in operators) or not content:
+                return
+
+        except AttributeError:
+            return
+
+        em = disnake.Embed(color=utils.blurple)
+        em.add_field(
+            name='I detected an expression in your message!',
+            value=f'```yaml\n"{content}"\n```',
+            inline=False
+        )
+
+        try:
+            print(content)
+            result = simpleeval.simple_eval(content, functions=functions)
+            em.add_field(
+                name='Result: ',
+                value=f'```\n{result}\n```'
+            )
+
+        except ZeroDivisionError:
+            em.add_field(
+                name='Wow...you make me question my existance',
+                value='```yaml\nImagine you have zero cookies and you split them amongst 0 friends, '
+                      'how many cookies does each friend get? See, it doesn\'t make sense and Cookie Monster '
+                      'is sad that there are no cookies, and you are sad that you have no friends.```'
+            )
+        except SyntaxError:
+            return
+        try:
+            await ctx.better_reply(embed=em)
+        except disnake.HTTPException:
+            return
+
+    @calculator_.command(name='toggle')
+    @utils.is_owner()
+    async def calculator_toggle(self, ctx: Context):
+        """
+        Toggles whether to use the calculator command or not.
+
+        If disabled, then the calculator command will be disabled and it will evaluate any message's content where it finds an expression.
+        """
+
+        ternary = self.bot.calc_ternary
+        data: utils.Constants = await utils.Constants.get()
+        if ternary is False:
+            cmd = self.bot.get_command('calculator')
+            cmd.enabled = True
+            self.bot.calc_ternary = True
+            data.calculator_ternary = True
+        else:
+            cmd = self.bot.get_command('calculator')
+            cmd.enabled = False
+            self.bot.calc_ternary = False
+            data.calculator_ternary = False
+        await data.commit()
+
+        await ctx.reply(
+            f'Successfully **{"enabled" if cmd.enabled is True else "disabled"}** '
+            'the calculator command and enabled checking for expressions in messages automatically.'
+        )
 
 
 def setup(bot: Ukiyo):
