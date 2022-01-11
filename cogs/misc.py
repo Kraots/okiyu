@@ -1180,11 +1180,11 @@ class Misc(commands.Cog):
         _sentence = sentence.lower()
         _sentence = ' '.join(_sentence.split())
         sentence = ''
-        for word in _sentence:
+        for letter in _sentence:
             space = 1
-            if word == ' ':
+            if letter == ' ':
                 space = 3
-            sentence += word + (' ' * space)
+            sentence += letter + (' ' * space)
         _numbers_table = {
             '0': '0️⃣',
             '1': '1️⃣',
