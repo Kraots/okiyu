@@ -24,6 +24,8 @@ class AutoMod(commands.Cog):
             3, 1800.0, commands.BucketType.user)  # Checks for bad words (3msg per 30m)
         self.invite_cooldown = commands.CooldownMapping.from_cooldown(
             2, 900.0, commands.BucketType.user)  # Checks for invites (2msg per 15m)
+        self.newline_cooldown = commands.CooldownMapping.from_cooldown(
+            3, 120.0, commands.BucketType.user)  # Checks for newlines in a message (3msg per 2m)
 
     def get_mute_time(self, user_id) -> str:
         try:
@@ -173,6 +175,18 @@ class AutoMod(commands.Cog):
                     return await self.apply_action(message, 'invite found')
                 return
 
+    async def anti_newlines(self, message: disnake.Message):
+        current = message.created_at.timestamp()
+
+        count = message.content.count('\n')
+        if count > 15:
+            await utils.try_delete(message)
+
+            words_bucket = self.newline_cooldown.get_bucket(message)
+            if words_bucket.update_rate_limit(current):
+                words_bucket.reset()
+                return await self.apply_action(message, 'too many lines')
+
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
         if message.author.bot or message.author.id == self.bot._owner_id or\
@@ -197,7 +211,7 @@ class AutoMod(commands.Cog):
             if await coro(self, after):
                 break
 
-    coros = [anti_bad_words, anti_invites, anti_raid]
+    coros = [anti_bad_words, anti_invites, anti_raid, anti_newlines]
 
 
 def setup(bot: Ukiyo):
