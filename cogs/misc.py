@@ -1087,9 +1087,8 @@ class Misc(commands.Cog):
         """
 
         if self.bot.calc_ternary is False:
-            cmd = self.bot.get_command('calc')
-            cmd.enabled = False
-            return await ctx.invoke(cmd, expression='1+1')
+            return
+
         operators = r'\+\-\/\*\(\)\^\÷\%\×'
 
         if not any(m in expression for m in operators):
@@ -1159,19 +1158,15 @@ class Misc(commands.Cog):
         ternary = self.bot.calc_ternary
         data: utils.Constants = await utils.Constants.get()
         if ternary is False:
-            cmd = self.bot.get_command('calculator')
-            cmd.enabled = True
             self.bot.calc_ternary = True
             data.calculator_ternary = True
         else:
-            cmd = self.bot.get_command('calculator')
-            cmd.enabled = False
             self.bot.calc_ternary = False
             data.calculator_ternary = False
         await data.commit()
 
         await ctx.reply(
-            f'Successfully **{"enabled" if cmd.enabled is True else "disabled"}** '
+            f'Successfully **{"enabled" if self.bot.calc_ternary is True else "disabled"}** '
             'the calculator command and enabled checking for expressions in messages automatically.'
         )
 
