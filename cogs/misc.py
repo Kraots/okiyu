@@ -1177,6 +1177,11 @@ class Misc(commands.Cog):
         `sentence` **->** The sentence to emojify.
         """
 
+        _sentence = sentence.replace(' ', '')
+        sentence = ''
+        for word in _sentence:
+            sentence += word + ' '
+
         await ctx.reply(sentence.translate(utils.LETTERS_TABLE))
 
 
