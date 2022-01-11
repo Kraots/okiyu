@@ -1177,10 +1177,14 @@ class Misc(commands.Cog):
         `sentence` **->** The sentence to emojify.
         """
 
-        _sentence = sentence.lower().replace(' ', '')
+        _sentence = sentence.lower()
+        _sentence = ' '.join(_sentence.split())
         sentence = ''
         for word in _sentence:
-            sentence += word + ' '
+            space = 1
+            if word == ' ':
+                space = 4
+            sentence += word + (' ' * space)
         _numbers_table = {
             '0': '0️⃣',
             '1': '1️⃣',
