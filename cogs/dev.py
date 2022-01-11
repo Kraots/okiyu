@@ -132,8 +132,7 @@ class Developer(commands.Cog):
             return await ctx.reply('This command cannot be disabled.')
 
         data: utils.Constants = await utils.Constants.get()
-        _cmd = data.disabled_commands.get(cmd.qualified_name)
-        if _cmd is not None:
+        if cmd.qualified_name in data.disabled_commands:
             data.disabled_commands.remove(cmd.qualified_name)
             await data.commit()
         else:
