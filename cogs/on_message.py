@@ -216,7 +216,9 @@ class OnMessage(commands.Cog):
         except SyntaxError:
             return
         try:
-            await message.reply(embed=em)
+            ctx = await self.bot.get_context(message)
+            view = utils.QuitButton(ctx, label='Delete')
+            view.message = await message.reply(embed=em, view=view)
         except disnake.HTTPException:
             return
 
