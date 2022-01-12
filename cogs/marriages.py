@@ -230,12 +230,8 @@ class Marriages(commands.Cog):
         elif data1 and member.id in data1.adoptions:
             return await ctx.reply(f'{ctx.denial} You already adopted that person.')
         else:
-            filter1: Marriage = await Marriage.find({'adoptions': ctx.author.id}).to_list(1)
-            filter2: Marriage = await Marriage.find({'adoptions': member.id}).to_list(1)
-            if len(filter1) == 1:
-                mem = ctx.ukiyo.get_member(filter1[0].id)
-                return await ctx.reply(f'{ctx.denial} You are already adopted by {mem.mention}')
-            elif len(filter2) == 1:
+            filter2: list[Marriage] = await Marriage.find({'adoptions': member.id}).to_list(1)
+            if len(filter2) == 1:
                 mem = ctx.ukiyo.get_member(filter2[0].id)
                 return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already adopted by {mem.mention}')
 
