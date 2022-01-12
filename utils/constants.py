@@ -27,6 +27,7 @@ EDGE_CHARACTERS_CASES = {
     '$': 's',
     '!': 'i',
     '9': 'g',
+    '5': 's',
 }
 EDGE_CHARACTERS_TABLE = str.maketrans(EDGE_CHARACTERS_CASES)
 PUNCTUATIONS_AND_DIGITS = tuple(list(st.punctuation) + list(st.digits))
