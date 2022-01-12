@@ -121,12 +121,12 @@ class _Game(commands.Cog, name='Game'):
             if mem == ctx.author:
                 to_append = (
                     f'**{place} {mem.name} (YOU)**',
-                    f'`{entry.coins:,}` {self.coin_emoji}'
+                    f'**{entry.coins:,}** {self.coin_emoji}'
                 )
             else:
                 to_append = (
                     f'{place} {mem.name}',
-                    f'`{entry.coins:,}` {self.coin_emoji}'
+                    f'**{entry.coins:,}** {self.coin_emoji}'
                 )
             entries.append(to_append)
 
@@ -253,12 +253,12 @@ class _Game(commands.Cog, name='Game'):
             if mem == ctx.author:
                 to_append = (
                     f'**{place} {mem.name} (YOU)**',
-                    f'`{entry.streak:,}` streak(s)'
+                    f'**{entry.streak:,}** streak(s)'
                 )
             else:
                 to_append = (
                     f'{place} {mem.name}',
-                    f'`{entry.streak:,}` streak(s)'
+                    f'**{entry.streak:,}** streak(s)'
                 )
             entries.append(to_append)
 
