@@ -323,6 +323,29 @@ class Marriages(commands.Cog):
         await ctx.reply(f'You have unadopted {member.mention}')
 
     @commands.command()
+    async def runaway(self, ctx: Context):
+        """Run away from your family. That means you will "unadopt" yourself."""
+
+        data: Marriage = await Marriage.find({'adoptions': ctx.author.id}).to_list(2)
+        if not data:
+            return await ctx.reply(f'{ctx.denial} You are not adopted by anybody.')
+        else:
+            async for entry in Marriage.find({'adoptions': ctx.author.id}):
+                entry: Marriage
+
+                entry.adoptions.remove(ctx.author.id)
+                await entry.commit()
+                mem = ctx.ukiyo.get_member(entry.id)
+                await mem.send(
+                    f'`{utils.format_name(ctx.author)}` Has run away from your family. '
+                    'They are no longer adopted by you.'
+                )
+        await ctx.reply(
+            'You have run away from your family. '
+            'You are not adopted anymore and your ex-step-parents have been notified about this.'
+        )
+
+    @commands.command()
     async def family(self, ctx: Context, *, member: disnake.Member = None):
         """See your family members. This basically shows you who you have adopted, and who you are married to.
 
