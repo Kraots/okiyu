@@ -173,17 +173,17 @@ class OnMessage(commands.Cog):
             ' ': '',
             '×': '*',
         }.items():
-            message.content = message.content.replace(key, value)
+            _content = message.content.replace(key, value)
 
         try:
             def parse(_match):
                 return _match.group().replace('(', '*(')
 
-            message.content = re.sub(re.compile(r'\d\('), parse, message.content)
+            _content = re.sub(re.compile(r'\d\('), parse, _content)
             regex = re.compile(
                 rf"({'|'.join(list(functions.keys()))})?([{operators}]+)?(\d+[{operators}]+)*(\d+)([{operators}]+)?"
             )
-            match = re.search(regex, message.content)
+            match = re.search(regex, _content)
             content = ''.join(match.group())
             if not any(m in content for m in operators) or not content:
                 return
