@@ -1167,7 +1167,8 @@ class Misc(commands.Cog):
 
         await ctx.reply(
             f'Successfully **{"enabled" if self.bot.calc_ternary is True else "disabled"}** '
-            'the calculator command and enabled checking for expressions in messages automatically.'
+            f'the calculator command and **{"disabled" if self.bot.calc_ternary is True else "enabled"}** '
+            'checking for expressions in messages automatically.'
         )
 
     @commands.command()
