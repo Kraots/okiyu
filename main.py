@@ -1,6 +1,5 @@
 import os
 import aiohttp
-import asyncio
 import datetime
 from typing import Optional
 from traceback import format_exception
@@ -28,7 +27,6 @@ class Ukiyo(commands.Bot):
             ),
             test_guilds=[913310006814859334]
         )
-        self.loop.run_until_complete(self._fill_attrs())  # Fill all of them concurrently in the background.
         self.add_check(self.check_dms)
 
         self._owner_id = 374622847672254466
@@ -62,49 +60,6 @@ class Ukiyo(commands.Bot):
     def session(self) -> aiohttp.ClientSession:
         return self._session
 
-    async def _fill_attrs(self):
-        async def _fill_views():
-            if self.added_views is False:
-                self.add_view(utils.Verify(self), message_id=913512065799421953)
-                self.add_view(utils.ColourButtonRoles(), message_id=913763247927218177)
-                self.add_view(utils.ColourButtonRoles(), message_id=913763329816821780)
-                self.add_view(utils.ColourButtonRoles(), message_id=913763420644462603)
-                self.add_view(utils.ColourButtonRoles(), message_id=913763496448110603)
-                self.add_view(utils.ColourButtonRoles(), message_id=913763571853303858)
-                self.add_view(utils.ColourButtonRoles(), message_id=913763639922659358)
-                self.add_view(utils.PronounsButtonRoles(), message_id=928684415452856381)
-                self.add_view(utils.GenderButtonRoles(), message_id=913788066114719785)
-                self.add_view(utils.AgeButtonRoles(), message_id=913788068031496192)
-                self.add_view(utils.SexualityButtonRoles(), message_id=913788069373681685)
-                self.add_view(utils.RelationshipStatusButtonRoles(), message_id=913790418959876097)
-
-                async for ticket in utils.Ticket.find():
-                    self.add_view(utils.TicketView(), message_id=ticket.message_id)
-
-                self.added_views = True
-
-        async def _fill_bad_words():
-            data: utils.BadWords = await utils.BadWords.get(self._owner_id)
-            if data and data.bad_words and not self.bad_words:
-                for word, added_by in data.bad_words.items():
-                    self.bad_words[word] = added_by
-
-        async def _fill_constants():
-            data: utils.Constants = await utils.Constants.get()
-            if data is None:
-                data = await utils.Constants().commit()
-
-            self.calc_ternary = data.calculator_ternary
-            for cmd_name in data.disabled_commands:
-                cmd = self.get_command(cmd_name)
-                if cmd is None:
-                    data.disabled_commands.remove(cmd_name)
-                    await data.commit()
-                else:
-                    cmd.enabled = False
-
-        asyncio.gather(_fill_constants(), _fill_bad_words(), _fill_views())
-
     async def on_ready(self):
         if not hasattr(self, 'uptime'):
             self.uptime = datetime.datetime.utcnow()
@@ -116,6 +71,42 @@ class Ukiyo(commands.Bot):
             activity = disnake.Activity(type=disnake.ActivityType.watching, name='you date | !help')
             await self.change_presence(status=disnake.Status.dnd, activity=activity)
             self._presence_changed = True
+
+        data: utils.BadWords = await utils.BadWords.get()
+        if data and data.bad_words:
+            for word, added_by in data.bad_words.items():
+                self.bad_words[word] = added_by
+
+        data: utils.Constants = await utils.Constants.get()
+        if data is None:
+            data = await utils.Constants().commit()
+        self.calc_ternary = data.calculator_ternary
+        for cmd_name in data.disabled_commands:
+            cmd = self.get_command(cmd_name)
+            if cmd is None:
+                data.disabled_commands.remove(cmd_name)
+                await data.commit()
+            else:
+                cmd.enabled = False
+
+        if self.added_views is False:
+            self.add_view(utils.Verify(self), message_id=913512065799421953)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763247927218177)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763329816821780)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763420644462603)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763496448110603)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763571853303858)
+            self.add_view(utils.ColourButtonRoles(), message_id=913763639922659358)
+            self.add_view(utils.PronounsButtonRoles(), message_id=928684415452856381)
+            self.add_view(utils.GenderButtonRoles(), message_id=913788066114719785)
+            self.add_view(utils.AgeButtonRoles(), message_id=913788068031496192)
+            self.add_view(utils.SexualityButtonRoles(), message_id=913788069373681685)
+            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=913790418959876097)
+
+            async for ticket in utils.Ticket.find():
+                self.add_view(utils.TicketView(), message_id=ticket.message_id)
+
+            self.added_views = True
 
         if len(self.webhooks) == 0:
             av = self.user.display_avatar
