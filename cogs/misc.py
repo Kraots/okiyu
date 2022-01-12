@@ -1186,6 +1186,7 @@ class Misc(commands.Cog):
                 space = 3
             sentence += letter + (' ' * space)
         sentence = sentence.translate(utils.LETTERS_TABLE)
+        sentence = sentence.translate(utils.NUMBERS_TABLE)
 
         await ctx.reply(sentence)
 
