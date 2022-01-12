@@ -329,12 +329,23 @@ class Marriages(commands.Cog):
             async for entry in Marriage.find({'adoptions': ctx.author.id}):
                 entry: Marriage
 
+                if entry.id == self.bot._owner_id:
+                    await self.bot._owner.send(
+                        f'{utils.format_name(ctx.author)}` Has tried to run away.',
+                        view=utils.UrlButton('Jump!', ctx.message.jump_url)
+                    )
+                    return await ctx.reply(
+                        'You cannot run away from my master. '
+                        'He\'s been notified about your misbehaviour.'
+                    )
+
                 entry.adoptions.remove(ctx.author.id)
                 await entry.commit()
                 mem = ctx.ukiyo.get_member(entry.id)
                 await mem.send(
                     f'`{utils.format_name(ctx.author)}` Has run away from your family. '
-                    'They are no longer adopted by you.'
+                    'They are no longer adopted by you.',
+                    view=utils.UrlButton('Jump!', ctx.message.jump_url)
                 )
         await ctx.reply(
             'You have run away from your family. '
