@@ -13,6 +13,8 @@ __all__ = (
     'LETTERS_EMOJI',
     'LETTERS_TABLE',
     'EMOJIS_TABLE',
+    'NUMBERS_EMOJI',
+    'NUMBERS_TABLE'
 )
 
 FIRST_JANUARY_1970 = datetime(1970, 1, 1, 0, 0, 0, 0)
@@ -37,9 +39,14 @@ LETTERS_EMOJI = {
     'm': '🇲', 'n': '🇳', 'o': '🇴', 'p': '🇵',
     'q': '🇶', 'r': '🇷', 's': '🇸', 't': '🇹',
     'u': '🇺', 'v': '🇻', 'w': '🇼', 'x': '🇽',
-    'y': '🇾', 'z': '🇿', '0': '0️⃣', '1': '1️⃣',
-    '2': '2️⃣', '3': '3️⃣', '4': '4️⃣', '5': '5️⃣',
-    '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'
+    'y': '🇾', 'z': '🇿'
+}
+NUMBERS_EMOJI = {
+    '0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣',
+    '4': '4️⃣', '5': '5️⃣', '6': '6️⃣', '7': '7️⃣',
+    '8': '8️⃣', '9': '9️⃣'
 }
 LETTERS_TABLE = str.maketrans(LETTERS_EMOJI)
+NUMBERS_TABLE = str.maketrans(NUMBERS_EMOJI)
+
 EMOJIS_TABLE = str.maketrans({v: k for k, v in LETTERS_EMOJI.items()})

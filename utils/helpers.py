@@ -122,6 +122,8 @@ def check_profanity(string: str, *, bad_words: list = None) -> bool:
 
         if res is False:
             string = string.translate(EMOJIS_TABLE)  # Change every regional indicator emoji to its corresponding letter.
+            for original, emoji in NUMBERS_EMOJI.items():
+                string.replace(emoji, original)  # Replace every number emoji with its corresponding number
             res = any(w for w in bad_words if w in string)
 
             if res is False:
