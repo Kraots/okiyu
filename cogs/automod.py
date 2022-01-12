@@ -26,6 +26,10 @@ class AutoMod(commands.Cog):
             2, 900.0, commands.BucketType.user)  # Checks for invites (2msg per 15m)
         self.newline_cooldown = commands.CooldownMapping.from_cooldown(
             3, 120.0, commands.BucketType.user)  # Checks for newlines in a message (3msg per 2m)
+        self.mentions_cooldown = commands.CooldownMapping.from_cooldown(
+            3, 60.0, commands.BucketType.user)  # Checks for the amount of mentions in a message (3msg per 1m)
+        self.emojis_cooldown = commands.CooldownMapping.from_cooldown(
+            3, 30.0, commands.BucketType.user)  # Checks for the amount of emojis in a message in a message (3msg per 30s)
 
     def get_mute_time(self, user_id) -> str:
         try:
@@ -139,6 +143,15 @@ class AutoMod(commands.Cog):
             user_bucket.reset()
             return await self.apply_action(message, 'anti raid (spam)')
 
+        count = len(message.mentions)
+        if count > 6:
+            await utils.try_delete(message)
+
+            words_bucket = self.newline_cooldown.get_bucket(message)
+            if words_bucket.update_rate_limit(current):
+                words_bucket.reset()
+                return await self.apply_action(message, 'anti raid (too many mentions)')
+
     async def anti_bad_words(self, message: disnake.Message):
         current = message.created_at.timestamp()
 
@@ -187,6 +200,20 @@ class AutoMod(commands.Cog):
             if words_bucket.update_rate_limit(current):
                 words_bucket.reset()
                 return await self.apply_action(message, 'too many lines')
+
+    async def anti_emojis(self, message: disnake.Message):
+        current = message.created_at.timestamp()
+
+        unicode_emojis_count = len(utils.UNICODE_REGEX.findall(message.content))
+        custom_emojis_count = len(utils.CUSTOM_EMOJI_REGEX.findall(message.content))
+        total_emojis_count = unicode_emojis_count + custom_emojis_count
+        if total_emojis_count > 7:
+            await utils.try_delete(message)
+
+            words_bucket = self.newline_cooldown.get_bucket(message)
+            if words_bucket.update_rate_limit(current):
+                words_bucket.reset()
+                return await self.apply_action(message, 'too many emojis')
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
