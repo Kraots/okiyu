@@ -32,6 +32,7 @@ __all__ = (
     'try_delete',
     'try_dm',
     'remove_zalgos',
+    'format_name',
 )
 
 
@@ -516,3 +517,7 @@ async def try_dm(
             "'list[disnake.Member | disnake.User]', 'tuple[disnake.Member | disnake.User]' or "
             f"'set[disnake.Member | disnake.User]' not {user.__class__}"
         )
+
+
+def format_name(member: disnake.Member) -> str:
+    return member.display_name + '#' + member.tag

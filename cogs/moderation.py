@@ -97,7 +97,7 @@ class Moderation(commands.Cog):
             await channel.set_permissions(
                 role,
                 overwrite=overwrites,
-                reason=f'Channel locked by {ctx.author} ({ctx.author.id})'
+                reason=f'Channel locked by {utils.format_name(ctx.author)} ({ctx.author.id})'
             )
         else:
             return await ctx.reply(f'{ctx.denial} That channel cannot be unlocked.')
@@ -130,7 +130,7 @@ class Moderation(commands.Cog):
                     await channel.set_permissions(
                         role,
                         overwrite=overwrites,
-                        reason=f'Channel locked by {ctx.author} ({ctx.author.id})'
+                        reason=f'Channel locked by {utils.format_name(ctx.author)} ({ctx.author.id})'
                     )
                     _channels.append(channel.mention)
         await ctx.reply('> 🔒 All the unlocked channels have been locked!')
@@ -163,7 +163,7 @@ class Moderation(commands.Cog):
             await channel.set_permissions(
                 role,
                 overwrite=overwrites,
-                reason=f'Channel unlocked by {ctx.author} ({ctx.author.id})'
+                reason=f'Channel unlocked by {utils.format_name(ctx.author)} ({ctx.author.id})'
             )
         else:
             return await ctx.reply(f'{ctx.denial} That channel cannot be unlocked.')
@@ -196,7 +196,7 @@ class Moderation(commands.Cog):
                     await channel.set_permissions(
                         role,
                         overwrite=overwrites,
-                        reason=f'Channel unlocked by {ctx.author} ({ctx.author.id})'
+                        reason=f'Channel unlocked by {utils.format_name(ctx.author)} ({ctx.author.id})'
                     )
                     _channels.append(channel.mention)
         await ctx.reply('> 🔓 All locked channels have been unlocked!')
@@ -231,7 +231,7 @@ class Moderation(commands.Cog):
 
         await ctx.ukiyo.ban(
             member,
-            reason=f'{ctx.author} ({ctx.author.id}): "{reason}"',
+            reason=f'{utils.format_name(ctx.author)} ({ctx.author.id}): "{reason}"',
             delete_message_days=0
         )
         await ctx.send(f'> 👌 🔨 Banned `{member}` for **{reason}**')
@@ -262,7 +262,7 @@ class Moderation(commands.Cog):
         """
 
         try:
-            await ctx.ukiyo.unban(user, reason=f'Unban by {ctx.author} ({ctx.author.id})')
+            await ctx.ukiyo.unban(user, reason=f'Unban by {utils.format_name(ctx.author)} ({ctx.author.id})')
         except disnake.NotFound:
             return await ctx.reply(f'{ctx.denial} The user is not banned.')
 
@@ -295,7 +295,7 @@ class Moderation(commands.Cog):
             member,
             f'> ⚠️ Hello! Sadly, you have been **kicked** from `Ukiyo` for **{reason}**. Goodbye 👋'
         )
-        await member.kick(reason=f'{ctx.author} ({ctx.author.id}): "{reason}"')
+        await member.kick(reason=f'{utils.format_name(ctx.author)} ({ctx.author.id}): "{reason}"')
         await ctx.send(f'> 👌 Kicked `{member}` for **{reason}**')
         await utils.log(
             self.bot.webhooks['mod_logs'],
@@ -436,11 +436,11 @@ class Moderation(commands.Cog):
         await member.edit(
             roles=new_roles,
             voice_channel=None,
-            reason=f'[{action.upper()}] {ctx.author} ({ctx.author.id}): "{reason}"'
+            reason=f'[{action.upper()}] {utils.format_name(ctx.author)} ({ctx.author.id}): "{reason}"'
         )
 
         em = disnake.Embed(title=f'You have been {fmt}!', color=utils.red)
-        em.description = f'**{fmt.title()} By:** {ctx.author}\n' \
+        em.description = f'**{fmt.title()} By:** {utils.format_name(ctx.author)}\n' \
                          f'**Reason:** {reason}\n' \
                          f'**{action.title()} Duration:** `{human_timedelta(time, suffix=False)}`\n' \
                          f'**Expire Date:** {format_dt(time, "F")}'
@@ -458,7 +458,7 @@ class Moderation(commands.Cog):
             self.bot.webhooks['mod_logs'],
             title=f'[{action.upper()}]',
             fields=[
-                ('Member', f'{member} (`{member.id}`)'),
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                 ('Reason', reason),
                 (f'{action.title()} Duration', f'`{duration}`'),
                 ('Expires At', format_dt(time, "F")),
@@ -479,7 +479,7 @@ class Moderation(commands.Cog):
         data: Mutes = await Mutes.get(member.id)
         fmt = 'muted' if action == 'unmute' else 'blocked'
         if data is None:
-            return await ctx.reply(f'`{member}` is not **{fmt}**!')
+            return await ctx.reply(f'`{utils.format_name(member)}` is not **{fmt}**!')
 
         muted_by = ctx.ukiyo.get_member(data.muted_by)
         if data.filter is False:
@@ -501,11 +501,11 @@ class Moderation(commands.Cog):
         elif data.is_mod is True:
             mod_role = ctx.ukiyo.get_role(913315033684008971)  # Check for mod
             new_roles += [mod_role]
-        await member.edit(roles=new_roles, reason=f'[{action.upper()}] {action.title()} by {ctx.author} ({ctx.author.id})')
+        await member.edit(roles=new_roles, reason=f'[{action.upper()}] {action.title()} by {utils.format_name(ctx.author)} ({ctx.author.id})')
         if send_feedback is True:
             await utils.try_dm(
                 member,
-                f'Hello, you have been **un{fmt}** in `Ukiyo` by **{ctx.author}**'
+                f'Hello, you have been **un{fmt}** in `Ukiyo` by **{utils.format_name(ctx.author)}**'
             )
 
             await ctx.reply(f'> 👌 Successfully **un{fmt}** {member.mention}')
@@ -513,7 +513,7 @@ class Moderation(commands.Cog):
             self.bot.webhooks['mod_logs'],
             title=f'[{action.upper()}]',
             fields=[
-                ('Member', f'{member} (`{member.id}`)'),
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                 (f'{"Mute" if action == "unmute" else "Block"} Duration', f'`{data.duration}`'),
                 ('Remaining', f'`{human_timedelta(data.muted_until, suffix=False, accuracy=6)}`'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
@@ -627,7 +627,7 @@ class Moderation(commands.Cog):
                     fmt = 'unmuted'
 
                 if member:
-                    _mem = f'{member} (`{member.id}`)'
+                    _mem = f'{utils.format_name(member)} (`{member.id}`)'
                     new_roles = [role for role in member.roles if role.id not in (913376647422545951, 924941473089224784)]
                     if mute.is_owner is True:
                         owner_role = guild.get_role(913310292505686046)  # Check for owner
@@ -687,15 +687,15 @@ class Moderation(commands.Cog):
             return
 
         if 913315033134542889 in (r.id for r in member.roles):
-            return await ctx.reply(f'{ctx.denial} `{member}` is already an admin!')
+            return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already an admin!')
         admin_role = ctx.ukiyo.get_role(913315033134542889)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
-        await ctx.reply(f'> 👌 Successfully made `{member}` an admin.')
+        await ctx.reply(f'> 👌 Successfully made `{utils.format_name(member)}` an admin.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title='[ADMIN ADDED]',
             fields=[
-                ('Member', f'{member} (`{member.id}`)'),
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
@@ -714,15 +714,15 @@ class Moderation(commands.Cog):
             return
 
         if 913315033684008971 in (r.id for r in member.roles):
-            return await ctx.reply(f'{ctx.denial} `{member}` is already a moderator!')
+            return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already a moderator!')
         mod_role = ctx.ukiyo.get_role(913315033684008971)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
-        await ctx.reply(f'> 👌 Successfully made `{member}` a moderator.')
+        await ctx.reply(f'> 👌 Successfully made `{utils.format_name(member)}` a moderator.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title='[MODERATOR ADDED]',
             fields=[
-                ('Member', f'{member} (`{member.id}`)'),
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
@@ -754,14 +754,14 @@ class Moderation(commands.Cog):
             return
 
         if 913315033134542889 not in (r.id for r in member.roles):
-            return await ctx.reply(f'{ctx.denial} `{member}` is not an admin!')
+            return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is not an admin!')
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
-        await ctx.reply(f'> 👌 Successfully removed `{member}` from being an admin.')
+        await ctx.reply(f'> 👌 Successfully removed `{utils.format_name(member)}` from being an admin.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title='[ADMIN REMOVED]',
             fields=[
-                ('Member', f'{member} (`{member.id}`)'),
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],
@@ -780,14 +780,14 @@ class Moderation(commands.Cog):
             return
 
         if 913315033684008971 not in (r.id for r in member.roles):
-            return await ctx.reply(f'{ctx.denial} `{member}` is not a moderator!')
+            return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is not a moderator!')
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971])
-        await ctx.reply(f'> 👌 Successfully removed `{member}` from being a moderator.')
+        await ctx.reply(f'> 👌 Successfully removed `{utils.format_name(member)}` from being a moderator.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title='[MODERATOR REMOVED]',
             fields=[
-                ('Member', f'{member} (`{member.id}`)'),
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', format_dt(datetime.now(), 'F')),
             ],

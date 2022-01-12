@@ -94,7 +94,7 @@ class _Game(commands.Cog, name='Game'):
             color=utils.blurple,
             description=f'You currently have `{data.coins:,}` {self.coin_emoji}'
         )
-        em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
+        em.set_author(name=utils.format_name(ctx.author), icon_url=ctx.author.display_avatar)
         em.set_thumbnail(url=ctx.author.display_avatar)
         if data.daily <= datetime.now():
             em.set_footer(text='• You can claim your daily!')
@@ -162,7 +162,9 @@ class _Game(commands.Cog, name='Game'):
         data.coins = amount
         await data.commit()
 
-        await ctx.reply(f'Successfully set the amount of coins for `{member}` to **{amount:,}** {self.coin_emoji}')
+        await ctx.reply(
+            f'Successfully set the amount of coins for `{utils.format_name(member)}` to **{amount:,}** {self.coin_emoji}'
+        )
 
     @game_coins.command(name='add')
     @utils.is_owner()
@@ -184,7 +186,7 @@ class _Game(commands.Cog, name='Game'):
         data.coins += amount
         await data.commit()
 
-        await ctx.reply(f'Successfully added **{amount:,}** {self.coin_emoji} to `{member}`')
+        await ctx.reply(f'Successfully added **{amount:,}** {self.coin_emoji} to `{utils.format_name(member)}`')
 
     @base_game.command(name='daily')
     async def game_daily(self, ctx: Context):
@@ -234,7 +236,7 @@ class _Game(commands.Cog, name='Game'):
             description=f'Your current daily streak is `{data.streak:,}`',
             color=utils.blurple
         )
-        em.set_author(name=ctx.author, icon_url=ctx.author.display_avatar)
+        em.set_author(name=utils.format_name(ctx.author), icon_url=ctx.author.display_avatar)
         if data.daily <= datetime.now():
             em.set_footer(text='• You can claim your daily!')
 
@@ -470,7 +472,7 @@ class _Game(commands.Cog, name='Game'):
 
         data2 = await self.get_user(member.id)
         if not data2.characters:
-            em = utils.fail_embed(f'`{member}` doesn\'t have any characters.')
+            em = utils.fail_embed(f'`{utils.format_name(member)}` doesn\'t have any characters.')
             return await ctx.reply(embed=em)
         elif data2.coins < 1500:
             em = utils.fail_embed(f'{member.mention} must have at least **1,500** {self.coin_emoji}')
@@ -485,7 +487,7 @@ class _Game(commands.Cog, name='Game'):
         if view.response is False:
             return await ctx.reply(f'{member.mention} does not want to fight you.')
         await ctx.reply(
-            f'`{member}` has agreed to have a fight with you. '
+            f'`{utils.format_name(member)}` has agreed to have a fight with you. '
             'Please send the name of one of the characters you own that '
             'you wish to use in this fight.'
         )
@@ -576,14 +578,14 @@ class _Game(commands.Cog, name='Game'):
         data = await self.get_user(member.id)
 
         em = disnake.Embed(color=utils.blurple)
-        em.set_author(name=f'{member}\'s game profile', icon_url=member.display_avatar)
+        em.set_author(name=f'{utils.format_name(member)}\'s game profile', icon_url=member.display_avatar)
         em.add_field('Coins', f'{data.coins:,} {self.coin_emoji}', inline=False)
         em.add_field('Total Characters', len(data.characters), inline=False)
         em.add_field('Current Streak', f'{data.streak:,}', inline=False)
         em.add_field('Total Matches', f'{data.total_matches:,}')
         em.add_field('Total Wins', f'{data.wins:,}')
         em.add_field('Total Loses', f'{data.loses:,}')
-        em.set_footer(text=f'Requested By: {ctx.author}')
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
 
         await ctx.better_reply(embed=em)
 
@@ -865,7 +867,7 @@ class _Game(commands.Cog, name='Game'):
             description=f'Next boss fight is in `{utils.human_timedelta(self.boss_fight.next_iteration)}`',
             color=utils.blurple
         )
-        em.set_footer(text=f'Requested By: {ctx.author}')
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
         await ctx.better_reply(embed=em)
 
     @game_boss.command(name='start', aliases=('s',))

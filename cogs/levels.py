@@ -105,7 +105,7 @@ class Levels(commands.Cog):
         if data is not None:
             data.xp = xp
             await data.commit()
-            return await ctx.reply(f'Successfully set `{member}` to level **{level}**')
+            return await ctx.reply(f'Successfully set `{utils.format_name(member)}` to level **{level}**')
         await ctx.reply(f'{ctx.denial} Member not in the database.')
 
     @level_cmd.command(name='leaderboard', aliases=('lb', 'top',))
@@ -171,7 +171,7 @@ class Levels(commands.Cog):
         em.set_author(name=f'{member.display_name}\'s message stats', icon_url=member.display_avatar)
         em.add_field(name='Total Messages', value=f"`{user_db.messages_count:,}`")
         em.add_field(name='Rank', value=f"`#{rank:,}`")
-        em.set_footer(text=f'Requested by: {ctx.author}')
+        em.set_footer(text=f'Requested by: {utils.format_name(ctx.author)}')
         await ctx.better_reply(embed=em)
 
     @_msgs.command(name='leaderboard', aliases=('top', 'lb',))
@@ -280,12 +280,12 @@ class Levels(commands.Cog):
             usr_db.messages_count = 0
             await usr_db.commit()
             return await msg.edit(
-                content=f'The total message count for member **{member}** has been reset successfully.',
+                content=f'The total message count for member **{utils.format_name(member)}** has been reset successfully.',
             )
 
         elif view.response is False:
             return await msg.edit(
-                content=f"Command to reset the message count for user `{member}` has been cancelled.",
+                content=f"Command to reset the message count for user `{utils.format_name(member)}` has been cancelled.",
             )
 
     @commands.Cog.listener()

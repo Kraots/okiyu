@@ -163,7 +163,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
         data[value] = new_data
 
         em = disnake.Embed(colour=inter.author.color)
-        em.set_author(name=inter.author, icon_url=inter.author.display_avatar)
+        em.set_author(name=utils.format_name(inter.author), icon_url=inter.author.display_avatar)
         em.set_thumbnail(url=inter.author.display_avatar)
         em.add_field(name='Name', value=data.name)
         em.add_field(name='Age', value=data.age)

@@ -69,7 +69,7 @@ class Featured(commands.Cog):
         channel = await ctx.ukiyo.create_text_channel(
             ch_name,
             category=categ,
-            reason=f'Ticket Creation by {ctx.author} (ID: {ctx.author.id})'
+            reason=f'Ticket Creation by {utils.format_name(ctx.author)} (ID: {ctx.author.id})'
         )
         em = disnake.Embed(
             title=f'Ticket #{ticket_id}',
@@ -104,7 +104,7 @@ class Featured(commands.Cog):
             self.bot.webhooks['mod_logs'],
             title='[TICKET OPENED]',
             fields=[
-                ('Ticket Owner', f'{ctx.author} (`{ctx.author.id}`)'),
+                ('Ticket Owner', f'{utils.format_name(ctx.author)} (`{ctx.author.id}`)'),
                 ('Ticket ID', f'`#{ticket_id}`'),
                 ('At', utils.format_dt(datetime.now(), 'F')),
             ]

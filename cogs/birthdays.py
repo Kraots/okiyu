@@ -78,9 +78,9 @@ class Birthdays(commands.Cog):
             if member.id == ctx.author.id:
                 return await ctx.reply('You did not set your birthday.')
             else:
-                return await ctx.better_reply(f'`{member}` did not set their birthday.')
+                return await ctx.better_reply(f'`{utils.format_name(member)}` did not set their birthday.')
 
-        em = disnake.Embed(title=f'`{member}`\'s birthday', color=utils.blurple)
+        em = disnake.Embed(title=f'`{utils.format_name(member)}`\'s birthday', color=utils.blurple)
         em.add_field(
             'Birthday date',
             data.birthday_date.strftime('%d %B %Y'),
@@ -96,7 +96,7 @@ class Birthdays(commands.Cog):
             data.timezone,
             inline=False
         )
-        em.set_footer(text=f'Requested by: {ctx.author}')
+        em.set_footer(text=f'Requested by: {utils.format_name(ctx.author)}')
 
         await ctx.better_reply(embed=em)
 

@@ -72,7 +72,7 @@ class ViewIntro(disnake.ui.View):
         member = guild.get_member(self.uid)
         if data is None:
             return await inter.response.send_message(
-                f'> {disagree} `{member}` doesn\'t have an intro. '
+                f'> {disagree} `{utils.format_name(member)}` doesn\'t have an intro. '
                 'Please contact a staff member to unverify them! This is a bug.',
                 ephemeral=True
             )
@@ -85,7 +85,7 @@ class ViewIntro(disnake.ui.View):
             view = None
 
         em = disnake.Embed(colour=member.color)
-        em.set_author(name=member, icon_url=member.display_avatar)
+        em.set_author(name=utils.format_name(member), icon_url=member.display_avatar)
         em.set_thumbnail(url=member.display_avatar)
         em.add_field(name='Name', value=data.name)
         em.add_field(name='Age', value=data.age)
@@ -178,7 +178,7 @@ class Misc(commands.Cog):
 
         await utils.try_delete(ctx.message)
         ad = disnake.Embed(color=utils.blurple, title='Here\'s the ad to the server:', description=SERVER_AD)
-        ad.set_footer(text=f'Requested by: {ctx.author}')
+        ad.set_footer(text=f'Requested by: {utils.format_name(ctx.author)}')
 
         await ctx.better_reply(embed=ad)
 
@@ -340,7 +340,7 @@ class Misc(commands.Cog):
         member = member or ctx.author
         em = disnake.Embed(colour=utils.blurple, title=f'`{member.display_name}`\'s avatar')
         em.set_image(url=member.display_avatar)
-        em.set_footer(text=f'Requested By: {ctx.author}')
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
         await ctx.better_reply(embed=em)
 
     @commands.group(invoke_without_command=True, case_insensitive=True)
@@ -466,15 +466,15 @@ class Misc(commands.Cog):
                 if member == ctx.author:
                     return await ctx.reply(f'{ctx.denial} You are not muted.')
                 else:
-                    return await ctx.better_reply(f'{ctx.denial} `{member}` is not muted.')
+                    return await ctx.better_reply(f'{ctx.denial} `{utils.format_name(member)}` is not muted.')
             em = disnake.Embed(colour=utils.blurple)
-            em.set_author(name=member, icon_url=member.display_avatar)
+            em.set_author(name=utils.format_name(member), icon_url=member.display_avatar)
             em.description = f'**Muted By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
                              f'**Mute Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
-            em.set_footer(text=f'Requested By: {ctx.author}')
+            em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
             await ctx.better_reply(embed=em)
 
     @commands.command(name='checkblock', aliases=('checkblocks', 'blockscheck', 'blockcheck',))
@@ -520,15 +520,15 @@ class Misc(commands.Cog):
                 if member == ctx.author:
                     return await ctx.reply(f'{ctx.denial} You are not blocked.')
                 else:
-                    return await ctx.better_reply(f'{ctx.denial} `{member}` is not blocked.')
+                    return await ctx.better_reply(f'{ctx.denial} `{utils.format_name(member)}` is not blocked.')
             em = disnake.Embed(colour=utils.blurple)
-            em.set_author(name=member, icon_url=member.display_avatar)
+            em.set_author(name=utils.format_name(member), icon_url=member.display_avatar)
             em.description = f'**Blocked By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
                              f'**Block Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
-            em.set_footer(text=f'Requested By: {ctx.author}')
+            em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
             await ctx.better_reply(embed=em)
 
     def append_choices(
@@ -962,7 +962,7 @@ class Misc(commands.Cog):
                 other_gender += 1
 
         em = disnake.Embed(color=utils.blurple)
-        em.set_footer(text=f'Requested By: {ctx.author}')
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
 
         file = await self.draw_pie(males, trans_males, females, trans_females, other_gender)
         em.set_image(file=file)
@@ -1022,7 +1022,7 @@ class Misc(commands.Cog):
             content = utils.GistContent(f'```{res["language"]}\n' + output + '\n```')
             url = await self.github_client.create_gist(
                 content.source,
-                description=f'(`{ctx.author.id}` {ctx.author}) code result',
+                description=f'(`{ctx.author.id}` {utils.format_name(ctx.author)}) code result',
                 filename='code_output.txt',
                 public=False
             )
@@ -1075,7 +1075,7 @@ class Misc(commands.Cog):
         em = disnake.Embed(title=f'`{member.display_name}`\'s time information', color=utils.blurple)
         em.add_field('Current Time', res, inline=False)
         em.add_field('Timezone', data.timezone, inline=False)
-        em.set_footer(text=f'Requested By: {ctx.author}')
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
 
         await ctx.better_reply(embed=em)
 

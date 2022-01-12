@@ -8,7 +8,8 @@ from utils import (
     create_intro,
     is_mod,
     try_delete,
-    try_dm
+    try_dm,
+    format_name
 )
 
 from main import Ukiyo
@@ -83,7 +84,7 @@ class Intros(commands.Cog):
                 )
             else:
                 return await ctx.better_reply(
-                    f'{ctx.denial} `{member}` doesn\'t have an intro. '
+                    f'{ctx.denial} `{format_name(member)}` doesn\'t have an intro. '
                     'Please contact a staff member to unverify them! This is a bug.'
                 )
         intro_channel = ctx.ukiyo.get_channel(913331578606854184)
@@ -109,7 +110,7 @@ class Intros(commands.Cog):
         em.add_field(name='Relationship Status', value=data.status)
         em.add_field(name='Likes', value=data.likes)
         em.add_field(name='Dislikes', value=data.dislikes)
-        em.set_footer(text=f'Requested by: {ctx.author}')
+        em.set_footer(text=f'Requested by: {format_name(ctx.author)}')
         await ctx.better_reply(embed=em, view=view)
 
     @commands.command(name='unverify')
@@ -138,7 +139,7 @@ class Intros(commands.Cog):
             'You have been unverified in `Ukiyo` by one of our staff members. '
             'Please be serious when you\'re making your intro!'
         )
-        await ctx.reply(f'> 👌 `{member}` has been successfully unverified.')
+        await ctx.reply(f'> 👌 `{format_name(member)}` has been successfully unverified.')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):

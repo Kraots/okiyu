@@ -61,7 +61,7 @@ class Confesscord(commands.Cog):
             self.bot.webhooks['mod_logs'],
             title='[CONFESSCORD RESTRICTION]',
             fields=[
-                ('Member', f'{member} (`{member.id}`)'),
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', utils.format_dt(datetime.now(), 'F')),
             ],

@@ -270,7 +270,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
         usr = guild.get_member(user_id)
         colour = role.color if to_update is False else usr.color
         em = disnake.Embed(colour=colour)
-        em.set_author(name=usr.display_name, icon_url=usr.display_avatar)
+        em.set_author(name=utils.format_name(usr), icon_url=usr.display_avatar)
         em.set_thumbnail(url=usr.display_avatar)
         em.add_field(name='Name', value=name)
         em.add_field(name='Age', value=age)

@@ -70,7 +70,7 @@ class Welcome(commands.Cog):
                 self.bot.webhooks['mod_logs'],
                 title=f'[{action.upper()} EVASION]',
                 fields=[
-                    ('Member', f'{member} (`{member.id}`)'),
+                    ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                     ('Reason', f'{action.title()} Evasion.'),
                     ('Expires At', utils.format_dt(mute.muted_until, 'F')),
                     ('Remaining', f'`{utils.human_timedelta(mute.muted_until, suffix=False)}`'),

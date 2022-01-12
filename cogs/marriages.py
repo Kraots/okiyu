@@ -43,7 +43,7 @@ class Marriages(commands.Cog):
         data2: Marriage = await Marriage.get(member.id)
         if data2 and data2.married_to != 0:
             mem = ctx.ukiyo.get_member(data2.married_to)
-            return await ctx.reply(f'{ctx.denial} `{member}` is already married to {mem.mention}')
+            return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already married to {mem.mention}')
         elif data2 and ctx.author.id in data2.adoptions:
             return await ctx.reply(
                 f'{ctx.denial} You cannot marry the person that adopted you.'
@@ -193,7 +193,9 @@ class Marriages(commands.Cog):
 
         if member.id != data.married_to:
             mem = ctx.ukiyo.get_member(data.married_to)
-            return await ctx.reply(f'{ctx.denial} You cannot kiss `{member}`!! You can only kiss {mem.mention}')
+            return await ctx.reply(
+                f'{ctx.denial} You cannot kiss `{utils.format_name(member)}`!! You can only kiss {mem.mention}'
+            )
 
         em = disnake.Embed(color=utils.red)
         em.set_image(url='https://cdn.discordapp.com/attachments/752148605753884792/754984869569888276/KIS.gif')
@@ -235,7 +237,7 @@ class Marriages(commands.Cog):
                 return await ctx.reply(f'{ctx.denial} You are already adopted by {mem.mention}')
             elif len(filter2) == 1:
                 mem = ctx.ukiyo.get_member(filter2[0].id)
-                return await ctx.reply(f'{ctx.denial} `{member}` is already adopted by {mem.mention}')
+                return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already adopted by {mem.mention}')
 
         if data1 and data1.married_to != 0:
             mem = ctx.ukiyo.get_member(data1.married_to)
@@ -366,7 +368,7 @@ class Marriages(commands.Cog):
         em.add_field('Married To', married_to, inline=False)
         em.add_field(f'Adoptions ({adoptions_count})', adoptions, inline=False)
         em.add_field('Adopted By', adopted_by, inline=False)
-        em.set_footer(text=f'Requested By: {ctx.author}')
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
 
         await ctx.better_reply(embed=em)
 
