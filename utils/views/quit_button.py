@@ -6,18 +6,25 @@ __all__ = ('QuitButton',)
 
 
 class QuitButton(disnake.ui.View):
+    message: disnake.Message
+
     def __init__(
         self,
         ctx: utils.Context,
         *,
         timeout: float = 180.0,
-        delete_after: bool = False
+        delete_after: bool = False,
+        label: str = 'Quit'
     ):
         super().__init__(timeout=timeout)
         self.ctx = ctx
         self.bot = ctx.bot
         self.delete_after = delete_after
         self.message = None
+
+        self.remove_item(self.quit)
+        self.quit.label = label
+        self.add_item(self.quit)
 
     async def interaction_check(self, interaction: disnake.MessageInteraction):
         if interaction.author.id != self.ctx.author.id:
