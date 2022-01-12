@@ -199,5 +199,8 @@ class Ukiyo(commands.Bot):
         else:
             await inter.response.send_message(fmt, ephemeral=True)
 
+    async def get_context(self, message, *, cls=utils.Context):
+        return await super().get_context(message, cls=cls)
+
 
 Ukiyo().run(TOKEN)
