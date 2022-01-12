@@ -161,8 +161,9 @@ class OnMessage(commands.Cog):
         if self.bot.calc_ternary is True:
             return
         operators = r'\+\-\/\*\(\)\^\÷\%\×'
+        _content = message.content
 
-        if not any(m in message.content for m in operators):
+        if not any(m in _content for m in operators):
             return
         if message.author.bot:
             return
@@ -173,7 +174,7 @@ class OnMessage(commands.Cog):
             ' ': '',
             '×': '*',
         }.items():
-            _content = message.content.replace(key, value)
+            _content = _content.replace(key, value)
 
         try:
             def parse(_match):
