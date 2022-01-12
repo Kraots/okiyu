@@ -199,6 +199,7 @@ class Levels(commands.Cog):
                 else:
                     to_append = (f'{place} {mem.name}', f'**{entry.messages_count:,}** messages')
                     data.append(to_append)
+
         source = utils.FieldPageSource(data, per_page=10)
         source.embed.title = 'Top Most Active Users'
         pages = utils.RoboPages(source, ctx=ctx)
