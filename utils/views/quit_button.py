@@ -52,5 +52,8 @@ class QuitButton(disnake.ui.View):
         """Deletes the user's message along with the bot's message."""
 
         await inter.response.defer()
-        await utils.try_delete((self.message, self.ctx.message))
+        to_delete = [self.message]
+        if self.delete_after is True:
+            to_delete.append(self.ctx.message)
+        await utils.try_delete(to_delete)
         self.stop()
