@@ -150,7 +150,7 @@ class Birthdays(commands.Cog):
             'The format in which you must send this must be **Continent/City**. (e.g: Europe/London, America/Los Angeles, etc...)'
         )
         try:
-            _birthday_timezone = await self.bot.wait_for(
+            _birthday_timezone: disnake.Message = await self.bot.wait_for(
                 'message',
                 check=lambda m: m.channel.id == ctx.channel.id and m.author.id == ctx.author.id,
                 timeout=45.0
