@@ -52,8 +52,7 @@ class Levels(commands.Cog):
             return await ctx.better_reply(f'{ctx.denial} User not in the database!')
 
         rank = 0
-        rankings: list[Level] = await Level.find().sort('xp', -1).to_list(100000)
-        for _rank in rankings:
+        async for _rank in Level.find().sort('xp', -1):
             rank += 1
             if data.id == _rank.id:
                 break
@@ -183,7 +182,7 @@ class Levels(commands.Cog):
         data = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
 
-        for entry in Level.find().sorted('messages_count', -1):
+        async for entry in Level.find().sorted('messages_count', -1):
             entry: Level
 
             if entry.messages_count != 0:

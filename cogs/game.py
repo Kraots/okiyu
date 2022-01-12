@@ -109,7 +109,7 @@ class _Game(commands.Cog, name='Game'):
         entries = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
 
-        for entry in Game.find().sort('coins', -1):
+        async for entry in Game.find().sort('coins', -1):
             entry: Game
 
             index += 1
@@ -241,7 +241,7 @@ class _Game(commands.Cog, name='Game'):
         entries = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
 
-        for entry in Game.find().sort('streak', -1):
+        async for entry in Game.find().sort('streak', -1):
             entry: Game
 
             index += 1
