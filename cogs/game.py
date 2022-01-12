@@ -79,7 +79,7 @@ class _Game(commands.Cog, name='Game'):
         if await ctx.check_channel() is True:
             await ctx.send_help('Game')
 
-    @base_game.group(name='coins', invoke_without_command=True, case_insensitive=True)
+    @base_game.group(name='coins', aliases=('coin',), invoke_without_command=True, case_insensitive=True)
     async def game_coins(self, ctx: Context):
         """See how many coins you currently have.
 
@@ -109,7 +109,7 @@ class _Game(commands.Cog, name='Game'):
         entries = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
 
-        for entry in Game.find().sorted('coins', -1):
+        for entry in Game.find().sort('coins', -1):
             entry: Game
 
             index += 1
@@ -212,7 +212,7 @@ class _Game(commands.Cog, name='Game'):
 
         await ctx.reply(embed=em)
 
-    @base_game.group(name='streak', invoke_without_command=True, case_insensitive=True,)
+    @base_game.group(name='streak', aliases=('streaks',), invoke_without_command=True, case_insensitive=True,)
     async def game_streak(self, ctx: Context):
         """Check your current daily streak.
 
@@ -241,7 +241,7 @@ class _Game(commands.Cog, name='Game'):
         entries = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
 
-        for entry in Game.find().sorted('streak', -1):
+        for entry in Game.find().sort('streak', -1):
             entry: Game
 
             index += 1
