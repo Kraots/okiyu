@@ -239,7 +239,7 @@ class AutoMod(commands.Cog):
             if await coro(self, after):
                 break
 
-    coros = [anti_bad_words, anti_invites, anti_raid, anti_newlines]
+    coros = [anti_bad_words, anti_invites, anti_raid, anti_newlines, anti_emojis]
 
 
 def setup(bot: Ukiyo):
