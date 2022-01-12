@@ -1,5 +1,6 @@
 import os
 import aiohttp
+import asyncio
 import datetime
 from typing import Optional
 from traceback import format_exception
@@ -27,6 +28,7 @@ class Ukiyo(commands.Bot):
             ),
             test_guilds=[913310006814859334]
         )
+        asyncio.gather(*self.coros)  # Run all of them concurrently.
         self.add_check(self.check_dms)
 
         self._owner_id = 374622847672254466
@@ -60,18 +62,7 @@ class Ukiyo(commands.Bot):
     def session(self) -> aiohttp.ClientSession:
         return self._session
 
-    async def on_ready(self):
-        if not hasattr(self, 'uptime'):
-            self.uptime = datetime.datetime.utcnow()
-
-        if not hasattr(self, '_session'):
-            self._session = aiohttp.ClientSession(loop=self.loop)
-
-        if not hasattr(self, '_presence_changed'):
-            activity = disnake.Activity(type=disnake.ActivityType.watching, name='you date | !help')
-            await self.change_presence(status=disnake.Status.dnd, activity=activity)
-            self._presence_changed = True
-
+    async def _fill_views(self):
         if self.added_views is False:
             self.add_view(utils.Verify(self), message_id=913512065799421953)
             self.add_view(utils.ColourButtonRoles(), message_id=913763247927218177)
@@ -91,6 +82,40 @@ class Ukiyo(commands.Bot):
 
             self.added_views = True
 
+    async def _fill_bad_words(self):
+        data: utils.BadWords = await utils.BadWords.get(self._owner_id)
+        if data and data.bad_words:
+            for word, added_by in data.bad_words.items():
+                self.bad_words[word] = added_by
+
+    async def _fill_constants(self):
+        data: utils.Constants = await utils.Constants.get()
+        if data is None:
+            data = await utils.Constants().commit()
+
+        self.calc_ternary = data.calculator_ternary
+        for cmd_name in data.disabled_commands:
+            cmd = self.get_command(cmd_name)
+            if cmd is None:
+                data.disabled_commands.remove(cmd_name)
+                await data.commit()
+            else:
+                cmd.enabled = False
+
+    coros = [_fill_bad_words, _fill_constants, _fill_views]
+
+    async def on_ready(self):
+        if not hasattr(self, 'uptime'):
+            self.uptime = datetime.datetime.utcnow()
+
+        if not hasattr(self, '_session'):
+            self._session = aiohttp.ClientSession(loop=self.loop)
+
+        if not hasattr(self, '_presence_changed'):
+            activity = disnake.Activity(type=disnake.ActivityType.watching, name='you date | !help')
+            await self.change_presence(status=disnake.Status.dnd, activity=activity)
+            self._presence_changed = True
+
         if len(self.webhooks) == 0:
             av = self.user.display_avatar
             logs = await self.get_webhook(
@@ -108,23 +133,6 @@ class Ukiyo(commands.Bot):
             self.webhooks['logs'] = logs
             self.webhooks['mod_logs'] = mod_logs
             self.webhooks['message_logs'] = message_logs
-
-        data: utils.BadWords = await utils.BadWords.get(self._owner_id)
-        if data and data.bad_words:
-            for word, added_by in data.bad_words.items():
-                self.bad_words[word] = added_by
-
-        data: utils.Constants = await utils.Constants.get()
-        if data is None:
-            data = await utils.Constants().commit()
-        self.calc_ternary = data.calculator_ternary
-        for cmd_name in data.disabled_commands:
-            cmd = self.get_command(cmd_name)
-            if cmd is None:
-                data.disabled_commands.remove(cmd_name)
-                await data.commit()
-            else:
-                cmd.enabled = False
 
         print('Bot is ready!')
 
