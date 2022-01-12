@@ -122,25 +122,26 @@ class Levels(commands.Cog):
         entries = []
         index = 0
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
-        async for res in Level.find().sort('xp', -1):
-            res: Level
+        async for entry in Level.find().sort('xp', -1):
+            entry: Level
+
             index += 1
             lvl = 0
             while True:
-                if res.xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
+                if entry.xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
                     break
                 lvl += 1
-            user = ctx.ukiyo.get_member(res.id)
+            user = ctx.ukiyo.get_member(entry.id)
             if index in (1, 2, 3):
                 place = top_3_emojis[index]
             else:
                 place = f'`#{index:,}`'
 
             if user == ctx.author:
-                to_append = (f"**{place} {user.name} (YOU)**", f"Level: `{lvl}`\nTotal XP: `{res.xp:,}`")
+                to_append = (f"**{place} {user.name} (YOU)**", f"Level: `{lvl}`\nTotal XP: `{entry.xp:,}`")
                 entries.append(to_append)
             else:
-                to_append = (f"{place} {user.name}", f"Level: `{lvl}`\nTotal XP: `{res.xp:,}`")
+                to_append = (f"{place} {user.name}", f"Level: `{lvl}`\nTotal XP: `{entry.xp:,}`")
                 entries.append(to_append)
 
         source = utils.FieldPageSource(entries, per_page=10)
@@ -162,9 +163,15 @@ class Levels(commands.Cog):
         user_db: Level = await Level.get(member.id)
         if user_db is None:
             return await ctx.better_reply(f'`{member.display_name}` sent no messages.')
+        rank = 0
+        async for entry in Level.find().sort('messages_count', -1):
+            rank += 1
+            if entry.id == user_db.id:
+                break
         em = disnake.Embed(color=utils.blurple)
         em.set_author(name=f'{member.display_name}\'s message stats', icon_url=member.display_avatar)
         em.add_field(name='Total Messages', value=f"`{user_db.messages_count:,}`")
+        em.add_field(name='Rank', value=f"`#{rank:,}`")
         em.set_footer(text=f'Requested by: {ctx.author}')
         await ctx.better_reply(embed=em)
 
@@ -176,20 +183,21 @@ class Levels(commands.Cog):
         data = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
 
-        results: list[Level] = await Level.find().sort('messages_count', -1).to_list(100000)
-        for result in results:
-            if result.messages_count != 0:
+        for entry in Level.find().sorted('messages_count', -1):
+            entry: Level
+
+            if entry.messages_count != 0:
                 index += 1
-                mem = ctx.ukiyo.get_member(result.id)
+                mem = ctx.ukiyo.get_member(entry.id)
                 if index in (1, 2, 3):
                     place = top_3_emojis[index]
                 else:
                     place = f'`#{index:,}`'
                 if mem == ctx.author:
-                    to_append = (f'**{place} {mem.name} (YOU)**', f'**{result.messages_count:,}** messages')
+                    to_append = (f'**{place} {mem.name} (YOU)**', f'**{entry.messages_count:,}** messages')
                     data.append(to_append)
                 else:
-                    to_append = (f'{place} {mem.name}', f'**{result.messages_count:,}** messages')
+                    to_append = (f'{place} {mem.name}', f'**{entry.messages_count:,}** messages')
                     data.append(to_append)
         source = utils.FieldPageSource(data, per_page=10)
         source.embed.title = 'Top Most Active Users'
