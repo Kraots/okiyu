@@ -101,6 +101,40 @@ class _Game(commands.Cog, name='Game'):
 
         await ctx.reply(embed=em)
 
+    @game_coins.command(name='leaderboard', aliases=('top', 'lb',))
+    async def coins_leaderboard(self, ctx: Context):
+        """See the top based on people's coins."""
+
+        index = 0
+        entries = []
+        top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
+
+        for entry in Game.find().sorted('coins', -1):
+            entry: Game
+
+            index += 1
+            mem = ctx.ukiyo.get_member(entry.id)
+            if index in (1, 2, 3):
+                place = top_3_emojis[index]
+            else:
+                place = f'`#{index:,}`'
+            if mem == ctx.author:
+                to_append = (
+                    f'**{place} {mem.name} (YOU)**',
+                    f'`{entry.coins:,}` {self.coin_emoji}'
+                )
+            else:
+                to_append = (
+                    f'{place} {mem.name}',
+                    f'`{entry.coins:,}` {self.coin_emoji}'
+                )
+            entries.append(to_append)
+
+        source = utils.FieldPageSource(entries, per_page=10)
+        source.embed.title = 'Coins Leaderboard'
+        pages = utils.RoboPages(source, ctx=ctx)
+        await pages.start()
+
     @game_coins.command(name='set')
     @utils.is_owner()
     async def coins_set(self, ctx: Context, amount: str = '1,000', member: disnake.Member = None):
@@ -178,7 +212,7 @@ class _Game(commands.Cog, name='Game'):
 
         await ctx.reply(embed=em)
 
-    @base_game.command(name='streak')
+    @base_game.group(name='streak', invoke_without_command=True, case_insensitive=True,)
     async def game_streak(self, ctx: Context):
         """Check your current daily streak.
 
@@ -198,6 +232,40 @@ class _Game(commands.Cog, name='Game'):
             em.set_footer(text='• You can claim your daily!')
 
         await ctx.reply(embed=em)
+
+    @game_streak.command(name='leaderboard', aliases=('top', 'lb',))
+    async def streaks_leaderboard(self, ctx: Context):
+        """See the top based on people's streaks."""
+
+        index = 0
+        entries = []
+        top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
+
+        for entry in Game.find().sorted('streak', -1):
+            entry: Game
+
+            index += 1
+            mem = ctx.ukiyo.get_member(entry.id)
+            if index in (1, 2, 3):
+                place = top_3_emojis[index]
+            else:
+                place = f'`#{index:,}`'
+            if mem == ctx.author:
+                to_append = (
+                    f'**{place} {mem.name} (YOU)**',
+                    f'`{entry.streak:,}` streak(s)'
+                )
+            else:
+                to_append = (
+                    f'{place} {mem.name}',
+                    f'`{entry.streak:,}` streak(s)'
+                )
+            entries.append(to_append)
+
+        source = utils.FieldPageSource(entries, per_page=10)
+        source.embed.title = 'Streaks Leaderboard'
+        pages = utils.RoboPages(source, ctx=ctx)
+        await pages.start()
 
     @base_game.command(name='inventory', aliases=('inv',))
     async def game_inventory(self, ctx: Context):
