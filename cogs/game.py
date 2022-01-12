@@ -98,6 +98,13 @@ class _Game(commands.Cog, name='Game'):
         em.set_thumbnail(url=ctx.author.display_avatar)
         if data.daily <= datetime.now():
             em.set_footer(text='• You can claim your daily!')
+        else:
+            rank = 0
+            async for entry in Game.find().sort('coins', -1):
+                rank += 1
+                if entry.id == ctx.author.id:
+                    break
+            em.set_footer(text=f'Your Rank: {rank:,}')
 
         await ctx.reply(embed=em)
 
