@@ -129,7 +129,7 @@ class Ukiyo(commands.Bot):
         print('Bot is ready!')
 
     async def process_commands(self, message):
-        ctx = await self.get_context(message, cls=utils.Context)
+        ctx = await self.get_context(message)
         await self.invoke(ctx)
 
     async def get_webhook(

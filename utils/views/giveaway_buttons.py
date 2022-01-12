@@ -168,7 +168,7 @@ class GiveAwayCreationView(View):
 
         c = None
         content = msg.content
-        ctx = await self.bot.get_context(msg, cls=utils.Context)
+        ctx = await self.bot.get_context(msg)
         try:
             duration = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, content + ' -')
             self.expire_date = duration.dt

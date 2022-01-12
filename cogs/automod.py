@@ -57,7 +57,7 @@ class AutoMod(commands.Cog):
 
     async def apply_action(self, message: disnake.Message, reason: str):
         user = message.author
-        ctx = await self.bot.get_context(message, cls=utils.Context)
+        ctx = await self.bot.get_context(message)
         time = self.get_mute_time(user.id)
 
         action = 'muted'

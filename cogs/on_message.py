@@ -73,7 +73,7 @@ class OnMessage(commands.Cog):
                 btn.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
                 await self.bot.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
-                ctx = await self.bot.get_context(message, cls=utils.Context)
+                ctx = await self.bot.get_context(message)
                 await ctx.reraise(e)
 
     @commands.Cog.listener('on_message_edit')
@@ -110,7 +110,7 @@ class OnMessage(commands.Cog):
                 btn.add_item(disnake.ui.Button(label='Jump!', url=after.jump_url))
                 await self.bot.webhooks['message_logs'].send(embed=em, view=btn)
             except Exception as e:
-                ctx = await self.bot.get_context(after, cls=utils.Context)
+                ctx = await self.bot.get_context(after)
                 await ctx.reraise(e)
 
     @commands.Cog.listener('on_message')
@@ -130,7 +130,7 @@ class OnMessage(commands.Cog):
         elif after.content[0] not in ('!', '?'):
             return
 
-        ctx = await self.bot.get_context(after, cls=utils.Context)
+        ctx = await self.bot.get_context(after)
         cmd = self.bot.get_command(after.content.replace('!', '').replace('?', ''))
         if cmd is None:
             return
