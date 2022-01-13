@@ -114,7 +114,7 @@ class AutoMod(commands.Cog):
             self.bot.webhooks['mod_logs'],
             title=f'[AUTOMOD {_action.upper()}]',
             fields=[
-                ('Member', f'{user} (`{user.id}`)'),
+                ('Member', f'{utils.format_name(user)} (`{user.id}`)'),
                 ('Reason', reason.title()),
                 (f'{_action.title()} Duration', f'`{duration}`'),
                 ('Expires At', utils.format_dt(_data.dt, "F")),

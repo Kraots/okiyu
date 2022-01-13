@@ -91,7 +91,7 @@ class Confesscord(commands.Cog):
             self.bot.webhooks['mod_logs'],
             title='[CONFESSCORD UNRESTRICTION]',
             fields=[
-                ('User', f'{user} (`{user.id}`)'),
+                ('User', f'{utils.format_name(user)} (`{user.id}`)'),
                 ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
                 ('At', utils.format_dt(datetime.now(), 'F')),
             ],
