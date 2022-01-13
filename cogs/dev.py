@@ -96,7 +96,7 @@ class Developer(commands.Cog):
             return await pager.start()
         em = disnake.Embed(description=f'```py\n{result}\n```')
         em.set_footer(text=f'Took {took}s')
-        view = utils.QuitButton(ctx)
+        view = utils.QuitButton(ctx, delete_after=True)
         view.message = await ctx.send(embed=em, view=view)
         data = self.bot.execs.get(ctx.author.id)
         if data is None:
