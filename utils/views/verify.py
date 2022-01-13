@@ -89,22 +89,15 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
             else:
                 if age < 14 or age > 19:
                     mem = guild.get_member(user_id)
-                    if age < 14:
-                        fmt = 'KICK'
-                        method = mem.kick
-                    else:
-                        fmt = 'BAN'
-                        method = mem.ban
-
                     await ctx.send(f'{ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.')
                     try:
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
                         pass
-                    await method(reason='User does not match age limits.')
+                    await mem.ban(reason='User does not match age limits.')
                     await utils.log(
                         webhook,
-                        title=f'[{fmt}]',
+                        title='[BAN]',
                         fields=[
                             ('Member', f'{mem} (`{mem.id}`)'),
                             ('Reason', f'User does not match age requirements. (`{age} y/o`)'),
