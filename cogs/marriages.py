@@ -404,15 +404,14 @@ class Marriages(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
-        data = await Marriage.get(member.id)
-        if data:
-            await data.delete()
+        entry = await Marriage.get(member.id)
+        if entry:
+            await entry.delete()
             mem = await Marriage.find_one({'married_to': member.id})
             await mem.delete()
-        data: Marriage = await Marriage.find({'adoptions': member.id}).to_list(0)
-        if data:
-            data[0].adoptions.remove(member.id)
-            await data[0].commit()
+        async for entry in Marriage.find({'adoptions': member.id}):
+            entry.adoptions.remove(member.id)
+            await entry.commit()
 
 
 def setup(bot: Ukiyo):
