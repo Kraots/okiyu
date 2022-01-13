@@ -92,7 +92,7 @@ def remove_zalgos(string: str, *, remove_whitespace: bool = False) -> str:
     return string
 
 
-def check_profanity(string: str, *, bad_words: list = None) -> bool:
+def check_profanity(string: str, *, bad_words: list = None, lazy: bool = True) -> bool:
     """
     If the return type is of bool ``True`` then it means that the
     string contains a bad word, otherwise ``False`` if it's safe.
@@ -105,30 +105,63 @@ def check_profanity(string: str, *, bad_words: list = None) -> bool:
         bad_words: :class:`list`
             A list of the bad words to check for. If ``None``, will use the hardcoded ones from bad_words.txt
 
+        lazy: :class:`bool`
+            If ``False``, this will return the word that triggered the filter along with the bool and the changed sentence
+            in a tuple. If ``True`` it will only return the bool if the filter was triggered or not. Defaults to ``True``.
+
     Return
     ------
-        True | False
+        True | False | tuple[bool, str]
     """
 
     bad_words = bad_words or BAD_WORDS
     string = str(string).lower()
-    res = any(w for w in bad_words if w in string)
 
-    if res is False:
-        string = string.translate(EDGE_CHARACTERS_TABLE)  # Replace each edge character to its corresponding letter.
-        string = string.replace('()', 'o')  # Replace this manually because ``str.maketrans`` keys must be of lenght 1.
+    if lazy is True:
         res = any(w for w in bad_words if w in string)
-
         if res is False:
-            string = string.translate(EMOJIS_TABLE)  # Change every regional indicator emoji to its corresponding letter.
-            for original, emoji in NUMBERS_EMOJI.items():
-                string.replace(emoji, original)  # Replace every number emoji with its corresponding number.
+            string = string.translate(EDGE_CHARACTERS_TABLE)  # Replace each edge character to its corresponding letter.
+            string = string.replace('()', 'o')  # Replace this manually because ``str.maketrans`` keys must be of lenght 1.
             res = any(w for w in bad_words if w in string)
 
             if res is False:
-                string = string.translate(PAD_TABLE)  # Remove every punctuation and digit character.
-                string = remove_zalgos(string, remove_whitespace=True)  # Remove any zalgo or non-abcd... character.
+                string = string.translate(EMOJIS_TABLE)  # Change every regional indicator emoji to its corresponding letter.
+                for original, emoji in NUMBERS_EMOJI.items():
+                    string.replace(emoji, original)  # Replace every number emoji with its corresponding number.
                 res = any(w for w in bad_words if w in string)
+
+                if res is False:
+                    string = string.translate(PAD_TABLE)  # Remove every punctuation and digit character.
+                    string = remove_zalgos(string, remove_whitespace=True)  # Remove any zalgo or non-abcd... character.
+                    res = any(w for w in bad_words if w in string)
+
+    else:
+        def filter_word(string: str):
+            for word in bad_words:
+                if word in string:
+                    start = string.index(word)
+                    end = start + len(word)
+                    new_word = '⚠️⚠️⚠️' + string[start:end] + '⚠️⚠️⚠️'
+                    string = string.replace(word, new_word)
+                    return (True, word, string)
+            return (False, '', string)
+
+        res = filter_word(string)
+        if res[0] is False:
+            string = string.translate(EDGE_CHARACTERS_TABLE)  # Replace each edge character to its corresponding letter.
+            string = string.replace('()', 'o')  # Replace this manually because ``str.maketrans`` keys must be of lenght 1.
+            res = filter_word(string)
+
+            if res[0] is False:
+                string = string.translate(EMOJIS_TABLE)  # Change every regional indicator emoji to its corresponding letter.
+                for original, emoji in NUMBERS_EMOJI.items():
+                    string.replace(emoji, original)  # Replace every number emoji with its corresponding number.
+                res = filter_word(string)
+
+                if res[0] is False:
+                    string = string.translate(PAD_TABLE)  # Remove every punctuation and digit character.
+                    string = remove_zalgos(string, remove_whitespace=True)  # Remove any zalgo or non-abcd... character
+                    res = filter_word(string)
 
     return res
 
