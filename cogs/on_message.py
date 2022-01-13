@@ -214,7 +214,7 @@ class OnMessage(commands.Cog):
                       'how many cookies does each friend get? See, it doesn\'t make sense and Cookie Monster '
                       'is sad that there are no cookies, and you are sad that you have no friends.```'
             )
-        except SyntaxError:
+        except Exception:
             return
         try:
             ctx = await self.bot.get_context(message)
