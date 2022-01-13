@@ -141,7 +141,7 @@ def check_profanity(string: str, *, bad_words: list = None, lazy: bool = True) -
                 if word in string:
                     start = string.index(word)
                     end = start + len(word)
-                    new_word = '⚠️⚠️⚠️' + string[start:end] + '⚠️⚠️⚠️'
+                    new_word = '     ' + string[start:end] + '     '
                     string = string.replace(word, new_word)
                     return (True, word, string)
             return (False, '', string)
