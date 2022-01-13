@@ -219,7 +219,7 @@ class Marriages(commands.Cog):
 
         partner = False
         data1: Marriage = await Marriage.get(ctx.author.id)
-        if data1 and len(data1.adoptions) > 7 and ctx.author.id != self.bot._owner_id:
+        if data1 and len(data1.adoptions) >= 7 and ctx.author.id != self.bot._owner_id:
             return await ctx.reply(f'{ctx.denial} You cannot adopt more than **7** people.')
 
         data2: Marriage = await Marriage.get(member.id)
