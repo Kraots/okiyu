@@ -913,8 +913,8 @@ class Misc(commands.Cog):
     ) -> disnake.File:
         fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect='equal'))
         labels = (
-            f'Male ({males:,})', f'Trans Male ({trans_males:,})',
-            f'Female ({females:,})', f'Trans Female ({trans_females:,})',
+            f'Cis Male ({males:,})', f'Trans Male ({trans_males:,})',
+            f'Cis Female ({females:,})', f'Trans Female ({trans_females:,})',
             f'Other Gender ({other_gender:,})'
         )
         data = [males, trans_males, females, trans_females, other_gender]
