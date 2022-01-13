@@ -1084,12 +1084,24 @@ class Misc(commands.Cog):
         """Do some math.
 
         `expression` **->** The expresion you want to calculate (e.g: 1 + 1, etc...)
+
+        **Functions:**
+        \u2800 • sqrt
+        \u2800 • sin
+        \u2800 • cos
+        \u2800 • tan
+        \u2800 • ceil
+        \u2800 • floor
+        \u2800 • sinh
+        \u2800 • cosh
+        \u2800 • tanh
+        \u2800 • abs
         """
 
         if self.bot.calc_ternary is False:
             return
 
-        operators = r'\+\-\/\*\(\)\^\÷\%\×'
+        operators = r'\+\-\/\*\(\)\^\÷\%\×\.'
 
         if not any(m in expression for m in operators):
             return await ctx.reply(f'{ctx.denial} Found an operator that doesn\'t exist.')
@@ -1140,6 +1152,10 @@ class Misc(commands.Cog):
                       'is sad that there are no cookies, and you are sad that you have no friends.```'
             )
         except SyntaxError:
+            return await ctx.reply(f'{ctx.denial} Expression invalid.')
+        except simpleeval.NumberTooHigh:
+            return await ctx.reply(f'{ctx.denial} Number too high.')
+        except Exception:
             return await ctx.reply(f'{ctx.denial} Expression invalid.')
         try:
             await ctx.better_reply(embed=em)

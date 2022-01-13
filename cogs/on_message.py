@@ -160,7 +160,7 @@ class OnMessage(commands.Cog):
     async def check_for_calc_expression(self, message: disnake.Message):
         if self.bot.calc_ternary is True:
             return
-        operators = r'\+\-\/\*\(\)\^\÷\%\×'
+        operators = r'\+\-\/\*\(\)\^\÷\%\×\.'
         _content = message.content
 
         if not any(m in _content for m in operators):
