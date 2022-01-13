@@ -1086,16 +1086,16 @@ class Misc(commands.Cog):
         `expression` **->** The expresion you want to calculate (e.g: 1 + 1, etc...)
 
         **Functions:**
-        \u2800 • sqrt
-        \u2800 • sin
-        \u2800 • cos
-        \u2800 • tan
-        \u2800 • ceil
-        \u2800 • floor
-        \u2800 • sinh
-        \u2800 • cosh
-        \u2800 • tanh
-        \u2800 • abs
+        \u2800 • `sqrt`
+        \u2800 • `sin`
+        \u2800 • `cos`
+        \u2800 • `tan`
+        \u2800 • `ceil`
+        \u2800 • `floor`
+        \u2800 • `sinh`
+        \u2800 • `cosh`
+        \u2800 • `tanh`
+        \u2800 • `abs`
         """
 
         if self.bot.calc_ternary is False:
