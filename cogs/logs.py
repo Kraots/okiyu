@@ -9,26 +9,6 @@ import utils
 from main import Ukiyo
 
 
-# Webhook that sends a message in the logs channel
-async def send_webhook(em: disnake.Embed, webhook: disnake.Webhook):
-    if isinstance(em, disnake.Embed):
-        await webhook.send(embed=em)
-    else:
-        count = 0
-        embeds = []
-        for embed in em:
-            embeds.append(embed)
-            count += 1
-            if count == 10:
-                await webhook.send(embeds=embeds)
-                count = 0
-                embeds = []
-        else:
-            if count != 0:
-                await webhook.send(embeds=embeds)
-                embeds = []
-
-
 class Logs(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
@@ -39,7 +19,7 @@ class Logs(commands.Cog):
     async def send_embeds(self):
         if len(self.embeds) != 0:
             try:
-                await send_webhook(self.embeds, self.bot.webhooks['logs'])
+                await utils.send_embeds(self.bot.webhooks['logs'], self.embeds)
             except Exception:
                 pass
             self.embeds = []
