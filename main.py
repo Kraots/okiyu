@@ -122,9 +122,14 @@ class Ukiyo(commands.Bot):
                 self.get_channel(913332431417925634),
                 avatar=av
             )
+            welcome_channel = await self.get_webhook(
+                self.get_channel(913331535170637825),
+                avatar=av
+            )
             self.webhooks['logs'] = logs
             self.webhooks['mod_logs'] = mod_logs
             self.webhooks['message_logs'] = message_logs
+            self.webhooks['welcome_channel'] = welcome_channel
 
         print('Bot is ready!')
 
