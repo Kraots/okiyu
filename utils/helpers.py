@@ -33,6 +33,7 @@ __all__ = (
     'try_dm',
     'remove_zalgos',
     'format_name',
+    'send_embeds',
 )
 
 
@@ -388,16 +389,16 @@ async def try_delete(
 
     Parameters
     ----------
-        message: Optional[:class:`disnake.Message` | :class:`list[disnake.Message]` |
-        :class:`tuple[disnake.Message]` | :class:`set[disnake.Message]`]
+        message: Optional[:class:`disnake.Message` | list[:class:`disnake.Message`] |
+        tuple[:class:`disnake.Message`] | set[:class:`disnake.Message`]]
             The message to try and delete, can also be a list of message objects.
             If `channel` and `message_id` is not given, this is required.
 
-        channel: Optional[:class:`disnake.TextChannel`, :class:`disnake.Thread`]
+        channel: Optional[:class:`disnake.TextChannel` | :class:`disnake.Thread`]
             The channel from which to fetch the message object. If this is given, `message_id` becomes required.
             This gets ignored if `message` is not ``None``.
 
-        message_id: Optional[:class:`int` | :class:`list[int]` | :class:`tuple[int]` | :class:`set[int]`]
+        message_id: Optional[:class:`int` | list[:class:`int`] | tuple[:class:`int`] | set[:class:`int`]]
             The message id for the message object to fetch, can also be a list of message ids.
             If this is given, `channel` becomes required. This gets ignored if `message` is not ``None``.
 
@@ -418,7 +419,7 @@ async def try_delete(
 
     elif delay is not None and not isinstance(delay, (float, int)):
         raise TypeError(
-            "Argument 'delay' must be of time 'float' or 'int', "
+            "Argument 'delay' must be of type 'float' or 'int', "
             f"not {delay.__class__}"
         )
 
@@ -507,8 +508,9 @@ async def try_dm(
     Parameters
     ----------
         user: :class:`disnake.Member` | :class:`disnake.User` |
-        :class:`list[disnake.Member | disnake.User]` | :class:`tuple[disnake.Member | disnake.User]` |
-        :class:`set[disnake.Member | disnake.User]`
+        list[:class:`disnake.Member` | :class:`disnake.User`] |
+        tuple[:class:`disnake.Member` | :class:`disnake.User`] |
+        set[:class:`disnake.Member` | :class:`disnake.User`]
             The user(s) to dm.
 
         *args: The args of every ``.send`` method.
@@ -553,3 +555,62 @@ async def try_dm(
 
 def format_name(member: disnake.Member) -> str:
     return member.display_name + '#' + member.tag
+
+
+async def send_embeds(
+    destination: disnake.TextChannel | disnake.Webhook | disnake.Thread | disnake.User | disnake.Member,
+    embeds: list[disnake.Embed] | tuple[disnake.Embed] | set[disnake.Embed]
+):
+    """
+    Safe sends the embeds to the destination.
+
+    Parameters
+    ----------
+        destination: :class:`disnake.TextChannel` | :class:`disnake.Webhook`
+        :class:`disnake.Thread` | :class:`disnake.User` | :class:`disnake.Member`
+            The destination where to send the embeds to.
+
+        embeds: list[:class:`disnake.Embed`] | tuple[:class:`disnake.Embed`]
+        | set[:class:`disnake.Embed`]
+            The embeds to send.
+
+    Return
+    ------
+        ``None``
+    """
+
+    if not isinstance(
+        destination,
+        (
+            disnake.TextChannel, disnake.Webhook,
+            disnake.Thread, disnake.User, disnake.Member
+        )
+    ):
+        raise TypeError(
+            "Argument 'destination' must be of type 'disnake.TextChannel', 'disnake.Webhook', "
+            "'disnake.Thread', 'disnake.User' or 'disnake.Member', "
+            f"not {destination.__class__}"
+        )
+
+    elif not isinstance(embeds, (list, tuple, set)):
+        raise TypeError(
+            "Argument 'embeds' must be of type 'list[disnake.Embed]', 'tuple[disnake.Embed]', "
+            f"or 'set[disnake.Embed]', not {embeds.__class__}"
+        )
+
+    if len(embeds) == 1:
+        await destination.send(embed=embeds[0])
+    elif len(embeds) > 1:
+        count = 0
+        ems = []
+        for em in embeds:
+            ems.append(em)
+            count += 1
+            if count == 10:
+                await destination.send(embeds=ems)
+                count = 0
+                ems = []
+        else:
+            if count != 0:
+                await destination.send(embeds=ems)
+                ems = []
