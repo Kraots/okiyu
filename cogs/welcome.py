@@ -25,6 +25,7 @@ class Welcome(commands.Cog):
         unverified_role = guild.get_role(913329062347423775)
         await member.add_roles(unverified_role)
 
+        welcome_channel = guild.get_channel(913331535170637825)
         member_count = len([m for m in guild.members if not m.bot])
 
         welcome = disnake.Embed(
@@ -38,7 +39,7 @@ class Welcome(commands.Cog):
         welcome.set_thumbnail(url=member.display_avatar)
         welcome.set_footer(text=f"Joined discord {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
         msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{member_count}** member.\n\n\n_ _'
-        await self.bot.webhooks['welcome_channel'].send(msg, embed=welcome)
+        await welcome_channel.send(msg, embed=welcome)
 
         mute: utils.Mutes = await utils.Mutes.get(member.id)
         if mute is not None:
