@@ -207,7 +207,7 @@ class AutoMod(commands.Cog):
         unicode_emojis_count = len(utils.UNICODE_REGEX.findall(message.content))
         custom_emojis_count = len(utils.CUSTOM_EMOJI_REGEX.findall(message.content))
         total_emojis_count = unicode_emojis_count + custom_emojis_count
-        if total_emojis_count > 7:
+        if total_emojis_count > 15:
             await utils.try_delete(message)
 
             words_bucket = self.newline_cooldown.get_bucket(message)
