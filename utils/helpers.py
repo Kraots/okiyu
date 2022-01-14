@@ -553,8 +553,8 @@ async def try_dm(
         )
 
 
-def format_name(member: disnake.Member) -> str:
-    return member.display_name + '#' + member.tag
+def format_name(user: disnake.Member | disnake.User) -> str:
+    return user.display_name + '#' + user.discriminator
 
 
 async def send_embeds(

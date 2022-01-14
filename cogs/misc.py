@@ -1207,6 +1207,20 @@ class Misc(commands.Cog):
 
         await ctx.reply(sentence)
 
+    @commands.command(name='mirror')
+    async def _mirror_(self, ctx: Context, *, user: disnake.User = None):
+        """Invert someone's avatar.
+
+        `user` **->** The user that you want to see the mirrored avatar of. If you want to mirror your own avatar, you can ignore this since it defaults to you.
+        """
+
+        user = user or ctx.author
+        av = await utils.mirror_avatar(user)
+        em = disnake.Embed(title=f'Mirrored `{utils.format_name(user)}`', color=utils.blurple)
+        em.set_image(file=av)
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
+        await ctx.better_reply(embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
