@@ -187,8 +187,8 @@ class Marriages(commands.Cog):
         If for some reason you don't know who you're married to, you are a complete jerk but luckily for you, there's the command `!marriedwho` which reminds you who you are married to, and for how long.
         """  # noqa
 
-        if ctx.author.id != self.bot._owner_id:
-            data = await Marriage.get(ctx.author.id)
+        data = await Marriage.get(ctx.author.id)
+        if ctx.author.id != self.bot._owner_idz:
             if data is None or data.married_to == 0:
                 return await ctx.reply(f'{ctx.denial} You must be married to {member.mention} in order to kiss them.')
 
@@ -200,7 +200,9 @@ class Marriages(commands.Cog):
                 )
         else:
             data: Marriage = await Marriage.get()
-            if data is not None and data.married_to != 0:
+            if data is None or data.married_to == 0:
+                return await ctx.reply(f'{ctx.denial} You are not married to my master.')
+            if data is not None and data.married_to != ctx.author.id:
                 return await ctx.reply(f'{ctx.denial} My master is currently taken, you cannot kiss him :rage:')
 
         em = disnake.Embed(color=utils.red)
