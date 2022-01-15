@@ -188,7 +188,7 @@ class Marriages(commands.Cog):
         """  # noqa
 
         data = await Marriage.get(ctx.author.id)
-        if ctx.author.id != self.bot._owner_idz:
+        if ctx.author.id != self.bot._owner_id:
             if data is None or data.married_to == 0:
                 return await ctx.reply(f'{ctx.denial} You must be married to {member.mention} in order to kiss them.')
 
