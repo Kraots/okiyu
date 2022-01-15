@@ -187,15 +187,21 @@ class Marriages(commands.Cog):
         If for some reason you don't know who you're married to, you are a complete jerk but luckily for you, there's the command `!marriedwho` which reminds you who you are married to, and for how long.
         """  # noqa
 
-        data = await Marriage.get(ctx.author.id)
-        if data is None or data.married_to == 0:
-            return await ctx.reply(f'{ctx.denial} You must be married to {member.mention} in order to kiss them.')
+        if ctx.author.id != self.bot._owner_id:
+            data = await Marriage.get(ctx.author.id)
+            if data is None or data.married_to == 0:
+                return await ctx.reply(f'{ctx.denial} You must be married to {member.mention} in order to kiss them.')
 
-        if member.id != data.married_to:
-            mem = ctx.ukiyo.get_member(data.married_to)
-            return await ctx.reply(
-                f'{ctx.denial} You cannot kiss `{utils.format_name(member)}`!! You can only kiss {mem.mention}'
-            )
+        if member.id != self.bot._owner_id:
+            if member.id != data.married_to:
+                mem = ctx.ukiyo.get_member(data.married_to)
+                return await ctx.reply(
+                    f'{ctx.denial} You cannot kiss `{utils.format_name(member)}`!! You can only kiss {mem.mention}'
+                )
+        else:
+            data: Marriage = await Marriage.get()
+            if data is not None and data.married_to != 0:
+                return await ctx.reply(f'{ctx.denial} My master is currently taken, you cannot kiss him :rage:')
 
         em = disnake.Embed(color=utils.red)
         em.set_image(url='https://cdn.discordapp.com/attachments/752148605753884792/754984869569888276/KIS.gif')
