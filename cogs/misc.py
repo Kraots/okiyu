@@ -1115,15 +1115,28 @@ class Misc(commands.Cog):
             expression = expression.replace(key, value)
 
         try:
-            def parse(_match):
-                return _match.group().replace('(', '*(')
-
-            expression = re.sub(re.compile(r'\d\('), parse, expression)
-            regex = re.compile(
-                rf"({'|'.join(list(functions.keys()))})?([{operators}]+)?(\d+[{operators}]+)*(\d+)([{operators}]+)?"
-            )
+            # Syntax:
+            # 1. See if at least one function or one statement (E.g 1+2) exists, else return
+            # 2. Parentheses multiplication is a valid syntax in math, so substitute `<digit*>"("` with `<digit*>"*("`
+            # 3. It is possible that the first character in the equation is either "-", "+", or "(", so include it
+            # 4. Functions is implemented here, so with functions the syntax would be `[<func>"("<expr*>")"]`
+            # 5. Multiple parent/operators also possible, so we do `<digit*>[operators*][digit*]`, operators as wildcard
+            # 6. Get the first match of all possible equations
+            regex = re.compile(rf"(\d+|{'|'.join(list(functions.keys()))})[{operators}]+\d+")
             match = re.search(regex, expression)
-            content = ''.join(match.group())
+            if not match:
+                return
+
+            def parse(_match):
+                return _match.group().replace("(", "*(")
+
+            expression = re.sub(re.compile(r"\d\("), parse, expression)
+            funcs = "|".join(list(functions.keys()))
+            regex = re.compile(
+                rf"((([{operators}]+)?({funcs})?([{operators}]+)?(\d+[{operators}]+)*(\d+)([{operators}]+)?)+)"
+            )
+            match = re.findall(regex, expression)
+            content = match[0][0]
             if not any(m in content for m in operators) or not content:
                 return await ctx.reply(f'{ctx.denial} Your expression doesn\'t contain any valid operators.')
 
