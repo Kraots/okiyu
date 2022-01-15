@@ -51,7 +51,8 @@ functions = {
     'sinh': lambda x: math.sinh(x),
     'cosh': lambda x: math.cosh(x),
     'tanh': lambda x: math.tanh(x),
-    'abs': lambda x: math.fabs(x)
+    'abs': lambda x: math.fabs(x),
+    'log': lambda x: math.log(x)
 }
 
 
@@ -1096,6 +1097,7 @@ class Misc(commands.Cog):
         \u2800 • `cosh`
         \u2800 • `tanh`
         \u2800 • `abs`
+        \u2800 • `log`
         """
 
         if self.bot.calc_ternary is False:

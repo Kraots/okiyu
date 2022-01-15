@@ -21,7 +21,8 @@ functions = {
     'sinh': lambda x: math.sinh(x),
     'cosh': lambda x: math.cosh(x),
     'tanh': lambda x: math.tanh(x),
-    'abs': lambda x: math.fabs(x)
+    'abs': lambda x: math.fabs(x),
+    'log': lambda x: math.log(x)
 }
 
 
