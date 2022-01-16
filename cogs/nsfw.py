@@ -1,3 +1,5 @@
+from typing import Literal
+
 import disnake
 from disnake.ext import commands
 
@@ -68,9 +70,10 @@ class Nsfw(commands.Cog):
             return False
 
         elif member_entry != 0 and member_entry.married_to != ctx.author.id:
+            mem = ctx.ukiyo.get_member(member_entry.married_to)
             await ctx.reply(
                 f'{ctx.denial} You cannot **{action}** that person '
-                'because they are married with somebody else!'
+                f'because they are married with {mem.mention}!'
             )
             return False
 
@@ -84,24 +87,44 @@ class Nsfw(commands.Cog):
 
         return True
 
-    async def get_link(self, endpoint: str) -> str | None:
-        """Gets and returns a nsfw gif from https://purrbot.site/api/img/nsfw/`endpoint`/gif
+    async def get_link(
+        self,
+        endpoint: str,
+        url_index: Literal[1, 2] = 1,
+        index_arg: str = 'link'
+    ) -> str | None:
+        """Gets and returns a nsfw gif from an url.
+
+        URLS
+        ----
+        1 - https://purrbot.site/api/img/nsfw/`endpoint`/gif
+
+        2 - https://nekos.life/api/v2/img/`endpoint`
 
         Parameters
         ----------
             endpoint: :class:`str`
                 The nsfw endpoint from which to take the gif from.
 
+            url_index: :class:`int`
+                The index of which url to use. Ranges between 1 and 2, defaults to `1`
+
+            index_arg: :class:`str`
+                The argument which to index the result. Defauls to `link`
+
         Return
         ------
             The link of the gif returned by the API or ``None``.
         """
 
-        BASE_URL = 'https://purrbot.site/api/img/nsfw/{}/gif'
-        data = await self.bot.session.get(BASE_URL.format(endpoint))
+        URLS = {
+            1: 'https://purrbot.site/api/img/nsfw/{}/gif',
+            2: 'https://nekos.life/api/v2/img/{}'
+        }
+        data = await self.bot.session.get(URLS[url_index].format(endpoint))
         js = await data.json()
 
-        return js.get('link')
+        return js.get(index_arg)
 
     @commands.group(name='nsfw', invoke_without_command=True, case_insensitive=True, hidden=True)
     async def base_nsfw(self, ctx: Context):
@@ -214,6 +237,23 @@ class Nsfw(commands.Cog):
                 em.set_image(url)
                 await ctx.send(
                     f'{ctx.author.mention} is licking your pussy {member.mention} {self.LIP_BITE}',
+                    embed=em
+                )
+
+    @base_nsfw.command(name='spank')
+    async def nsfw_spank(self, ctx: Context, *, member: disnake.Member):
+        """Spank someone.
+
+        `member` **->** The member you wish to spank.
+        """
+
+        if await self.check_channel(ctx) is True:
+            if await self.check_marriage('spank', ctx, member) is True:
+                url = await self.get_link('spank', 2, 'url')
+                em = disnake.Embed(color=utils.blurple)
+                em.set_image(url)
+                await ctx.send(
+                    f'{ctx.author.mention} is spanking you {member.mention} {self.LIP_BITE}',
                     embed=em
                 )
 
