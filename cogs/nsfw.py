@@ -143,8 +143,6 @@ class Nsfw(commands.Cog):
                     embed=em
                 )
 
-        await ctx.reply('a')
-
     @base_nsfw.command(name='cum')
     async def nsfw_cum(self, ctx: Context, *, member: disnake.Member):
         """Cum in/on someone.
