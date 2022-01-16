@@ -55,14 +55,15 @@ class Nsfw(commands.Cog):
 
         elif author_entry.married_to != 0 and author_entry.married_to != member.id:
             mem = ctx.ukiyo.get_member(author_entry.married_to)
-            await mem.send(
-                f'`{utils.format_name(ctx.author)}` has tried to cheat on you.\n'
-                f'They wanted to **{action}** {member.mention} ({utils.format_name(member)})'
-            )
-            await ctx.reply(
+            m = await ctx.reply(
                 f'{ctx.denial} You cannot **{action}** `{utils.format_name(member)}`, '
                 f'you can only **{action}** {mem.mention}\nYour partner has been notified '
                 'about your cheating behaviour.'
+            )
+            await mem.send(
+                f'`{utils.format_name(ctx.author)}` has tried to cheat on you.\n'
+                f'They wanted to **{action}** {member.mention} ({utils.format_name(member)})',
+                view=utils.UrlButton('Jump!', m.jump_url)
             )
             return False
 
