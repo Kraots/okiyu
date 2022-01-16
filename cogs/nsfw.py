@@ -75,8 +75,13 @@ class Nsfw(commands.Cog):
 
         return True
 
-    def check_channel(self, channel_id: int) -> bool:
-        return channel_id == 932226719593672714
+    async def check_channel(self, ctx: Context) -> bool:
+        if ctx.author.id != self.bot._owner_id:
+            if ctx.channel.id != 932226719593672714:
+                await ctx.reply(f'{ctx.denial} This command can only be used in the nsfw channel!')
+                return False
+
+        return True
 
     async def get_link(self, endpoint: str) -> str | None:
         """Gets and returns a nsfw gif from https://purrbot.site/api/img/nsfw/`endpoint`/gif
@@ -133,7 +138,7 @@ class Nsfw(commands.Cog):
         `member` **->** The member you wish to fuck.
         """
 
-        if self.check_channel(ctx.channel.id) is True:
+        if await self.check_channel(ctx) is True:
             if await self.check_marriage('fuck', ctx, member) is True:
                 url = await self.get_link('fuck')
                 em = disnake.Embed(color=utils.blurple)
@@ -150,7 +155,7 @@ class Nsfw(commands.Cog):
         `member` **->** The member you wish to cum in/on.
         """
 
-        if self.check_channel(ctx.channel.id) is True:
+        if await self.check_channel(ctx) is True:
             if await self.check_marriage('cum in/on', ctx, member) is True:
                 url = await self.get_link('cum')
                 em = disnake.Embed(color=utils.blurple)
@@ -167,7 +172,7 @@ class Nsfw(commands.Cog):
         `member` **->** The member you wish to give a blowjob to.
         """
 
-        if self.check_channel(ctx.channel.id) is True:
+        if await self.check_channel(ctx) is True:
             if await self.check_marriage('give a blowjob to', ctx, member) is True:
                 url = await self.get_link('blowjob')
                 em = disnake.Embed(color=utils.blurple)
@@ -184,7 +189,7 @@ class Nsfw(commands.Cog):
         `member` **->** The member you wish to have anal with.
         """
 
-        if self.check_channel(ctx.channel.id) is True:
+        if await self.check_channel(ctx) is True:
             if await self.check_marriage('have anal sex with', ctx, member) is True:
                 url = await self.get_link('anal')
                 em = disnake.Embed(color=utils.blurple)
@@ -201,7 +206,7 @@ class Nsfw(commands.Cog):
         `member` **->** The member you wish to lick the pussy of.
         """
 
-        if self.check_channel(ctx.channel.id) is True:
+        if await self.check_channel(ctx) is True:
             if await self.check_marriage('pussy lick', ctx, member) is True:
                 url = await self.get_link('pussylick')
                 em = disnake.Embed(color=utils.blurple)
