@@ -40,10 +40,7 @@ class QuitButton(disnake.ui.View):
 
     async def on_timeout(self):
         try:
-            if self.delete_after is False:
-                return await self.message.edit(view=None)
-
-            await utils.try_delete((self.message, self.ctx.message))
+            return await self.message.edit(view=None)
         except disnake.HTTPException:
             pass
 
