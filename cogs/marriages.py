@@ -199,9 +199,10 @@ class Marriages(commands.Cog):
                     f'{ctx.denial} You cannot kiss `{utils.format_name(member)}`!! You can only kiss {mem.mention}'
                 )
         else:
-            data: Marriage = await Marriage.get()
-            if data is not None and data.married_to != ctx.author.id and data.married_to != 0:
-                return await ctx.reply(f'{ctx.denial} My master is currently taken, you cannot kiss him :rage:')
+            if ctx.author.id != self.bot._owner_id:
+                data: Marriage = await Marriage.get()
+                if data is not None and data.married_to != ctx.author.id and data.married_to != 0:
+                    return await ctx.reply(f'{ctx.denial} My master is currently taken, you cannot kiss him :rage:')
 
         em = disnake.Embed(color=utils.red)
         em.set_image(url='https://cdn.discordapp.com/attachments/752148605753884792/754984869569888276/KIS.gif')
