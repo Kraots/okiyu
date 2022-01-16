@@ -81,7 +81,7 @@ class Featured(commands.Cog):
         m = await channel.send(
             ctx.author.mention,
             embed=em,
-            view=TicketView()
+            view=TicketView(self.bot)
         )
 
         ticket = Ticket(
