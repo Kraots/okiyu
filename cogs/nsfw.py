@@ -16,6 +16,10 @@ class Nsfw(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
+    @property
+    def display_emoji(self) -> str:
+        return self.LIP_BITE
+
     @staticmethod
     async def check_marriage(
         action: str,
