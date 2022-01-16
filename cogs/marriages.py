@@ -200,7 +200,7 @@ class Marriages(commands.Cog):
                 )
         else:
             data: Marriage = await Marriage.get()
-            if data is not None and data.married_to != ctx.author.id and data.married_to != 0:
+            if data is not None and data.married_to != member.id and data.married_to != 0:
                 return await ctx.reply(f'{ctx.denial} My master is currently taken, you cannot kiss him :rage:')
 
         em = disnake.Embed(color=utils.red)
