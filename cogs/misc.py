@@ -1249,6 +1249,34 @@ class Misc(commands.Cog):
 
         await ctx.reply(embed=em)
 
+    @commands.command(name='roast')
+    async def roast_cmd(self, ctx: Context, *, member: disnake.Member = None):
+        """Roast someone or yourself.
+
+        `member` **->** The member you want to roast. Defaults to yourself.
+        """
+
+        member = member or ctx.author
+        if member == ctx.author:
+            fmt = f'{ctx.author.mention} Hah! You roasted yourself.'
+        else:
+            if member.id == self.bot._owner_id:
+                fmt = f'{ctx.author.mention} you got roasted by {self.bot._owner.mention}'
+                member = ctx.author
+            else:
+                fmt = f'{member.mention} you got roasted by {ctx.author.mention}'
+
+        data = await self.bot.session.get('https://insult.mattbas.org/api/insult')
+        roast = (await data.read()).decode()
+        roast = roast + '.' if not roast.endswith('.') else roast
+        em = disnake.Embed(
+            title=f'`{utils.format_name(member)}` get roasted',
+            description=roast,
+            color=utils.blurple
+        )
+
+        await ctx.reply(fmt, embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
