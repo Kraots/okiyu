@@ -6,6 +6,7 @@ __all__ = (
     'TOKEN_REGEX',
     'UNICODE_REGEX',
     'CUSTOM_EMOJI_REGEX',
+    'URL_REGEX'
 )
 
 INVITE_REGEX = re.compile(
@@ -39,3 +40,5 @@ UNICODE_REGEX = re.compile(
     "])"
 )
 CUSTOM_EMOJI_REGEX = re.compile(r'<?(?P<animated>a)?:?(?P<name>[A-Za-z0-9\_]+):(?P<id>[0-9]{13,20})>?')
+
+URL_REGEX = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
