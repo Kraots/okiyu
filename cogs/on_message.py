@@ -164,6 +164,8 @@ class OnMessage(commands.Cog):
         operators = r'\+\-\/\*\(\)\^\÷\%\×\.'
         _content = message.content
 
+        if utils.URL_REGEX.findall(_content):
+            return
         if not any(m in _content for m in operators):
             return
         if message.author.bot:
