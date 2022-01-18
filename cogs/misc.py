@@ -1236,6 +1236,19 @@ class Misc(commands.Cog):
         em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
         await ctx.better_reply(embed=em)
 
+    @commands.command(name='quote')
+    async def anime_quote(self, ctx: Context):
+        """Get a random anime quote."""
+
+        data = await self.bot.session.get('https://animechan.vercel.app/api/random')
+        js = await data.json()
+        em = disnake.Embed(title='Random anime quote', color=utils.blurple)
+        em.add_field('Anime', js['anime'], inline=False)
+        em.add_field('Character', js['character'], inline=False)
+        em.add_field('Quote', js['quote'], inline=False)
+
+        await ctx.reply(embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
