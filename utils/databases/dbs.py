@@ -33,3 +33,15 @@ database7 = cluster7['Ukiyo3']  # Birthdays
 key8 = os.getenv('MONGODBKEY8')
 cluster8 = motor.motor_asyncio.AsyncIOMotorClient(key8)
 database8 = cluster8['Ukiyo4']  # Confesscord Restrictions and Bad Words because confesscord is rarely used anyways
+
+key9 = os.getenv('MONGODBKEY9')
+cluster9 = motor.motor_asyncio.AsyncIOMotorClient(key9)
+database9 = cluster9['Ukiyo5']  # Reminders
+
+key10 = os.getenv('MONGODBKEY10')
+cluster10 = motor.motor_asyncio.AsyncIOMotorClient(key10)
+database10 = cluster10['DATABASE_NAME']  # Todos
+
+key11 = os.getenv('MONGODBKEY11')
+cluster11 = motor.motor_asyncio.AsyncIOMotorClient(key11)
+database11 = cluster11['DATABASE_NAME']  # Sober App

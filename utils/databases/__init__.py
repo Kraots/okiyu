@@ -6,7 +6,10 @@ from .dbs import (  # noqa
     database5,
     database6,
     database7,
-    database8
+    database8,
+    database9,
+    database10,
+    database11
 )
 
 
@@ -36,6 +39,7 @@ from .db_bdays import Birthday
 from .db_confesscord import Restrictions
 from .db_bad_words import BadWords
 from .db_constants import Constants
+from .db_reminders import Reminder
 
 __all__ = (
     'Intro',
@@ -53,4 +57,5 @@ __all__ = (
     'Restrictions',
     'BadWords',
     'Constants',
+    'Reminder',
 )
