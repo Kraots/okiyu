@@ -364,6 +364,11 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(user.created_at, "F")} '
                         f'(`{utils.human_timedelta(user.created_at, accuracy=6)}`)'
         )
+        if user.id in [m.id for m in ctx.ukiyo.members]:
+            sorted_users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.created_at)
+            users_ids = [u.id for u in sorted_users]
+            pos = users_ids.index(user.id) + 1
+            em.set_footer(text=f'{utils.format_position(pos)} oldest account in this server')
         await ctx.better_reply(embed=em)
 
     @created.command(name='server')
@@ -416,6 +421,10 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(member.joined_at, "F")} '
                         f'(`{utils.human_timedelta(member.joined_at, accuracy=6)}`)'
         )
+        sorted_users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.joined_at)
+        users_ids = [u.id for u in sorted_users]
+        pos = users_ids.index(member.id) + 1
+        em.set_footer(text=f'Join Position: {utils.format_position(pos)}')
         await ctx.better_reply(embed=em)
 
     @commands.Cog.listener()
