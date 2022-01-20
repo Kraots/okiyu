@@ -43,10 +43,10 @@ class Reminders(commands.Cog):
             `!remind 30m sleep`
         """
 
-        res: Reminder = await Reminder.find({'user_id': ctx.author.id}).sort('reminder_id', -1).to_list(1)
+        res: list[Reminder] = await Reminder.find({'user_id': ctx.author.id}).sort('reminder_id', -1).to_list(1)
 
         if res:
-            new_id = res.reminder_id + 1
+            new_id = res[0].reminder_id + 1
         else:
             new_id = 1
 
