@@ -93,9 +93,11 @@ class Reminders(commands.Cog):
         `reminder_id` **->** The id of the reminder you want to delete. This can be found by looking at `!remind list`
         """
 
-        res: Reminder = await Reminder.find({'user_id': ctx.author.id, 'reminder_id': reminder_id})
-        if res is not None:
-            if res.user_id == ctx.author.id:
+        entries: list[Reminder] = await Reminder.find({'user_id': ctx.author.id, 'reminder_id': reminder_id}).to_list(0)
+        if entries:
+            entry = entries[0]
+
+            if entry.user_id == ctx.author.id:
                 view = utils.ConfirmView(ctx, 'Did not react in time.')
                 view.message = msg = await ctx.send(
                     'Are you sure you want to cancel that reminder?',
@@ -103,7 +105,7 @@ class Reminders(commands.Cog):
                 )
                 await view.wait()
                 if view.response is True:
-                    await res.delete()
+                    await entry.delete()
                     e = 'Succesfully cancelled the reminder.'
                     return await msg.edit(content=e, view=view)
 
