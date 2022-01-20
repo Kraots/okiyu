@@ -22,14 +22,14 @@ __all__ = (
 
 
 class ShortTime:
-    compiled = re.compile("""(?:(?P<years>[0-9])(?:years?|y|yrs|yr))?             # e.g. 2y
-                             (?:(?P<months>[0-9]{1,2})(?:months?|mo|month))?     # e.g. 2months
-                             (?:(?P<weeks>[0-9]{1,4})(?:weeks?|w|week))?        # e.g. 10w
-                             (?:(?P<days>[0-9]{1,5})(?:days?|d|day))?          # e.g. 14d
-                             (?:(?P<hours>[0-9]{1,5})(?:hours?|h|hr|hrs|hour))?        # e.g. 12h
-                             (?:(?P<minutes>[0-9]{1,5})(?:minutes?|m|mins|min|minute))?    # e.g. 10m
-                             (?:(?P<seconds>[0-9]{1,5})(?:seconds?|s|secs|second|sec))?    # e.g. 15s
-                          """, re.VERBOSE)
+    compiled = re.compile("""(?:(?P<years>[0-9])(?:years?|yrs|yr|y))?             # e.g. 2y
+                             (?:(?P<months>[0-9]{1,2})(?:months?|month|mo))?     # e.g. 2months
+                             (?:(?P<weeks>[0-9]{1,4})(?:weeks?|week|w))?        # e.g. 10w
+                             (?:(?P<days>[0-9]{1,5})(?:days?|day|d))?          # e.g. 14d
+                             (?:(?P<hours>[0-9]{1,5})(?:hours?|hour|hrs|hr|h))?        # e.g. 12h
+                             (?:(?P<minutes>[0-9]{1,5})(?:minutes?|minute|mins|min|m))?    # e.g. 10m
+                             (?:(?P<seconds>[0-9]{1,5})(?:seconds?|second|secs|sec|s))?    # e.g. 15s
+                          """, re.VERBOSE, re.IGNORECASE)
 
     def __init__(self, argument, *, now=None):
         match = self.compiled.fullmatch(argument)
