@@ -39,7 +39,7 @@ class Welcome(commands.Cog):
         )
         welcome.set_thumbnail(url=member.display_avatar)
         welcome.set_footer(text=f"Joined discord {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
-        msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{member_count}** member.\n\n\n_ _'
+        msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{utils.format_position(member_count)}** member.\n\n\n_ _'
         await welcome_webhook.send(msg, embed=welcome)
 
         mute: utils.Mutes = await utils.Mutes.get(member.id)
