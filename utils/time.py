@@ -22,13 +22,13 @@ __all__ = (
 
 
 class ShortTime:
-    compiled = re.compile("""(?:(?P<years>[0-9])(?:years?|y))?             # e.g. 2y
-                             (?:(?P<months>[0-9]{1,2})(?:months?|mo))?     # e.g. 2months
-                             (?:(?P<weeks>[0-9]{1,4})(?:weeks?|w))?        # e.g. 10w
-                             (?:(?P<days>[0-9]{1,5})(?:days?|d))?          # e.g. 14d
-                             (?:(?P<hours>[0-9]{1,5})(?:hours?|h))?        # e.g. 12h
-                             (?:(?P<minutes>[0-9]{1,5})(?:minutes?|m))?    # e.g. 10m
-                             (?:(?P<seconds>[0-9]{1,5})(?:seconds?|s))?    # e.g. 15s
+    compiled = re.compile("""(?:(?P<years>[0-9])(?:years?|y|yrs|yr))?             # e.g. 2y
+                             (?:(?P<months>[0-9]{1,2})(?:months?|mo|month))?     # e.g. 2months
+                             (?:(?P<weeks>[0-9]{1,4})(?:weeks?|w|week))?        # e.g. 10w
+                             (?:(?P<days>[0-9]{1,5})(?:days?|d|day))?          # e.g. 14d
+                             (?:(?P<hours>[0-9]{1,5})(?:hours?|h|hr|hrs|hour))?        # e.g. 12h
+                             (?:(?P<minutes>[0-9]{1,5})(?:minutes?|m|mins|min|minute))?    # e.g. 10m
+                             (?:(?P<seconds>[0-9]{1,5})(?:seconds?|s|secs|second|sec))?    # e.g. 15s
                           """, re.VERBOSE)
 
     def __init__(self, argument, *, now=None):
