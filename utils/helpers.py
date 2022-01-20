@@ -624,7 +624,7 @@ def format_position(n: int | str) -> str:
 
     Parameters
     ----------
-        n: :class:`int`
+        n: :class:`int` | :class:`str`
             The number to format.
 
     Return
@@ -633,7 +633,12 @@ def format_position(n: int | str) -> str:
             The formatted number.
     """
 
-    n: str = str(n)
+    if isinstance(n, int):
+        n = f'{n:,}'
+    else:
+        n = int(n)
+        n = f'{n:,}'
+
     if n.endswith('1'):
         return n + 'st'
     elif n.endswith('2'):
