@@ -22,11 +22,7 @@ class Reminders(commands.Cog):
 
     def __init__(self, bot: Ukiyo):
         self.bot = bot
-        self.prefix = '!'
         self.check_current_reminders.start()
-
-    def cog_check(self, ctx: Context):
-        return ctx.prefix == self.prefix
 
     @property
     def display_emoji(self) -> str:
