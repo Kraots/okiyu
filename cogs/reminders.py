@@ -93,7 +93,7 @@ class Reminders(commands.Cog):
         `reminder_id` **->** The id of the reminder you want to delete. This can be found by looking at `!remind list`
         """
 
-        entries: list[Reminder] = await Reminder.find({'user_id': ctx.author.id, 'reminder_id': reminder_id}).to_list(0)
+        entries: list[Reminder] = await Reminder.find({'user_id': ctx.author.id, 'reminder_id': reminder_id}).to_list(1)
         if entries:
             entry = entries[0]
 
