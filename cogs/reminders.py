@@ -69,9 +69,11 @@ class Reminders(commands.Cog):
 
         reminders = []
         async for entry in Reminder.find({'user_id': ctx.author.id}).sort('remind_when', 1):
+            entry: Reminder
+
             shorten = textwrap.shorten(entry.remind_what, width=320)
             reminders.append((
-                f'(ID) `{entry.id}`: In {human_timedelta(entry.remind_when)}',
+                f'(ID) `{entry.reminder_id}`: In {human_timedelta(entry.remind_when)}',
                 f'{shorten}\n[Click here to go there]({entry.message_url})'
             ))
 
