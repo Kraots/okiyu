@@ -617,7 +617,7 @@ async def send_embeds(
                 ems = []
 
 
-def format_position(n: int) -> str:
+def format_position(n: int | str) -> str:
     """Adds the corresponding suffix depending on what `n` ends in.
     If it ends in 1, it will add a `st` at the end, if it ends in 2,
     it will add a `nd`, etc...
