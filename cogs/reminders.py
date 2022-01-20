@@ -5,10 +5,14 @@ import disnake
 from disnake.ext import commands, tasks
 
 import utils
-from utils import time
-from utils.context import Context
-from utils import Reminder
-from utils.paginator import RoboPages, FieldPageSource
+from utils import (
+    human_timedelta,
+    UserFriendlyTime,
+    Context,
+    RoboPages,
+    FieldPageSource,
+    Reminder
+)
 
 from main import Ukiyo
 
@@ -33,7 +37,7 @@ class Reminders(commands.Cog):
         self,
         ctx: Context,
         *,
-        when_and_what: time.UserFriendlyTime(commands.clean_content, default='\u2026')  # noqa
+        when_and_what: UserFriendlyTime(commands.clean_content, default='\u2026')  # noqa
     ):
         """Set your reminder.
 
@@ -60,7 +64,7 @@ class Reminders(commands.Cog):
             message_url=ctx.message.jump_url
         ).commit()
 
-        delta = time.human_timedelta(when_and_what.dt, accuracy=3)
+        delta = human_timedelta(when_and_what.dt, accuracy=3)
         await ctx.send(f'Alright {ctx.author.mention}, in **{delta}**: {when_and_what.arg}')
 
     @remind.command(name='list')
@@ -71,7 +75,7 @@ class Reminders(commands.Cog):
         async for entry in Reminder.find({'user_id': ctx.author.id}).sort('remind_when', 1):
             shorten = textwrap.shorten(entry.remind_what, width=320)
             reminders.append((
-                f'(ID) `{entry.id}`: In {time.human_timedelta(entry.remind_when)}',
+                f'(ID) `{entry.id}`: In {human_timedelta(entry.remind_when)}',
                 f'{shorten}\n[Click here to go there]({entry.message_url})'
             ))
 
@@ -147,7 +151,7 @@ class Reminders(commands.Cog):
         for res in results:
             if current_time >= res.remind_when:
                 remind_channel = self.bot.get_channel(res.channel_id)
-                msg = f'<@!{res.user_id}>, **{time.human_timedelta(res.remind_when)}**: {res.remind_what}'
+                msg = f'<@!{res.user_id}>, **{human_timedelta(res.remind_when)}**: {res.remind_what}'
                 await remind_channel.send(
                     msg,
                     view=utils.UrlButton('Go to the original message', res.message_url)
