@@ -34,6 +34,7 @@ __all__ = (
     'remove_zalgos',
     'format_name',
     'send_embeds',
+    'format_position',
 )
 
 
@@ -614,3 +615,30 @@ async def send_embeds(
             if count != 0:
                 await destination.send(embeds=ems)
                 ems = []
+
+
+def format_position(n: int) -> str:
+    """Adds the corresponding suffix depending on what `n` ends in.
+    If it ends in 1, it will add a `st` at the end, if it ends in 2,
+    it will add a `nd`, etc...
+
+    Parameters
+    ----------
+        n: :class:`int`
+            The number to format.
+
+    Return
+    ------
+        :class:`str`
+            The formatted number.
+    """
+
+    n: str = str(n)
+    if n.endswith('1'):
+        return n + 'st'
+    elif n.endswith('2'):
+        return n + 'nd'
+    elif n.endswith('3'):
+        return n + 'rd'
+    else:
+        return n + 'th'
