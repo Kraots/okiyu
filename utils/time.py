@@ -29,7 +29,7 @@ class ShortTime:
                              (?:(?P<hours>[0-9]{1,5})(?:hours?|hour|hrs|hr|h))?        # e.g. 12h
                              (?:(?P<minutes>[0-9]{1,5})(?:minutes?|minute|mins|min|m))?    # e.g. 10m
                              (?:(?P<seconds>[0-9]{1,5})(?:seconds?|second|secs|sec|s))?    # e.g. 15s
-                          """, re.VERBOSE, re.IGNORECASE)
+                          """, re.VERBOSE)
 
     def __init__(self, argument, *, now=None):
         match = self.compiled.fullmatch(argument)
