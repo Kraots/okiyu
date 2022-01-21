@@ -31,7 +31,7 @@ class Ukiyo(commands.Bot):
 
         self._owner_id = 374622847672254466
         self.added_views = False
-        self.webhooks = {}
+        self.webhooks: dict[str, disnake.Webhook] = {}
         self.execs = {}
         self.verifying = []
         self.bad_words = {}
