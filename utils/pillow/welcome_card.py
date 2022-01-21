@@ -28,7 +28,7 @@ async def create_welcome_card(member: disnake.Member, join_pos: str) -> disnake.
 
     pos = Image.new("RGBA", (900, 150), TRANSPARENT)
     draw = ImageDraw.Draw(pos)
-    txt = f'You are our {join_pos} member'
+    txt = f'You are our {utils.format_position(join_pos)} member'
     font = utils.pillow.rank_card.get_font(txt, pos)
     draw.text((0, 0), txt, font=font)
     img.paste(pos, (50, 375), pos)
