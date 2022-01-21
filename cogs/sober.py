@@ -99,7 +99,7 @@ class SoberApp(commands.Cog, name='Sober App'):
                 f'{ctx.denial} You don\'t have any sober that you\'re keeping track of currently.'
             )
 
-        view = utils.SelectView([entry.short_title for entry in entries], enumerated=True)
+        view = utils.SelectView(ctx, [entry.short_title for entry in entries], enumerated=True)
         view.message = await ctx.reply(
             'Please select one of the sobers that you wish to reset from the select menu below.',
             view=view
@@ -125,7 +125,7 @@ class SoberApp(commands.Cog, name='Sober App'):
                 f'{ctx.denial} You don\'t have any sober that you\'re keeping track of currently.'
             )
 
-        view = utils.SelectView([entry.short_title for entry in entries], enumerated=True)
+        view = utils.SelectView(ctx, [entry.short_title for entry in entries], enumerated=True)
         view.message = await ctx.reply(
             'Please select one of the sobers that you wish to reset from the select menu below.',
             view=view
@@ -150,7 +150,7 @@ class SoberApp(commands.Cog, name='Sober App'):
                 f'{ctx.denial} You don\'t have any sober that you\'re keeping track of currently.'
             )
 
-        view = utils.SelectView([entry.short_title for entry in entries], enumerated=True)
+        view = utils.SelectView(ctx, [entry.short_title for entry in entries], enumerated=True)
         view.message = await ctx.reply(
             'Please select one of the sobers that you wish check your progress on from the select menu below.',
             view=view
