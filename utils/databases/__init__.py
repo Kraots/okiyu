@@ -40,6 +40,7 @@ from .db_confesscord import Restrictions
 from .db_bad_words import BadWords
 from .db_constants import Constants
 from .db_reminders import Reminder
+from .db_todos import ToDo
 
 __all__ = (
     'Intro',
@@ -58,4 +59,5 @@ __all__ = (
     'BadWords',
     'Constants',
     'Reminder',
+    'ToDo',
 )
