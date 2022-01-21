@@ -59,7 +59,7 @@ class Nsfw(commands.Cog):
         ):
             return True
 
-        elif author_entry.married_to != 0 and author_entry.married_to != member.id:
+        elif author_entry and author_entry.married_to != 0 and author_entry.married_to != member.id:
             mem = ctx.ukiyo.get_member(author_entry.married_to)
             m = await ctx.reply(
                 f'{ctx.denial} You cannot **{action}** `{utils.format_name(member)}`, '
@@ -73,7 +73,7 @@ class Nsfw(commands.Cog):
             )
             return False
 
-        elif member_entry != 0 and member_entry.married_to != ctx.author.id:
+        elif member_entry and member_entry != 0 and member_entry.married_to != ctx.author.id:
             mem = ctx.ukiyo.get_member(member_entry.married_to)
             await ctx.reply(
                 f'{ctx.denial} You cannot **{action}** that person '
