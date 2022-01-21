@@ -76,9 +76,9 @@ class Birthdays(commands.Cog):
         data: Birthday = await Birthday.get(member.id)
         if data is None:
             if member.id == ctx.author.id:
-                return await ctx.reply('You did not set your birthday.')
+                return await ctx.reply(f'{ctx.denial} You did not set your birthday.')
             else:
-                return await ctx.better_reply(f'`{utils.format_name(member)}` did not set their birthday.')
+                return await ctx.better_reply(f'{ctx.denial} `{utils.format_name(member)}` did not set their birthday.')
 
         em = disnake.Embed(title=f'`{utils.format_name(member)}`\'s birthday', color=utils.blurple)
         em.add_field(
@@ -124,7 +124,7 @@ class Birthdays(commands.Cog):
             birthday_date = datetime.strptime(date, '%d/%m/%Y')
         except ValueError:
             return await ctx.reply(
-                'The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
+                f'{ctx.denial} The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
                 'Doing `!help birthday set` will show you the correct format.'
             )
         if birthday_date.year not in range(2002, 2008):
@@ -165,7 +165,7 @@ class Birthdays(commands.Cog):
             birthday_timezone = pytz.timezone(_birthday_timezone.content.replace(' ', '_'))
         except pytz.UnknownTimeZoneError:
             return await _birthday_timezone.reply(
-                'That **Continent/City** does not exist. Please pick one that has the exact same timezone as yours.'
+                f'{ctx.denial} That **Continent/City** does not exist. Please pick one that has the exact same timezone as yours.'
             )
         data.timezone = birthday_timezone.zone.replace('_', ' ')
 
@@ -193,7 +193,7 @@ class Birthdays(commands.Cog):
 
         data: Birthday = await Birthday.get(ctx.author.id)
         if data is None:
-            return await ctx.reply('You did not set your birthday.')
+            return await ctx.reply(f'{ctx.denial} You did not set your birthday.')
 
         view = utils.ConfirmView(ctx)
         view.message = await ctx.reply('Are you sure you want to remove your birthday?', view=view)
