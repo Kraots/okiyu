@@ -14,7 +14,7 @@ class Welcome(commands.Cog):
         self.files = []
         self.send_welc.start()
 
-    @tasks.loop(seconds=25.0)
+    @tasks.loop(seconds=15.0)
     async def send_welc(self):
         webhook = self.bot.webhooks.get('welcome_webhook')
         if webhook is not None:
