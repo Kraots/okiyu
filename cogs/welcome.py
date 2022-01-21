@@ -33,6 +33,7 @@ class Welcome(commands.Cog):
                 if len(files) != 0:
                     await webhook.send(files=files)
                     files = []
+            self.files = []
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
