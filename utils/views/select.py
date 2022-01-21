@@ -12,7 +12,7 @@ class Select(disnake.ui.Select['SelectView']):
 
     def _fill_options(self, options: list[str]):
         for option in options:
-            self.add_option(option)
+            self.add_option(label=option)
 
     async def callback(self, interaction: disnake.MessageInteraction):
         assert self.view is not None
