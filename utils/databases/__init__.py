@@ -41,6 +41,7 @@ from .db_bad_words import BadWords
 from .db_constants import Constants
 from .db_reminders import Reminder
 from .db_todos import ToDo
+from .db_sober import Sober
 
 __all__ = (
     'Intro',
@@ -60,4 +61,5 @@ __all__ = (
     'Constants',
     'Reminder',
     'ToDo',
+    'Sober',
 )
