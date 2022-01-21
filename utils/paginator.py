@@ -15,6 +15,8 @@ __all__ = (
     'SimplePageSource',
     'SimplePages',
     'EmbedPaginator',
+    'RawSimplePageSource',
+    'RawSimplePages'
 )
 
 
