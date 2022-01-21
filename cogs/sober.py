@@ -47,6 +47,10 @@ class SoberApp(commands.Cog, name='Sober App'):
         except TimeoutError:
             return await ctx.reply(f'{ctx.denial} You didn\'t give the short title. Aborting.')
         short_title = msg.content
+        if any(i for i in entries if i.short_title.lower() == short_title.lower()):
+            return await msg.reply(
+                f'{ctx.denial} You already have a sober that you\'re keeping the track of with that same short title.'
+            )
 
         try:
             await msg.reply('Please give a detailed(optional) description of what this sober is about.')
