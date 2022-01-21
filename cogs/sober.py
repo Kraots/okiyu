@@ -19,6 +19,10 @@ class SoberApp(commands.Cog, name='Sober App'):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
 
+    @property
+    def display_emoji(self) -> str:
+        return '😇'
+
     @commands.group(
         name='sober',
         invoke_without_command=True,
