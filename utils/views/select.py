@@ -20,6 +20,8 @@ class Select(disnake.ui.Select['SelectView']):
                 self.add_option(label=f'{index + 1}. {option}', value=option)
 
     async def callback(self, interaction: disnake.MessageInteraction):
+        await interaction.response.defer()
+
         assert self.view is not None
         value = self.values[0]
         self.view.value = value
