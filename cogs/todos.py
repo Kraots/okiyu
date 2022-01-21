@@ -100,7 +100,7 @@ class ToDos(commands.Cog):
         if not res:
             return await ctx.reply('You do not have any todo list.')
 
-        view = self.bot.confirm_view(ctx, f'{ctx.author.mention} Did not react in time.')
+        view = utils.ConfirmView(ctx, f'{ctx.author.mention} Did not react in time.')
         view.message = msg = await ctx.send(f'Are you sure you want to delete your todo list? {ctx.author.mention}', view=view)
         await view.wait()
         if view.response is True:
