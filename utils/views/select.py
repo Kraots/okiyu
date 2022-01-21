@@ -36,8 +36,8 @@ class SelectView(disnake.ui.View):
 
     def __init__(
         self,
-        options: list[str],
         ctx: Context,
+        options: list[str],
         *,
         timeout: float = 30.0,
         enumerated: bool = False
