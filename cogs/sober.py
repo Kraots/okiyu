@@ -104,6 +104,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         entry.progress = datetime.now()
         await entry.commit()
 
+        await view.message.delete()
         await ctx.reply(f'Successfully reset your progress for `{view.value}`')
 
     @base_sober.command(name='check', aliases=('list', 'all',))
@@ -132,6 +133,7 @@ class SoberApp(commands.Cog, name='Sober App'):
             f'{utils.format_dt(entry.progress, "F")} (`{utils.human_timedelta(entry.progress, accuracy=7)}`)'
         )
 
+        await view.message.delete()
         await ctx.reply(embed=em)
 
     @base_sober.command(name='clear')
