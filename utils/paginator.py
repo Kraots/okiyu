@@ -328,6 +328,35 @@ class SimplePages(RoboPages):
         self.embed = disnake.Embed(colour=color)
 
 
+class RawSimplePageSource(menus.ListPageSource):
+    def __init__(self, entries, *, per_page=12):
+        super().__init__(entries, per_page=per_page)
+        self.initial_page = True
+
+    async def format_page(self, menu, entries):
+        pages = []
+        for index, entry in enumerate(entries, start=menu.current_page * self.per_page):
+            pages.append(str(entry))
+
+        maximum = self.get_max_pages()
+        if maximum > 1:
+            footer = f'Page {menu.current_page + 1}/{maximum} ({len(self.entries)} entries)'
+            menu.embed.set_footer(text=footer)
+
+        menu.embed.description = '\n'.join(pages)
+        return menu.embed
+
+
+class RawSimplePages(RoboPages):
+    """Same as SimplePages but without enumerating them automatically."""
+
+    def __init__(self, ctx, entries, *, per_page=5, color=None, compact=False):
+        super().__init__(RawSimplePageSource(entries, per_page=per_page), ctx=ctx, compact=compact)
+        if color is None:
+            color = disnake.Color.blurple()
+        self.embed = disnake.Embed(colour=color)
+
+
 class EmbedPaginator(disnake.ui.View):
     def __init__(
         self,
