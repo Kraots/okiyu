@@ -93,6 +93,7 @@ class ToDos(commands.Cog):
         await ctx.reply('Successfully removed that todo from your todo list.')
 
     @todo.command(name='clear')
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def todo_clear(self, ctx: Context):
         """Delete your todo list, completely."""
 

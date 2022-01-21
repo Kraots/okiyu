@@ -36,6 +36,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         await ctx.send_help('Sober App')
 
     @base_sober.command(name='add')
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def sober_add(self, ctx: Context):
         """Add a new sober to keep track of."""
 
@@ -90,6 +91,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         await ctx.reply('Successfully added your new sober to keep track of.')
 
     @base_sober.command(name='reset')
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def sober_reset(self, ctx: Context):
         """Reset your progress on a sober that you're keeping track of."""
 
@@ -116,6 +118,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         await ctx.reply(f'Successfully reset your progress for `{view.value}`')
 
     @base_sober.command(name='delete', aliases=('remove',))
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def sober_delete(self, ctx: Context):
         """Delets a sober."""
 
@@ -141,6 +144,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         await ctx.reply(f'Successfully deleted `{view.value}` from your sobers.')
 
     @base_sober.command(name='check', aliases=('list', 'all',))
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def sober_check(self, ctx: Context):
         """Check your current sober progress."""
 
@@ -170,6 +174,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         await ctx.reply(embed=em)
 
     @base_sober.command(name='clear')
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def sober_clear(self, ctx: Context):
         """Clears all of your sober data."""
 

@@ -87,6 +87,7 @@ class Reminders(commands.Cog):
         await pages.start()
 
     @remind.command(name='remove', aliases=['delete', 'cancel'])
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def remind_remove(self, ctx: Context, reminder_id: int):
         """Remove a reminder from your list based on its id.
 
@@ -120,6 +121,7 @@ class Reminders(commands.Cog):
             return
 
     @remind.command(name='clear')
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def remind_clear(self, ctx: Context):
         """Delete all of your reminders."""
 
