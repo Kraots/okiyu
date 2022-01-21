@@ -111,6 +111,31 @@ class SoberApp(commands.Cog, name='Sober App'):
         await view.message.delete()
         await ctx.reply(f'Successfully reset your progress for `{view.value}`')
 
+    @base_sober.command(name='delete', aliases=('remove',))
+    async def sober_delete(self, ctx: Context):
+        """Delets a sober."""
+
+        entries: list[Sober] = await Sober.find({'user_id': ctx.author.id}).to_list(20)
+        if len(entries) == 0:
+            return await ctx.reply(
+                f'{ctx.denial} You don\'t have any sober that you\'re keeping track of currently.'
+            )
+
+        view = utils.SelectView([entry.short_title for entry in entries], enumerated=True)
+        view.message = await ctx.reply(
+            'Please select one of the sobers that you wish to reset from the select menu below.',
+            view=view
+        )
+        await view.wait()
+        if view.value is None:
+            return
+
+        entry = [i for i in entries if i.short_title == view.value][0]
+        await entry.delete()
+
+        await view.message.delete()
+        await ctx.reply(f'Successfully deleted `{view.value}` from your sobers.')
+
     @base_sober.command(name='check', aliases=('list', 'all',))
     async def sober_check(self, ctx: Context):
         """Check your current sober progress."""
