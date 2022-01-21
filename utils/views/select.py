@@ -23,7 +23,7 @@ class Select(disnake.ui.Select['SelectView']):
 
 class SelectView(disnake.ui.View):
     message: disnake.Message
-    value: str | int | bool | float
+    value: str | int | bool | float = None
 
     def __init__(self, options: list[str], *, timeout: float = 30.0):
         super().__init__(timeout=timeout)
