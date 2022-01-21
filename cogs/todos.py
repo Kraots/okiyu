@@ -48,7 +48,7 @@ class ToDos(commands.Cog):
 
         res: ToDo = await ToDo.get(ctx.author.id)
         if res is None:
-            return await ctx.reply('You do not have any todo list.')
+            return await ctx.reply('You do not have any todos in your todo list.')
 
         entries = []
         for i, entry in enumerate(res.todo_data):
@@ -73,7 +73,7 @@ class ToDos(commands.Cog):
 
         res: ToDo = await ToDo.get(ctx.author.id)
         if not res:
-            return await ctx.reply('You do not have any todo list.')
+            return await ctx.reply('You do not have any todo in your todos list.')
 
         new_data = []
         if index < 0:
@@ -98,7 +98,7 @@ class ToDos(commands.Cog):
 
         res: ToDo = await ToDo.get(ctx.author.id)
         if not res:
-            return await ctx.reply('You do not have any todo list.')
+            return await ctx.reply('You do not have any todos in your todo list.')
 
         view = utils.ConfirmView(ctx, f'{ctx.author.mention} Did not react in time.')
         view.message = msg = await ctx.send(f'Are you sure you want to delete your todo list? {ctx.author.mention}', view=view)
