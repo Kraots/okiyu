@@ -21,7 +21,7 @@ class ToDos(commands.Cog):
         return '📋'
 
     @commands.group(aliases=('todos',), invoke_without_command=True, case_insensitive=True, hidden=True)
-    async def todo(self, ctx: Context, *, todo: str):
+    async def todo(self, ctx: Context):
         """Base command for all todo commands."""
 
         await ctx.send_help('ToDos')
