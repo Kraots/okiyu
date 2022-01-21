@@ -46,7 +46,7 @@ class SoberApp(commands.Cog, name='Sober App'):
             msg: disnake.Message = await self.bot.wait_for('message', check=check, timeout=60.0)
         except TimeoutError:
             return await ctx.reply(f'{ctx.denial} You didn\'t give the short title. Aborting.')
-        short_title = msg.short_title
+        short_title = msg.content
 
         try:
             await msg.reply('Please give a detailed(optional) description of what this sober is about.')
