@@ -93,7 +93,8 @@ class SoberApp(commands.Cog, name='Sober App'):
 
         view = utils.SelectView([f'{index + 1}. {entry.short_title}' for index, entry in enumerate(entries)])
         view.message = await ctx.reply(
-            'Please select one of the sobers that you wish to reset from the select menu below.'
+            'Please select one of the sobers that you wish to reset from the select menu below.',
+            view=view
         )
         await view.wait()
         if view.value is None:
@@ -117,7 +118,8 @@ class SoberApp(commands.Cog, name='Sober App'):
 
         view = utils.SelectView([f'{index + 1}. {entry.short_title}' for index, entry in enumerate(entries)])
         view.message = await ctx.reply(
-            'Please select one of the sobers that you wish check your progress on.'
+            'Please select one of the sobers that you wish check your progress on from the select menu below.',
+            view=view
         )
         await view.wait()
         if view.value is None:
