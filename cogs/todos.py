@@ -50,11 +50,10 @@ class ToDos(commands.Cog):
         if res is None:
             return await ctx.reply('You do not have any todo list.')
 
-        entries = res.todo_data
-        index = 0
-        for i in range(len(entries)):
-            index += 1
-            entries[i]['todo'] = f"**[{index}.]({entries[i]['url']})** {entries[i]['todo']}"
+        entries = []
+        for i, entry in res.todo_data:
+            entry = f"**[{i + 1}.]({entry['url']})** {entry['todo']}"
+            entries.append(entry)
 
         pag = utils.RawSimplePages(ctx, entries, compact=True)
         pag.embed.set_author(name=utils.format_name(ctx.author), icon_url=ctx.author.display_avatar)
