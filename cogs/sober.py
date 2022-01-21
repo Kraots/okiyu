@@ -74,7 +74,7 @@ class SoberApp(commands.Cog, name='Sober App'):
             progress = datetime.strptime(progress, '%d/%m/%Y')
         except ValueError:
             return await ctx.reply(
-                f'{ctx.denial} The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
+                f'{ctx.denial} The format in which you gave your progress date does not match the one you\'re supposed to give it in. '
             )
 
         await Sober(
