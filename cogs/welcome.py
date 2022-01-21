@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 import disnake
-from disnake.ext import commands
+from disnake.ext import commands, tasks
 
 import utils
 
@@ -11,6 +11,31 @@ from main import Ukiyo
 class Welcome(commands.Cog):
     def __init__(self, bot: Ukiyo):
         self.bot = bot
+        self.files = []
+        self.send_welc.start()
+
+    @tasks.loop(seconds=8.0)
+    async def send_welc(self):
+        webhook = self.bot.webhooks['welcome_webhook']
+        if len(self.files) == 10:
+            await webhook.send(files=self.files)
+        else:
+            files = []
+            count = 0
+            for file in self.files:
+                count += 1
+                files.append(file)
+                if count == 10:
+                    await webhook.send(files=files)
+                    count = 0
+                    files = []
+            if len(files) != 0:
+                await webhook.send(files=files)
+                files = []
+
+    @send_welc.before_loop
+    async def before_send_welc(self):
+        await self.bot.wait_until_ready()
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
@@ -25,22 +50,9 @@ class Welcome(commands.Cog):
         unverified_role = guild.get_role(913329062347423775)
         await member.add_roles(unverified_role)
 
-        welcome_channel = guild.get_channel(913331535170637825)
-        welcome_webhook = await self.bot.get_webhook(welcome_channel, avatar=self.bot.user.display_avatar)
         member_count = len([m for m in guild.members if not m.bot])
-
-        welcome = disnake.Embed(
-            description="***Please read the rules at*** <#913331459673178122>\n"
-                        "***You can always get a colour from*** <#913331502761271296>\n"
-                        "***Don't forget to get your roles from*** <#913336089492717618>\n"
-                        "***For bot commands please use*** <#913330644875104306>\n\n"
-                        "> Enjoy your stay ^-^",
-            color=utils.pastel
-        )
-        welcome.set_thumbnail(url=member.display_avatar)
-        welcome.set_footer(text=f"Joined discord {utils.human_timedelta(member.created_at)}", icon_url=member.display_avatar)
-        msg = f'Hey {member.mention}, welcome to **Ukiyo!** \nYou are our **{utils.format_position(member_count)}** member.\n\n\n_ _'
-        await welcome_webhook.send(msg, embed=welcome)
+        file = await utils.create_welcome_card(member, member_count)
+        self.files.append(file)
 
         mute: utils.Mutes = await utils.Mutes.get(member.id)
         if mute is not None:
