@@ -14,28 +14,25 @@ class Welcome(commands.Cog):
         self.files = []
         self.send_welc.start()
 
-    @tasks.loop(seconds=8.0)
+    @tasks.loop(seconds=25.0)
     async def send_welc(self):
-        webhook = self.bot.webhooks['welcome_webhook']
-        if len(self.files) == 10:
-            await webhook.send(files=self.files)
-        else:
-            files = []
-            count = 0
-            for file in self.files:
-                count += 1
-                files.append(file)
-                if count == 10:
-                    await webhook.send(files=files)
-                    count = 0
-                    files = []
-            if len(files) != 0:
-                await webhook.send(files=files)
+        webhook = self.bot.webhooks.get('welcome_webhook')
+        if webhook is not None:
+            if len(self.files) == 10:
+                await webhook.send(files=self.files)
+            else:
                 files = []
-
-    @send_welc.before_loop
-    async def before_send_welc(self):
-        await self.bot.wait_until_ready()
+                count = 0
+                for file in self.files:
+                    count += 1
+                    files.append(file)
+                    if count == 10:
+                        await webhook.send(files=files)
+                        count = 0
+                        files = []
+                if len(files) != 0:
+                    await webhook.send(files=files)
+                    files = []
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
