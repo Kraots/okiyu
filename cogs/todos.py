@@ -51,7 +51,7 @@ class ToDos(commands.Cog):
             return await ctx.reply('You do not have any todo list.')
 
         entries = []
-        for i, entry in res.todo_data:
+        for i, entry in enumerate(res.todo_data):
             entry = f"**[{i + 1}.]({entry['url']})** {entry['todo']}"
             entries.append(entry)
 
