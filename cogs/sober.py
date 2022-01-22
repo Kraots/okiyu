@@ -166,7 +166,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         entry = [i for i in entries if i.short_title == view.value][0]
         em = disnake.Embed(title='• ' + entry.short_title, description=entry.description, color=utils.blurple)
         em.add_field(
-            'Sober since',
+            'Sober Since',
             f'{utils.format_dt(entry.progress, "F")} (`{utils.human_timedelta(entry.progress, accuracy=7)}`)'
         )
 
