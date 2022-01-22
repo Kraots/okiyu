@@ -33,7 +33,7 @@ class Reminders(commands.Cog):
         self,
         ctx: Context,
         *,
-        when_and_what: UserFriendlyTime(commands.clean_content, default='\u2026')  # noqa
+        when_and_what: UserFriendlyTime(commands.clean_content, default='...')
     ):
         """Set your reminder.
 
