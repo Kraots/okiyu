@@ -120,7 +120,7 @@ class SoberApp(commands.Cog, name='Sober App'):
     @base_sober.command(name='delete', aliases=('remove',))
     @commands.max_concurrency(1, commands.BucketType.user)
     async def sober_delete(self, ctx: Context):
-        """Delets a sober."""
+        """Deletes a sober."""
 
         entries: list[Sober] = await Sober.find({'user_id': ctx.author.id}).to_list(20)
         if len(entries) == 0:
