@@ -143,7 +143,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         await view.message.delete()
         await ctx.reply(f'Successfully deleted `{view.value}` from your sobers.')
 
-    @base_sober.command(name='check', aliases=('list', 'all',))
+    @base_sober.command(name='check', aliases=('list', 'all', 'since',))
     @commands.max_concurrency(1, commands.BucketType.user)
     async def sober_check(self, ctx: Context):
         """Check your current sober progress."""
@@ -166,7 +166,7 @@ class SoberApp(commands.Cog, name='Sober App'):
         entry = [i for i in entries if i.short_title == view.value][0]
         em = disnake.Embed(title='• ' + entry.short_title, description=entry.description, color=utils.blurple)
         em.add_field(
-            'Last time you have done it',
+            'Sober since',
             f'{utils.format_dt(entry.progress, "F")} (`{utils.human_timedelta(entry.progress, accuracy=7)}`)'
         )
 
