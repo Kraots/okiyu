@@ -219,13 +219,13 @@ class Birthdays(commands.Cog):
 
         datas: list[Birthday] = await Birthday.find().sort('next_birthday', 1).to_list(5)
         for data in datas:
-            user = self.bot.get_user(data.id)
+            user = ctx.ukiyo.get_member(data.id)
             index += 1
             next_birthday_date = data.birthday_date.strftime('%d %B %Y')
             next_birthday_date.replace(str(data.birthday_date.year), str(data.next_birthday.year))
             next_birthday = utils.human_timedelta(data.next_birthday, accuracy=3)
             em.add_field(
-                name=f"`{index}`. _ _ _ _ {user.name}",
+                name=f"`{index}`. _ _ _ _ {user.display_name}",
                 value=f'Birthday in `{next_birthday}` ( **{next_birthday_date}** )',
                 inline=False
             )
