@@ -134,7 +134,7 @@ class SoberApp(commands.Cog, name='Sober App'):
 
         view = utils.SelectView(ctx, [entry.short_title for entry in entries], enumerated=True)
         view.message = await ctx.reply(
-            'Please select one of the sobers that you wish to reset from the select menu below.',
+            'Please select one of the sobers that you wish to delete from the select menu below.',
             view=view
         )
         await view.wait()
