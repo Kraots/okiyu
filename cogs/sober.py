@@ -111,11 +111,15 @@ class SoberApp(commands.Cog, name='Sober App'):
             return
 
         entry = [i for i in entries if i.short_title == view.value][0]
+        old_progress = entry.progress
         entry.progress = datetime.now()
         await entry.commit()
 
         await view.message.delete()
-        await ctx.reply(f'Successfully reset your progress for `{view.value}`')
+        await ctx.reply(
+            f'Successfully reset your progress for `{view.value}`\n'
+            f'You lasted a total of **{utils.human_timedelta(old_progress, accuracy=7, suffix=False)}**'
+        )
 
     @base_sober.command(name='delete', aliases=('remove',))
     @commands.max_concurrency(1, commands.BucketType.user)
