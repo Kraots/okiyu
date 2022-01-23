@@ -182,7 +182,7 @@ class Levels(commands.Cog):
         data = []
         top_3_emojis = {1: '🥇', 2: '🥈', 3: '🥉'}
 
-        async for entry in Level.find().sorted('messages_count', -1):
+        async for entry in Level.find().sort('messages_count', -1):
             entry: Level
 
             if entry.messages_count != 0:
