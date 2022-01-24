@@ -239,6 +239,23 @@ class OnMessage(commands.Cog):
         except disnake.HTTPException:
             return
 
+    @commands.Cog.listener('on_message')
+    async def server_boosts(self, message: disnake.Message):
+        if message.channel.id == 935155596611690506:
+            if message.is_system():
+                total_boosts = message.guild.premium_subscription_count
+                total_boosters = len(message.guild.premium_subscribers)
+                boost_level = message.guild.premium_tier
+                em = disnake.Embed(
+                    color=utils.light_pink,
+                    title=f'Thanks for the boost {utils.format_name(message.author)}',
+                    description='Thanks for boosting the server! '
+                                f'We are now at level **{boost_level}** with a total '
+                                f'of **{total_boosts}** boosts and **{total_boosters}** '
+                                'total members that have boosted the server.'
+                )
+                await message.send(embed=em)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(OnMessage(bot))
