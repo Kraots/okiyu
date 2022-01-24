@@ -7,3 +7,4 @@ light_pink = 0xf1a3d8
 blurple = 0x5865f2
 light_blue = 0x94feff
 green = 0x2ecc71
+booster_pink = 0xf47fff
