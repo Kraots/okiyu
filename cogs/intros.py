@@ -133,7 +133,8 @@ class Intros(commands.Cog):
             intro_channel = ctx.ukiyo.get_channel(913331578606854184)
             await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()
-        await member.edit(roles=[r for r in member.roles if r.id == 913376647422545951] + [unverified_role])
+        await member.edit(roles=[r for r in member.roles if r.id in (
+            921036443672014918, 913376647422545951, 924941473089224784)] + [unverified_role])
         await try_dm(
             member,
             'You have been unverified in `Ukiyo` by one of our staff members. '
