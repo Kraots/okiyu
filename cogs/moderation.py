@@ -101,7 +101,7 @@ class Moderation(commands.Cog):
                 reason=f'Channel locked by {utils.format_name(ctx.author)} ({ctx.author.id})'
             )
         else:
-            return await ctx.reply(f'{ctx.denial} That channel cannot be unlocked.')
+            return await ctx.reply(f'{ctx.denial} That channel cannot be locked.')
         await ctx.reply('> 🔒 Channel Locked!')
         await utils.log(
             self.bot.webhooks['mod_logs'],
