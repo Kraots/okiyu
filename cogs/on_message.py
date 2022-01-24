@@ -254,6 +254,8 @@ class OnMessage(commands.Cog):
                                 f'of **{total_boosts}** boosts and **{total_boosters}** '
                                 'total members that have boosted the server.'
                 )
+                em.set_thumbnail(url=message.author.display_avatar)
+
                 await message.send(embed=em)
 
 
