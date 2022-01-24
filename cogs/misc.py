@@ -1288,7 +1288,7 @@ class Misc(commands.Cog):
 
     @commands.command(name='boosters')
     async def check_boosters(self, ctx: Context):
-        """See all the people that are currently boosting the server."""
+        """See all the people that are currently boosting the server, in order based on the date they started boosting."""
 
         boosters = []
         sorted_ = sorted(ctx.ukiyo.premium_subscribers, key=lambda m: m.premium_since)
