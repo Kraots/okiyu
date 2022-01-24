@@ -247,7 +247,7 @@ class OnMessage(commands.Cog):
                 total_boosters = len(message.guild.premium_subscribers)
                 boost_level = message.guild.premium_tier
                 em = disnake.Embed(
-                    color=utils.light_pink,
+                    color=utils.booster_pink,
                     title=f'Thanks for the boost {utils.format_name(message.author)}',
                     description='Thanks for boosting the server! '
                                 f'We are now at level **{boost_level}** with a total '
