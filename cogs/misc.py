@@ -1286,7 +1286,7 @@ class Misc(commands.Cog):
 
         await ctx.reply(fmt, embed=em)
 
-    @commands.command(name='boosters', aliases=('booster'))
+    @commands.command(name='boosters', aliases=('booster',))
     async def check_boosters(self, ctx: Context):
         """See all the people that are currently boosting the server, in order based on the date they started boosting."""
 
