@@ -1286,6 +1286,28 @@ class Misc(commands.Cog):
 
         await ctx.reply(fmt, embed=em)
 
+    @commands.command(name='boosters')
+    async def check_boosters(self, ctx: Context):
+        """See all the people that are currently boosting the server."""
+
+        boosters = []
+        sorted_ = sorted(ctx.ukiyo.premium_subscribers, key=lambda m: m.premium_since)
+        for index, member in enumerate(sorted_):
+            boosters.append(
+                (
+                    f'`#{index + 1}` {utils.format_name(member)}',
+                    f'{member.mention} Has been boosting this server since '
+                    f'{utils.format_dt(member.premium_since, "F")} '
+                    f'(`{utils.human_timedelta(member.premium_since)}`)\n _ _ '
+                )
+            )
+
+        source = utils.FieldPageSource(boosters, per_page=5)
+        source.embed.color = utils.booster_pink
+        source.embed.title = 'Here\'s all the boosters of `Ukiyo`'
+        pag = utils.RoboPages(source, ctx=ctx, compact=True)
+        await pag.start(ref=True)
+
 
 def setup(bot: Ukiyo):
     bot.add_cog(Misc(bot))
