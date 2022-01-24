@@ -256,7 +256,7 @@ class OnMessage(commands.Cog):
                 )
                 em.set_thumbnail(url=message.author.display_avatar)
 
-                await message.send(embed=em)
+                await message.send(message.author.mention, embed=em)
 
 
 def setup(bot: Ukiyo):
