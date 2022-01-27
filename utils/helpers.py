@@ -168,7 +168,7 @@ def check_profanity(string: str, *, bad_words: list = None, lazy: bool = True) -
     return res
 
 
-def check_string(string: str, *, limit: str = 4) -> bool:
+def check_string(string: str, *, limit: str = 4, ignore_whitespace: bool = False) -> bool:
     """
     If the return type of bool is ``True`` then it means that the word has
     less allowed characters in a row than the limit, otherwise ``False``
@@ -183,10 +183,16 @@ def check_string(string: str, *, limit: str = 4) -> bool:
             The limit for which to check the lenght of the allowed letters in a row within the string.
             Defaults to 4.
 
+        ignore_whitespace: :class:`bool`
+            Whether to ignore any whitespace characters or not.
+
     Return
     ------
         True | False
     """
+
+    if ignore_whitespace is True:
+        string = string.replace(' ', '').replace('\n', '')
 
     count = 0
     for letter in string:
