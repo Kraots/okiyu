@@ -48,6 +48,8 @@ class Marriages(commands.Cog):
             return await ctx.reply(
                 f'{ctx.denial} You cannot marry the person that adopted you.'
             )
+        elif member.id == self.bot._owner_id:
+            return await ctx.reply(ctx.denial)
 
         view = utils.ConfirmView(ctx, f'{ctx.denial} {member.mention} Did not react in time.', member)
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
@@ -241,6 +243,9 @@ class Marriages(commands.Cog):
             if len(filter2) == 1:
                 mem = ctx.ukiyo.get_member(filter2[0].id)
                 return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already adopted by {mem.mention}')
+
+        if member.id == self.bot._owner_id:
+            return await ctx.reply(ctx.denial)
 
         if data1 and data1.married_to != 0:
             mem = ctx.ukiyo.get_member(data1.married_to)
