@@ -222,7 +222,7 @@ async def check_username(member: disnake.Member):
     if member.id == 374622847672254466 or member.bot:
         return
     name = member.display_name.lower()
-    res = check_string(name) or check_profanity(name)
+    res = check_string(name, ignore_whitespace=True) or check_profanity(name)
     if res is False:
         return
 
