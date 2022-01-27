@@ -11,9 +11,6 @@ from disnake.ext import commands
 import utils
 from utils.views.help_command import PaginatedHelpCommand
 
-from dotenv import load_dotenv
-load_dotenv()
-
 TOKEN = os.getenv('BOT_TOKEN')
 
 
