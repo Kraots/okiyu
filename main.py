@@ -2,6 +2,7 @@ import os
 import aiohttp
 import datetime
 from typing import Optional
+from collections import Counter
 from traceback import format_exception
 
 import disnake
@@ -9,6 +10,9 @@ from disnake.ext import commands
 
 import utils
 from utils.views.help_command import PaginatedHelpCommand
+
+from dotenv import load_dotenv
+load_dotenv()
 
 TOKEN = os.getenv('BOT_TOKEN')
 
@@ -29,12 +33,18 @@ class Ukiyo(commands.Bot):
         )
         self.add_check(self.check_dms)
 
+        self.socket_events = Counter()
+
         self._owner_id = 374622847672254466
+
         self.added_views = False
+
         self.webhooks: dict[str, disnake.Webhook] = {}
         self.execs = {}
-        self.verifying = []
         self.bad_words = {}
+
+        self.verifying = []
+
         self.calc_ternary = False
 
         self.load_extension('jishaku')
