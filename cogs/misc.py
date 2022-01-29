@@ -799,7 +799,7 @@ class Misc(commands.Cog):
                     data.date = None
                     data.message_id = None
                     await data.commit()
-                return await utils.try_delete(m, delay=15.0)
+                return await utils.try_delete(m, delay=30.0)
 
         for user in message.mentions:
             data: AFK = await AFK.get(user.id)
@@ -808,7 +808,7 @@ class Misc(commands.Cog):
                     f'**{utils.format_name(user)}** is ``AFK`` **->** **"{data.reason}"** '
                     f'*since {utils.format_dt(data.date, "F")} '
                     f'(`{utils.human_timedelta(dt=data.date, accuracy=6)}`)*')
-                await utils.try_delete(m, delay=15.0)
+                await utils.try_delete(m, delay=30.0)
 
     @utils.run_in_executor
     def search_wiki(self, query):
