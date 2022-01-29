@@ -786,7 +786,7 @@ class Misc(commands.Cog):
         data: AFK = await AFK.get(message.author.id)
         if data is not None:
             if data.is_afk is True and message.id != data.message_id:
-                await message.reply(
+                m = await message.reply(
                     'Welcome back! Removed your ``AFK``\nYou have been ``AFK`` '
                     f'since {utils.format_dt(data.date, "F")} '
                     f'(`{utils.human_timedelta(dt=data.date, accuracy=6)}`)'
@@ -799,15 +799,16 @@ class Misc(commands.Cog):
                     data.date = None
                     data.message_id = None
                     await data.commit()
-                return
+                return await utils.try_delete(m, delay=15.0)
 
         for user in message.mentions:
             data: AFK = await AFK.get(user.id)
             if data is not None and data.is_afk is True:
-                await message.reply(
+                m = await message.reply(
                     f'**{utils.format_name(user)}** is ``AFK`` **->** **"{data.reason}"** '
                     f'*since {utils.format_dt(data.date, "F")} '
                     f'(`{utils.human_timedelta(dt=data.date, accuracy=6)}`)*')
+                await utils.try_delete(m, delay=15.0)
 
     @utils.run_in_executor
     def search_wiki(self, query):
