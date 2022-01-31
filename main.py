@@ -98,17 +98,20 @@ class Ukiyo(commands.Bot):
 
         if self.added_views is False:
             self.add_view(utils.Verify(self), message_id=913512065799421953)
+
             self.add_view(utils.ColourButtonRoles(), message_id=913763247927218177)
             self.add_view(utils.ColourButtonRoles(), message_id=913763329816821780)
             self.add_view(utils.ColourButtonRoles(), message_id=913763420644462603)
             self.add_view(utils.ColourButtonRoles(), message_id=913763496448110603)
             self.add_view(utils.ColourButtonRoles(), message_id=913763571853303858)
             self.add_view(utils.ColourButtonRoles(), message_id=913763639922659358)
-            self.add_view(utils.PronounsButtonRoles(), message_id=928684415452856381)
-            self.add_view(utils.GenderButtonRoles(), message_id=913788066114719785)
-            self.add_view(utils.AgeButtonRoles(), message_id=913788068031496192)
-            self.add_view(utils.SexualityButtonRoles(), message_id=913788069373681685)
-            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=913790418959876097)
+
+            self.add_view(utils.GenderButtonRoles(), message_id=937769499770363924)
+            self.add_view(utils.AgeButtonRoles(), message_id=937769501188034620)
+            self.add_view(utils.SexualityButtonRoles(), message_id=937769502169526283)
+            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=937769503444598794)
+            self.add_view(utils.PronounsButtonRoles(), message_id=937769521777889290)
+            self.add_view(utils.GameButtonRoles(), message_id=937769522943913994)
 
             async for ticket in utils.Ticket.find():
                 self.add_view(utils.TicketView(), message_id=ticket.message_id)
