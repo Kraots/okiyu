@@ -111,7 +111,6 @@ class Ukiyo(commands.Bot):
             self.add_view(utils.SexualityButtonRoles(), message_id=937769502169526283)
             self.add_view(utils.RelationshipStatusButtonRoles(), message_id=937769503444598794)
             self.add_view(utils.PronounsButtonRoles(), message_id=937769521777889290)
-            self.add_view(utils.GameButtonRoles(), message_id=937769522943913994)
 
             async for ticket in utils.Ticket.find():
                 self.add_view(utils.TicketView(), message_id=ticket.message_id)
