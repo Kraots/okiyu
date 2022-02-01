@@ -101,6 +101,16 @@ class Channels(NamedTuple):
     github = 938119954316800012
     bot_commands = 938120063037345865
 
+    all = (
+        news, boosts, rules, welcome, intros,
+        roles, colours, birthdays, general, venting,
+        nsfw, bots, memes, anime, animals,
+        gaming, selfies, artwork, photos, videos,
+        confesscord, bump, no_mic_chat, music_commands, music,
+        lobby_1, lobby_2, sleep, staff_chat, logs,
+        messages_logs, moderation_logs, github, bot_commands
+    )
+
 
 class Categories(NamedTuple):
     server = 938119657892749394
@@ -111,13 +121,19 @@ class Categories(NamedTuple):
     music = 938119318649045033
     staff = 938119702503379025
 
+    all = (server, general, fun, media, extra, music, staff)
+
 
 class StaffRoles(NamedTuple):
     owner = 938116169976664114
     admin = 938116189702463528
     moderator = 938116208270647356
 
+    all = (owner, admin, moderator)
+
 
 class ExtraRoles(NamedTuple):
     muted = 938137040430723083
     blocked = 938137066640904342
+
+    all = (muted, blocked)
