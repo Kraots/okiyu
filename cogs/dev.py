@@ -13,7 +13,7 @@ from disnake.ext import commands
 import utils
 from utils import Context, TextPage, clean_code
 
-from main import Ukiyo
+from main import Okiyu
 
 
 def restart_program():
@@ -23,7 +23,7 @@ def restart_program():
 
 class Developer(commands.Cog):
     """Dev only commands."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     async def cog_check(self, ctx: Context):
@@ -44,7 +44,7 @@ class Developer(commands.Cog):
         **Local Variables**
         \u2800 • ``disnake`` **->** The disnake module.
         \u2800 • ``commands`` **->** The disnake.ext.commands module.
-        \u2800 • ``_bot`` **->** The bot instance. (`Ukiyo`)
+        \u2800 • ``_bot`` **->** The bot instance. (`Okiyu`)
         \u2800 • ``_ctx`` **->** The ``Context`` object of the command.
         \u2800 • ``_channel`` **->** The ``disnake.abc.GuildChannel`` the command is invoked in.
         \u2800 • ``_author`` **->** The ``disnake.Member`` of the command.
@@ -198,5 +198,5 @@ class Developer(commands.Cog):
         await ctx.reply(embed=em)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Developer(bot))

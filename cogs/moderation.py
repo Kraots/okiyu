@@ -20,12 +20,12 @@ from utils import (
     BadWords
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Moderation(commands.Cog):
     """Staff related commands."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.ignored_channels = (
             913331371282423808, 913331459673178122, 913331535170637825, 913336089492717618,
@@ -227,10 +227,10 @@ class Moderation(commands.Cog):
 
         await utils.try_dm(
             member,
-            f'> ⚠️ Hello! Sadly, you have been **banned** from `Ukiyo` for **{reason}**. Goodbye 👋'
+            f'> ⚠️ Hello! Sadly, you have been **banned** from `Okiyu` for **{reason}**. Goodbye 👋'
         )
 
-        await ctx.ukiyo.ban(
+        await ctx.okiyu.ban(
             member,
             reason=f'{utils.format_name(ctx.author)} ({ctx.author.id}): "{reason}"',
             delete_message_days=0
@@ -263,7 +263,7 @@ class Moderation(commands.Cog):
         """
 
         try:
-            await ctx.ukiyo.unban(user, reason=f'Unban by {utils.format_name(ctx.author)} ({ctx.author.id})')
+            await ctx.okiyu.unban(user, reason=f'Unban by {utils.format_name(ctx.author)} ({ctx.author.id})')
         except disnake.NotFound:
             return await ctx.reply(f'{ctx.denial} The user is not banned.')
 
@@ -294,7 +294,7 @@ class Moderation(commands.Cog):
 
         await utils.try_dm(
             member,
-            f'> ⚠️ Hello! Sadly, you have been **kicked** from `Ukiyo` for **{reason}**. Goodbye 👋'
+            f'> ⚠️ Hello! Sadly, you have been **kicked** from `Okiyu` for **{reason}**. Goodbye 👋'
         )
         await member.kick(reason=f'{utils.format_name(ctx.author)} ({ctx.author.id}): "{reason}"')
         await ctx.send(f'> 👌 Kicked `{member}` for **{reason}**')
@@ -331,7 +331,7 @@ class Moderation(commands.Cog):
         usr: Mutes = await Mutes.get(member.id)
         _ctx = ctx
         if usr is not None:
-            muted_by = ctx.ukiyo.get_member(usr.muted_by)
+            muted_by = ctx.okiyu.get_member(usr.muted_by)
             data = await UserFriendlyTime(commands.clean_content).convert(ctx, _time_and_reason)
             if usr.blocked is True and action == 'block':
                 if usr.filter is False:
@@ -430,7 +430,7 @@ class Moderation(commands.Cog):
 
         muted_role_id = 913376647422545951
         blocked_role_id = 924941473089224784
-        role = ctx.ukiyo.get_role(muted_role_id) if action == 'mute' else ctx.ukiyo.get_role(blocked_role_id)
+        role = ctx.okiyu.get_role(muted_role_id) if action == 'mute' else ctx.okiyu.get_role(blocked_role_id)
         new_roles = [role for role in member.roles
                      if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
                      ] + [role]
@@ -445,7 +445,7 @@ class Moderation(commands.Cog):
                          f'**Reason:** {reason}\n' \
                          f'**{action.title()} Duration:** `{human_timedelta(time, suffix=False)}`\n' \
                          f'**Expire Date:** {format_dt(time, "F")}'
-        em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
+        em.set_footer(text=f'{fmt.title()} in `Okiyu`')
         em.timestamp = datetime.now(timezone.utc)
         await utils.try_dm(member, embed=em)
 
@@ -482,7 +482,7 @@ class Moderation(commands.Cog):
         if data is None:
             return await ctx.reply(f'`{utils.format_name(member)}` is not **{fmt}**!')
 
-        muted_by = ctx.ukiyo.get_member(data.muted_by)
+        muted_by = ctx.okiyu.get_member(data.muted_by)
         if data.filter is False:
             if ctx.author.id not in (data.muted_by, self.bot._owner_id):
                 if data.muted_by == self.bot._owner_id:
@@ -494,19 +494,19 @@ class Moderation(commands.Cog):
         await data.delete()
         new_roles = [role for role in member.roles if role.id not in (913376647422545951, 924941473089224784)]
         if data.is_owner is True:
-            owner_role = ctx.ukiyo.get_role(913310292505686046)  # Check for owner
+            owner_role = ctx.okiyu.get_role(913310292505686046)  # Check for owner
             new_roles += [owner_role]
         elif data.is_admin is True:
-            admin_role = ctx.ukiyo.get_role(913315033134542889)  # Check for admin
+            admin_role = ctx.okiyu.get_role(913315033134542889)  # Check for admin
             new_roles += [admin_role]
         elif data.is_mod is True:
-            mod_role = ctx.ukiyo.get_role(913315033684008971)  # Check for mod
+            mod_role = ctx.okiyu.get_role(913315033684008971)  # Check for mod
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[{action.upper()}] {action.title()} by {utils.format_name(ctx.author)} ({ctx.author.id})')
         if send_feedback is True:
             await utils.try_dm(
                 member,
-                f'Hello, you have been **un{fmt}** in `Ukiyo` by **{utils.format_name(ctx.author)}**'
+                f'Hello, you have been **un{fmt}** in `Okiyu` by **{utils.format_name(ctx.author)}**'
             )
 
             await ctx.reply(f'> 👌 Successfully **un{fmt}** {member.mention}')
@@ -642,7 +642,7 @@ class Moderation(commands.Cog):
                     await member.edit(roles=new_roles, reason=f'[{fmt.upper()}] {action.title()} Expired.')
                     await utils.try_dm(
                         member,
-                        f'Hello, your **{action}** in `Ukiyo` has expired. You have been **{fmt}**.'
+                        f'Hello, your **{action}** in `Okiyu` has expired. You have been **{fmt}**.'
                     )
                 await mute.delete()
                 mem = guild.get_member(mute.muted_by)
@@ -689,7 +689,7 @@ class Moderation(commands.Cog):
 
         if 913315033134542889 in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already an admin!')
-        admin_role = ctx.ukiyo.get_role(913315033134542889)
+        admin_role = ctx.okiyu.get_role(913315033134542889)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{utils.format_name(member)}` an admin.')
         await utils.log(
@@ -716,7 +716,7 @@ class Moderation(commands.Cog):
 
         if 913315033684008971 in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already a moderator!')
-        mod_role = ctx.ukiyo.get_role(913315033684008971)
+        mod_role = ctx.okiyu.get_role(913315033684008971)
         await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
         await ctx.reply(f'> 👌 Successfully made `{utils.format_name(member)}` a moderator.')
         await utils.log(
@@ -888,7 +888,7 @@ class Moderation(commands.Cog):
 
         entries = []
         for mem_id in data.participants:
-            mem = ctx.ukiyo.get_member(mem_id)
+            mem = ctx.okiyu.get_member(mem_id)
             if mem is None:
                 mem = f'**[LEFT]** (`{mem_id}`)'
             entries.append(mem)
@@ -933,7 +933,7 @@ class Moderation(commands.Cog):
         entries = []
         for word in sorted_:
             added_by_id = data.bad_words[word]
-            added_by = ctx.ukiyo.get_member(added_by_id)
+            added_by = ctx.okiyu.get_member(added_by_id)
             added_by = f'**{added_by.display_name}#{added_by.tag}**' or '**[LEFT]**'
             added_by = added_by + f' (`{added_by_id}`)'
 
@@ -1004,5 +1004,5 @@ class Moderation(commands.Cog):
         await ctx.reply('Successfully **cleared** the bad words list.')
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Moderation(bot))

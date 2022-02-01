@@ -13,7 +13,7 @@ from disnake.ui import View, Button, button
 from utils import Game, Characters, try_delete
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Okiyu
 
 __all__ = ('BossFight',)
 
@@ -25,7 +25,7 @@ class Participant:
 
 
 class BossFight(View):
-    def __init__(self, bot: Ukiyo, levels: dict, embed: disnake.Embed):
+    def __init__(self, bot: Okiyu, levels: dict, embed: disnake.Embed):
         super().__init__(timeout=120.0)
         self.bot = bot
         self.levels = levels

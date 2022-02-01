@@ -4,12 +4,12 @@ from disnake.ext import commands
 import utils
 from utils import Level, Context
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Levels(commands.Cog):
     """Level and message related commands."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -77,7 +77,7 @@ class Levels(commands.Cog):
         current_xp = x
         needed_xp = int(200 * ((1 / 2) * lvl))
         percent = round(float(current_xp * 100 / needed_xp), 2)
-        members_count = len([m for m in ctx.ukiyo.members if not m.bot])
+        members_count = len([m for m in ctx.okiyu.members if not m.bot])
 
         rank_card = await utils.create_rank_card(
             member, lvl, rank, members_count, current_xp, needed_xp, percent
@@ -130,7 +130,7 @@ class Levels(commands.Cog):
                 if entry.xp < ((50 * (lvl**2)) + (50 * (lvl - 1))):
                     break
                 lvl += 1
-            user = ctx.ukiyo.get_member(entry.id)
+            user = ctx.okiyu.get_member(entry.id)
             if index in (1, 2, 3):
                 place = top_3_emojis[index]
             else:
@@ -187,7 +187,7 @@ class Levels(commands.Cog):
 
             if entry.messages_count != 0:
                 index += 1
-                mem = ctx.ukiyo.get_member(entry.id)
+                mem = ctx.okiyu.get_member(entry.id)
                 if index in (1, 2, 3):
                     place = top_3_emojis[index]
                 else:
@@ -295,5 +295,5 @@ class Levels(commands.Cog):
             await data.delete()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Levels(bot))

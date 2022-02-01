@@ -9,16 +9,16 @@ from disnake.ui import View, Button
 import utils
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Okiyu
 
 __all__ = ('TicketView',)
 
 
 class TicketView(View):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         super().__init__(timeout=None)
 
-    @disnake.ui.button(label='Close', emoji='<:trash:914081331762307093>', custom_id='ukiyo:tickets')
+    @disnake.ui.button(label='Close', emoji='<:trash:914081331762307093>', custom_id='okiyu:tickets')
     async def close(self, button: Button, inter: disnake.MessageInteraction):
         await inter.response.defer()
         ticket: utils.Ticket = await utils.Ticket.get(inter.channel.id)

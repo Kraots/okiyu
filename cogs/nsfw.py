@@ -6,14 +6,14 @@ from disnake.ext import commands
 import utils
 from utils import Context
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Nsfw(commands.Cog):
     """Nsfw commands."""
     LIP_BITE = '<:lipbite:914193306416742411>'
 
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -60,7 +60,7 @@ class Nsfw(commands.Cog):
             return True
 
         elif author_entry and author_entry.married_to != 0 and author_entry.married_to != member.id:
-            mem = ctx.ukiyo.get_member(author_entry.married_to)
+            mem = ctx.okiyu.get_member(author_entry.married_to)
             m = await ctx.reply(
                 f'{ctx.denial} You cannot **{action}** `{utils.format_name(member)}`, '
                 f'you can only **{action}** {mem.mention}\nYour partner has been notified '
@@ -74,7 +74,7 @@ class Nsfw(commands.Cog):
             return False
 
         elif member_entry and member_entry != 0 and member_entry.married_to != ctx.author.id:
-            mem = ctx.ukiyo.get_member(member_entry.married_to)
+            mem = ctx.okiyu.get_member(member_entry.married_to)
             await ctx.reply(
                 f'{ctx.denial} You cannot **{action}** that person '
                 f'because they are married with {mem.mention}!'
@@ -140,7 +140,7 @@ class Nsfw(commands.Cog):
     async def nsfw_toggle(self, ctx: Context):
         """Toggle the visibilty of the nsfw channel for you."""
 
-        nsfw_channel = ctx.ukiyo.get_channel(932226719593672714)
+        nsfw_channel = ctx.okiyu.get_channel(932226719593672714)
         overwrite = nsfw_channel.overwrites_for(ctx.author)
         if overwrite.read_messages is True:
             ternary = 'off'
@@ -262,5 +262,5 @@ class Nsfw(commands.Cog):
                 )
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Nsfw(bot))

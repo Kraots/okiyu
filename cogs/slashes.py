@@ -3,11 +3,11 @@ from disnake import AppCmdInter
 
 import utils
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class SlashCommands(commands.Cog):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @commands.slash_command(name='colours', description='Change your colour!')
@@ -20,5 +20,5 @@ class SlashCommands(commands.Cog):
             await inter.response.send_message('**Please use the select menu below:**', view=view, ephemeral=True)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(SlashCommands(bot))

@@ -2,11 +2,11 @@ from disnake.ext import commands
 
 from utils import Context
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class ErrorHandler(commands.Cog):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @commands.Cog.listener()
@@ -22,5 +22,5 @@ class ErrorHandler(commands.Cog):
         await ctx.reraise(error)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(ErrorHandler(bot))

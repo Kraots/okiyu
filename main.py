@@ -14,7 +14,7 @@ from utils.views.help_command import PaginatedHelpCommand
 TOKEN = os.getenv('BOT_TOKEN')
 
 
-class Ukiyo(commands.Bot):
+class Okiyu(commands.Bot):
     def __init__(self):
         super().__init__(
             max_messages=100000,
@@ -151,7 +151,7 @@ class Ukiyo(commands.Bot):
         self,
         channel: disnake.TextChannel,
         *,
-        name: str = "ukiyo",
+        name: str = "okiyu",
         avatar: disnake.Asset = None,
     ) -> disnake.Webhook:
         """Returns the general bot hook or creates one."""
@@ -218,4 +218,4 @@ class Ukiyo(commands.Bot):
         return await super().get_context(message, cls=cls)
 
 
-Ukiyo().run(TOKEN)
+Okiyu().run(TOKEN)

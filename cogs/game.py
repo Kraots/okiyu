@@ -13,7 +13,7 @@ from utils import (
     Characters
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 # TOTAL_XP = (LVL, NEEDED_XP)
 LEVELS = {
@@ -29,7 +29,7 @@ LEVELS = {
 
 class _Game(commands.Cog, name='Game'):
     """This category shows the commands for the game."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.coin_emoji = '🪙'
         self.in_game = []
@@ -120,7 +120,7 @@ class _Game(commands.Cog, name='Game'):
             entry: Game
 
             index += 1
-            mem = ctx.ukiyo.get_member(entry.id)
+            mem = ctx.okiyu.get_member(entry.id)
             if index in (1, 2, 3):
                 place = top_3_emojis[index]
             else:
@@ -254,7 +254,7 @@ class _Game(commands.Cog, name='Game'):
             entry: Game
 
             index += 1
-            mem = ctx.ukiyo.get_member(entry.id)
+            mem = ctx.okiyu.get_member(entry.id)
             if index in (1, 2, 3):
                 place = top_3_emojis[index]
             else:
@@ -914,5 +914,5 @@ class _Game(commands.Cog, name='Game'):
         await view.wait()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(_Game(bot))

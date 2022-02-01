@@ -10,13 +10,13 @@ from disnake.ui import View, button
 import utils
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Okiyu
 
 __all__ = ('AnnouncementView',)
 
 
 class AnnouncementView(View):
-    def __init__(self, bot: Ukiyo, author: disnake.Member):
+    def __init__(self, bot: Okiyu, author: disnake.Member):
         super().__init__()
         self.bot = bot
         self.author = author

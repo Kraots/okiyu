@@ -9,7 +9,7 @@ import disnake
 from disnake.ext import commands
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Okiyu
 
 __all__ = ('GistContent', 'GithubClient',)
 
@@ -35,14 +35,14 @@ class GistContent:
 
 
 class GithubClient:
-    def __init__(self, bot: Ukiyo) -> None:
+    def __init__(self, bot: Okiyu) -> None:
         self.bot = bot
         self.lock = asyncio.Lock()
 
     async def github_request(self, method, url, *, params=None, data=None, headers=None):
         hdrs = {
             'Accept': 'application/vnd.github.inertia-preview+json',
-            'User-Agent': 'Ukiyo\'s token invalidation',
+            'User-Agent': 'Okiyu\'s token invalidation',
             'Authorization': f'token {os.getenv("GITHUB_TOKEN")}'
         }
 

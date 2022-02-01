@@ -6,11 +6,11 @@ from disnake.ext import commands, tasks
 
 import utils
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Logs(commands.Cog):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.send_embeds.start()
         self.embeds = []
@@ -361,5 +361,5 @@ class Logs(commands.Cog):
             self.embeds.append(em)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Logs(bot))

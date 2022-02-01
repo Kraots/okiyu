@@ -10,7 +10,7 @@ import utils
 from utils.context import Context
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Okiyu
 
 
 __all__ = (
@@ -36,7 +36,7 @@ class Fight(disnake.ui.View):
         self.p2_lvl = pl2[2]
 
         self.ctx = ctx
-        self.bot: Ukiyo = ctx.bot
+        self.bot: Okiyu = ctx.bot
 
         self.hp = {self.p1: pl1[1].hp, self.p2: pl2[1].hp}
         self.dmg = {

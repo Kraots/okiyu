@@ -10,7 +10,7 @@ from disnake.ui import View, button
 import utils
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Okiyu
 
 __all__ = (
     'GiveAwayCreationView',
@@ -22,7 +22,7 @@ class JoinGiveawayButton(disnake.ui.Button):
     def __init__(self, label: str = '0'):
         super().__init__(
             label=f'{label} participants',
-            custom_id='ukiyo:giveaways:join_btn',
+            custom_id='okiyu:giveaways:join_btn',
             style=disnake.ButtonStyle.blurple,
             emoji='🎉'
         )
@@ -63,7 +63,7 @@ class JoinGiveawayButton(disnake.ui.Button):
 
 
 class GiveAwayCreationView(View):
-    def __init__(self, bot: Ukiyo, author: disnake.Member):
+    def __init__(self, bot: Okiyu, author: disnake.Member):
         super().__init__()
         self.bot = bot
         self.author = author

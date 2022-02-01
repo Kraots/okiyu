@@ -10,13 +10,13 @@ from utils import (
     Sober
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class SoberApp(commands.Cog, name='Sober App'):
     """Commands for the sober app to keep track of your time being sober of a certain something."""
 
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -210,5 +210,5 @@ class SoberApp(commands.Cog, name='Sober App'):
             await entry.delete()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(SoberApp(bot))

@@ -34,7 +34,7 @@ class Context(commands.Context):
         return f'>>> {self.disagree}'
 
     @property
-    def ukiyo(self) -> disnake.Guild:
+    def okiyu(self) -> disnake.Guild:
         return self.bot.get_guild(913310006814859334)
 
     @disnake.utils.cached_property

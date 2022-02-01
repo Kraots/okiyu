@@ -6,12 +6,12 @@ from disnake.ext import commands
 import utils
 from utils import Context, Marriage
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Marriages(commands.Cog):
     """Marriage commands."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -33,7 +33,7 @@ class Marriages(commands.Cog):
 
         data1: Marriage = await Marriage.get(ctx.author.id)
         if data1 and data1.married_to != 0:
-            mem = ctx.ukiyo.get_member(data1.married_to)
+            mem = ctx.okiyu.get_member(data1.married_to)
             return await ctx.reply(f'{ctx.denial} You are already married to {mem.mention}')
         elif data1 and member.id in data1.adoptions:
             return await ctx.reply(
@@ -42,7 +42,7 @@ class Marriages(commands.Cog):
 
         data2: Marriage = await Marriage.get(member.id)
         if data2 and data2.married_to != 0:
-            mem = ctx.ukiyo.get_member(data2.married_to)
+            mem = ctx.okiyu.get_member(data2.married_to)
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already married to {mem.mention}')
         elif data2 and ctx.author.id in data2.adoptions:
             return await ctx.reply(
@@ -55,7 +55,7 @@ class Marriages(commands.Cog):
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
         await view.wait()
         if view.response is True:
-            taken_role = ctx.ukiyo.get_role(913789939961954304)
+            taken_role = ctx.okiyu.get_role(913789939961954304)
             now = datetime.utcnow()
 
             if data1 is None:
@@ -118,13 +118,13 @@ class Marriages(commands.Cog):
             return await ctx.reply(f'{ctx.denial} You are not married to anyone.')
 
         else:
-            usr = ctx.ukiyo.get_member(data.married_to)
+            usr = ctx.okiyu.get_member(data.married_to)
 
             view = utils.ConfirmView(ctx, f'{ctx.author.mention} Did not react in time.')
             view.message = msg = await ctx.reply(f'Are you sure you want to divorce {usr.mention}?', view=view)
             await view.wait()
             if view.response is True:
-                single_role = ctx.ukiyo.get_role(913789939668385822)
+                single_role = ctx.okiyu.get_role(913789939668385822)
                 mem: Marriage = await Marriage.get(usr.id)
                 await data.delete()
                 await mem.delete()
@@ -167,7 +167,7 @@ class Marriages(commands.Cog):
                 fn = ctx.better_reply
             return await fn(i)
 
-        mem = ctx.ukiyo.get_member(data.married_to)
+        mem = ctx.okiyu.get_member(data.married_to)
         em = disnake.Embed(title=f'Married to `{mem.display_name}`', colour=utils.blurple)
         if member == ctx.author:
             i = 'You\'re married to'
@@ -196,7 +196,7 @@ class Marriages(commands.Cog):
 
         if member.id != self.bot._owner_id and ctx.author.id != self.bot._owner_id:
             if member.id != data.married_to and data.married_to != 0:
-                mem = ctx.ukiyo.get_member(data.married_to)
+                mem = ctx.okiyu.get_member(data.married_to)
                 return await ctx.reply(
                     f'{ctx.denial} You cannot kiss `{utils.format_name(member)}`!! You can only kiss {mem.mention}'
                 )
@@ -241,14 +241,14 @@ class Marriages(commands.Cog):
         else:
             filter2: list[Marriage] = await Marriage.find({'adoptions': member.id}).to_list(1)
             if len(filter2) == 1:
-                mem = ctx.ukiyo.get_member(filter2[0].id)
+                mem = ctx.okiyu.get_member(filter2[0].id)
                 return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already adopted by {mem.mention}')
 
         if member.id == self.bot._owner_id:
             return await ctx.reply(f'{ctx.denial} No.')
 
         if data1 and data1.married_to != 0:
-            mem = ctx.ukiyo.get_member(data1.married_to)
+            mem = ctx.okiyu.get_member(data1.married_to)
             view = utils.ConfirmView(ctx, react_user=mem)
             view.message = await ctx.send(
                 f'{mem.mention} your partner wants to adopt {member.mention}. Do you agree?',
@@ -307,7 +307,7 @@ class Marriages(commands.Cog):
         if data is None or len(data.adoptions) == 0:
             return await ctx.reply(f'You\'ve never adopted {member.mention}.')
         elif data.married_to != 0:
-            mem = ctx.ukiyo.get_member(data.married_to)
+            mem = ctx.okiyu.get_member(data.married_to)
             data2: Marriage = await Marriage.get(data.married_to)
             view = utils.ConfirmView(ctx, react_user=mem)
             view.message = await ctx.send(
@@ -353,7 +353,7 @@ class Marriages(commands.Cog):
 
                 entry.adoptions.remove(ctx.author.id)
                 await entry.commit()
-                mem = ctx.ukiyo.get_member(entry.id)
+                mem = ctx.okiyu.get_member(entry.id)
                 await mem.send(
                     f'`{utils.format_name(ctx.author)}` Has run away from your family. '
                     'They are no longer adopted by you.',
@@ -390,7 +390,7 @@ class Marriages(commands.Cog):
                 return await ctx.reply(f'{member.mention} doesn\'t have a family :frowning:')
         adopted_by = []
         for uid in _adopted_by:
-            mem = ctx.ukiyo.get_member(uid.id)
+            mem = ctx.okiyu.get_member(uid.id)
             adopted_by.append(mem.mention)
         adopted_by = ' and '.join(adopted_by) if len(adopted_by) != 0 else 'No one.'
 
@@ -398,11 +398,11 @@ class Marriages(commands.Cog):
         adoptions = []
         if data is not None:
             if data.married_to != 0:
-                mem = ctx.ukiyo.get_member(data.married_to)
+                mem = ctx.okiyu.get_member(data.married_to)
                 married_since = utils.human_timedelta(data.married_since)
                 married_to = f'{mem.mention} (married since `{married_since}`)'
             for adoption in data.adoptions:
-                mem = ctx.ukiyo.get_member(adoption)
+                mem = ctx.okiyu.get_member(adoption)
                 adoptions.append(f'{mem.mention} (`{mem.display_name}`)')
         adoptions_count = len(adoptions)
         adoptions = '\n'.join(adoptions) if len(adoptions) != 0 else 'No adoptions.'
@@ -426,5 +426,5 @@ class Marriages(commands.Cog):
             await entry.commit()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Marriages(bot))

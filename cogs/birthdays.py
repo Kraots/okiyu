@@ -9,13 +9,13 @@ from disnake.ext import commands, tasks
 import utils
 from utils import Context, Birthday
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Birthdays(commands.Cog):
     """Birthday related commands."""
 
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.check_birthday.start()
 
@@ -49,7 +49,7 @@ class Birthdays(commands.Cog):
                             await utils.try_dm(
                                 mem,
                                 'Hello! Happy birthday for turning 20 years of age, but sadly, that also means you no longer meet '
-                                'the age requirements of `Ukiyo`, therefore, you have been banned (people can\'t age backwards yk).\n'
+                                'the age requirements of `Okiyu`, therefore, you have been banned (people can\'t age backwards yk).\n'
                                 'Apologies for the inconvenience, and once again, happy birthday. :tada: :tada:'
                             )
                             return await mem.kick(reason='User birthday and turned 20y/o+')
@@ -137,7 +137,7 @@ class Birthdays(commands.Cog):
             if view.response is True:
                 await utils.try_dm(
                     ctx.author,
-                    f'{ctx.denial} You have been kicked from `Ukiyo` for not meeting the age requirements. \n'
+                    f'{ctx.denial} You have been kicked from `Okiyu` for not meeting the age requirements. \n'
                     'This server is only for people between **14-19**'
                 )
                 await ctx.author.kick(reason='User does not match age requirements.')
@@ -219,7 +219,7 @@ class Birthdays(commands.Cog):
 
         datas: list[Birthday] = await Birthday.find().sort('next_birthday', 1).to_list(5)
         for data in datas:
-            user = ctx.ukiyo.get_member(data.id)
+            user = ctx.okiyu.get_member(data.id)
             index += 1
             next_birthday_date = data.birthday_date.strftime('%d %B %Y')
             next_birthday_date.replace(str(data.birthday_date.year), str(data.next_birthday.year))
@@ -239,5 +239,5 @@ class Birthdays(commands.Cog):
             await data.delete()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Birthdays(bot))

@@ -11,13 +11,13 @@ from utils import (
     TicketView
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Featured(commands.Cog):
     """Featured cool commands."""
 
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -65,8 +65,8 @@ class Featured(commands.Cog):
         ticket_id = '1' if not total_tickets else str(int(total_tickets[0].ticket_id) + 1)
         ch_name = f'{ctx.author.name}-ticket #' + ticket_id
 
-        categ = ctx.ukiyo.get_channel(914082225274912808)
-        channel = await ctx.ukiyo.create_text_channel(
+        categ = ctx.okiyu.get_channel(914082225274912808)
+        channel = await ctx.okiyu.create_text_channel(
             ch_name,
             category=categ,
             reason=f'Ticket Creation by {utils.format_name(ctx.author)} (ID: {ctx.author.id})'
@@ -125,8 +125,8 @@ class Featured(commands.Cog):
         `count` **->** The amount of how many new users you want to see. The minimum is 3 and it defaults to 3.
         """
 
-        count = min(max(count, 3), ctx.ukiyo.member_count)
-        users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.joined_at, reverse=True)
+        count = min(max(count, 3), ctx.okiyu.member_count)
+        users: list[disnake.Member] = sorted(ctx.okiyu.members, key=lambda m: m.joined_at, reverse=True)
         entries = []
         for index, user in enumerate(users):
             if index >= count:
@@ -146,5 +146,5 @@ class Featured(commands.Cog):
         await paginator.start()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Featured(bot))

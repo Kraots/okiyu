@@ -6,12 +6,12 @@ from disnake.ext import commands
 import utils
 from utils import Context, Restrictions
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Confesscord(commands.Cog):
     """Commands related to the confesscord bot."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -106,8 +106,8 @@ class Confesscord(commands.Cog):
         to_append = '{} (`{}`) by {}'
         async for data in Restrictions.find():
             data: Restrictions
-            restricted_by = ctx.ukiyo.get_member(data.restricted_by)
-            mem = ctx.ukiyo.get_member(data.id)
+            restricted_by = ctx.okiyu.get_member(data.restricted_by)
+            mem = ctx.okiyu.get_member(data.id)
             restricted_by = restricted_by.mention if restricted_by is not None else '**[LEFT]**'
             mem = mem.mention if mem is not None else '**[LEFT]**'
             entries.append(to_append.format(mem, data.id, restricted_by))
@@ -117,5 +117,5 @@ class Confesscord(commands.Cog):
         await paginator.start(ref=True)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Confesscord(bot))

@@ -11,7 +11,7 @@ from disnake.ui import View, button
 import utils
 
 if TYPE_CHECKING:
-    from main import Ukiyo
+    from main import Okiyu
 
 __all__ = (
     'create_intro',
@@ -19,7 +19,7 @@ __all__ = (
 )
 
 
-async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo, user_id: int = None):
+async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu, user_id: int = None):
     user_id = user_id or ctx.author.id
 
     if not isinstance(ctx.channel, disnake.DMChannel):
@@ -320,14 +320,14 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Ukiyo,
 
 
 class Verify(View):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         super().__init__(timeout=None)
         self.bot = bot
 
     async def on_error(self, error, item, inter):
         await self.bot.inter_reraise(inter, item, error)
 
-    @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='ukiyo:verify')
+    @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='okiyu:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
         await inter.response.defer()
         disagree = '<:disagree:913895999125196860>'

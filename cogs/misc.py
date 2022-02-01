@@ -22,10 +22,10 @@ from utils import (
     Birthday
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 SERVER_AD = """
-☞ Ukiyo ☜
+☞ Okiyu ☜
 ✯ Looking for a great partner or friendship? This is the perfect server!! ✯
 
 ⇨ This server:
@@ -57,7 +57,7 @@ functions = {
 
 
 class ViewIntro(disnake.ui.View):
-    def __init__(self, bot: Ukiyo, uid: int):
+    def __init__(self, bot: Okiyu, uid: int):
         super().__init__(timeout=None)
         self.bot = bot
         self.uid = uid
@@ -105,7 +105,7 @@ class ViewIntro(disnake.ui.View):
 
 class Misc(commands.Cog):
     """Miscellaneous commands."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.github_client = utils.GithubClient(bot)
 
@@ -364,8 +364,8 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(user.created_at, "F")} '
                         f'(`{utils.human_timedelta(user.created_at, accuracy=6)}`)'
         )
-        if user.id in [m.id for m in ctx.ukiyo.members]:
-            sorted_users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.created_at)
+        if user.id in [m.id for m in ctx.okiyu.members]:
+            sorted_users: list[disnake.Member] = sorted(ctx.okiyu.members, key=lambda m: m.created_at)
             users_ids = [u.id for u in sorted_users]
             pos = users_ids.index(user.id) + 1
             em.set_footer(text=f'{utils.format_position(pos)} oldest account in this server')
@@ -382,9 +382,9 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        created_date = ctx.ukiyo.created_at
-        publiced_date = ctx.ukiyo.get_member(302050872383242240).joined_at
-        members = [m for m in ctx.ukiyo.members if not m.bot]
+        created_date = ctx.okiyu.created_at
+        publiced_date = ctx.okiyu.get_member(302050872383242240).joined_at
+        members = [m for m in ctx.okiyu.members if not m.bot]
         em = disnake.Embed(colour=utils.red, title='Server Creation')
         em.add_field(
             name='Created At',
@@ -421,7 +421,7 @@ class Misc(commands.Cog):
                         f'on {utils.format_dt(member.joined_at, "F")} '
                         f'(`{utils.human_timedelta(member.joined_at, accuracy=6)}`)'
         )
-        sorted_users: list[disnake.Member] = sorted(ctx.ukiyo.members, key=lambda m: m.joined_at)
+        sorted_users: list[disnake.Member] = sorted(ctx.okiyu.members, key=lambda m: m.joined_at)
         users_ids = [u.id for u in sorted_users]
         pos = users_ids.index(member.id) + 1
         em.set_footer(text=f'Join Position: {utils.format_position(pos)}')
@@ -453,10 +453,10 @@ class Misc(commands.Cog):
                     continue
 
                 index += 1
-                key = ctx.ukiyo.get_member(mute.id)
+                key = ctx.okiyu.get_member(mute.id)
                 if key is None:
                     key = f'[LEFT] {mute.id}'
-                value = f'**Muted By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
+                value = f'**Muted By:** {ctx.okiyu.get_member(mute.muted_by)}\n' \
                         f'**Reason:** {mute.reason}\n' \
                         f'**Mute Duration:** `{mute.duration}`\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -479,7 +479,7 @@ class Misc(commands.Cog):
                     return await ctx.better_reply(f'{ctx.denial} `{utils.format_name(member)}` is not muted.')
             em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=utils.format_name(member), icon_url=member.display_avatar)
-            em.description = f'**Muted By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
+            em.description = f'**Muted By:** {ctx.okiyu.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
                              f'**Mute Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -507,10 +507,10 @@ class Misc(commands.Cog):
                     continue
 
                 index += 1
-                key = ctx.ukiyo.get_member(mute.id)
+                key = ctx.okiyu.get_member(mute.id)
                 if key is None:
                     key = f'[LEFT] {mute.id}'
-                value = f'**Blocked By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
+                value = f'**Blocked By:** {ctx.okiyu.get_member(mute.muted_by)}\n' \
                         f'**Reason:** {mute.reason}\n' \
                         f'**Block Duration:** `{mute.duration}`\n' \
                         f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -533,7 +533,7 @@ class Misc(commands.Cog):
                     return await ctx.better_reply(f'{ctx.denial} `{utils.format_name(member)}` is not blocked.')
             em = disnake.Embed(colour=utils.blurple)
             em.set_author(name=utils.format_name(member), icon_url=member.display_avatar)
-            em.description = f'**Blocked By:** {ctx.ukiyo.get_member(mute.muted_by)}\n' \
+            em.description = f'**Blocked By:** {ctx.okiyu.get_member(mute.muted_by)}\n' \
                              f'**Reason:** {mute.reason}\n' \
                              f'**Block Duration:** `{mute.duration}`\n' \
                              f'**Expires At:** {utils.format_dt(mute.muted_until, "F")}\n' \
@@ -593,7 +593,7 @@ class Misc(commands.Cog):
 
         _ = await utils.Marriage.get(ctx.author.id)
         if _ is not None:
-            mem = ctx.ukiyo.get_member(_.married_to)
+            mem = ctx.okiyu.get_member(_.married_to)
             return await ctx.reply(f'You are already married to {mem.mention}')
 
         choices = []
@@ -678,7 +678,7 @@ class Misc(commands.Cog):
             "offline": {"users": [], "emoji": "<:status_offline:916642281593913354>"}
         }
 
-        for mem in ctx.ukiyo.members:
+        for mem in ctx.okiyu.members:
             if 913310292505686046 in (r.id for r in mem.roles):  # Checks for owner
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
@@ -938,7 +938,7 @@ class Misc(commands.Cog):
             bbox_to_anchor=(1, 0, 0.8, 1)
         )
         plt.setp(autotexts, size=8, weight='bold')
-        ax.set_title('Ukiyo Gender Stats')
+        ax.set_title('Okiyu Gender Stats')
 
         plt.savefig('gender_stats.png', bbox_inches='tight')
         file = disnake.File('gender_stats.png')
@@ -1292,7 +1292,7 @@ class Misc(commands.Cog):
         """See all the people that are currently boosting the server, in order based on the date they started boosting."""
 
         boosters = []
-        sorted_ = sorted(ctx.ukiyo.premium_subscribers, key=lambda m: m.premium_since)
+        sorted_ = sorted(ctx.okiyu.premium_subscribers, key=lambda m: m.premium_since)
         for index, member in enumerate(sorted_):
             boosters.append(
                 (
@@ -1305,10 +1305,10 @@ class Misc(commands.Cog):
 
         source = utils.FieldPageSource(boosters, per_page=5)
         source.embed.color = utils.booster_pink
-        source.embed.title = 'Here\'s all the boosters of `Ukiyo`'
+        source.embed.title = 'Here\'s all the boosters of `Okiyu`'
         pag = utils.RoboPages(source, ctx=ctx, compact=True)
         await pag.start(ref=True)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Misc(bot))

@@ -5,11 +5,11 @@ from disnake.ext import commands, tasks
 
 import utils
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Welcome(commands.Cog):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.files = []
         self.send_welc.start()
@@ -71,7 +71,7 @@ class Welcome(commands.Cog):
                              f'**Reason:** {action.title} Evasion.\n' \
                              f'**Expire Date:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
-            em.set_footer(text=f'{fmt.title()} in `Ukiyo`')
+            em.set_footer(text=f'{fmt.title()} in `Okiyu`')
             em.timestamp = datetime.now(timezone.utc)
             await utils.try_dm(member, embed=em)
 
@@ -92,5 +92,5 @@ class Welcome(commands.Cog):
             )
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Welcome(bot))

@@ -12,12 +12,12 @@ from utils import (
     format_name
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Intros(commands.Cog):
     """Intro related commands."""
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -87,7 +87,7 @@ class Intros(commands.Cog):
                     f'{ctx.denial} `{format_name(member)}` doesn\'t have an intro. '
                     'Please contact a staff member to unverify them! This is a bug.'
                 )
-        intro_channel = ctx.ukiyo.get_channel(913331578606854184)
+        intro_channel = ctx.okiyu.get_channel(913331578606854184)
         msg = await intro_channel.fetch_message(data.message_id)
         if msg:
             view = disnake.ui.View()
@@ -127,17 +127,17 @@ class Intros(commands.Cog):
         ) is False:
             return
 
-        unverified_role = ctx.ukiyo.get_role(913329062347423775)
+        unverified_role = ctx.okiyu.get_role(913329062347423775)
         data = await Intro.get(member.id)
         if data is not None:
-            intro_channel = ctx.ukiyo.get_channel(913331578606854184)
+            intro_channel = ctx.okiyu.get_channel(913331578606854184)
             await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()
         await member.edit(roles=[r for r in member.roles if r.id in (
             921036443672014918, 913376647422545951, 924941473089224784)] + [unverified_role])
         await try_dm(
             member,
-            'You have been unverified in `Ukiyo` by one of our staff members. '
+            'You have been unverified in `Okiyu` by one of our staff members. '
             'Please be serious when you\'re making your intro!'
         )
         await ctx.reply(f'> 👌 `{format_name(member)}` has been successfully unverified.')
@@ -152,5 +152,5 @@ class Intros(commands.Cog):
             await data.delete()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Intros(bot))

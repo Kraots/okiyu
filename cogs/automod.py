@@ -5,11 +5,11 @@ from disnake.ext import commands
 
 import utils
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class AutoMod(commands.Cog):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.muted_amount_count = {}
 
@@ -63,12 +63,12 @@ class AutoMod(commands.Cog):
         action = 'muted'
         _action = 'mute'
         kwargs = {'muted': True}
-        role = ctx.ukiyo.get_role(913376647422545951)  # Mute
+        role = ctx.okiyu.get_role(913376647422545951)  # Mute
         if self.muted_amount_count[user.id] >= 3:  # Block if this is the user's 3rd time they get punished
             action = 'blocked'
             _action = 'block'
             kwargs = {'blocked': True}
-            role = ctx.ukiyo.get_role(924941473089224784)
+            role = ctx.okiyu.get_role(924941473089224784)
 
         _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} {reason.title()}')
         duration = utils.human_timedelta(_data.dt, suffix=False)
@@ -97,7 +97,7 @@ class AutoMod(commands.Cog):
                              f'**{_action.title()} Duration:** `{duration}`\n' \
                              f'**Expire Date:** {utils.format_dt(_data.dt, "F")}\n' \
                              f'**Remaining:** {utils.human_timedelta(data.muted_until, suffix=False, accuracy=6)}'
-            em.set_footer(text=f'{action.title()} in `Ukiyo`')
+            em.set_footer(text=f'{action.title()} in `Okiyu`')
             em.timestamp = datetime.datetime.now(datetime.timezone.utc)
             await utils.try_dm(user, embed=em)
         except disnake.Forbidden:
@@ -170,8 +170,8 @@ class AutoMod(commands.Cog):
         matches = utils.INVITE_REGEX.findall(content)
         if matches:
             guild = self.bot.get_guild(913310006814859334)
-            ukiyo_invites = [inv.code for inv in await guild.invites()]
-            if any(inv for inv in matches if inv not in ukiyo_invites):
+            okiyu_invites = [inv.code for inv in await guild.invites()]
+            if any(inv for inv in matches if inv not in okiyu_invites):
                 await utils.try_delete(message)
                 invite_logs = guild.get_channel(913332511789178951)
                 em = disnake.Embed(
@@ -242,5 +242,5 @@ class AutoMod(commands.Cog):
     coros = [anti_bad_words, anti_invites, anti_raid, anti_newlines, anti_emojis]
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(AutoMod(bot))

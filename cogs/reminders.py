@@ -14,13 +14,13 @@ from utils import (
     Reminder
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Reminders(commands.Cog):
     """Reminder related commands."""
 
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.check_current_reminders.start()
 
@@ -181,5 +181,5 @@ class Reminders(commands.Cog):
             await ctx.reraise(error)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Reminders(bot))

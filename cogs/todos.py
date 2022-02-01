@@ -7,13 +7,13 @@ from utils import (
     ToDo,
 )
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class ToDos(commands.Cog):
     """Todo related commands."""
 
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @property
@@ -120,5 +120,5 @@ class ToDos(commands.Cog):
                 await todo.delete()
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(ToDos(bot))

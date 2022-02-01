@@ -6,13 +6,13 @@ from disnake.ext import commands
 import utils
 from utils.context import Context
 
-from main import Ukiyo
+from main import Okiyu
 
 
 class Cogs(commands.Cog):
     """Commands to reload cogs."""
 
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
 
     @commands.group(invoke_without_command=True, case_insensitive=True, hidden=True)
@@ -114,5 +114,5 @@ class Cogs(commands.Cog):
         await ctx.reply(embed=em)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(Cogs(bot))

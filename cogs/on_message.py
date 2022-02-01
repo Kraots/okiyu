@@ -9,7 +9,7 @@ from disnake.ext import commands
 
 import utils
 
-from main import Ukiyo
+from main import Okiyu
 
 functions = {
     'sqrt': lambda x: math.sqrt(x),
@@ -27,7 +27,7 @@ functions = {
 
 
 class OnMessage(commands.Cog):
-    def __init__(self, bot: Ukiyo):
+    def __init__(self, bot: Okiyu):
         self.bot = bot
         self.github_client = utils.GithubClient(bot)
 
@@ -259,5 +259,5 @@ class OnMessage(commands.Cog):
                 await message.send(message.author.mention, embed=em)
 
 
-def setup(bot: Ukiyo):
+def setup(bot: Okiyu):
     bot.add_cog(OnMessage(bot))
