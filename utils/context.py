@@ -5,7 +5,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
-from utils import Channels
+from .constants import Channels
 
 __all__ = ('Context',)
 
