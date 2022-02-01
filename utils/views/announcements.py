@@ -142,7 +142,7 @@ class AnnouncementView(View):
             return await inter.response.edit_message(content='You didn\'t set the content!')
         await inter.response.edit_message(view=None)
 
-        guild = self.bot.get_guild(913310006814859334)
+        guild = self.bot.get_guild(938115625073639425)
         news_channel = guild.get_channel(913331371282423808)
         title = self.title or disnake.embeds.EmptyEmbed
         em = disnake.Embed(colour=utils.red, title=title, description=self.description)

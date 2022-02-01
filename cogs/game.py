@@ -809,7 +809,7 @@ class _Game(commands.Cog, name='Game'):
                     return await utils.try_delete(msg, delay=30.0)
 
                 await msg.reply('Boss fight ended!')
-                guild = self.bot.get_guild(913310006814859334)
+                guild = self.bot.get_guild(938115625073639425)
                 participant_ids = sorted(view.participants, key=lambda k: view.participants[k].total_damage, reverse=True)
                 awarded_first = False
 

@@ -146,7 +146,7 @@ class Intros(commands.Cog):
     async def on_member_remove(self, member: disnake.Member):
         data = await Intro.get(member.id)
         if data:
-            guild = self.bot.get_guild(913310006814859334)
+            guild = self.bot.get_guild(938115625073639425)
             intro_channel = guild.get_channel(913331578606854184)
             await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()

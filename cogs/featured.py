@@ -113,7 +113,7 @@ class Featured(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
         async for ticket in Ticket.find({'owner_id': member.id}):
-            guild = self.bot.get_guild(913310006814859334)
+            guild = self.bot.get_guild(938115625073639425)
             ch = guild.get_channel(ticket.id)
             await ch.delete(reason='Member left.')
             await ticket.delete()

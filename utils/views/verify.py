@@ -50,7 +50,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
 
     def check(m):
         return m.channel.id == ctx.channel.id and m.author.id == user_id
-    guild = bot.get_guild(913310006814859334)
+    guild = bot.get_guild(938115625073639425)
     intro_channel = guild.get_channel(913331578606854184)
 
     await ctx.reply('What\'s your name?')

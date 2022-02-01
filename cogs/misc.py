@@ -69,7 +69,7 @@ class ViewIntro(disnake.ui.View):
     async def view_intro(self, button: disnake.Button, inter: disnake.MessageInteraction):
         disagree = '<:disagree:913895999125196860>'
         data: utils.Intro = await utils.Intro.get(self.uid)
-        guild = self.bot.get_guild(913310006814859334)
+        guild = self.bot.get_guild(938115625073639425)
         member = guild.get_member(self.uid)
         if data is None:
             return await inter.response.send_message(

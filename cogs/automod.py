@@ -169,7 +169,7 @@ class AutoMod(commands.Cog):
         content = utils.remove_zalgos(message.content.replace(' ', '').replace('\\', ''))
         matches = utils.INVITE_REGEX.findall(content)
         if matches:
-            guild = self.bot.get_guild(913310006814859334)
+            guild = self.bot.get_guild(938115625073639425)
             okiyu_invites = [inv.code for inv in await guild.invites()]
             if any(inv for inv in matches if inv not in okiyu_invites):
                 await utils.try_delete(message)
@@ -218,7 +218,7 @@ class AutoMod(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
         if message.author.bot or message.author.id == self.bot._owner_id or\
-                not message.guild or message.guild.id != 913310006814859334 or \
+                not message.guild or message.guild.id != 938115625073639425 or \
                 913310292505686046 in (r.id for r in message.author.roles) or \
                 not message.content:
             return
@@ -230,7 +230,7 @@ class AutoMod(commands.Cog):
     @commands.Cog.listener()
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
         if after.author.bot or after.author.id == self.bot._owner_id or \
-                not after.guild or after.guild.id != 913310006814859334 or \
+                not after.guild or after.guild.id != 938115625073639425 or \
                 913310292505686046 in (r.id for r in after.author.roles) or \
                 not after.content:
             return

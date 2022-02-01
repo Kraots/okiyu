@@ -26,7 +26,7 @@ class Okiyu(commands.Bot):
             allowed_mentions=disnake.AllowedMentions(
                 roles=False, everyone=False, users=True
             ),
-            test_guilds=[913310006814859334]
+            test_guilds=[938115625073639425]
         )
         self.add_check(self.check_dms)
 

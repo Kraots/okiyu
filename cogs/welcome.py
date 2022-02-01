@@ -37,7 +37,7 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
-        guild = self.bot.get_guild(913310006814859334)
+        guild = self.bot.get_guild(938115625073639425)
 
         if member.bot:
             bot_role = guild.get_role(913459676962770944)

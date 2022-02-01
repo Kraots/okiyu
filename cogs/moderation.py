@@ -617,7 +617,7 @@ class Moderation(commands.Cog):
         mutes: list[Mutes] = await Mutes.find().sort('muted_until', 1).to_list(5)
         for mute in mutes:
             if datetime.utcnow() >= mute.muted_until:
-                guild = self.bot.get_guild(913310006814859334)
+                guild = self.bot.get_guild(938115625073639425)
                 member = guild.get_member(mute.id)
                 _mem = f'**[LEFT]** (`{mute.id}`)'
                 if mute.blocked is True:
@@ -796,7 +796,7 @@ class Moderation(commands.Cog):
         )
 
     async def end_giveaway(self, gw: GiveAway):
-        guild = self.bot.get_guild(913310006814859334)
+        guild = self.bot.get_guild(938115625073639425)
         participants = gw.participants + [0]
         random.shuffle(participants)
         while True:

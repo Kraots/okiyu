@@ -5,6 +5,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
+from utils import Channels
 
 __all__ = ('Context',)
 
@@ -35,7 +36,7 @@ class Context(commands.Context):
 
     @property
     def okiyu(self) -> disnake.Guild:
-        return self.bot.get_guild(913310006814859334)
+        return self.bot.get_guild(938115625073639425)
 
     @disnake.utils.cached_property
     def replied_reference(self) -> disnake.MessageReference | None:
@@ -62,10 +63,15 @@ class Context(commands.Context):
             return await super().reply(*args, **kwargs)
 
     async def check_channel(self) -> bool:
-        if self.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
+        if self.channel.id not in (
+            Channels.bots, Channels.bot_commands, Channels.staff_chat
+        ) \
                 and self.author.id != 938097236024360960:
             await utils.try_delete(self.message, delay=10.0)
-            await self.reply(f'{self.denial} Sorry! This command can only be used in <#913330644875104306>', delete_after=10.0)
+            await self.reply(
+                f'{self.denial} Sorry! This command can only be used in <#{Channels.bots}>',
+                delete_after=10.0
+            )
             return False
         return True
 

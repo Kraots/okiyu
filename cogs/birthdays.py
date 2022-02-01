@@ -32,7 +32,7 @@ class Birthdays(commands.Cog):
                 data.next_birthday += relativedelta(years=1)
                 await data.commit()
 
-                guild = self.bot.get_guild(913310006814859334)
+                guild = self.bot.get_guild(938115625073639425)
                 channel = guild.get_channel(923681449490669628)
                 mem = guild.get_member(data.id)
                 _now = datetime.now() + relativedelta(days=3)  # Use this as source so it doesn't fail to say the right age for the people in UTC- timezones.
