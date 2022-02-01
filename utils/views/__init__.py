@@ -5,6 +5,7 @@ from .gender_buttons import *  # noqa
 from .age_buttons import *  # noqa
 from .sexuality_buttons import *  # noqa
 from .relationship_status import *  # noqa
+from .dm_buttons import *  # noqa
 from .slash_cmd_roles import *  # noqa
 from .announcements import *  # noqa
 from .ticket_buttons import *  # noqa

@@ -106,11 +106,12 @@ class Ukiyo(commands.Bot):
             self.add_view(utils.ColourButtonRoles(), message_id=913763571853303858)
             self.add_view(utils.ColourButtonRoles(), message_id=913763639922659358)
 
-            self.add_view(utils.GenderButtonRoles(), message_id=937769499770363924)
-            self.add_view(utils.AgeButtonRoles(), message_id=937769501188034620)
-            self.add_view(utils.SexualityButtonRoles(), message_id=937769502169526283)
-            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=937769503444598794)
-            self.add_view(utils.PronounsButtonRoles(), message_id=937769521777889290)
+            self.add_view(utils.GenderButtonRoles(), message_id=938070096423813130)
+            self.add_view(utils.AgeButtonRoles(), message_id=938070098248335411)
+            self.add_view(utils.SexualityButtonRoles(), message_id=938070099858976788)
+            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=938070101108867142)
+            self.add_view(utils.PronounsButtonRoles(), message_id=938070102421676113)
+            self.add_view(utils.DMButtonRoles(), message_id=938070118653640714)
 
             async for ticket in utils.Ticket.find():
                 self.add_view(utils.TicketView(), message_id=ticket.message_id)
