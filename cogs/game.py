@@ -73,7 +73,7 @@ class _Game(commands.Cog, name='Game'):
     async def base_game(self, ctx: Context):
         """Base command for all the `game` commands. To see the commands, please type `!help game`
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is True:
@@ -83,7 +83,7 @@ class _Game(commands.Cog, name='Game'):
     async def game_coins(self, ctx: Context):
         """See how many coins you currently have.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -193,7 +193,7 @@ class _Game(commands.Cog, name='Game'):
         """Get your daily coins.
         One streak is `200` coins, which gets multiplied by the amount of streaks you have accumulated. That means that a 10 day streak is `2000` extra coins.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -225,7 +225,7 @@ class _Game(commands.Cog, name='Game'):
     async def game_streak(self, ctx: Context):
         """Check your current daily streak.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -280,7 +280,7 @@ class _Game(commands.Cog, name='Game'):
     async def game_inventory(self, ctx: Context):
         """Shows your inventory which contains all of the characters that you own.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -347,7 +347,7 @@ class _Game(commands.Cog, name='Game'):
     async def game_shop(self, ctx: Context):
         """The shop from which you can buy boxes that contain a character.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -387,7 +387,7 @@ class _Game(commands.Cog, name='Game'):
 
         `box_rarity` **->** The rarity of the box that you wish to open.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -445,7 +445,7 @@ class _Game(commands.Cog, name='Game'):
 
         `member` **->** The member you want to challenge.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -568,7 +568,7 @@ class _Game(commands.Cog, name='Game'):
 
         `member` **->** The member you wish to see the profile of. If you want to see your own, then you can ignore this since it defaults to yourself.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -595,7 +595,7 @@ class _Game(commands.Cog, name='Game'):
 
         `character_name` **->** The full name of the character you want to see the info of.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -625,7 +625,7 @@ class _Game(commands.Cog, name='Game'):
     async def character_all(self, ctx: Context):
         """Shows all of the existing obtainable characters.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -781,7 +781,7 @@ class _Game(commands.Cog, name='Game'):
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
-        if message.channel.id == 913330644875104306:
+        if message.channel.id == 938119528464916530:
             self.last_message = message
 
     @tasks.loop(minutes=30.0)
@@ -856,7 +856,7 @@ class _Game(commands.Cog, name='Game'):
         """See how much longer until the next boss fight begins.
         The boss fight can only begin if there's been a message sent in the last 5 minutes before actually starting the boss fight.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -886,7 +886,7 @@ class _Game(commands.Cog, name='Game'):
 
         `amount` **->** The amount you wish to bet. The minimum must be 200 and the maximum 5,000.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:

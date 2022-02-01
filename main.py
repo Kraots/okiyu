@@ -191,7 +191,7 @@ class Okiyu(commands.Bot):
             return True
         if isinstance(ctx.channel, disnake.DMChannel):
             if ctx.command.qualified_name != 'intro':
-                await ctx.send('Commands do not work in dm channels. Please use commands only in <#913330644875104306>')
+                await ctx.send('Commands do not work in dm channels. Please use commands only in <#938119528464916530>')
                 return False
         return True
 

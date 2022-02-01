@@ -25,7 +25,7 @@ class Levels(commands.Cog):
             if message.author.id == self.bot._owner_id:
                 data.xp += 30
             else:
-                if message.channel.id not in (913330644875104306, 913335107564208158):
+                if message.channel.id not in (938119528464916530, 913335107564208158):
                     data.xp += 5
             data.messages_count += 1
             await data.commit()
@@ -38,7 +38,7 @@ class Levels(commands.Cog):
 
         `member` **->** The member you want to see the level of. If you want to see your own, you can ignore this since it defaults to yourself.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -112,7 +112,7 @@ class Levels(commands.Cog):
     async def level_top(self, ctx: Context):
         """See the top people with the highest levels.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:

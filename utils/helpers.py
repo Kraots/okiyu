@@ -235,7 +235,7 @@ async def check_username(member: disnake.Member):
         return await member.send(
             'Your name has too few pingable letters in a row, '
             f'is a bad word or is too short (minimum is **4**) so I changed it to `{new_nick}`\n'
-            'You can always change your nickname by using the command `!nick new_nick` in <#913330644875104306>'
+            'You can always change your nickname by using the command `!nick new_nick` in <#938119528464916530>'
         )
     except disnake.Forbidden:
         return

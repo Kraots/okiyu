@@ -117,7 +117,7 @@ class Misc(commands.Cog):
     async def ping(self, ctx: Context):
         """See the bot's ping.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -141,7 +141,7 @@ class Misc(commands.Cog):
     async def uptime(self, ctx: Context):
         """See how long the bot has been online for.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -159,7 +159,7 @@ class Misc(commands.Cog):
     async def _invite(self, ctx: Context):
         """Sends an invite that never expires.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -171,7 +171,7 @@ class Misc(commands.Cog):
     async def serverad(self, ctx: Context):
         """See the server's ad.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -332,7 +332,7 @@ class Misc(commands.Cog):
 
         `member` **->** The member that you want to see the avatar of. If you want to see your own avatar, you can ignore this since it defaults to you.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -350,7 +350,7 @@ class Misc(commands.Cog):
 
         `user` **->** The user that you want to see the date of when they created their discord account. If you want to see your own account creation date, you can ignore this since it defaults to you.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """  # noqa
 
         if await ctx.check_channel() is False:
@@ -376,7 +376,7 @@ class Misc(commands.Cog):
         """
         See the date when the server got created at and when it was made public.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -407,7 +407,7 @@ class Misc(commands.Cog):
 
         `member` **->** The member that you want to see the date of when they joined this server. If you want to see your own join date, you can ignore this since it defaults to you.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """  # noqa
 
         if await ctx.check_channel() is False:
@@ -585,7 +585,7 @@ class Misc(commands.Cog):
         """
         Matches you with another person, based on the sexuality, gender, relationship status of what the both of you have in your intros and if they are looking.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """  # noqa
 
         if await ctx.check_channel() is False:
@@ -820,7 +820,7 @@ class Misc(commands.Cog):
 
         `query` **->** What to search on wikipedia for.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -844,7 +844,7 @@ class Misc(commands.Cog):
 
         `query` **->** What to search for using the urban dictionary.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:

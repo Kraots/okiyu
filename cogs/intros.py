@@ -29,7 +29,7 @@ class Intros(commands.Cog):
     async def intro(self, ctx: Context):
         """Create/Redo your intro.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if ctx.author.id in self.bot.verifying:
@@ -44,7 +44,7 @@ class Intros(commands.Cog):
     async def intro_edit(self, ctx: Context):
         """Edit a single field in your intro.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:

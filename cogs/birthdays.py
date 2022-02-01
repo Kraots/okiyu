@@ -110,7 +110,7 @@ class Birthdays(commands.Cog):
         **Example:**
         `!birthday set 24/08/2005`
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -185,7 +185,7 @@ class Birthdays(commands.Cog):
     async def birthday_remove(self, ctx: Context):
         """Remove your birthday, if you have it set.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -208,7 +208,7 @@ class Birthdays(commands.Cog):
     async def bday_top(self, ctx: Context):
         """See top 5 upcoming birthdays.
 
-        **NOTE:** This command can only be used in <#913330644875104306>
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
