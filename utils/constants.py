@@ -108,3 +108,9 @@ class Categories(NamedTuple):
     extra = 938135097515851806
     music = 938119318649045033
     staff = 938119702503379025
+
+
+class StaffRoles(NamedTuple):
+    owner = 938116169976664114
+    admin = 938116189702463528
+    moderator = 938116208270647356
