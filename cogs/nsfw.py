@@ -11,7 +11,7 @@ from main import Okiyu
 
 class Nsfw(commands.Cog):
     """Nsfw commands."""
-    LIP_BITE = '<:lipbite:914193306416742411>'
+    LIP_BITE = '<:lipbite:938120948597547029>'
 
     def __init__(self, bot: Okiyu):
         self.bot = bot
@@ -85,7 +85,7 @@ class Nsfw(commands.Cog):
 
     async def check_channel(self, ctx: Context) -> bool:
         if ctx.author.id != self.bot._owner_id:
-            if ctx.channel.id != 932226719593672714:
+            if ctx.channel.id != utils.Channels.nsfw:
                 await ctx.reply(f'{ctx.denial} This command can only be used in the nsfw channel!')
                 return False
 
@@ -140,7 +140,7 @@ class Nsfw(commands.Cog):
     async def nsfw_toggle(self, ctx: Context):
         """Toggle the visibilty of the nsfw channel for you."""
 
-        nsfw_channel = ctx.okiyu.get_channel(932226719593672714)
+        nsfw_channel = ctx.okiyu.get_channel(utils.Channels.nsfw)
         overwrite = nsfw_channel.overwrites_for(ctx.author)
         if overwrite.read_messages is True:
             ternary = 'off'

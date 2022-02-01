@@ -1,6 +1,7 @@
 from disnake.ext import commands
 
 from .context import Context
+from .constants import StaffRoles
 
 __all__ = (
     'is_owner',
@@ -12,7 +13,7 @@ __all__ = (
 def _is_owner(ctx: Context, *, owner_only: bool = True):
     if ctx.author.id == 938097236024360960:
         return True
-    elif 913310292505686046 in (role.id for role in ctx.author.roles):
+    elif StaffRoles.owner in (role.id for role in ctx.author.roles):
         return True
     return False
 
@@ -32,7 +33,7 @@ def is_owner(*, owner_only: bool = True):
 def _is_admin_or_owner(ctx):
     res = _is_owner(ctx)
     if res is False:
-        if 913315033134542889 in (role.id for role in ctx.author.roles):
+        if StaffRoles.admin in (role.id for role in ctx.author.roles):
             return True
     else:
         return res
@@ -53,7 +54,7 @@ def is_mod():
     async def pred(ctx: Context):
         res = _is_admin_or_owner(ctx)
         if res is False:
-            if 913315033684008971 in (role.id for role in ctx.author.roles):
+            if StaffRoles.moderator in (role.id for role in ctx.author.roles):
                 return True
         else:
             return res

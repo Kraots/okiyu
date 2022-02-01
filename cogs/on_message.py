@@ -241,7 +241,7 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener('on_message')
     async def server_boosts(self, message: disnake.Message):
-        if message.channel.id == 935155596611690506:
+        if message.channel.id == utils.Channels.boosts:
             if message.is_system():
                 total_boosts = message.guild.premium_subscription_count
                 total_boosters = len(message.guild.premium_subscribers)

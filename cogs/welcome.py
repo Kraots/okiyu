@@ -40,12 +40,12 @@ class Welcome(commands.Cog):
         guild = self.bot.get_guild(938115625073639425)
 
         if member.bot:
-            bot_role = guild.get_role(913459676962770944)
+            bot_role = guild.get_role(utils.ExtraRoles.bot)
             await member.add_roles(bot_role, reason='Bot Account.')
             return
 
         await utils.check_username(member=member)
-        unverified_role = guild.get_role(913329062347423775)
+        unverified_role = guild.get_role(utils.ExtraRoles.unverified)
         await member.add_roles(unverified_role)
 
         member_count = len([m for m in guild.members if not m.bot])
@@ -61,9 +61,7 @@ class Welcome(commands.Cog):
                 action = 'mute'
                 fmt = 'muted'
 
-            muted_role_id = 913376647422545951
-            blocked_role_id = 924941473089224784
-            role = guild.get_role(muted_role_id) if action == 'mute' else guild.get_role(blocked_role_id)
+            role = guild.get_role(utils.ExtraRoles.muted) if action == 'mute' else guild.get_role(utils.ExtraRoles.blocked)
             mem = guild.get_member(mute.muted_by)
             await member.add_roles(role, reason=f'[{action.title()} EVASION] user joined but was still {fmt} in the database')
             em = disnake.Embed(title=f'You have been {fmt}!', color=utils.red)

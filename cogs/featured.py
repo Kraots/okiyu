@@ -65,7 +65,7 @@ class Featured(commands.Cog):
         ticket_id = '1' if not total_tickets else str(int(total_tickets[0].ticket_id) + 1)
         ch_name = f'{ctx.author.name}-ticket #' + ticket_id
 
-        categ = ctx.okiyu.get_channel(914082225274912808)
+        categ = ctx.okiyu.get_channel(utils.Categories.tickets)
         channel = await ctx.okiyu.create_text_channel(
             ch_name,
             category=categ,

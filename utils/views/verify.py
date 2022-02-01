@@ -23,7 +23,9 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
     user_id = user_id or ctx.author.id
 
     if not isinstance(ctx.channel, disnake.DMChannel):
-        if ctx.channel.id not in (938119528464916530, 913332335473205308, 913445987102654474):
+        if ctx.channel.id not in (
+            utils.Channels.bots, utils.Channels.bot_commands, utils.Channels.staff_chat
+        ):
             try:
                 bot.verifying.pop(bot.verifying.index(user_id))
             except (IndexError, ValueError):
@@ -51,7 +53,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
     def check(m):
         return m.channel.id == ctx.channel.id and m.author.id == user_id
     guild = bot.get_guild(938115625073639425)
-    intro_channel = guild.get_channel(913331578606854184)
+    intro_channel = guild.get_channel(utils.Channels.intros)
 
     await ctx.reply('What\'s your name?')
     try:
@@ -280,7 +282,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
         msg = await intro_channel.send(embed=em)
 
         if to_update is False:
-            new_roles = [r for r in usr.roles if r.id != 913329062347423775] + [role]
+            new_roles = [r for r in usr.roles if r.id != utils.ExtraRoles.unverified] + [role]
             await usr.edit(roles=new_roles)
             await utils.Intro(
                 id=user_id,

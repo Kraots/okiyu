@@ -232,7 +232,7 @@ class GiveAwayCreationView(View):
         await inter.response.edit_message(view=None)
 
         guild = self.bot.get_guild(938115625073639425)
-        news_channel = guild.get_channel(913331371282423808)
+        news_channel = guild.get_channel(utils.Channels.news)
         em = disnake.Embed(
             colour=utils.green,
             title='🎁 New Giveaway',

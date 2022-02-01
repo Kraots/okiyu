@@ -7,7 +7,7 @@ import disnake
 from disnake.ext import commands, tasks
 
 import utils
-from utils import Context, Birthday
+from utils import Context, Birthday, Channels, StaffRoles
 
 from main import Okiyu
 
@@ -33,7 +33,7 @@ class Birthdays(commands.Cog):
                 await data.commit()
 
                 guild = self.bot.get_guild(938115625073639425)
-                channel = guild.get_channel(923681449490669628)
+                channel = guild.get_channel(Channels.birthdays)
                 mem = guild.get_member(data.id)
                 _now = datetime.now() + relativedelta(days=3)  # Use this as source so it doesn't fail to say the right age for the people in UTC- timezones.
                 next_birthday = data.next_birthday.strftime('%d %B %Y')
@@ -44,7 +44,7 @@ class Birthdays(commands.Cog):
 
                 if age == '20':
                     if mem.id != self.bot._owner_id:
-                        staff_roles = (913310292505686046, 913315033134542889, 913315033684008971)
+                        staff_roles = (StaffRoles.owner, StaffRoles.admin, StaffRoles.moderator)
                         if any(r for r in staff_roles if r in (role.id for role in mem.roles)) is False:
                             await utils.try_dm(
                                 mem,

@@ -121,19 +121,19 @@ class Okiyu(commands.Bot):
         if len(self.webhooks) == 0:
             av = self.user.display_avatar
             logs = await self.get_webhook(
-                self.get_channel(913332408537976892),
+                self.get_channel(utils.Channels.logs),
                 avatar=av
             )
             mod_logs = await self.get_webhook(
-                self.get_channel(914257049456607272),
+                self.get_channel(utils.Channels.moderation_logs),
                 avatar=av
             )
             message_logs = await self.get_webhook(
-                self.get_channel(913332431417925634),
+                self.get_channel(utils.Channels.messages_logs),
                 avatar=av
             )
             welcome_webhook = await self.get_webhook(
-                self.get_channel(913331535170637825),
+                self.get_channel(utils.Channels.welcome),
                 avatar=av
             )
             self.webhooks['logs'] = logs

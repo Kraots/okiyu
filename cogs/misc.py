@@ -77,7 +77,7 @@ class ViewIntro(disnake.ui.View):
                 'Please contact a staff member to unverify them! This is a bug.',
                 ephemeral=True
             )
-        intro_channel = guild.get_channel(913331578606854184)
+        intro_channel = guild.get_channel(utils.Channels.intros)
         msg = await intro_channel.fetch_message(data.message_id)
         if msg:
             view = disnake.ui.View()
@@ -679,19 +679,19 @@ class Misc(commands.Cog):
         }
 
         for mem in ctx.okiyu.members:
-            if 913310292505686046 in (r.id for r in mem.roles):  # Checks for owner
+            if utils.StaffRoles.owner in (r.id for r in mem.roles):  # Checks for owner
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
                         all_status[str(mem.status)]["users"].append(f"**{mem}** `(OWNER)`")
                     else:
                         all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(OWNER)`")
-            elif 913315033134542889 in (r.id for r in mem.roles):  # Checks for admin
+            elif utils.StaffRoles.admin in (r.id for r in mem.roles):  # Checks for admin
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
                         all_status[str(mem.status)]["users"].append(f"**{mem}** `(ADMIN)`")
                     else:
                         all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(ADMIN)`")
-            elif 913315033684008971 in (r.id for r in mem.roles):  # Checks for mod
+            elif utils.StaffRoles.moderator in (r.id for r in mem.roles):  # Checks for mod
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
                         all_status[str(mem.status)]["users"].append(f"**{mem}** `(MODERATOR)`")

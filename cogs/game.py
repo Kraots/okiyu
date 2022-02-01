@@ -781,7 +781,7 @@ class _Game(commands.Cog, name='Game'):
 
     @commands.Cog.listener()
     async def on_message(self, message: disnake.Message):
-        if message.channel.id == 938119528464916530:
+        if message.channel.id == utils.Channels.bots:
             self.last_message = message
 
     @tasks.loop(minutes=30.0)

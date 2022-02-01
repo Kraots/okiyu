@@ -14,7 +14,7 @@ class Actions(commands.Cog):
 
     @property
     def display_emoji(self) -> str:
-        return '<:hug:914072588886614027>'
+        return '<:hug:938120942465482866>'
 
     @commands.command(name='huggles')
     async def _huggles(self, ctx: Context, members: commands.Greedy[disnake.Member] = None):

@@ -4,6 +4,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
+from utils import StaffRoles, ExtraRoles
 
 from main import Okiyu
 
@@ -63,12 +64,12 @@ class AutoMod(commands.Cog):
         action = 'muted'
         _action = 'mute'
         kwargs = {'muted': True}
-        role = ctx.okiyu.get_role(913376647422545951)  # Mute
+        role = ctx.okiyu.get_role(ExtraRoles.muted)  # Mute
         if self.muted_amount_count[user.id] >= 3:  # Block if this is the user's 3rd time they get punished
             action = 'blocked'
             _action = 'block'
             kwargs = {'blocked': True}
-            role = ctx.okiyu.get_role(924941473089224784)
+            role = ctx.okiyu.get_role(ExtraRoles.blocked)
 
         _data = await utils.UserFriendlyTime(commands.clean_content).convert(ctx, f'{time} {reason.title()}')
         duration = utils.human_timedelta(_data.dt, suffix=False)
@@ -81,12 +82,12 @@ class AutoMod(commands.Cog):
             filter=True,
             **kwargs
         )
-        if 913315033134542889 in (r.id for r in user.roles):  # Checks for admin
+        if StaffRoles.admin in (r.id for r in user.roles):  # Checks for admin
             data.is_admin = True
-        elif 913315033684008971 in (r.id for r in message.author.roles):  # Checks for mod
+        elif StaffRoles.moderator in (r.id for r in message.author.roles):  # Checks for mod
             data.is_mod = True
         new_roles = [role for role in user.roles
-                     if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
+                     if role.id not in (StaffRoles.admin, StaffRoles.moderator)
                      ] + [role]
         await user.edit(roles=new_roles, reason=f'[AUTOMOD: {reason.upper()}]')
 
@@ -173,16 +174,6 @@ class AutoMod(commands.Cog):
             okiyu_invites = [inv.code for inv in await guild.invites()]
             if any(inv for inv in matches if inv not in okiyu_invites):
                 await utils.try_delete(message)
-                invite_logs = guild.get_channel(913332511789178951)
-                em = disnake.Embed(
-                    title='New Invite Found!!',
-                    description=f'`{message.author}` sent an invite in {message.channel.mention}'
-                )
-                em.set_footer(text=f'User ID: {message.author.id}')
-                v = disnake.ui.View()
-                v.add_item(disnake.ui.Button(label='Jump!', url=message.jump_url))
-                await invite_logs.send(embed=em, view=v)
-
                 invite_bucket = self.invite_cooldown.get_bucket(message)
                 if invite_bucket.update_rate_limit(current):
                     invite_bucket.reset()
@@ -219,7 +210,7 @@ class AutoMod(commands.Cog):
     async def on_message(self, message: disnake.Message):
         if message.author.bot or message.author.id == self.bot._owner_id or\
                 not message.guild or message.guild.id != 938115625073639425 or \
-                913310292505686046 in (r.id for r in message.author.roles) or \
+                StaffRoles.owner in (r.id for r in message.author.roles) or \
                 not message.content:
             return
 
@@ -231,7 +222,7 @@ class AutoMod(commands.Cog):
     async def on_message_edit(self, before: disnake.Message, after: disnake.Message):
         if after.author.bot or after.author.id == self.bot._owner_id or \
                 not after.guild or after.guild.id != 938115625073639425 or \
-                913310292505686046 in (r.id for r in after.author.roles) or \
+                StaffRoles.owner in (r.id for r in after.author.roles) or \
                 not after.content:
             return
 

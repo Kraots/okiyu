@@ -68,7 +68,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
         self.add_option(label='Dislikes')
 
     async def delete_intro_message(self, data: utils.Intro):
-        channel = self.view.ctx.okiyu.get_channel(913331578606854184)
+        channel = self.view.ctx.okiyu.get_channel(utils.Channels.intros)
         await utils.try_delete(channel=channel, message_id=data.message_id)
 
     async def callback(self, inter: disnake.MessageInteraction):

@@ -17,7 +17,10 @@ from utils import (
     human_timedelta,
     AnnouncementView,
     GiveAway,
-    BadWords
+    BadWords,
+    Channels,
+    StaffRoles,
+    ExtraRoles
 )
 
 from main import Okiyu
@@ -28,11 +31,10 @@ class Moderation(commands.Cog):
     def __init__(self, bot: Okiyu):
         self.bot = bot
         self.ignored_channels = (
-            913331371282423808, 913331459673178122, 913331535170637825, 913336089492717618,
-            913331502761271296, 913331578606854184, 913332335473205308, 913332408537976892,
-            913332431417925634, 913332511789178951, 913425733567799346, 913445987102654474,
-            914257049456607272, 913329436953296917, 913337284697419816, 923681449490669628,
-            935155596611690506
+            Channels.news, Channels.boosts, Channels.rules, Channels.welcome,
+            Channels.intros, Channels.roles, Channels.colours, Channels.birthdays,
+            Channels.staff_chat, Channels.logs, Channels.messages_logs, Channels.moderation_logs,
+            Channels.github, Channels.bot_commands, Channels.bump, Channels.confesscord
         )
 
         self.check_mutes.start()
@@ -50,7 +52,7 @@ class Moderation(commands.Cog):
     @commands.command()
     @is_admin()
     async def announce(self, ctx: Context):
-        """Make an announcement in <#913331371282423808>"""
+        """Make an announcement in <#938119688335007744>"""
 
         view = AnnouncementView(self.bot, ctx.author)
         view.message = await ctx.send(embed=view.prepare_embed(), view=view)
@@ -421,18 +423,16 @@ class Moderation(commands.Cog):
             duration=duration,
             **kwargs,
         )
-        if 913310292505686046 in (r.id for r in member.roles):  # Checks for owner
+        if StaffRoles.owner in (r.id for r in member.roles):  # Checks for owner
             data.is_owner = True
-        elif 913315033134542889 in (r.id for r in member.roles):  # Checks for admin
+        elif StaffRoles.admin in (r.id for r in member.roles):  # Checks for admin
             data.is_admin = True
-        elif 913315033684008971 in (r.id for r in member.roles):  # Checks for mod
+        elif StaffRoles.moderator in (r.id for r in member.roles):  # Checks for mod
             data.is_mod = True
 
-        muted_role_id = 913376647422545951
-        blocked_role_id = 924941473089224784
-        role = ctx.okiyu.get_role(muted_role_id) if action == 'mute' else ctx.okiyu.get_role(blocked_role_id)
+        role = ctx.okiyu.get_role(ExtraRoles.muted) if action == 'mute' else ctx.okiyu.get_role(ExtraRoles.blocked)
         new_roles = [role for role in member.roles
-                     if role.id not in (913310292505686046, 913315033134542889, 913315033684008971)
+                     if role.id not in (StaffRoles.all)
                      ] + [role]
         await member.edit(
             roles=new_roles,
@@ -492,15 +492,15 @@ class Moderation(commands.Cog):
                     )
 
         await data.delete()
-        new_roles = [role for role in member.roles if role.id not in (913376647422545951, 924941473089224784)]
+        new_roles = [role for role in member.roles if role.id not in (ExtraRoles.muted, ExtraRoles.blocked)]
         if data.is_owner is True:
-            owner_role = ctx.okiyu.get_role(913310292505686046)  # Check for owner
+            owner_role = ctx.okiyu.get_role(StaffRoles.owner)  # Check for owner
             new_roles += [owner_role]
         elif data.is_admin is True:
-            admin_role = ctx.okiyu.get_role(913315033134542889)  # Check for admin
+            admin_role = ctx.okiyu.get_role(StaffRoles.admin)  # Check for admin
             new_roles += [admin_role]
         elif data.is_mod is True:
-            mod_role = ctx.okiyu.get_role(913315033684008971)  # Check for mod
+            mod_role = ctx.okiyu.get_role(StaffRoles.moderator)  # Check for mod
             new_roles += [mod_role]
         await member.edit(roles=new_roles, reason=f'[{action.upper()}] {action.title()} by {utils.format_name(ctx.author)} ({ctx.author.id})')
         if send_feedback is True:
@@ -555,7 +555,7 @@ class Moderation(commands.Cog):
     async def unmute_cmd(self, ctx: Context, *, member: disnake.Member):
         """Unmute somebody that is currently muted.
 
-        `member` **->** The member you want to unmute. If the member was muted by carrot then you can't do shit about it <:lipbite:914193306416742411> <:kek:913339277939720204>
+        `member` **->** The member you want to unmute. If the member was muted by carrot then you can't do shit about it <:lipbite:938120948597547029> <:kek:938120870839332915>
         """  # noqa
 
         await self.apply_unmute_or_unblock(
@@ -596,7 +596,7 @@ class Moderation(commands.Cog):
     async def unblock_cmd(self, ctx: Context, *, member: disnake.Member):
         """Unblock somebody that is currently blocked.
 
-        `member` **->** The member you want to unblock. If the member was blocked by carrot then you can't do shit about it <:lipbite:914193306416742411> <:kek:913339277939720204>
+        `member` **->** The member you want to unblock. If the member was blocked by carrot then you can't do shit about it <:lipbite:938120948597547029> <:kek:938120870839332915>
         """  # noqa
 
         await self.apply_unmute_or_unblock(
@@ -629,15 +629,15 @@ class Moderation(commands.Cog):
 
                 if member:
                     _mem = f'{utils.format_name(member)} (`{member.id}`)'
-                    new_roles = [role for role in member.roles if role.id not in (913376647422545951, 924941473089224784)]
+                    new_roles = [role for role in member.roles if role.id not in (ExtraRoles.blocked, ExtraRoles.muted)]
                     if mute.is_owner is True:
-                        owner_role = guild.get_role(913310292505686046)  # Check for owner
+                        owner_role = guild.get_role(StaffRoles.owner)  # Check for owner
                         new_roles += [owner_role]
                     elif mute.is_admin is True:
-                        admin_role = guild.get_role(913315033134542889)  # Check for admin
+                        admin_role = guild.get_role(StaffRoles.admin)  # Check for admin
                         new_roles += [admin_role]
                     elif mute.is_mod is True:
-                        mod_role = guild.get_role(913315033684008971)  # Check for mod
+                        mod_role = guild.get_role(StaffRoles.moderator)  # Check for mod
                         new_roles += [mod_role]
                     await member.edit(roles=new_roles, reason=f'[{fmt.upper()}] {action.title()} Expired.')
                     await utils.try_dm(
@@ -676,6 +676,35 @@ class Moderation(commands.Cog):
 
         await ctx.send_help('make')
 
+    @staff_make.command(name='owner')
+    @commands.is_owner()
+    async def staff_make_owner(self, ctx: Context, *, member: disnake.Member):
+        """Make somebody an owner.
+
+        `member` **->** The member you want to make an owner.
+        """
+
+        if await ctx.check_perms(member) is False:
+            return
+
+        if StaffRoles.owner in (r.id for r in member.roles):
+            return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already an owner!')
+        owner_role = ctx.okiyu.get_role(StaffRoles.owner)
+        await member.edit(roles=[
+            r for r in member.roles if r.id not in (StaffRoles.admin, StaffRoles.moderator)
+        ] + [owner_role])
+        await ctx.reply(f'> 👌 Successfully made `{utils.format_name(member)}` an owner.')
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title='[OWNER ADDED]',
+            fields=[
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                ('At', format_dt(datetime.now(), 'F')),
+            ],
+            view=self.jump_view(ctx.message.jump_url)
+        )
+
     @staff_make.command(name='admin')
     @is_owner()
     async def staff_make_admin(self, ctx: Context, *, member: disnake.Member):
@@ -687,10 +716,12 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        if 913315033134542889 in (r.id for r in member.roles):
+        if StaffRoles.admin in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already an admin!')
-        admin_role = ctx.okiyu.get_role(913315033134542889)
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971] + [admin_role])
+        admin_role = ctx.okiyu.get_role(StaffRoles.admin)
+        await member.edit(roles=[
+            r for r in member.roles if r.id not in (StaffRoles.owner, StaffRoles.moderator)
+        ] + [admin_role])
         await ctx.reply(f'> 👌 Successfully made `{utils.format_name(member)}` an admin.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
@@ -714,10 +745,12 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        if 913315033684008971 in (r.id for r in member.roles):
+        if StaffRoles.moderator in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is already a moderator!')
-        mod_role = ctx.okiyu.get_role(913315033684008971)
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889] + [mod_role])
+        mod_role = ctx.okiyu.get_role(StaffRoles.moderator)
+        await member.edit(roles=[
+            r for r in member.roles if r.id not in (StaffRoles.owner, StaffRoles.admin)
+        ] + [mod_role])
         await ctx.reply(f'> 👌 Successfully made `{utils.format_name(member)}` a moderator.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
@@ -743,6 +776,32 @@ class Moderation(commands.Cog):
 
         await ctx.send_help('remove')
 
+    @staff_remove.command(name='owner')
+    @commands.is_owner()
+    async def staff_remove_owner(self, ctx: Context, *, member: disnake.Member):
+        """Remove an owner.
+
+        `member` **->** The member you want to remove owner from.
+        """
+
+        if await ctx.check_perms(member) is False:
+            return
+
+        if StaffRoles.owner not in (r.id for r in member.roles):
+            return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is not an owner!')
+        await member.edit(roles=[r for r in member.roles if r.id != StaffRoles.owner])
+        await ctx.reply(f'> 👌 Successfully removed `{utils.format_name(member)}` from being an owner.')
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title='[OWNER REMOVED]',
+            fields=[
+                ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                ('At', format_dt(datetime.now(), 'F')),
+            ],
+            view=self.jump_view(ctx.message.jump_url)
+        )
+
     @staff_remove.command(name='admin')
     @is_owner()
     async def staff_remove_admin(self, ctx: Context, *, member: disnake.Member):
@@ -754,9 +813,9 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        if 913315033134542889 not in (r.id for r in member.roles):
+        if StaffRoles.admin not in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is not an admin!')
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033134542889])
+        await member.edit(roles=[r for r in member.roles if r.id != StaffRoles.admin])
         await ctx.reply(f'> 👌 Successfully removed `{utils.format_name(member)}` from being an admin.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
@@ -780,9 +839,9 @@ class Moderation(commands.Cog):
         if await ctx.check_perms(member) is False:
             return
 
-        if 913315033684008971 not in (r.id for r in member.roles):
+        if StaffRoles.moderator not in (r.id for r in member.roles):
             return await ctx.reply(f'{ctx.denial} `{utils.format_name(member)}` is not a moderator!')
-        await member.edit(roles=[r for r in member.roles if r.id != 913315033684008971])
+        await member.edit(roles=[r for r in member.roles if r.id != StaffRoles.moderator])
         await ctx.reply(f'> 👌 Successfully removed `{utils.format_name(member)}` from being a moderator.')
         await utils.log(
             self.bot.webhooks['mod_logs'],
@@ -854,7 +913,7 @@ class Moderation(commands.Cog):
     @base_giveaway.command(name='create')
     @is_admin()
     async def giveaway_create(self, ctx: Context):
-        """Create a giveaway. The giveaway message is sent and pinned in <#913331371282423808>"""
+        """Create a giveaway. The giveaway message is sent and pinned in <#938119688335007744>"""
 
         view = utils.GiveAwayCreationView(self.bot, ctx.author)
         view.message = await ctx.send(embed=view.prepare_embed(), view=view)

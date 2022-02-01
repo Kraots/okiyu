@@ -9,7 +9,9 @@ from utils import (
     is_mod,
     try_delete,
     try_dm,
-    format_name
+    format_name,
+    ExtraRoles,
+    Channels
 )
 
 from main import Okiyu
@@ -87,7 +89,7 @@ class Intros(commands.Cog):
                     f'{ctx.denial} `{format_name(member)}` doesn\'t have an intro. '
                     'Please contact a staff member to unverify them! This is a bug.'
                 )
-        intro_channel = ctx.okiyu.get_channel(913331578606854184)
+        intro_channel = ctx.okiyu.get_channel(Channels.intros)
         msg = await intro_channel.fetch_message(data.message_id)
         if msg:
             view = disnake.ui.View()
@@ -127,14 +129,14 @@ class Intros(commands.Cog):
         ) is False:
             return
 
-        unverified_role = ctx.okiyu.get_role(913329062347423775)
+        unverified_role = ctx.okiyu.get_role(ExtraRoles.unverified)
         data = await Intro.get(member.id)
         if data is not None:
-            intro_channel = ctx.okiyu.get_channel(913331578606854184)
+            intro_channel = ctx.okiyu.get_channel(Channels.intros)
             await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()
         await member.edit(roles=[r for r in member.roles if r.id in (
-            921036443672014918, 913376647422545951, 924941473089224784)] + [unverified_role])
+            ExtraRoles.muted, ExtraRoles.blocked)] + [unverified_role])
         await try_dm(
             member,
             'You have been unverified in `Okiyu` by one of our staff members. '
@@ -147,7 +149,7 @@ class Intros(commands.Cog):
         data = await Intro.get(member.id)
         if data:
             guild = self.bot.get_guild(938115625073639425)
-            intro_channel = guild.get_channel(913331578606854184)
+            intro_channel = guild.get_channel(Channels.intros)
             await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()
 

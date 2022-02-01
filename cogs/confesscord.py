@@ -4,7 +4,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
-from utils import Context, Restrictions
+from utils import Context, Restrictions, StaffRoles
 
 from main import Okiyu
 
@@ -21,7 +21,7 @@ class Confesscord(commands.Cog):
     async def cog_check(self, ctx: Context) -> bool:
         if ctx.author.id == self.bot._owner_id:
             return True
-        return any(r.id for r in ctx.author.roles if r in (913310292505686046, 913315033134542889, 913315033684008971))
+        return any(r.id for r in ctx.author.roles if r in StaffRoles.all)
 
     @commands.group(
         name='confesscord',
@@ -82,7 +82,7 @@ class Confesscord(commands.Cog):
         if data.restricted_by == self.bot._owner_id:
             if ctx.author.id != self.bot._owner_id:
                 return await ctx.reply(
-                    f'{ctx.denial} That user was restricted by my master, so no, you noob <:kek:913339277939720204>'
+                    f'{ctx.denial} That user was restricted by my master, so no, you noob <:kek:938120870839332915>'
                 )
         await data.delete()
 
