@@ -120,8 +120,9 @@ class Categories(NamedTuple):
     extra = 938135097515851806
     music = 938119318649045033
     staff = 938119702503379025
+    tickets = 938142268882317372
 
-    all = (server, general, fun, media, extra, music, staff)
+    all = (server, general, fun, media, extra, music, staff, tickets)
 
 
 class StaffRoles(NamedTuple):
