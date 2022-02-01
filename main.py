@@ -32,7 +32,7 @@ class Ukiyo(commands.Bot):
 
         self.socket_events = Counter()
 
-        self._owner_id = 374622847672254466
+        self._owner_id = 938097236024360960
 
         self.added_views = False
 

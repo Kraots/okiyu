@@ -26,7 +26,7 @@ class Actions(commands.Cog):
         mems = ' '.join([m.mention for m in members]) if members else None
         em = disnake.Embed(color=utils.red)
         em.set_image(
-            url='https://media.discordapp.net/attachments/737981297212915712/751115114106585243/374622847672254466.gif'
+            url='https://media.discordapp.net/attachments/737981297212915712/751115114106585243/938097236024360960.gif'
         )
 
         await ctx.reply(mems, embed=em)

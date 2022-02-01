@@ -63,7 +63,7 @@ class Context(commands.Context):
 
     async def check_channel(self) -> bool:
         if self.channel.id not in (913330644875104306, 913332335473205308, 913445987102654474) \
-                and self.author.id != 374622847672254466:
+                and self.author.id != 938097236024360960:
             await utils.try_delete(self.message, delay=10.0)
             await self.reply(f'{self.denial} Sorry! This command can only be used in <#913330644875104306>', delete_after=10.0)
             return False
@@ -75,9 +75,9 @@ class Context(commands.Context):
         *,
         reason: str = 'That member is above or equal to you. Cannot do that.'
     ) -> bool:
-        if self.author.id == 374622847672254466:
+        if self.author.id == 938097236024360960:
             return True
-        elif member.id == 374622847672254466:
+        elif member.id == 938097236024360960:
             await self.reply(
                 f'{self.denial} That member is above or equal to you. '
                 'Cannot do that. (above in this case you sub bottom <:kek:913339277939720204>)'

@@ -219,14 +219,14 @@ async def check_username(member: disnake.Member):
             than ``limit`` and if they have any bad word in it.
     """
 
-    if member.id == 374622847672254466 or member.bot:
+    if member.id == 938097236024360960 or member.bot:
         return
     name = member.display_name.lower()
     res = check_string(name, ignore_whitespace=True) or check_profanity(name)
     if res is False:
         return
 
-    kraots: utils.InvalidName = await utils.InvalidName.get(374622847672254466)
+    kraots: utils.InvalidName = await utils.InvalidName.get(938097236024360960)
     kraots.last_pos += 1
     await kraots.commit()
     new_nick = f'UnpingableName{kraots.last_pos}'

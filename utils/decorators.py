@@ -10,7 +10,7 @@ __all__ = (
 
 
 def _is_owner(ctx: Context, *, owner_only: bool = True):
-    if ctx.author.id == 374622847672254466:
+    if ctx.author.id == 938097236024360960:
         return True
     elif 913310292505686046 in (role.id for role in ctx.author.roles):
         return True
