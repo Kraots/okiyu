@@ -17,6 +17,7 @@ __all__ = ('TicketView',)
 class TicketView(View):
     def __init__(self, bot: Okiyu):
         super().__init__(timeout=None)
+        self.bot = bot
 
     @disnake.ui.button(label='Close', emoji='<:trash:914081331762307093>', custom_id='okiyu:tickets')
     async def close(self, button: Button, inter: disnake.MessageInteraction):
