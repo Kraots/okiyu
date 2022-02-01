@@ -136,5 +136,6 @@ class StaffRoles(NamedTuple):
 class ExtraRoles(NamedTuple):
     muted = 938137040430723083
     blocked = 938137066640904342
+    unverified = 938142878029451334
 
-    all = (muted, blocked)
+    all = (muted, blocked, unverified)
