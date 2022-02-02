@@ -67,7 +67,7 @@ class ViewIntro(disnake.ui.View):
 
     @disnake.ui.button(label='View Intro', style=disnake.ButtonStyle.blurple)
     async def view_intro(self, button: disnake.Button, inter: disnake.MessageInteraction):
-        disagree = '<:disagree:913895999125196860>'
+        disagree = '<:disagree:938412196663271514>'
         data: utils.Intro = await utils.Intro.get(self.uid)
         guild = self.bot.get_guild(938115625073639425)
         member = guild.get_member(self.uid)
@@ -672,10 +672,10 @@ class Misc(commands.Cog):
 
         message = ""
         all_status = {
-            "online": {"users": [], "emoji": "<:status_online:916642281631670273>"},
-            "idle": {"users": [], "emoji": "<:status_idle:916642281665212437>"},
-            "dnd": {"users": [], "emoji": "<:status_dnd:916642281665220699>"},
-            "offline": {"users": [], "emoji": "<:status_offline:916642281593913354>"}
+            "online": {"users": [], "emoji": "<:status_online:938412200693997600>"},
+            "idle": {"users": [], "emoji": "<:status_idle:938412202090696704>"},
+            "dnd": {"users": [], "emoji": "<:status_dnd:938412203026055198>"},
+            "offline": {"users": [], "emoji": "<:status_offline:938412200157134858>"}
         }
 
         for mem in ctx.okiyu.members:
@@ -684,19 +684,19 @@ class Misc(commands.Cog):
                     if len(all_status[str(mem.status)]['users']) == 0:
                         all_status[str(mem.status)]["users"].append(f"**{mem}** `(OWNER)`")
                     else:
-                        all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(OWNER)`")
+                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** `(OWNER)`")
             elif utils.StaffRoles.admin in (r.id for r in mem.roles):  # Checks for admin
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
                         all_status[str(mem.status)]["users"].append(f"**{mem}** `(ADMIN)`")
                     else:
-                        all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(ADMIN)`")
+                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** `(ADMIN)`")
             elif utils.StaffRoles.moderator in (r.id for r in mem.roles):  # Checks for mod
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
                         all_status[str(mem.status)]["users"].append(f"**{mem}** `(MODERATOR)`")
                     else:
-                        all_status[str(mem.status)]["users"].append(f"<:blank:916776676250234911> **{mem}** `(MODERATOR)`")
+                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** `(MODERATOR)`")
 
         for entry in all_status:
             if all_status[entry]["users"]:

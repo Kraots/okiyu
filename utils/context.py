@@ -20,15 +20,15 @@ class Context(commands.Context):
 
     @property
     def agree(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='agree', id=913895978535374898)
+        return disnake.PartialEmoji(name='agree', id=938412195627290684)
 
     @property
     def disagree(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='disagree', id=913895999125196860)
+        return disnake.PartialEmoji(name='disagree', id=938412196663271514)
 
     @property
     def thumb(self) -> disnake.PartialEmoji:
-        return disnake.PartialEmoji(name='thumb', id=923542820273418290)
+        return disnake.PartialEmoji(name='thumb', id=938412204926062602)
 
     @property
     def denial(self) -> str:

@@ -332,7 +332,7 @@ class Verify(View):
     @button(label='Verify', style=disnake.ButtonStyle.green, custom_id='okiyu:verify')
     async def verify(self, button: disnake.Button, inter: disnake.MessageInteraction):
         await inter.response.defer()
-        disagree = '<:disagree:913895999125196860>'
+        disagree = '<:disagree:938412196663271514>'
         if inter.author.id in self.bot.verifying:
             return await inter.followup.send(
                 f'> {disagree} Please complete your current verification before proceeding again!', ephemeral=True

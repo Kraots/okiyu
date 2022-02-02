@@ -19,7 +19,7 @@ class TicketView(View):
         super().__init__(timeout=None)
         self.bot = bot
 
-    @disnake.ui.button(label='Close', emoji='<:trash:914081331762307093>', custom_id='okiyu:tickets')
+    @disnake.ui.button(label='Close', emoji='<:trash:938412197967724554>', custom_id='okiyu:tickets')
     async def close(self, button: Button, inter: disnake.MessageInteraction):
         await inter.response.defer()
         ticket: utils.Ticket = await utils.Ticket.get(inter.channel.id)

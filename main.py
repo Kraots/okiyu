@@ -196,7 +196,7 @@ class Okiyu(commands.Bot):
         return True
 
     async def inter_reraise(self, inter, item: disnake.ui.Item, error):
-        disagree = '<:disagree:913895999125196860>'
+        disagree = '<:disagree:938412196663271514>'
         get_error = "".join(format_exception(error, error, error.__traceback__))
         em = disnake.Embed(description=f'```py\n{get_error}\n```')
         await self._owner.send(
