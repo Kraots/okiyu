@@ -26,7 +26,7 @@ class Actions(commands.Cog):
         mems = ' '.join([m.mention for m in members]) if members else None
         em = disnake.Embed(color=utils.red)
         em.set_image(
-            url='https://media.discordapp.net/attachments/737981297212915712/751115114106585243/938097236024360960.gif'
+            url='https://cdn.discordapp.com/attachments/938411306762002456/938475660601602159/huggles.gif'
         )
 
         await ctx.reply(mems, embed=em)
@@ -41,7 +41,7 @@ class Actions(commands.Cog):
         mems = ' '.join([m.mention for m in members]) if members else None
         em = disnake.Embed(color=utils.red)
         em.set_image(
-            url='https://cdn.discordapp.com/attachments/750160852380024893/751229628202483772/tenor_9.gif'
+            url='https://cdn.discordapp.com/attachments/938411306762002456/938475661209767947/pat.gif'
         )
 
         await ctx.reply(mems, embed=em)
@@ -63,7 +63,7 @@ class Actions(commands.Cog):
 
         em = disnake.Embed(color=utils.red)
         em.set_image(
-            url='https://cdn.discordapp.com/attachments/855126816271106061/894624778906910740/slap_gif.gif'
+            url='https://cdn.discordapp.com/attachments/938411306762002456/938475660962299974/slap.gif'
         )
 
         await ctx.reply(mems, embed=em)
@@ -85,7 +85,7 @@ class Actions(commands.Cog):
 
         em = disnake.Embed(color=utils.red)
         em.set_image(
-            url='https://cdn.discordapp.com/attachments/750160852380024893/751229626952581170/tenor_8.gif'
+            url='https://cdn.discordapp.com/attachments/938411306762002456/938475661490815006/kill.gif'
         )
 
         await ctx.reply(mems, embed=em)

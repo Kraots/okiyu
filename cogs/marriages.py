@@ -207,7 +207,7 @@ class Marriages(commands.Cog):
                     return await ctx.reply(f'{ctx.denial} My master is currently taken, you cannot kiss him :rage:')
 
         em = disnake.Embed(color=utils.red)
-        em.set_image(url='https://cdn.discordapp.com/attachments/752148605753884792/754984869569888276/KIS.gif')
+        em.set_image(url='https://cdn.discordapp.com/attachments/938411306762002456/938475662556151838/kiss.gif')
         await ctx.send(
             f'{ctx.author.mention} is giving you a hot kiss {member.mention} 🥺 💋',
             embed=em
