@@ -1,15 +1,15 @@
 import disnake
 
 all_gender_roles = (
-    913771963099541524, 913771962835271820,
-    913771962256482346, 913771962155810846,
-    913771963346989117
+    938433145957662740, 938433146431631410,
+    938433146821672960, 938433147157217280,
+    938433147710894222
 )
 
 gender_roles = {
-    'okiyu:gender_roles:Trans-Female': 913771963099541524, 'okiyu:gender_roles:Trans-Male': 913771962835271820,
-    'okiyu:gender_roles:Female': 913771962256482346, 'okiyu:gender_roles:Male': 913771962155810846,
-    'okiyu:gender_roles:Other-Gender': 913771963346989117
+    'okiyu:gender_roles:Male': 938433145957662740, 'okiyu:gender_roles:Female': 938433146431631410,
+    'okiyu:gender_roles:Trans-Male': 938433146821672960, 'okiyu:gender_roles:Trans-Female': 938433147157217280,
+    'okiyu:gender_roles:Other-Gender': 938433147710894222
 }
 
 __all__ = (

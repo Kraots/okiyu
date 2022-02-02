@@ -97,7 +97,7 @@ class Okiyu(commands.Bot):
                 cmd.enabled = False
 
         if self.added_views is False:
-            self.add_view(utils.Verify(self), message_id=913512065799421953)
+            self.add_view(utils.Verify(self), message_id=938439017345736774)
 
             self.add_view(utils.ColourButtonRoles(), message_id=938429135800389673)
             self.add_view(utils.ColourButtonRoles(), message_id=938429211109109771)
@@ -106,12 +106,12 @@ class Okiyu(commands.Bot):
             self.add_view(utils.ColourButtonRoles(), message_id=938429469910241322)
             self.add_view(utils.ColourButtonRoles(), message_id=938429554396127315)
 
-            self.add_view(utils.GenderButtonRoles(), message_id=938070096423813130)
-            self.add_view(utils.AgeButtonRoles(), message_id=938070098248335411)
-            self.add_view(utils.SexualityButtonRoles(), message_id=938070099858976788)
-            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=938070101108867142)
-            self.add_view(utils.PronounsButtonRoles(), message_id=938070102421676113)
-            self.add_view(utils.DMButtonRoles(), message_id=938070118653640714)
+            self.add_view(utils.GenderButtonRoles(), message_id=938437938646241391)
+            self.add_view(utils.PronounsButtonRoles(), message_id=938437939405410334)
+            self.add_view(utils.SexualityButtonRoles(), message_id=938437940193927259)
+            self.add_view(utils.AgeButtonRoles(), message_id=938437940600799302)
+            self.add_view(utils.RelationshipStatusButtonRoles(), message_id=938437951120105494)
+            self.add_view(utils.DMButtonRoles(), message_id=938437952248352819)
 
             async for ticket in utils.Ticket.find():
                 self.add_view(utils.TicketView(), message_id=ticket.message_id)

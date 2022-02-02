@@ -1,14 +1,14 @@
 import disnake
 
 all_pronouns_roles = (
-    928682922112864266, 928682922465181736, 928682922968481892,
-    928682923446652928, 928682923895443467
+    938433148138704988, 938433148683952150, 938433149455728651,
+    938433149975801916, 938433150311358485
 )
 
 pronouns_roles = {
-    'okiyu:pronouns_roles:he_him': 928682922112864266, 'okiyu:pronouns_roles:she_her': 928682922465181736,
-    'okiyu:pronouns_roles:they_them': 928682922968481892, 'okiyu:pronouns_roles:he_they': 928682923446652928,
-    'okiyu:pronouns_roles:she_they': 928682923895443467
+    'okiyu:pronouns_roles:he_him': 938433148138704988, 'okiyu:pronouns_roles:she_her': 938433148683952150,
+    'okiyu:pronouns_roles:he_they': 938433149455728651, 'okiyu:pronouns_roles:she_they': 938433149975801916,
+    'okiyu:pronouns_roles:they_them': 938433150311358485
 }
 
 __all__ = (

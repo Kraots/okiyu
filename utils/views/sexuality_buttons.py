@@ -1,16 +1,16 @@
 import disnake
 
 all_sexuality_roles = (
-    913771961845424159, 913771961530851368, 913771961249828964,
-    913771961002364948, 913771960725549096, 913771960343867402,
-    913771959987372073
+    938433150906937384, 938433151359922247, 938433151917772810,
+    938433152228130867, 938433153054425131, 938433153398366248,
+    938433153540968489
 )
 
 sexuality_roles = {
-    'okiyu:sexuality_roles:Other-Sexuality': 913771961845424159, 'okiyu:sexuality_roles:Queer': 913771961530851368,
-    'okiyu:sexuality_roles:Asexual': 913771961249828964, 'okiyu:sexuality_roles:Bisexual': 913771961002364948,
-    'okiyu:sexuality_roles:Lesbian': 913771960725549096, 'okiyu:sexuality_roles:Gay': 913771960343867402,
-    'okiyu:sexuality_roles:Straight': 913771959987372073
+    'okiyu:sexuality_roles:Straight': 938433150906937384, 'okiyu:sexuality_roles:Bisexual': 938433151359922247,
+    'okiyu:sexuality_roles:Gay': 938433151917772810, 'okiyu:sexuality_roles:Lesbian': 938433152228130867,
+    'okiyu:sexuality_roles:Asexual': 938433153054425131, 'okiyu:sexuality_roles:Queer': 938433153398366248,
+    'okiyu:sexuality_roles:Other-Sexuality': 938433153540968489
 }
 
 __all__ = (

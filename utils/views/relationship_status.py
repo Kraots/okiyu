@@ -1,12 +1,12 @@
 import disnake
 
 all_relationship_status_roles = (
-    913789939668385822, 913789939961954304
+    938433153993945090, 938433154266595381
 )
 
 relationship_status_roles = {
-    'okiyu:relationship_status_roles:Single': 913789939668385822,
-    'okiyu:relationship_status_roles:Taken': 913789939961954304
+    'okiyu:relationship_status_roles:Single': 938433153993945090,
+    'okiyu:relationship_status_roles:Taken': 938433154266595381
 }
 
 __all__ = (
