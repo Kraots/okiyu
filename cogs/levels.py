@@ -26,7 +26,10 @@ class Levels(commands.Cog):
                 data.xp += 30
             else:
                 if message.channel.id not in (utils.Channels.bots, utils.Channels.memes):
-                    data.xp += 5
+                    if utils.ExtraRoles.server_booster in (r.id for r in message.author.roles):
+                        data.xp += 10
+                    else:
+                        data.xp += 5
             data.messages_count += 1
             await data.commit()
 
