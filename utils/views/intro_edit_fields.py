@@ -174,7 +174,7 @@ class IntroField(disnake.ui.Select['IntroFields']):
 
         await self.delete_intro_message(data)
 
-        channel = self.view.ctx.okiyu.get_channel(913331578606854184)
+        channel = self.view.ctx.okiyu.get_channel(utils.Channels.intros)
         m = await channel.send(embed=em)
 
         data.message_id = m.id
