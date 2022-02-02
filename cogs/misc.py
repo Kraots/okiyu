@@ -177,7 +177,6 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        await utils.try_delete(ctx.message)
         ad = disnake.Embed(color=utils.blurple, title='Here\'s the ad to the server:', description=SERVER_AD)
         ad.set_footer(text=f'Requested by: {utils.format_name(ctx.author)}')
 
