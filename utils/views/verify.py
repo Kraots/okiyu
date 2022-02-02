@@ -4,6 +4,7 @@ import random
 import datetime
 from asyncio import TimeoutError
 from typing import TYPE_CHECKING
+from pymongo.errors import DuplicateKeyError
 
 import disnake
 from disnake.ui import View, button
@@ -284,21 +285,27 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
         if to_update is False:
             new_roles = [r for r in usr.roles if r.id != utils.ExtraRoles.unverified] + [role]
             await usr.edit(roles=new_roles)
-            await utils.Intro(
-                id=user_id,
-                name=name,
-                age=age,
-                pronouns=pronouns,
-                gender=gender,
-                location=location,
-                dms=dms,
-                looking=looking,
-                sexuality=sexuality,
-                status=status,
-                likes=likes,
-                dislikes=dislikes,
-                message_id=msg.id
-            ).commit()
+            try:
+                await utils.Intro(
+                    id=user_id,
+                    name=name,
+                    age=age,
+                    pronouns=pronouns,
+                    gender=gender,
+                    location=location,
+                    dms=dms,
+                    looking=looking,
+                    sexuality=sexuality,
+                    status=status,
+                    likes=likes,
+                    dislikes=dislikes,
+                    message_id=msg.id
+                ).commit()
+            except DuplicateKeyError:
+                role = random.choice([r for r in usr.roles if r.id in utils.all_colour_roles])
+                new_roles = [r for r in usr.roles if r.id not in utils.all_colour_roles] + [role]
+                await usr.edit(roles=new_roles)
+                return await utils.try_delete(msg)
         else:
             await utils.try_delete(channel=intro_channel, message_id=data.message_id)
 
