@@ -136,7 +136,7 @@ class Intros(commands.Cog):
             await try_delete(channel=intro_channel, message_id=data.message_id)
             await data.delete()
         await member.edit(roles=[r for r in member.roles if r.id in (
-            ExtraRoles.muted, ExtraRoles.blocked)] + [unverified_role])
+            ExtraRoles.muted, ExtraRoles.blocked, ExtraRoles.server_booster)] + [unverified_role])
         await try_dm(
             member,
             'You have been unverified in `Okiyu` by one of our staff members. '
