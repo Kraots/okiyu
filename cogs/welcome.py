@@ -11,7 +11,7 @@ from main import Okiyu
 class Welcome(commands.Cog):
     def __init__(self, bot: Okiyu):
         self.bot = bot
-        self.files = []
+        self.files = {}
         self.send_welc.start()
 
     @tasks.loop(seconds=15.0)
@@ -19,11 +19,11 @@ class Welcome(commands.Cog):
         webhook = self.bot.webhooks.get('welcome_webhook')
         if webhook is not None:
             if len(self.files) == 10:
-                await webhook.send(files=self.files)
+                await webhook.send(files=self.files.values())
             else:
                 files = []
                 count = 0
-                for file in self.files:
+                for file in self.files.values():
                     count += 1
                     files.append(file)
                     if count == 10:
@@ -33,7 +33,7 @@ class Welcome(commands.Cog):
                 if len(files) != 0:
                     await webhook.send(files=files)
                     files = []
-            self.files = []
+            self.files = {}
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
@@ -50,7 +50,7 @@ class Welcome(commands.Cog):
 
         member_count = len([m for m in guild.members if not m.bot])
         file = await utils.create_welcome_card(member, member_count)
-        self.files.append(file)
+        self.files[member.id] = file
 
         mute: utils.Mutes = await utils.Mutes.get(member.id)
         if mute is not None:
@@ -88,6 +88,11 @@ class Welcome(commands.Cog):
                 ],
                 view=view
             )
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: disnake.Member):
+        if member.id in self.files:
+            del self.files[member.id]
 
 
 def setup(bot: Okiyu):
