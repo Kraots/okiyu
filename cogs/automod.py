@@ -172,6 +172,10 @@ class AutoMod(commands.Cog):
         if matches:
             guild = self.bot.get_guild(938115625073639425)
             okiyu_invites = [inv.code for inv in await guild.invites()]
+            try:
+                okiyu_invites.append((await guild.vanity_invite()).code)
+            except disnake.HTTPException:
+                pass
             if any(inv for inv in matches if inv not in okiyu_invites):
                 await utils.try_delete(message)
                 invite_bucket = self.invite_cooldown.get_bucket(message)
