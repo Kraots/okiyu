@@ -55,7 +55,7 @@ class Marriages(commands.Cog):
         view.message = msg = await ctx.send(f'{member.mention} do you want to marry {ctx.author.mention}?', view=view)
         await view.wait()
         if view.response is True:
-            taken_role = ctx.okiyu.get_role(913789939961954304)
+            taken_role = ctx.okiyu.get_role(938433154266595381)
             now = datetime.utcnow()
 
             if data1 is None:
@@ -90,8 +90,8 @@ class Marriages(commands.Cog):
                     data2.adoptions.append(adoption)
             await data2.commit()
 
-            new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939668385822] + [taken_role]
-            new_roles_2 = [r for r in member.roles if not r.id == 913789939668385822] + [taken_role]
+            new_roles_1 = [r for r in ctx.author.roles if not r.id == 938433153993945090] + [taken_role]
+            new_roles_2 = [r for r in member.roles if not r.id == 938433153993945090] + [taken_role]
             try:
                 await ctx.author.edit(roles=new_roles_1)
             except disnake.HTTPException:
@@ -124,13 +124,13 @@ class Marriages(commands.Cog):
             view.message = msg = await ctx.reply(f'Are you sure you want to divorce {usr.mention}?', view=view)
             await view.wait()
             if view.response is True:
-                single_role = ctx.okiyu.get_role(913789939668385822)
+                single_role = ctx.okiyu.get_role(938433153993945090)
                 mem: Marriage = await Marriage.get(usr.id)
                 await data.delete()
                 await mem.delete()
 
-                new_roles_1 = [r for r in ctx.author.roles if not r.id == 913789939961954304] + [single_role]
-                new_roles_2 = [r for r in usr.roles if not r.id == 913789939961954304] + [single_role]
+                new_roles_1 = [r for r in ctx.author.roles if not r.id == 938433154266595381] + [single_role]
+                new_roles_2 = [r for r in usr.roles if not r.id == 938433154266595381] + [single_role]
                 try:
                     await ctx.author.edit(roles=new_roles_1)
                 except disnake.HTTPException:
