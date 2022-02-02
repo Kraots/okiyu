@@ -677,25 +677,29 @@ class Misc(commands.Cog):
             "offline": {"users": [], "emoji": "<:status_offline:938412200157134858>"}
         }
 
+        owner_icon = '<:owner:938486758654476288>'
+        mod_icon = '<:moderator:938486811955703818>'
+        admin_icon = '<:admin:938486758117638286>'
+
         for mem in ctx.okiyu.members:
             if utils.StaffRoles.owner in (r.id for r in mem.roles):  # Checks for owner
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
-                        all_status[str(mem.status)]["users"].append(f"**{mem}** `(OWNER)`")
+                        all_status[str(mem.status)]["users"].append(f"**{mem}** {owner_icon}")
                     else:
-                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** `(OWNER)`")
+                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** {owner_icon}")
             elif utils.StaffRoles.admin in (r.id for r in mem.roles):  # Checks for admin
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
-                        all_status[str(mem.status)]["users"].append(f"**{mem}** `(ADMIN)`")
+                        all_status[str(mem.status)]["users"].append(f"**{mem}** {admin_icon}")
                     else:
-                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** `(ADMIN)`")
+                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** {admin_icon}")
             elif utils.StaffRoles.moderator in (r.id for r in mem.roles):  # Checks for mod
                 if not mem.bot:
                     if len(all_status[str(mem.status)]['users']) == 0:
-                        all_status[str(mem.status)]["users"].append(f"**{mem}** `(MODERATOR)`")
+                        all_status[str(mem.status)]["users"].append(f"**{mem}** {mod_icon}")
                     else:
-                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** `(MODERATOR)`")
+                        all_status[str(mem.status)]["users"].append(f"<:blank:938412203579674705> **{mem}** {mod_icon}")
 
         for entry in all_status:
             if all_status[entry]["users"]:
