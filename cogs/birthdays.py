@@ -55,7 +55,7 @@ class Birthdays(commands.Cog):
                             return await mem.kick(reason='User birthday and turned 20y/o+')
 
                 em = disnake.Embed(title=f'Happy {age}th birthday {mem.name}!!! :tada: :tada:', color=mem.color)
-                em.set_image(url='https://cdn.discordapp.com/attachments/787359417674498088/901940653762687037/happy_bday.gif')
+                em.set_image(url='https://cdn.discordapp.com/attachments/938411306762002456/938443264703463514/happy_bday.gif')
                 em.set_footer(text=f'Your next birthday is on {next_birthday}')
 
                 msg = await channel.send(mem.mention, embed=em)

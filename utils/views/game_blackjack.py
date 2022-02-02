@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 __all__ = ('BlackJack',)
 
-hyperlink = '[`{0}`](https://cdn.discordapp.com/attachments/787359417674498088/924239039790477322/rickroll.gif "{0}")'
+hyperlink = '[`{0}`](https://cdn.discordapp.com/attachments/938411306762002456/938443265252925510/rickroll.gif "{0}")'
 
 
 class Player:
