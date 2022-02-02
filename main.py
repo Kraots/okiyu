@@ -99,12 +99,12 @@ class Okiyu(commands.Bot):
         if self.added_views is False:
             self.add_view(utils.Verify(self), message_id=913512065799421953)
 
-            self.add_view(utils.ColourButtonRoles(), message_id=913763247927218177)
-            self.add_view(utils.ColourButtonRoles(), message_id=913763329816821780)
-            self.add_view(utils.ColourButtonRoles(), message_id=913763420644462603)
-            self.add_view(utils.ColourButtonRoles(), message_id=913763496448110603)
-            self.add_view(utils.ColourButtonRoles(), message_id=913763571853303858)
-            self.add_view(utils.ColourButtonRoles(), message_id=913763639922659358)
+            self.add_view(utils.ColourButtonRoles(), message_id=938429135800389673)
+            self.add_view(utils.ColourButtonRoles(), message_id=938429211109109771)
+            self.add_view(utils.ColourButtonRoles(), message_id=938429293371985950)
+            self.add_view(utils.ColourButtonRoles(), message_id=938429380860989510)
+            self.add_view(utils.ColourButtonRoles(), message_id=938429469910241322)
+            self.add_view(utils.ColourButtonRoles(), message_id=938429554396127315)
 
             self.add_view(utils.GenderButtonRoles(), message_id=938070096423813130)
             self.add_view(utils.AgeButtonRoles(), message_id=938070098248335411)
