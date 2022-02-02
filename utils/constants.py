@@ -60,6 +60,8 @@ EMOJIS_TABLE = str.maketrans({v: k for k, v in LETTERS_EMOJI.items()})
 
 
 class Channels(NamedTuple):
+    verify = 938164079158251560
+
     news = 938119688335007744
     boosts = 938119709046485103
     rules = 938119722929639444
@@ -108,7 +110,7 @@ class Channels(NamedTuple):
         gaming, selfies, artwork, photos, videos,
         confesscord, bump, no_mic_chat, music_commands, music,
         lobby_1, lobby_2, sleep, staff_chat, logs,
-        messages_logs, moderation_logs, github, bot_commands
+        messages_logs, moderation_logs, github, bot_commands, verify
     )
 
 
