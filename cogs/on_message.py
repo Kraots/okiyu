@@ -256,7 +256,8 @@ class OnMessage(commands.Cog):
                 )
                 em.set_thumbnail(url=message.author.display_avatar)
 
-                await message.channel.send(message.author.mention, embed=em)
+                m = await message.channel.send(message.author.mention, embed=em)
+                await m.add_reaction('<:blob_love:938354926759854120>')
 
 
 def setup(bot: Okiyu):
