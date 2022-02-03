@@ -231,6 +231,20 @@ class Logs(commands.Cog):
         if before.rules_channel != after.rules_channel:
             em.add_field(name='Rules Channel', value=f'`{before.rules_channel}` **->** `{after.rules_channel}`', inline=False)
 
+        if before.public_updates_channel != after.public_updates_channel:
+            em.add_field(
+                name='Public Updates Channel',
+                value=f'`{before.public_updates_channel}` **->** `{after.public_updates_channel}`',
+                inline=False
+            )
+
+        if before.premium_progress_bar_enabled != after.premium_progress_bar_enabled:
+            em.add_field(
+                name='Premium Progress Bar Visibility',
+                value=f'`{before.premium_progress_bar_enabled}` **->** `{after.premium_progress_bar_enabled}`',
+                inline=False
+            )
+
         if len(em.fields) != 0:
             self.embeds.append(em)
 
