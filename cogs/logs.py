@@ -198,6 +198,9 @@ class Logs(commands.Cog):
         if before.emoji_limit != after.emoji_limit:
             em.add_field(name='Emojis Limit', value=f'`{before.emoji_limit}` **->** `{after.emoji_limit}`', inline=False)
 
+        if before.sticker_limit != after.sticker_limit:
+            em.add_field(name='Stickers Limit', value=f'`{before.sticker_limit}` **->** `{after.sticker_limit}`', inline=False)
+
         if before.verification_level != after.verification_level:
             em.add_field(
                 name='Verification Level',
