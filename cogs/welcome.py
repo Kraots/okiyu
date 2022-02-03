@@ -37,7 +37,15 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
+        if member.guild.id != 938115625073639425:  # Only do something if it happens in the actual okiyu server.
+            return
+
         guild = self.bot.get_guild(938115625073639425)
+
+        alt_guild = self.bot.get_guild(938886845314510978)  # The 2nd okiyu guild just for bumping to get members
+        mem = alt_guild.get_member(member.id)
+        if mem is not None:
+            await mem.kick()
 
         if member.bot:
             bot_role = guild.get_role(utils.ExtraRoles.bot)
@@ -91,6 +99,9 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member: disnake.Member):
+        if member.guild.id == 938886845314510978:
+            return
+
         if member.id in self.files:
             del self.files[member.id]
 
