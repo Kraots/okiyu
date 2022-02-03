@@ -309,6 +309,15 @@ class Logs(commands.Cog):
                 )
         except AttributeError:
             pass
+        try:
+            if before.user_limit != after.user_limit:
+                em.add_field(
+                    name='User Limit',
+                    value=f'`{before.user_limit}` **->** `{after.user_limit}`',
+                    inline=False
+                )
+        except AttributeError:
+            pass
 
         if before.overwrites != after.overwrites:
             added_overwrites = []
