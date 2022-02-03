@@ -54,7 +54,8 @@ def time_phaser(seconds):
         output = output + str(int(round(m, 0))) + " minutes "
     if s > 0:
         output = output + str(int(round(s, 0))) + " seconds"
-    return output
+
+    return output.strip()
 
 
 def clean_code(content):
