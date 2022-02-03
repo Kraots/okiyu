@@ -256,6 +256,13 @@ class Logs(commands.Cog):
                 inline=False
             )
 
+        if before.premium_tier != after.premium_tier:
+            em.add_field(
+                name='Boosts Level',
+                value=f'`{before.premium_tier}` **->** {after.premium_tier}',
+                inline=False
+            )
+
         if len(em.fields) != 0:
             self.embeds.append(em)
 
