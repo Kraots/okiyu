@@ -399,6 +399,15 @@ class Moderation(commands.Cog):
                 _ctx = await self.bot.get_context(msg)
                 await utils.try_delete(msg)
             else:
+                if usr.filter is False:
+                    if ctx.author.id not in (usr.muted_by, self.bot._owner_id):
+                        if usr.muted_by == self.bot._owner_id:
+                            _ = 'muted' if usr.muted is True else 'blocked'
+                            return await ctx.reply(
+                                f'{member.mention} was **{fmt}** by `{muted_by}` which is in a '
+                                'higher role hierarcy than you. Only staff members of the same '
+                                f'role or above can edit the **{action}** time and reason that person.'
+                            )
                 _action = 'unblock' if action == 'mute' else 'unmute'
                 await self.apply_unmute_or_unblock(
                     action=_action,
