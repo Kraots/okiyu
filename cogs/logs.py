@@ -90,7 +90,7 @@ class Logs(commands.Cog):
         em.set_author(name=utils.format_name(member), icon_url=member.display_avatar)
         em.set_thumbnail(url=member.display_avatar)
         em.set_footer(text=f'Member ID: {member.id}')
-        em.add_field(name='Account Creation', value=str(utils.human_timedelta(member.created_at)))
+        em.add_field(name='Account Creation', value=utils.human_timedelta(member.created_at))
 
         self.embeds.append(em)
 
