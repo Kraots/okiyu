@@ -180,8 +180,8 @@ class Logs(commands.Cog):
             em.add_field(name='AFK Channel', value=f'`{before.afk_channel}` **->** `{after.afk_channel}`', inline=False)
 
         if before.afk_timeout != after.afk_timeout:
-            before_timeout = '0' if before.afk_timeout == 0 else utils.time_phaser(before.afk_timeout)
-            after_timeout = '0' if after.afk_timeout == 0 else utils.time_phaser(after.afk_timeout)
+            before_timeout = '0 seconds' if before.afk_timeout == 0 else utils.time_phaser(before.afk_timeout)
+            after_timeout = '0 seconds' if after.afk_timeout == 0 else utils.time_phaser(after.afk_timeout)
             em.add_field(
                 name='AFK Timeout',
                 value=f'`{before_timeout}` **->** `{after_timeout}`',
