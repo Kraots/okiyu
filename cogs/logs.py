@@ -179,7 +179,7 @@ class Logs(commands.Cog):
         if before.afk_channel != after.afk_channel:
             em.add_field(name='AFK Channel', value=f'`{before.afk_channel}` **->** `{after.afk_channel}`', inline=False)
 
-        if before.afk_timeout:
+        if before.afk_timeout != after.afk_timeout:
             before_timeout = '0' if before.afk_timeout == 0 else utils.time_phaser(before.afk_timeout)
             after_timeout = '0' if after.afk_timeout == 0 else utils.time_phaser(after.afk_timeout)
             em.add_field(
@@ -229,6 +229,13 @@ class Logs(commands.Cog):
             em.add_field(
                 name='Explicit Content Filter',
                 value=f'`{before_filter}` **->** `{after_filter}`',
+                inline=False
+            )
+
+        if before.system_channel != after.system_channel:
+            em.add_field(
+                name='System Channel',
+                value=f'`{before.system_channel}` **->** `{after.system_channel}`',
                 inline=False
             )
 
