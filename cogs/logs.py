@@ -228,6 +228,9 @@ class Logs(commands.Cog):
                 inline=False
             )
 
+        if before.rules_channel != after.rules_channel:
+            em.add_field(name='Rules Channel', value=f'`{before.rules_channel}` **->** `{after.rules_channel}`', inline=False)
+
         if len(em.fields) != 0:
             self.embeds.append(em)
 
