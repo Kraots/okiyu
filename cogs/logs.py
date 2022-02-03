@@ -282,16 +282,15 @@ class Logs(commands.Cog):
             for overwrite in before.overwrites:
                 if overwrite not in after.overwrites:
                     removed_overwrites.append(f'`{overwrite.name}`')
+
             if len(added_overwrites) != 0:
                 em.description = f'Added permissions for {", ".join(added_overwrites)}'
                 em.color = disnake.Colour.green()
                 self.embeds.append(em)
-                return
             if len(removed_overwrites) != 0:
                 em.description = f'Removed permissions for {", ".join(removed_overwrites)}'
                 em.color = disnake.Colour.red()
                 self.embeds.append(em)
-                return
 
     @commands.Cog.listener('on_guild_channel_update')
     async def overwrites_update(self, before: disnake.abc.GuildChannel, after: disnake.abc.GuildChannel):
