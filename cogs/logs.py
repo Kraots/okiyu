@@ -271,53 +271,6 @@ class Logs(commands.Cog):
 
         em = disnake.Embed(title=f'Channel Updated: {before.name}', color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
         em.set_footer(text=f'Channel ID: {after.id}')
-        if before.name != after.name:
-            em.add_field(name='Name', value=f'`{before.name}` **->** `{after.name}`', inline=False)
-
-        try:
-            if before.nsfw != after.nsfw:
-                em.add_field(
-                    name='NSFW',
-                    value=f'`{before.nsfw}` **->** `{after.nsfw}`',
-                    inline=False
-                )
-        except AttributeError:
-            pass
-        try:
-            if before.default_auto_archive_duration != after.default_auto_archive_duration:
-                _ = {
-                    60: '1 hour',
-                    1440: '1 day',
-                    4320: '3 days',
-                    10080: '1 week'
-                }
-                em.add_field(
-                    name='Default Thread Archive Duration',
-                    value=f'`{_[before.default_auto_archive_duration]}` '
-                          f'**->** `{_[after.default_auto_archive_duration]}`',
-                    inline=False
-                )
-        except AttributeError:
-            pass
-        try:
-            if before.slowmode_delay != after.slowmode_delay:
-                em.add_field(
-                    name='Slowmode Delay',
-                    value=f'`{utils.time_phaser(before.slowmode_delay)}` '
-                          f'**->** `{utils.time_phaser(after.slowmode_delay)}`',
-                    inline=False
-                )
-        except AttributeError:
-            pass
-        try:
-            if before.user_limit != after.user_limit:
-                em.add_field(
-                    name='User Limit',
-                    value=f'`{before.user_limit}` **->** `{after.user_limit}`',
-                    inline=False
-                )
-        except AttributeError:
-            pass
 
         if before.overwrites != after.overwrites:
             added_overwrites = []
@@ -400,6 +353,41 @@ class Logs(commands.Cog):
         try:
             if before.nsfw != after.nsfw:
                 em.add_field(name='NSFW', value=f'`{before.nsfw}` **->** `{after.nsfw}`', inline=False)
+        except AttributeError:
+            pass
+        try:
+            if before.default_auto_archive_duration != after.default_auto_archive_duration:
+                _ = {
+                    60: '1 hour',
+                    1440: '1 day',
+                    4320: '3 days',
+                    10080: '1 week'
+                }
+                em.add_field(
+                    name='Default Thread Archive Duration',
+                    value=f'`{_[before.default_auto_archive_duration]}` '
+                          f'**->** `{_[after.default_auto_archive_duration]}`',
+                    inline=False
+                )
+        except AttributeError:
+            pass
+        try:
+            if before.slowmode_delay != after.slowmode_delay:
+                em.add_field(
+                    name='Slowmode Delay',
+                    value=f'`{utils.time_phaser(before.slowmode_delay)}` '
+                          f'**->** `{utils.time_phaser(after.slowmode_delay)}`',
+                    inline=False
+                )
+        except AttributeError:
+            pass
+        try:
+            if before.user_limit != after.user_limit:
+                em.add_field(
+                    name='User Limit',
+                    value=f'`{before.user_limit}` **->** `{after.user_limit}`',
+                    inline=False
+                )
         except AttributeError:
             pass
 
