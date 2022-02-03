@@ -133,6 +133,7 @@ class Logs(commands.Cog):
             return
 
         em = disnake.Embed(color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
+        em.set_thumbnail(url=before.icon)
         em.title = 'Guild Updated'
 
         if before.name != after.name:
@@ -194,7 +195,7 @@ class Logs(commands.Cog):
             }
             em.add_field(
                 name='Default Notifications',
-                value=f'{_[before.default_notifications]} **->** {_[after.default_notifications]}',
+                value=f'{_[before.default_notifications.value]} **->** {_[after.default_notifications.value]}',
                 inline=False
             )
 
@@ -218,7 +219,7 @@ class Logs(commands.Cog):
             }
             em.add_field(
                 name='2 Factor Authentication',
-                value=f'`{_[before.mfa_level]}` **->** `{after.mfa_level}`',
+                value=f'`{_[str(before.mfa_level)]}` **->** `{str(after.mfa_level)}`',
                 inline=False
             )
 
