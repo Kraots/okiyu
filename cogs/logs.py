@@ -130,10 +130,102 @@ class Logs(commands.Cog):
             return
 
         em = disnake.Embed(color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
+        em.title = 'Guild Updated'
+
         if before.name != after.name:
-            em.description = f'**Name Changed**\n`{before.name}` **->** `{after.name}`'
+            em.add_field(name='Name', value=f'`{before.name}` **->** `{after.name}`', inline=False)
             em.set_thumbnail(url=after.icon.url)
-            em.title = 'Guild Updated'
+
+        if before.description != after.description:
+            em.add_field(name='Description', value=f'`{before.description}` **->** `{after.description}`', inline=False)
+
+        if before.icon != after.icon:
+            if before.icon is not None:
+                before_icon = f'[`Before`]({before.icon.url})'
+            else:
+                before_icon = '`None`'
+            if after.icon is not None:
+                after_icon = f'[`After`]({after.icon.url})'
+            else:
+                after_icon = '`None`'
+            em.add_field(name='Icon', value=f'{before_icon} **->** {after_icon}', inline=False)
+
+        if before.banner != after.banner:
+            if before.banner is not None:
+                before_banner = f'[`Before`]({before.banner.url})'
+            else:
+                before_banner = '`None`'
+            if after.banner is not None:
+                after_banner = f'[`After`]({after.banner.url})'
+            else:
+                after_banner = '`None`'
+            em.add_field(name='Banner', value=f'{before_banner} **->** {after_banner}', inline=False)
+
+        if before.splash != after.splash:
+            if before.splash is not None:
+                before_splash = f'[`Before`]({before.splash.url})'
+            else:
+                before_splash = '`None`'
+            if after.splash is not None:
+                after_splash = f'[`After`]({after.splash.url})'
+            else:
+                after_splash = '`None`'
+            em.add_field(name='Invite Background', value=f'{before_splash} **->** {after_splash}', inline=False)
+
+        if before.afk_channel != after.afk_channel:
+            em.add_field(name='AFK Channel', value=f'`{before.afk_channel}` **->** `{after.afk_channel}`', inline=False)
+
+        if before.afk_timeout:
+            before_timeout = '0' if before.afk_timeout == 0 else utils.time_phaser(before.afk_timeout)
+            after_timeout = '0' if after.afk_timeout == 0 else utils.time_phaser(after.afk_timeout)
+            em.add_field(
+                name='AFK Timeout',
+                value=f'`{before_timeout}` **->** `{after_timeout}`',
+                inline=False
+            )
+
+        if before.default_notifications != after.default_notifications:
+            _ = {
+                0: '`All Messages`',
+                1: '`Mentions Only`'
+            }
+            em.add_field(
+                name='Default Notifications',
+                value=f'{_[before.default_notifications]} **->** {_[after.default_notifications]}',
+                inline=False
+            )
+
+        if before.emoji_limit != after.emoji_limit:
+            em.add_field(name='Emojis Limit', value=f'`{before.emoji_limit}` **->** `{after.emoji_limit}`', inline=False)
+
+        if before.verification_level != after.verification_level:
+            em.add_field(
+                name='Verification Level',
+                value=f'`{str(before.verification_level).title()}` **->** `{str(after.verification_level).title()}`',
+                inline=False
+            )
+
+        if before.mfa_level != after.mfa_level:
+            _ = {
+                0: 'False',
+                1: 'True'
+            }
+            em.add_field(
+                name='2 Factor Authentication',
+                value=f'`{_[before.mfa_level]}` **->** `{after.mfa_level}`',
+                inline=False
+            )
+
+        if before.explicit_content_filter != after.explicit_content_filter:
+            before_filter = before.explicit_content_filter.replace('_', ' ').title()
+            after_filter = after.explicit_content_filter.replace('_', ' ').title()
+            em.add_field(
+                name='Explicit Content Filter',
+                value=f'`{before_filter}` **->** `{after_filter}`',
+                inline=False
+            )
+
+        if len(em.fields) != 0:
             self.embeds.append(em)
 
     @commands.Cog.listener()
@@ -372,10 +464,11 @@ class Logs(commands.Cog):
             pass
         try:
             if before.slowmode_delay != after.slowmode_delay:
+                before_slowmode = '0' if before.slowmode_delay == 0 else utils.time_phaser(before.slowmode_delay)
+                after_slowmode = '0' if after.slowmode_delay == 0 else utils.time_phaser(after.slowmode_delay)
                 em.add_field(
                     name='Slowmode Delay',
-                    value=f'`{"0" if before.slowmode_delay == 0 else utils.time_phaser(before.slowmode_delay)}` '
-                          f'**->** `{utils.time_phaser(after.slowmode_delay)}`',
+                    value=f'`{before_slowmode}` **->** `{after_slowmode}`',
                     inline=False
                 )
         except AttributeError:
