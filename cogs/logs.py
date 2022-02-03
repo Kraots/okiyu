@@ -223,8 +223,8 @@ class Logs(commands.Cog):
             )
 
         if before.explicit_content_filter != after.explicit_content_filter:
-            before_filter = before.explicit_content_filter.replace('_', ' ').title()
-            after_filter = after.explicit_content_filter.replace('_', ' ').title()
+            before_filter = str(before.explicit_content_filter).replace('_', ' ').title()
+            after_filter = str(after.explicit_content_filter).replace('_', ' ').title()
             em.add_field(
                 name='Explicit Content Filter',
                 value=f'`{before_filter}` **->** `{after_filter}`',
