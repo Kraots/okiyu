@@ -41,8 +41,10 @@ class Logs(commands.Cog):
 
         if before.name != after.name:
             em.add_field(name='Username', value=f'`{before.name}` **->** `{after.name}`', inline=False)
+
         if before.discriminator != after.discriminator:
             em.add_field(name='Discriminator', value=f'`#{before.discriminator}` **->** `#{after.discriminator}`', inline=False)
+
         if before.display_avatar != after.display_avatar:
             em.add_field(name='Avatar', value=f'[`Before`]({before.display_avatar}) -> [`After`]({after.display_avatar})', inline=False)
 
@@ -61,6 +63,7 @@ class Logs(commands.Cog):
 
         if before.nick != after.nick:
             em.add_field(name='Nickname', value=f'`{before.nick}` **->** `{after.nick}`', inline=False)
+
         if before.roles != after.roles:
             removed_roles = []
             added_roles = []
@@ -288,12 +291,16 @@ class Logs(commands.Cog):
 
         if before.name != after.name:
             em.add_field(name='Name', value=f'`{before.name}` **->** `{after.name}`', inline=False)
+
         if before.color != after.color:
             em.add_field(name='Colour', value=f'`{before.colour}` **->** `{after.colour}`', inline=False)
+
         if before.hoist != after.hoist:
             em.add_field(name='Hoisted', value=f'`{before.hoist}` **->** `{after.hoist}`', inline=False)
+
         if before.mentionable != after.mentionable:
             em.add_field(name='Mentionable', value=f'`{before.mentionable}` **->** `{after.mentionable}`', inline=False)
+
         if before.permissions != after.permissions:
             added_perms = []
             removed_perms = []
@@ -327,6 +334,7 @@ class Logs(commands.Cog):
         removed_emoji = None
         old_name = None
         new_name = None
+
         for emoji in before:
             if emoji.id in (e.id for e in after):
                 if emoji.name != ''.join([e.name for e in after if e.id == emoji.id]):
@@ -341,11 +349,14 @@ class Logs(commands.Cog):
             if emoji.id not in (e.id for e in before):
                 added_emoji = emoji
                 break
+
         if new_name is not None:
             em.add_field(name='Emoji Name Changed', value=f'`{old_name}` **->** `{new_name}`', inline=False)
+
         if added_emoji is not None:
             em.add_field(name=r'\✅ Added Emoji', value='`' + str(added_emoji) + '`', inline=False)
             em.set_thumbnail(url=emoji.url)
+
         if removed_emoji is not None:
             em.add_field(name=r'\❌ Removed Emoji', value=f'[`{removed_emoji[0]}`]({removed_emoji[1]})', inline=False)
             em.set_thumbnail(url=removed_emoji[1])
@@ -454,18 +465,22 @@ class Logs(commands.Cog):
 
         em = disnake.Embed(title=f'Channel Updated: {before.name}', color=disnake.Color.yellow(), timestamp=datetime.datetime.utcnow())
         em.set_footer(text=f'Channel ID: {after.id}')
+
         if before.name != after.name:
             em.add_field(name='Name', value=f'`{before.name}` **->** `{after.name}`', inline=False)
+
         try:
             if before.topic != after.topic:
                 em.add_field(name='Topic', value=f'`{before.topic}` **->** `{after.topic}`', inline=False)
         except AttributeError:
             pass
+
         try:
             if before.nsfw != after.nsfw:
                 em.add_field(name='NSFW', value=f'`{before.nsfw}` **->** `{after.nsfw}`', inline=False)
         except AttributeError:
             pass
+
         try:
             if before.default_auto_archive_duration != after.default_auto_archive_duration:
                 _ = {
@@ -482,6 +497,7 @@ class Logs(commands.Cog):
                 )
         except AttributeError:
             pass
+
         try:
             if before.slowmode_delay != after.slowmode_delay:
                 before_slowmode = '0' if before.slowmode_delay == 0 else utils.time_phaser(before.slowmode_delay)
@@ -493,6 +509,7 @@ class Logs(commands.Cog):
                 )
         except AttributeError:
             pass
+
         try:
             if before.user_limit != after.user_limit:
                 em.add_field(
