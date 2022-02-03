@@ -374,7 +374,7 @@ class Logs(commands.Cog):
             if before.slowmode_delay != after.slowmode_delay:
                 em.add_field(
                     name='Slowmode Delay',
-                    value=f'`{utils.time_phaser(before.slowmode_delay)}` '
+                    value=f'`{"0" if before.slowmode_delay == 0 else utils.time_phaser(before.slowmode_delay)}` '
                           f'**->** `{utils.time_phaser(after.slowmode_delay)}`',
                     inline=False
                 )
