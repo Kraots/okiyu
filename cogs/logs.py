@@ -508,8 +508,8 @@ class Logs(commands.Cog):
 
         try:
             if before.slowmode_delay != after.slowmode_delay:
-                before_slowmode = '0' if before.slowmode_delay == 0 else utils.time_phaser(before.slowmode_delay)
-                after_slowmode = '0' if after.slowmode_delay == 0 else utils.time_phaser(after.slowmode_delay)
+                before_slowmode = '0 seconds' if before.slowmode_delay == 0 else utils.time_phaser(before.slowmode_delay)
+                after_slowmode = '0 seconds' if after.slowmode_delay == 0 else utils.time_phaser(after.slowmode_delay)
                 em.add_field(
                     name='Slowmode Delay',
                     value=f'`{before_slowmode}` **->** `{after_slowmode}`',
