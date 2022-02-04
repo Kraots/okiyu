@@ -9,7 +9,8 @@ from .dbs import (  # noqa
     database8,
     database9,
     database10,
-    database11
+    database11,
+    database12
 )
 
 
@@ -42,6 +43,7 @@ from .db_constants import Constants
 from .db_reminders import Reminder
 from .db_todos import ToDo
 from .db_sober import Sober
+from .db_bdsm import BDSM
 
 __all__ = (
     'Intro',
@@ -62,4 +64,5 @@ __all__ = (
     'Reminder',
     'ToDo',
     'Sober',
+    'BDSM'
 )

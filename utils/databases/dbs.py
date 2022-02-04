@@ -45,3 +45,7 @@ database10 = cluster10['Okiyu']  # Todos
 key11 = os.getenv('MONGODBKEY11')
 cluster11 = motor.motor_asyncio.AsyncIOMotorClient(key11)
 database11 = cluster11['Okiyu']  # Sober App
+
+key12 = os.getenv('MONGODBKEY12')
+cluster12 = motor.motor_asyncio.AsyncIOMotorClient(key12)
+database12 = cluster12['Okiyu']  # BDSM tests
