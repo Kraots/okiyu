@@ -26,7 +26,7 @@ class _BDSM(commands.Cog, name='BDSM'):
 
         await ctx.send_help('BDSM')
 
-    @bdsm.command(name='result', aliases=('results', 'show', 'check'))
+    @bdsm.command(name='results', aliases=('result', 'show', 'check'))
     async def bdsm_res(self, ctx: Context, *, member: disnake.Member = None):
         """See the bdsm results of someone if they have it set.
 
@@ -111,7 +111,7 @@ class _BDSM(commands.Cog, name='BDSM'):
                 'You ran out of time, type the command again to set your bdsm results.'
             )
 
-    @bdsm.command(name='delete', aliases=('remove',))
+    @bdsm.command(name='remove', aliases=('delete',))
     async def bdsm_remove(self, ctx: Context):
         """Remove your bdsm results if you have them set."""
 
