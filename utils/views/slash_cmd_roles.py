@@ -61,8 +61,3 @@ class SlashColours(disnake.ui.View):
         self.inter = inter
         placeholder = 'Select a colour master...' if is_owner is True else None
         self.add_item(SlashColoursSelect(is_owner=is_owner, placeholder=placeholder))
-
-    async def on_timeout(self):
-        for item in self.children:
-            item.disabled = True
-        await self.inter.edit_original_message(view=self)
