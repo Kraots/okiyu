@@ -48,6 +48,8 @@ class _BDSM(commands.Cog, name='BDSM'):
                         f'(`{utils.human_timedelta(entry.set_date, accuracy=7)}`)'
         )
         em.set_image(url=entry.result)
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
+
         await ctx.better_reply(embed=em)
 
     @bdsm.command(name='set', aliases=('add',))
