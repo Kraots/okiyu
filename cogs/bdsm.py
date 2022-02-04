@@ -52,7 +52,7 @@ class _BDSM(commands.Cog, name='BDSM'):
 
     @bdsm.command(name='set', aliases=('add',))
     async def bdsm_set(self, ctx: Context):
-        """Set your bdsm results."""
+        """Set or update your bdsm results."""
 
         entry: BDSM = await BDSM.get(ctx.author.id)
         if entry is not None:
