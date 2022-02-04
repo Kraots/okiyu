@@ -71,40 +71,39 @@ class _BDSM(commands.Cog, name='BDSM'):
             '\n*Must be an image from your gallery.*'
         )
         try:
-            while True:
-                res = await self.bot.wait_for(
-                    'message',
-                    check=lambda m: m.author.id == ctx.author.id and m.channel.id == ctx.channel.id,
-                    timeout=180
-                )
+            res = await self.bot.wait_for(
+                'message',
+                check=lambda m: m.author.id == ctx.author.id and m.channel.id == ctx.channel.id,
+                timeout=180
+            )
 
-                try:
-                    result = res.attachments[0].url
+            try:
+                result = res.attachments[0].url
 
-                    if entry is not None:
-                        entry.result = result
-                        entry.set_date = datetime.utcnow()
-                        await entry.commit()
-                        return await res.reply(
-                            'Succesfully updated your bdsm result. '
-                            'To check your bdsm results or others, '
-                            'you can type `!bdsm results <member>`.'
-                        )
-
-                    await BDSM(
-                        id=ctx.author.id,
-                        result=result,
-                        set_date=datetime.utcnow()
-                    ).commit()
-
+                if entry is not None:
+                    entry.result = result
+                    entry.set_date = datetime.utcnow()
+                    await entry.commit()
                     return await res.reply(
-                        'Succesfully set your bdsm result. '
+                        'Succesfully updated your bdsm result. '
                         'To check your bdsm results or others, '
                         'you can type `!bdsm results <member>`.'
                     )
 
-                except Exception:
-                    return await res.reply('You must send an image from your gallery, not an url.')
+                await BDSM(
+                    id=ctx.author.id,
+                    result=result,
+                    set_date=datetime.utcnow()
+                ).commit()
+
+                return await res.reply(
+                    'Succesfully set your bdsm result. '
+                    'To check your bdsm results or others, '
+                    'you can type `!bdsm results <member>`.'
+                )
+
+            except Exception:
+                return await res.reply('You must send an image from your gallery, not an url.')
 
         except TimeoutError:
             await ctx.reply(
