@@ -900,6 +900,8 @@ class Misc(commands.Cog):
         """Get the source on github for a command the bot has.
 
         `command` **->** The command you want to see. Can either be a prefixed command or a slash command.
+
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -994,6 +996,8 @@ class Misc(commands.Cog):
         \`\`\`language
         code
         \`\`\`
+
+        **NOTE:** This command can only be used in <#938119528464916530>
         """
 
         if await ctx.check_channel() is False:
@@ -1292,7 +1296,13 @@ class Misc(commands.Cog):
 
     @commands.command(name='boosters', aliases=('booster',))
     async def check_boosters(self, ctx: Context):
-        """See all the people that are currently boosting the server, in order based on the date they started boosting."""
+        """See all the people that are currently boosting the server, in order based on the date they started boosting.
+
+        **NOTE:** This command can only be used in <#938119528464916530>
+        """
+
+        if await ctx.check_channel() is False:
+            return
 
         boosters = []
         sorted_ = sorted(ctx.okiyu.premium_subscribers, key=lambda m: m.premium_since)

@@ -54,7 +54,13 @@ class _BDSM(commands.Cog, name='BDSM'):
 
     @bdsm.command(name='set', aliases=('add',))
     async def bdsm_set(self, ctx: Context):
-        """Set or update your bdsm results."""
+        """Set or update your bdsm results.
+
+        **NOTE:** This command can only be used in <#938119528464916530>
+        """
+
+        if await ctx.check_channel() is False:
+            return
 
         entry: BDSM = await BDSM.get(ctx.author.id)
         if entry is not None:
