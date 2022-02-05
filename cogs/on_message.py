@@ -56,7 +56,7 @@ class OnMessage(commands.Cog):
                             f'**Content:** \n{content}',
                 timestamp=datetime.datetime.utcnow()
             )
-            em.set_author(name=f'{message.author}', icon_url=f'{message.author.display_avatar}')
+            em.set_author(name=utils.format_name(message.author), icon_url=f'{message.author.display_avatar}')
             em.set_footer(text=f'User ID: {message.author.id}')
             if message.attachments:
                 em.set_image(url=message.attachments[0].proxy_url)
@@ -94,7 +94,7 @@ class OnMessage(commands.Cog):
                 description=f'Message edited in <#{before.channel.id}>\n\n**Before:**\n```{before.content}```\n\n**After:**\n```{after.content}```',  # noqa
                 timestamp=datetime.datetime.utcnow()
             )
-            em.set_author(name=f'{before.author}', icon_url=f'{before.author.display_avatar}')
+            em.set_author(name=utils.format_name(before.author), icon_url=f'{before.author.display_avatar}')
             em.set_footer(text=f'User ID: {before.author.id}')
             ref = after.reference
             if ref and isinstance(ref.resolved, disnake.Message):
