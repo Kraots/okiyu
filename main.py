@@ -190,7 +190,7 @@ class Okiyu(commands.Bot):
         if ctx.author.id == self.owner_id:
             return True
         if isinstance(ctx.channel, disnake.DMChannel):
-            if ctx.command.qualified_name != 'intro':
+            if ctx.command.qualified_name not in ('intro', 'ticket'):
                 await ctx.send('Commands do not work in dm channels. Please use commands only in <#938119528464916530>')
                 return False
         return True

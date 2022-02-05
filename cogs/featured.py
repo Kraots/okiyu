@@ -59,9 +59,12 @@ class Featured(commands.Cog):
     async def ticket_cmd(self, ctx: Context):
         """Create a ticket."""
 
+        if not isinstance(ctx.channel, disnake.DMChannel):
+            await ctx.message.delete()
+
         total_tickets = await Ticket.find({'user_id': ctx.author.id}).sort('ticket_id', -1).to_list(5)
         if len(total_tickets) == 5:
-            return await ctx.reply('You already have a max of `5` tickets created!')
+            return await ctx.reply('Cannot create ticket because ticket limit reached (`5`).')
         ticket_id = '1' if not total_tickets else str(int(total_tickets[0].ticket_id) + 1)
         ch_name = f'{ctx.author.name}-ticket #' + ticket_id
 
@@ -99,7 +102,7 @@ class Featured(commands.Cog):
 
         v = View()
         v.add_item(Button(label='Jump!', url=m.jump_url))
-        await ctx.reply('Ticket created!', view=v)
+        await utils.try_dm(ctx.author, 'Ticket created!', view=v)
         await utils.log(
             self.bot.webhooks['mod_logs'],
             title='[TICKET OPENED]',
