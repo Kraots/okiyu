@@ -625,9 +625,10 @@ async def send_embeds(
 
 
 def format_position(n: int | str) -> str:
-    """Adds the corresponding suffix depending on what `n` ends in.
-    If it ends in 1, it will add a `st` at the end, if it ends in 2,
-    it will add a `nd`, etc...
+    """Adds the corresponding suffix depending on what `n` is.
+    If n is 1, it will add a `st` at the end, otherwise if n is 2,
+    it will add a `nd`, and if n is 3 it will add a `3rd`, and to everything
+    else it will add a `th`.
 
     Parameters
     ----------
@@ -646,11 +647,11 @@ def format_position(n: int | str) -> str:
         n = int(n)
         n = f'{n:,}'
 
-    if n.endswith('1'):
+    if n == '1':
         return n + 'st'
-    elif n.endswith('2'):
+    elif n == '2':
         return n + 'nd'
-    elif n.endswith('3'):
+    elif n == '3':
         return n + 'rd'
     else:
         return n + 'th'
