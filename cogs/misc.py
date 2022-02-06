@@ -590,8 +590,8 @@ class Misc(commands.Cog):
         if await ctx.check_channel() is False:
             return
 
-        _ = await utils.Marriage.get(ctx.author.id)
-        if _ is not None:
+        _: utils.Marriage = await utils.Marriage.get(ctx.author.id)
+        if _ is not None and _.married_to != 0:
             mem = ctx.okiyu.get_member(_.married_to)
             return await ctx.reply(f'You are already married to {mem.mention}')
 
