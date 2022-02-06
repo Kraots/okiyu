@@ -23,7 +23,7 @@ def _is_owner(ctx: Context, *, owner_only: bool = False):
     return False
 
 
-def is_owner(*, owner_only: bool = True):
+def is_owner(*, owner_only: bool = False):
     """
     A special check for checking if the author has the owner role.
 
