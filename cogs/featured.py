@@ -105,7 +105,7 @@ class Featured(commands.Cog):
 
         staff_chat = ctx.okiyu.get_channel(utils.Channels.staff_chat)
         await staff_chat.send(
-            f'@everyone New ticket has been created by f`{utils.format_name(ctx.author)}`',
+            f'@everyone New ticket has been created by `{utils.format_name(ctx.author)}`',
             allowed_mentions=disnake.AllowedMentions(everyone=True),
             view=v
         )
