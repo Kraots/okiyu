@@ -786,7 +786,12 @@ class Moderation(commands.Cog):
 
         await ctx.send_help('remove')
 
-    @staff_remove.command(name='owner')
+    @staff_remove.group(
+        name='owner',
+        invoke_without_command=True,
+        case_insensitive=True,
+        ignore_extra=False
+    )
     @commands.is_owner()
     async def staff_remove_owner(self, ctx: Context, *, member: disnake.Member):
         """Remove an owner.
@@ -812,7 +817,25 @@ class Moderation(commands.Cog):
             view=self.jump_view(ctx.message.jump_url)
         )
 
-    @staff_remove.command(name='admin')
+    @staff_remove_owner.command(name='all')
+    @is_owner(owner_only=True)
+    async def remove_owner_all(self, ctx: Context):
+        """Remove the owner role from everybody that has it."""
+
+        i = 0
+        role = ctx.okiyu.get_role(StaffRoles.owner)
+        for member in role.members:
+            await member.edit(roles=[r for r in member.roles if not r.id == StaffRoles.owner])
+            i += 1
+
+        await ctx.reply(f'Successfully removed `{i:,}` owners.')
+
+    @staff_remove.group(
+        name='admin',
+        invoke_without_command=True,
+        case_insensitive=True,
+        ignore_extra=False
+    )
     @is_owner()
     async def staff_remove_admin(self, ctx: Context, *, member: disnake.Member):
         """Remove an admin.
@@ -838,7 +861,26 @@ class Moderation(commands.Cog):
             view=self.jump_view(ctx.message.jump_url)
         )
 
-    @staff_remove.command(name='moderator', aliases=('mod',))
+    @staff_remove_admin.command(name='all')
+    @is_owner(owner_only=True)
+    async def remove_admin_all(self, ctx: Context):
+        """Remove the admin role from everybody that has it."""
+
+        i = 0
+        role = ctx.okiyu.get_role(StaffRoles.admin)
+        for member in role.members:
+            await member.edit(roles=[r for r in member.roles if not r.id == StaffRoles.admin])
+            i += 1
+
+        await ctx.reply(f'Successfully removed `{i:,}` admins.')
+
+    @staff_remove.group(
+        name='moderator',
+        aliases=('mod',),
+        invoke_without_command=True,
+        case_insensitive=True,
+        ignore_extra=False
+    )
     @is_admin()
     async def staff_remove_mod(self, ctx: Context, *, member: disnake.Member):
         """Remove a moderator.
@@ -863,6 +905,19 @@ class Moderation(commands.Cog):
             ],
             view=self.jump_view(ctx.message.jump_url)
         )
+
+    @staff_remove_mod.command(name='all')
+    @is_owner(owner_only=True)
+    async def remove_mod_all(self, ctx: Context):
+        """Remove the moderator role from everybody that has it."""
+
+        i = 0
+        role = ctx.okiyu.get_role(StaffRoles.moderator)
+        for member in role.members:
+            await member.edit(roles=[r for r in member.roles if not r.id == StaffRoles.moderator])
+            i += 1
+
+        await ctx.reply(f'Successfully removed `{i:,}` moderators.')
 
     async def end_giveaway(self, gw: GiveAway):
         guild = self.bot.get_guild(938115625073639425)
