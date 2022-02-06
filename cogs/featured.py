@@ -102,6 +102,14 @@ class Featured(commands.Cog):
 
         v = View()
         v.add_item(Button(label='Jump!', url=m.jump_url))
+
+        staff_chat = ctx.okiyu.get_channel(utils.Channels.staff_chat)
+        await staff_chat.send(
+            f'@everyone New ticket has been created by f`{utils.format_user(ctx.author)}`',
+            allowed_mentions=disnake.AllowedMentions(everyone=True),
+            view=v
+        )
+
         await utils.try_dm(ctx.author, 'Ticket created!', view=v)
         await utils.log(
             self.bot.webhooks['mod_logs'],
