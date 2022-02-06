@@ -822,13 +822,24 @@ class Moderation(commands.Cog):
     async def remove_owner_all(self, ctx: Context):
         """Remove the owner role from everybody that has it."""
 
-        i = 0
+        owners = []
         role = ctx.okiyu.get_role(StaffRoles.owner)
         for member in role.members:
             await member.edit(roles=[r for r in member.roles if not r.id == StaffRoles.owner])
-            i += 1
+            owners.append(member)
 
-        await ctx.reply(f'Successfully removed `{i:,}` owners.')
+        await ctx.reply(f'Successfully removed `{len(owners):,}` owners.')
+        formatted = '\n'.join([f'{utils.format_name(member)} (`{member.id}`)' for member in owners])
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title='[OWNER(S) REMOVED]',
+            fields=[
+                ('Member(s)', formatted),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                ('At', format_dt(datetime.now(), 'F')),
+            ],
+            view=self.jump_view(ctx.message.jump_url)
+        )
 
     @staff_remove.group(
         name='admin',
@@ -866,13 +877,24 @@ class Moderation(commands.Cog):
     async def remove_admin_all(self, ctx: Context):
         """Remove the admin role from everybody that has it."""
 
-        i = 0
+        admins = []
         role = ctx.okiyu.get_role(StaffRoles.admin)
         for member in role.members:
             await member.edit(roles=[r for r in member.roles if not r.id == StaffRoles.admin])
-            i += 1
+            admins.append(member)
 
-        await ctx.reply(f'Successfully removed `{i:,}` admins.')
+        await ctx.reply(f'Successfully removed `{len(admins):,}` admins.')
+        formatted = '\n'.join([f'{utils.format_name(member)} (`{member.id}`)' for member in admins])
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title='[ADMIN(S) REMOVED]',
+            fields=[
+                ('Member(s)', formatted),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                ('At', format_dt(datetime.now(), 'F')),
+            ],
+            view=self.jump_view(ctx.message.jump_url)
+        )
 
     @staff_remove.group(
         name='moderator',
@@ -911,13 +933,24 @@ class Moderation(commands.Cog):
     async def remove_mod_all(self, ctx: Context):
         """Remove the moderator role from everybody that has it."""
 
-        i = 0
+        moderators = []
         role = ctx.okiyu.get_role(StaffRoles.moderator)
         for member in role.members:
             await member.edit(roles=[r for r in member.roles if not r.id == StaffRoles.moderator])
-            i += 1
+            moderators.append(member)
 
-        await ctx.reply(f'Successfully removed `{i:,}` moderators.')
+        await ctx.reply(f'Successfully removed `{len(moderators):,}` moderators.')
+        formatted = '\n'.join([f'{utils.format_name(member)} (`{member.id}`)' for member in moderators])
+        await utils.log(
+            self.bot.webhooks['mod_logs'],
+            title='[MODERATOR(S) REMOVED]',
+            fields=[
+                ('Member(s)', formatted),
+                ('By', f'{ctx.author.mention} (`{ctx.author.id}`)'),
+                ('At', format_dt(datetime.now(), 'F')),
+            ],
+            view=self.jump_view(ctx.message.jump_url)
+        )
 
     async def end_giveaway(self, gw: GiveAway):
         guild = self.bot.get_guild(938115625073639425)
