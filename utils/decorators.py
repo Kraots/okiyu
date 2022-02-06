@@ -10,7 +10,12 @@ __all__ = (
 )
 
 
-def _is_owner(ctx: Context, *, owner_only: bool = True):
+def _is_owner(ctx: Context, *, owner_only: bool = False):
+    if owner_only is True:
+        if ctx.author.id == 938097236024360960:
+            return True
+        return False
+
     if ctx.author.id == 938097236024360960:
         return True
     elif StaffRoles.owner in (role.id for role in ctx.author.roles):
