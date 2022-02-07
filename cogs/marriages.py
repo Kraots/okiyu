@@ -150,7 +150,7 @@ class Marriages(commands.Cog):
                 return await msg.edit(content=e, view=view)
 
     @commands.command()
-    async def marriedwho(self, ctx: Context, *, member: disnake.Member = None):
+    async def marriage(self, ctx: Context, *, member: disnake.Member = None):
         """See who, who, the date and how much it's been since the member married their partner if they have one.
 
         `member` **->** The member you want to see who they are married with. If you want to see who you married, you can ignore this.
@@ -186,7 +186,7 @@ class Marriages(commands.Cog):
 
         `member` **->** The member you want to kiss. You can only kiss the person you are married with.
 
-        If for some reason you don't know who you're married to, you are a complete jerk but luckily for you, there's the command `!marriedwho` which reminds you who you are married to, and for how long.
+        If for some reason you don't know who you're married to, you are a complete jerk but luckily for you, there's the command `!marriage` which reminds you who you are married to, and for how long.
         """  # noqa
 
         data = await Marriage.get(ctx.author.id)
