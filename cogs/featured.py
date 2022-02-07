@@ -14,11 +14,29 @@ from utils import (
 from main import Okiyu
 
 
+class SnipesPageEntry:
+    def __init__(self, entry: disnake.Message, index: int):
+
+        content = entry.content or '<Only has image>'
+        content = content[0:45] + '[...]'
+        self.result = f'`{index + 1}.` *{content}* **-** __{utils.format_name(entry.author)}__'
+
+    def __str__(self):
+        return self.result
+
+
+class SnipesPages(utils.RawSimplePages):
+    def __init__(self, ctx: Context, entries, *, per_page=6):
+        converted = [SnipesPageEntry(entry, index) for index, entry in enumerate(entries)]
+        super().__init__(ctx=ctx, entries=converted, per_page=per_page, color=utils.blurple, compact=True)
+
+
 class Featured(commands.Cog):
     """Featured cool commands."""
 
     def __init__(self, bot: Okiyu):
         self.bot = bot
+        self.snipes: dict[int, list[disnake.Message]] = {}  # {channel_id: [message, message, ...]}
 
     @property
     def display_emoji(self) -> str:
@@ -155,6 +173,111 @@ class Featured(commands.Cog):
         source.embed.title = f'Here\'s the top `{count}` newly joined members'
         paginator = utils.RoboPages(source, ctx=ctx, compact=True)
         await paginator.start()
+
+    @commands.Cog.listener()
+    async def on_message(self, message: disnake.Message):
+        if message.guild is None or \
+                message.author.id == self.bot._owner_id or \
+                message.author.bot is True:
+            return
+
+        if not message.content:
+            if not message.attachments:
+                return
+            if not message.attachments[0].content_type.endswith(('png', 'jpg', 'jpeg')):
+                return
+
+        entry = self.snipes.get(message.channel.id)
+        if entry is None:
+            self.snipes[message.channel.id] = [message]
+        else:
+            if len(entry) == 500:
+                entry = entry[0:499]  # Remove the oldest message once it hits 500.
+            self.snipes[message.channel.id] = [message, *entry]
+
+    @staticmethod
+    def snipe_embed(message: disnake.Message) -> disnake.Embed:
+        """Creates an embed with the snipe's data."""
+
+        content = message.content or '\u200b'
+        em = disnake.Embed(color=message.author.color, description=content, timestamp=message.created_at)
+        em.set_author(name=utils.format_name(message.author), icon_url=message.author.display_avatar)
+        em.set_footer(text=f'Deleted in `{message.channel}` • message created')
+
+        if message.attachments:
+            em.set_image(message.attachments[0].proxy_url)
+
+        ref = message.reference
+        if ref and isinstance(ref.resolved, disnake.Message):
+            em.add_field(name='Replying to...', value=f'[{ref.resolved.author}]({ref.resolved.jump_url})', inline=False)
+
+        return em
+
+    @commands.group(
+        name='snipe',
+        invoke_without_command=True,
+        case_insensitive=True
+    )
+    async def base_snipe(self, ctx: Context, *, channel: disnake.TextChannel | disnake.Thread = None):
+        """Show the last deleted message as long as the message wasn't sent by a bot or in dms.
+
+        `channel` **->** The channel you want to snipe the last deleted message from. Defaults to the channel the command is used in.
+        """
+
+        channel = channel or ctx.channel
+        entries = self.snipes.get(channel.id)
+        if entries is None:
+            return await ctx.reply(f'Nothing to snipe in {channel.mention}')
+
+        message = entries[0]
+        em = self.snipe_embed(message)
+
+        await ctx.better_reply(embed=em)
+
+    @base_snipe.command(name='list', aliases=('all',))
+    async def snipes_list(self, ctx: Context, *, channel: disnake.TextChannel | disnake.Thread = None):
+        """Show all of the deleted messages that the bot has sniped in the given channel.
+
+        `channel` **->** The channel you want to see the list of all saved snipes. Defaults to the channel the command is used in.
+        """
+
+        channel = channel or ctx.channel
+        entries = self.snipes.get(channel.id)
+        if entries is None:
+            return await ctx.reply(f'No snipes in {channel.mention}')
+
+        paginator = SnipesPages(ctx, entries)
+        await paginator.start(ref=True)
+
+    @base_snipe.command(name='index')
+    async def snipe_index(self, ctx: Context, *, index: str):
+        """Just like the usual `!snipe` but instead of giving the latest deleted message it returns message at the given index.
+
+        `index` **->** The index of the deleted message.
+        """
+
+        index -= 1
+        if index == -1:
+            return await ctx.send('Invalid Index.')
+
+        entries = self.snipes.get(ctx.channel.id)
+        if entries is None:
+            return await ctx.reply('Nothing to snipe in this channel.')
+        try:
+            message = entries[index]
+        except IndexError:
+            return await ctx.reply('No message found at the given index.')
+
+        em = self.snipe_embed(message)
+
+        await ctx.better_reply(embed=em)
+
+    @base_snipe.error
+    async def snipe_error(self, ctx: Context, error):
+        if isinstance(error, commands.ChannelNotFound):
+            return await ctx.reply(f'Channel (`{error.argument}`) was not found.')
+        else:
+            await self.bot.reraise(ctx, error)
 
 
 def setup(bot: Okiyu):
