@@ -282,6 +282,7 @@ class Featured(commands.Cog):
         await ctx.better_reply(embed=em)
 
     @base_snipe.error
+    @snipes_list.error
     async def snipe_error(self, ctx: Context, error):
         if isinstance(error, (commands.ChannelNotFound, commands.BadUnionArgument)):
             return await ctx.reply(f'Channel (`{error.argument}`) was not found.')
