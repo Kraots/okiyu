@@ -208,7 +208,7 @@ class Featured(commands.Cog):
         content = message.content or '\u200b'
         em = disnake.Embed(color=message.author.color, description=content, timestamp=message.created_at)
         em.set_author(name=utils.format_name(message.author), icon_url=message.author.display_avatar)
-        em.set_footer(text=f'Deleted in `{message.channel}` • message created')
+        em.set_footer(text=f'Deleted in `{message.channel}` • message created:')
 
         if message.attachments:
             em.set_image(message.attachments[0].proxy_url)
