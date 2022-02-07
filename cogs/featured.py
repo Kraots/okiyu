@@ -277,7 +277,7 @@ class Featured(commands.Cog):
         if isinstance(error, commands.ChannelNotFound):
             return await ctx.reply(f'Channel (`{error.argument}`) was not found.')
         else:
-            await self.bot.reraise(ctx, error)
+            await ctx.reraise(error)
 
 
 def setup(bot: Okiyu):
