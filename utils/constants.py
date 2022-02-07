@@ -87,6 +87,7 @@ class Channels(NamedTuple):
     videos = 938118818226663445
 
     confesscord = 938135131728785430
+    quotes = 940329073656352852
     bump = 938135144848564224
 
     no_mic_chat = 938119894778658946
