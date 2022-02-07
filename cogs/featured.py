@@ -175,7 +175,7 @@ class Featured(commands.Cog):
         await paginator.start()
 
     @commands.Cog.listener()
-    async def on_message(self, message: disnake.Message):
+    async def on_message_delete(self, message: disnake.Message):
         if message.guild is None or \
                 message.author.id == self.bot._owner_id or \
                 message.author.bot is True:
@@ -194,6 +194,11 @@ class Featured(commands.Cog):
             if len(entry) == 500:
                 entry = entry[0:499]  # Remove the oldest message once it hits 500.
             self.snipes[message.channel.id] = [message, *entry]
+
+    @commands.Cog.listener()
+    async def on_bulk_message_delete(self, messages: list[disnake.Message]):
+        for message in messages:
+            await self.on_message_delete(message)
 
     @staticmethod
     def snipe_embed(message: disnake.Message) -> disnake.Embed:
