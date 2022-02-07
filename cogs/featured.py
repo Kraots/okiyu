@@ -256,6 +256,10 @@ class Featured(commands.Cog):
         `index` **->** The index of the deleted message.
         """
 
+        try:
+            index = int(utils.format_amount(index))
+        except ValueError:
+            return await ctx.reply('The index must be a number.')
         index -= 1
         if index == -1:
             return await ctx.send('Invalid Index.')
