@@ -268,7 +268,7 @@ class Featured(commands.Cog):
             return await ctx.reply('The index must be a number.')
         index -= 1
         if index == -1:
-            return await ctx.send('Invalid Index.')
+            return await ctx.reply('Invalid Index.')
 
         entries = self.snipes.get(ctx.channel.id)
         if entries is None:
