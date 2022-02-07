@@ -283,7 +283,7 @@ class Featured(commands.Cog):
 
     @base_snipe.error
     async def snipe_error(self, ctx: Context, error):
-        if isinstance(error, commands.ChannelNotFound):
+        if isinstance(error, (commands.ChannelNotFound, commands.BadUnionArgument)):
             return await ctx.reply(f'Channel (`{error.argument}`) was not found.')
         else:
             await ctx.reraise(error)
