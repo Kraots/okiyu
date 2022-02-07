@@ -18,7 +18,8 @@ class SnipesPageEntry:
     def __init__(self, entry: disnake.Message, index: int):
 
         content = entry.content or '<Only has image>'
-        content = content[0:45] + '[...]'
+        if len(content) > 45:
+            content = content[0:45] + '[...]'
         self.result = f'`{index + 1}.` *{content}* **-** __{utils.format_name(entry.author)}__'
 
     def __str__(self):
