@@ -46,10 +46,13 @@ class OnMessage(commands.Cog):
             return
 
         else:
-            if not message.attachments and not message.content:
-                return
+            if not message.content:
+                if not message.attachments:
+                    return
+                if not message.attachments[0].content_type.endswith(('png', 'jpg', 'jpeg')):
+                    return
 
-            content = f'```{message.content}```' if message.content else 'No content.'
+            content = f'```{utils.remove_markdown(message.content)}```' if message.content else '\u200b'
             em = disnake.Embed(
                 color=utils.red,
                 description=f'Message deleted in <#{message.channel.id}> \n\n'
@@ -91,7 +94,9 @@ class OnMessage(commands.Cog):
 
             em = disnake.Embed(
                 color=utils.yellow,
-                description=f'Message edited in <#{before.channel.id}>\n\n**Before:**\n```{before.content}```\n\n**After:**\n```{after.content}```',  # noqa
+                description=f'Message edited in <#{before.channel.id}>\n\n'
+                            f'**Before:**\n```{utils.remove_markdown(before.content)}```\n\n'
+                            f'**After:**\n```{utils.remove_markdown(after.content)}```',
                 timestamp=datetime.datetime.utcnow()
             )
             em.set_author(name=utils.format_name(before.author), icon_url=f'{before.author.display_avatar}')
