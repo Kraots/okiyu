@@ -248,6 +248,7 @@ class OnMessage(commands.Cog):
     async def server_boosts(self, message: disnake.Message):
         if message.channel.id == utils.Channels.boosts:
             if message.is_system():
+                boost_emoji = disnake.PartialEmoji(name='nitro_boost', animated=True, id=939677120454610964)
                 total_boosts = message.guild.premium_subscription_count
                 total_boosters = len(message.guild.premium_subscribers)
                 boost_level = message.guild.premium_tier
@@ -260,6 +261,7 @@ class OnMessage(commands.Cog):
                                 'total members that have boosted the server.'
                 )
                 em.set_thumbnail(url=message.author.display_avatar)
+                em.set_footer(icon_url=boost_emoji.url)
 
                 m = await message.channel.send(message.author.mention, embed=em)
                 await m.add_reaction('<:blob_love:938354926759854120>')
