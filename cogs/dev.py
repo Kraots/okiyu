@@ -197,7 +197,7 @@ class Developer(commands.Cog):
 
         await ctx.reply(embed=em)
 
-    @commands.command(aliases=('accountage'))
+    @commands.command(aliases=('accountage',))
     async def accage(self, ctx: Context, days: int = 7):
         """Set the minimum account age one must be in order to be allowed in the server.
 
