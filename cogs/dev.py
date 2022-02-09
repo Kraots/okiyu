@@ -11,7 +11,7 @@ import disnake
 from disnake.ext import commands
 
 import utils
-from utils import Context, TextPage, clean_code
+from utils import Context, TextPage, clean_code, Constants
 
 from main import Okiyu
 
@@ -196,6 +196,22 @@ class Developer(commands.Cog):
             em.add_field(name=event_type, value=f'{count:,}')
 
         await ctx.reply(embed=em)
+
+    @commands.command(aliases=('accountage'))
+    async def accage(self, ctx: Context, days: int = 7):
+        """Set the minimum account age one must be in order to be allowed in the server.
+
+        `days` **->** The minimum amount of days the user's account's age must be. Defaults to 7.
+        """
+
+        entry: Constants = await Constants.get()
+        Constants.min_account_age = days
+        await entry.commit()
+
+        await ctx.reply(
+            'Successfully made the minimum account age '
+            f'that someone must be in order to join the server `{days}` days.'
+        )
 
 
 def setup(bot: Okiyu):

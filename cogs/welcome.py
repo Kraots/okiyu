@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from dateutil.relativedelta import relativedelta
 
 import disnake
 from disnake.ext import commands, tasks
@@ -37,7 +38,24 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener('on_member_join')
     async def on_member_join(self, member: disnake.Member):
-        if member.guild.id != 938115625073639425:  # Only do something if it happens in the actual okiyu server.
+        entry: utils.Constants = await utils.Constants.get()
+        days_ago = datetime.now(timezone.utc) - relativedelta(days=entry.min_account_age)
+        if member.created_at > days_ago:
+            await utils.try_dm(member, 'Your account is too new to be allowed in the server.')
+            await member.ban(reason='Account too new.')
+            return await utils.log(
+                self.bot.webhooks['mod_logs'],
+                title='[BAN]',
+                fields=[
+                    ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
+                    ('Reason', 'Account too new.'),
+                    ('Account Created', utils.human_timedelta(member.cerated_at, accuracy=7)),
+                    ('By', f'{self.bot.user.mention} (`{self.bot.user.id}`)'),
+                    ('At', utils.format_dt(datetime.now(), 'F')),
+                ]
+            )
+
+        if member.guild.id != 938115625073639425:  # Only continue if it's actual okiyu server.
             return
 
         guild = self.bot.get_guild(938115625073639425)

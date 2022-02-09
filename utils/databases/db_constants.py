@@ -14,6 +14,7 @@ class Constants(Document, GetDoc):
     id = IntField(attribute='_id', default=938097236024360960)
     disabled_commands = ListField(StrField(), default=[])
     calculator_ternary = BooleanField(default=False)
+    min_account_age = IntField(default=7)
 
     class Meta:
         collection_name = 'Constants'
