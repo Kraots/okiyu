@@ -198,13 +198,18 @@ class Developer(commands.Cog):
         await ctx.reply(embed=em)
 
     @commands.command(aliases=('accountage',))
-    async def accage(self, ctx: Context, days: int = 7):
+    async def accage(self, ctx: Context, days: int = None):
         """Set the minimum account age one must be in order to be allowed in the server.
 
-        `days` **->** The minimum amount of days the user's account's age must be. Defaults to 7.
+        `days` **->** The minimum amount of days the user's account's age must be. If not given it will show the current minimum amount of days set.
         """
 
         entry: Constants = await Constants.get()
+        if days is None:
+            return await ctx.reply(
+                f'The current minimum acount age is set to `{entry.min_account_age}` days.'
+            )
+
         Constants.min_account_age = days
         await entry.commit()
 
