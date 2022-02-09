@@ -63,7 +63,7 @@ class Welcome(commands.Cog):
         alt_guild = self.bot.get_guild(938886845314510978)  # The 2nd okiyu guild just for bumping to get members
         mem = alt_guild.get_member(member.id)
         if mem is not None:
-            await mem.kick()
+            await mem.ban()
 
         if member.bot:
             bot_role = guild.get_role(utils.ExtraRoles.bot)
