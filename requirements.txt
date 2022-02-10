@@ -17,3 +17,4 @@ wikipedia
 pytz
 matplotlib
 simpleeval
+dateparser
