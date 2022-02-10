@@ -906,7 +906,7 @@ class Misc(commands.Cog):
         await ctx.send_help('github')
 
     @base_github.command(name='source', aliases=('src',))
-    async def github_source(self, ctx: Context, *, command: str):
+    async def github_source(self, ctx: Context, *, command: str = None):
         """Get the source on github for a command the bot has.
 
         `command` **->** The command you want to see. Can either be a prefixed command or a slash command.
@@ -918,13 +918,14 @@ class Misc(commands.Cog):
             return
 
         src = utils.GithubSource(self.bot.user.display_avatar)
-        if command.lower() == 'help':
-            cmd = command
-        elif command.lower().startswith(('jsk', 'jishaku')):
-            url = 'https://github.com/Kraots/jishaku'
-            return await ctx.reply(f'Sorry! That is a module\'s command. Here\'s the link to its github repo:\n<{url}>')
-        else:
-            cmd = self.bot.get_command(command) or self.bot.get_slash_command(command)
+        if command is not None:
+            if command.lower() == 'help':
+                cmd = command
+            elif command.lower().startswith(('jsk', 'jishaku')):
+                url = 'https://github.com/Kraots/jishaku'
+                return await ctx.reply(f'Sorry! That is a module\'s command. Here\'s the link to its github repo:\n<{url}>')
+            else:
+                cmd = self.bot.get_command(command) or self.bot.get_slash_command(command)
         data = await src.get_source(cmd)
         await ctx.better_reply(embed=data.embed, view=data.view)
 
