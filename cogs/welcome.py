@@ -49,7 +49,7 @@ class Welcome(commands.Cog):
                 fields=[
                     ('Member', f'{utils.format_name(member)} (`{member.id}`)'),
                     ('Reason', 'Account too new.'),
-                    ('Account Created', utils.human_timedelta(member.cerated_at, accuracy=7)),
+                    ('Account Created', utils.human_timedelta(member.created_at, accuracy=7)),
                     ('By', f'{self.bot.user.mention} (`{self.bot.user.id}`)'),
                     ('At', utils.format_dt(datetime.now(), 'F')),
                 ]
