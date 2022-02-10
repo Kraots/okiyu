@@ -104,7 +104,7 @@ class ViewIntro(disnake.ui.View):
 
 
 class Misc(commands.Cog):
-    """Miscellaneous commands."""
+    """Miscellaneous commands, basically commands that i have no fucking idea where to fucking put so they just come in this category."""
     def __init__(self, bot: Okiyu):
         self.bot = bot
         self.github_client = utils.GithubClient(bot)
@@ -901,7 +901,6 @@ class Misc(commands.Cog):
         await ctx.send_help('github')
 
     @base_github.command(name='source', aliases=('src',))
-    @commands.is_owner()  # Owner only for now, maybe if i decide to make the bot's source public in the future it won't be anymore
     async def github_source(self, ctx: Context, *, command: str):
         """Get the source on github for a command the bot has.
 
