@@ -127,11 +127,12 @@ class GithubClient:
 
         em = disnake.Embed(
             title=name,
-            description=data['bio'],
             color=utils.blurple,
             url=data['html_url'],
             timestamp=created_at,
         )
+        if data['bio']:
+            em.description = data['bio']
 
         em.set_footer(text='Joined')
 
