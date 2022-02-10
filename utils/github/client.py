@@ -95,11 +95,25 @@ class GithubClient:
         return js['html_url']
 
     async def get_user_info(self, username: str) -> disnake.Embed:
-        data = await self.github_request('GET', 'users/' + username)
-        if isinstance(data, str):
+        """Tries to fetch the github data of an user and returns an embed with it.
+
+        Parameters
+        ----------
+            username: :class:`str`
+                The username of the user to search for on github.
+
+        Returns
+        -------
+            :class:`disnake.Embed`
+                The embed with the retrieved data.
+        """
+
+        try:
+            data = await self.github_request('GET', 'users/' + username)
+        except GithubError as e:
             em = disnake.Embed(
                 title='Error!',
-                description=data,
+                description=''.join(e.args),
                 color=utils.red
             )
             return em
@@ -126,11 +140,11 @@ class GithubClient:
         em.add_field(
             name='Public Repos',
             value=data['public_repos'] or 'No public repos',
-            inline=True,
+            inline=False,
         )
 
         if data['public_gists']:
-            em.add_field(name='Public Gists', value=data['public_gists'], inline=True)
+            em.add_field(name='Public Gists', value=data['public_gists'], inline=False)
 
         value = [
             'Followers: ' + str(data['followers'])
@@ -143,28 +157,42 @@ class GithubClient:
             else 'Following: not following anyone'
         )
 
-        em.add_field(name='Followers/Following', value='\n'.join(value), inline=True)
+        em.add_field(name='Followers/Following', value='\n'.join(value), inline=False)
 
         if data['location']:
-            em.add_field(name='Location', value=data['location'], inline=True)
+            em.add_field(name='Location', value=data['location'], inline=False)
         if data['company']:
-            em.add_field(name='Company', value=data['company'], inline=True)
+            em.add_field(name='Company', value=data['company'], inline=False)
         if data['blog']:
             blog = data['blog']
             if blog.startswith('https://') or blog.startswith('http://'):
                 pass
             else:
                 blog = 'https://' + blog
-            em.add_field(name='Website', value=blog, inline=True)
+            em.add_field(name='Website', value=blog, inline=False)
 
         return em
 
     async def get_repo_info(self, repo_name: str) -> disnake.Embed:
-        data = await self.github_request('GET', 'repos/' + repo_name)
-        if isinstance(data, str):
+        """Tries to fetch the github data of a repository and returns an embed with it.
+
+        Parameters
+        ----------
+            repo_name: :class:`str`
+                The name of the repository to search for on github.
+
+        Returns
+        -------
+            :class:`disnake.Embed`
+                The embed with the retrieved data.
+        """
+
+        try:
+            data = await self.github_request('GET', 'repos/' + repo_name)
+        except GithubError as e:
             em = disnake.Embed(
                 title='Error!',
-                description=data,
+                description=''.join(e.args),
                 color=utils.red
             )
             return em
@@ -205,11 +233,11 @@ class GithubClient:
 
         em.add_field(name='Language', value=data['language'] or 'No language')
         em.add_field(
-            name='Stars', value=data['stargazers_count'] or 'No Stars', inline=True
+            name='Stars', value=data['stargazers_count'] or 'No Stars', inline=False
         )
         em.add_field(
-            name='Watchers', value=data['watchers_count'] or 'No watchers', inline=True
+            name='Watchers', value=data['watchers_count'] or 'No watchers', inline=False
         )
-        em.add_field(name='Forks', value=data['forks_count'] or 'No forks', inline=True)
+        em.add_field(name='Forks', value=data['forks_count'] or 'No forks', inline=False)
 
         return em
