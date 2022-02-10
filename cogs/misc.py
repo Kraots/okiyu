@@ -894,7 +894,13 @@ class Misc(commands.Cog):
 
         await ctx.reply(f'I have randomly chosen `{pick}`')
 
-    @commands.command(name='source', aliases=('src',))
+    @commands.command(name='github', hidden=True, invoke_without_command=True, case_insensitive=True)
+    async def base_github(self, ctx: Context):
+        """Base github command."""
+
+        await ctx.send_help('github')
+
+    @base_github.command(name='source', aliases=('src',))
     @commands.is_owner()  # Owner only for now, maybe if i decide to make the bot's source public in the future it won't be anymore
     async def github_source(self, ctx: Context, *, command: str):
         """Get the source on github for a command the bot has.
@@ -917,6 +923,36 @@ class Misc(commands.Cog):
             cmd = self.bot.get_command(command) or self.bot.get_slash_command(command)
         data = await src.get_source(cmd)
         await ctx.better_reply(embed=data.embed, view=data.view)
+
+    @base_github.command(name='user')
+    async def github_user(self, ctx: Context, *, username: str):
+        """Search for a github user's account via its username.
+
+        `username` **->** The user's github name.
+
+        **NOTE:** This command can only be used in <#938119528464916530>
+        """
+
+        if await ctx.check_channel() is False:
+            return
+
+        em = await self.github_client.get_user_info(username)
+        await ctx.better_reply(embed=em)
+
+    @base_github.command(name='repository', aliases=('repo',))
+    async def github_repo(self, ctx: Context, *, repo: str):
+        """Search for a github repository via the following format: `RepoOwnerUsername/RepoName`
+
+        `repo` **->** The repo to search for.
+
+        **NOTE:** This command can only be used in <#938119528464916530>
+        """
+
+        if await ctx.check_channel() is False:
+            return
+
+        em = await self.github_client.get_repo_info(repo)
+        await ctx.better_reply(embed=em)
 
     @staticmethod
     @utils.run_in_executor
