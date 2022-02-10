@@ -894,7 +894,12 @@ class Misc(commands.Cog):
 
         await ctx.reply(f'I have randomly chosen `{pick}`')
 
-    @commands.group(name='github', hidden=True, invoke_without_command=True, case_insensitive=True)
+    @commands.group(
+        name='github',
+        aliases=('gh',),
+        hidden=True,
+        invoke_without_command=True,
+        case_insensitive=True)
     async def base_github(self, ctx: Context):
         """Base github command."""
 
