@@ -894,7 +894,12 @@ class Misc(commands.Cog):
 
         await ctx.reply(f'I have randomly chosen `{pick}`')
 
-    @commands.group(name='github', hidden=True, invoke_without_command=True, case_insensitive=True)
+    @commands.group(
+        name='github',
+        aliases=('gh',),
+        hidden=True,
+        invoke_without_command=True,
+        case_insensitive=True)
     async def base_github(self, ctx: Context):
         """Base github command."""
 
@@ -923,7 +928,7 @@ class Misc(commands.Cog):
         data = await src.get_source(cmd)
         await ctx.better_reply(embed=data.embed, view=data.view)
 
-    @base_github.command(name='user')
+    @base_github.command(name='user', aliases=('usr',))
     async def github_user(self, ctx: Context, *, username: str):
         """Search for a github user's account via its username.
 
