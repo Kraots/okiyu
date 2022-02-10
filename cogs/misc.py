@@ -920,13 +920,13 @@ class Misc(commands.Cog):
         src = utils.GithubSource(self.bot.user.display_avatar)
         if command is not None:
             if command.lower() == 'help':
-                cmd = command
+                pass
             elif command.lower().startswith(('jsk', 'jishaku')):
                 url = 'https://github.com/Kraots/jishaku'
                 return await ctx.reply(f'Sorry! That is a module\'s command. Here\'s the link to its github repo:\n<{url}>')
             else:
-                cmd = self.bot.get_command(command) or self.bot.get_slash_command(command)
-        data = await src.get_source(cmd)
+                command = self.bot.get_command(command) or self.bot.get_slash_command(command)
+        data = await src.get_source(command)
         await ctx.better_reply(embed=data.embed, view=data.view)
 
     @base_github.command(name='user', aliases=('usr',))
