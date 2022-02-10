@@ -94,8 +94,8 @@ class GithubClient:
         js = await self.github_request('POST', 'gists', data=data, headers=headers)
         return js['html_url']
 
-    async def get_user_info(self, url: str) -> disnake.Embed:
-        data = await self.github_request('GET', url)
+    async def get_user_info(self, username: str) -> disnake.Embed:
+        data = await self.github_request('GET', 'users/' + username)
         if isinstance(data, str):
             em = disnake.Embed(
                 title='Error!',
@@ -159,8 +159,8 @@ class GithubClient:
 
         return em
 
-    async def get_repo_info(self, url: str) -> disnake.Embed:
-        data = await self.github_request('GET', url)
+    async def get_repo_info(self, repo_name: str) -> disnake.Embed:
+        data = await self.github_request('GET', 'repos/' + repo_name)
         if isinstance(data, str):
             em = disnake.Embed(
                 title='Error!',
