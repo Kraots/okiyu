@@ -140,7 +140,7 @@ class GithubClient:
 
         em.add_field(
             name='Public Repos',
-            value=data['public_repos'] or 'No public repos',
+            value=data['public_repos'] or '0',
             inline=False,
         )
 
@@ -150,12 +150,12 @@ class GithubClient:
         value = [
             'Followers: ' + str(data['followers'])
             if data['followers']
-            else 'Followers: no followers'
+            else 'Followers: 0'
         ]
         value.append(
             'Following: ' + str(data['following'])
             if data['following']
-            else 'Following: not following anyone'
+            else 'Following: 0'
         )
 
         em.add_field(name='Followers/Following', value='\n'.join(value), inline=False)
@@ -232,13 +232,13 @@ class GithubClient:
 
         em.description = description
 
-        em.add_field(name='Language', value=data['language'] or 'No language')
+        em.add_field(name='Language', value=data['language'] or 'None')
         em.add_field(
-            name='Stars', value=data['stargazers_count'] or 'No Stars', inline=False
+            name='Stars', value=data['stargazers_count'] or '0', inline=False
         )
         em.add_field(
-            name='Watchers', value=data['watchers_count'] or 'No watchers', inline=False
+            name='Watchers', value=data['watchers_count'] or '0', inline=False
         )
-        em.add_field(name='Forks', value=data['forks_count'] or 'No forks', inline=False)
+        em.add_field(name='Forks', value=data['forks_count'] or '0', inline=False)
 
         return em
