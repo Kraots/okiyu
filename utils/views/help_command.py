@@ -1,6 +1,7 @@
-from typing import Any, Dict, List, Optional
-import itertools
 import inspect
+import itertools
+from textwrap import shorten
+from typing import Any, Dict, List, Optional
 
 import disnake
 from disnake.ext import commands
@@ -60,6 +61,8 @@ class HelpSelectMenu(disnake.ui.Select['HelpMenu']):
             if not commands:
                 continue
             description = cog.description.split('\n', 1)[0] or None
+            if description is not None:
+                description = shorten(description, 100)
             emoji = getattr(cog, 'display_emoji', None)
             self.add_option(
                 label=cog.qualified_name + ' [' + str(len(list(cog.walk_commands()))) + ']',

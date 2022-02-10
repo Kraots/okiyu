@@ -1,3 +1,4 @@
+from textwrap import shorten
 from datetime import datetime
 
 import disnake
@@ -18,8 +19,7 @@ class SnipesPageEntry:
     def __init__(self, entry: disnake.Message, index: int):
 
         content = entry.content or '<Only has image>'
-        if len(content) > 45:
-            content = content[0:45] + '[...]'
+        content = shorten(content, 50)
         self.result = f'`{index + 1}.` *{content}* **-** __{utils.format_name(entry.author)}__'
 
     def __str__(self):

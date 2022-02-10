@@ -1,4 +1,5 @@
 import re
+from textwrap import shorten
 
 import disnake
 from disnake.ext import menus
@@ -22,9 +23,7 @@ class UrbanDictionaryPageSource(menus.ListPageSource):
             return f'[{word}](http://{word.replace(" ", "-")}.urbanup.com)'
 
         ret = regex.sub(repl, definition)
-        if len(ret) >= 2048:
-            return ret[0:2000] + ' [...]'
-        return ret
+        return shorten(ret, 2000)
 
     async def format_page(self, menu, entry):
         maximum = self.get_max_pages()
