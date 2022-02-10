@@ -929,7 +929,7 @@ class Misc(commands.Cog):
         data = await src.get_source(cmd)
         await ctx.better_reply(embed=data.embed, view=data.view)
 
-    @base_github.command(name='user')
+    @base_github.command(name='user', aliases=('usr',))
     async def github_user(self, ctx: Context, *, username: str):
         """Search for a github user's account via its username.
 
