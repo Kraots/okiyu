@@ -11,6 +11,8 @@ from datetime import datetime, timezone
 import disnake
 from disnake.ext import commands
 
+from serpapi import GoogleSearch
+
 import utils
 from utils import (
     Context,
@@ -1362,6 +1364,30 @@ class Misc(commands.Cog):
         source.embed.title = 'Here\'s all the boosters of `Okiyu`'
         pag = utils.RoboPages(source, ctx=ctx, compact=True)
         await pag.start(ref=True)
+
+    @commands.command(name='reverseimagesearch', aliases=('reverseimage', 'reverse', 'imagesearch'))
+    async def reverse_image_search(self, ctx: Context, *, url: str):
+        """Do a reverse image search with the google's reverse image search engine from the given url.
+
+        `url` **->** The url with the image to search for.
+        """
+
+        search = GoogleSearch(dict(
+            engine='google_reverse_image',
+            image_url=url,
+            api_key=self.bot.serpapi_key
+        ))
+        result = search.get_dict()
+        image = result.get('inline_images')
+        if image is None:
+            return await ctx.reply('Could not find an image from that url.')
+        await ctx.reply(
+            embed=disnake.Embed(
+                title='Match found',
+                description=f'Click [`here`]({image[0]["link"]}) to see your reverse image search result.',
+                color=utils.blurple
+            )
+        )
 
 
 def setup(bot: Okiyu):

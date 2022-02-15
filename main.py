@@ -44,6 +44,8 @@ class Okiyu(commands.Bot):
 
         self.calc_ternary = False
 
+        self.serpapi_key = os.getenv('SERPAPI_KEY')
+
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'
         os.environ['JISHAKU_FORCE_PAGINATOR'] = '1'
