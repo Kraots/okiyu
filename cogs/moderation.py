@@ -1191,7 +1191,7 @@ class Moderation(commands.Cog):
         `question` **->** The question to add.
         """
 
-        question = question[0].uppercase() + question[1:]  # Make sure that the first letter is always uppercase.
+        question = question[0].upper() + question[1:]  # Make sure that the first letter is always uppercase.
         entry: utils.Constants = await utils.Constants.get()
         entry.random_questions.append(question)
         await entry.commit()
