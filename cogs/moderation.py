@@ -1215,7 +1215,7 @@ class Moderation(commands.Cog):
         if index <= -1:
             return await ctx.reply('The index cannot be 0 or lower.')
         entry: utils.Constants = await utils.Constants.get()
-        if (index + 1) >= len(entry.random_questions):
+        if (index + 1) > len(entry.random_questions):
             return await ctx.reply('No question found at the given index.')
 
         entry.random_questions.pop(index)
