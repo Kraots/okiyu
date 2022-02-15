@@ -1171,7 +1171,7 @@ class Moderation(commands.Cog):
         """Shows all the currently added questions."""
 
         entry: utils.Constants = await utils.Constants.get()
-        if len(entry.questions) == 0:
+        if len(entry.random_questions) == 0:
             return await ctx.reply('There are no currently added questions.')
 
         questions = []
