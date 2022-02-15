@@ -1232,6 +1232,17 @@ class Moderation(commands.Cog):
         if len(entry.random_questions) == 0:
             return await ctx.reply('There are no currently added question to clear.')
 
+        view = utils.ConfirmView(ctx)
+        view.message = await ctx.reply(
+            'Are you sure you want to clear the questions?',
+            view=view
+        )
+        await view.wait()
+        if view.response is False:
+            return await view.message.edit(
+                content='The questions have not been cleared.'
+            )
+
         entry.random_questions = []
         await entry.commit()
 
