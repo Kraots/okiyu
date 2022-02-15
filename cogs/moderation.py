@@ -1223,6 +1223,23 @@ class Moderation(commands.Cog):
 
         await ctx.reply(f'> {ctx.agree} Successfully removed the question.')
 
+    @base_random_question.command(name='clear')
+    @is_owner(owner_only=True)
+    async def rand_q_clear(self, ctx: Context):
+        """Clears all questions."""
+
+        entry: utils.Constants = await utils.Constants.get()
+        if len(entry.random_questions) == 0:
+            return await ctx.reply('There are no currently added question to clear.')
+
+        entry.random_questions = []
+        await entry.commit()
+
+        await ctx.reply(
+            'Successfully cleared the random questions. '
+            'There are now no random questions added anymore.'
+        )
+
 
 def setup(bot: Okiyu):
     bot.add_cog(Moderation(bot))
