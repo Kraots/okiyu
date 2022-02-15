@@ -16,5 +16,7 @@ class Constants(Document, GetDoc):
     calculator_ternary = BooleanField(default=False)
     min_account_age = IntField(default=7)
 
+    random_questions = ListField(StrField(), default=[])
+
     class Meta:
         collection_name = 'Constants'

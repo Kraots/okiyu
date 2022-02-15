@@ -1160,6 +1160,66 @@ class Moderation(commands.Cog):
 
         await ctx.reply('Successfully **cleared** the bad words list.')
 
+    @commands.group(
+        name='questions',
+        aliases=('question', 'randomquestion', 'randquestion', 'q'),
+        invoke_without_command=True,
+        case_insensitive=True
+    )
+    @is_mod()
+    async def base_random_question(self, ctx: Context):
+        """Shows all the currently added questions."""
+
+        entry: utils.Constants = await utils.Constants.get()
+        questions = []
+        for i, question in enumerate(entry.random_questions):
+            questions.append(f'`{i + 1}.` {question}')
+
+        pag = utils.RawSimplePages(ctx, questions, compact=True)
+        pag.embed.title = 'Here\'s all the currently added questions:'
+
+        await pag.start()
+
+    @base_random_question.command(name='add')
+    @is_mod()
+    async def rand_q_add(self, ctx: Context, *, question: str):
+        """Adds a random question.
+
+        `question` **->** The question to add.
+        """
+
+        question = question[0].uppercase() + question[1:]  # Make sure that the first letter is always uppercase.
+        entry: utils.Constants = await utils.Constants.get()
+        entry.random_questions.append(question)
+        await entry.commit()
+
+        await ctx.reply(f'> {ctx.agree} Succesfully added the question.')
+
+    @base_random_question.command(name='remove', aliases=('delete',))
+    @is_mod()
+    async def rand_q_remove(self, ctx: Context, index: str):
+        """Removes a random question.
+
+        `question` **->** The question to remove.
+        """
+
+        index = utils.format_amount(index)
+        try:
+            index = int(index) - 1
+        except ValueError:
+            return await ctx.reply('The index must be a number.')
+
+        if index == 0:
+            return await ctx.reply('The index cannot be 0 or lower.')
+        entry: utils.Constants = await utils.Constants.get()
+        if (index + 1) >= len(entry.random_questions):
+            return await ctx.reply('No question found at the given index.')
+
+        entry.random_questions.pop(index)
+        await entry.commit()
+
+        await ctx.reply(f'> {ctx.agree} Successfully removed the question.')
+
 
 def setup(bot: Okiyu):
     bot.add_cog(Moderation(bot))
