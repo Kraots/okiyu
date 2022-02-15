@@ -1212,7 +1212,7 @@ class Moderation(commands.Cog):
         except ValueError:
             return await ctx.reply('The index must be a number.')
 
-        if index == 0:
+        if index <= -1:
             return await ctx.reply('The index cannot be 0 or lower.')
         entry: utils.Constants = await utils.Constants.get()
         if (index + 1) >= len(entry.random_questions):
