@@ -238,6 +238,12 @@ class Moderation(commands.Cog):
             reason=f'{utils.format_name(ctx.author)} ({ctx.author.id}): "{reason}"',
             delete_message_days=0
         )
+        entry: utils.Mutes = await utils.Mutes.get(member.id)
+        if entry is not None:
+            # If the user is stored in the mutes database,
+            # delete their entry since it's pretty much pointless
+            # for them to still be in there when they can't join back.
+            await entry.delete()
         await ctx.send(f'> 👌 🔨 Banned `{member}` for **{reason}**')
         await utils.log(
             self.bot.webhooks['mod_logs'],
