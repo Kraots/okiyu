@@ -365,11 +365,14 @@ class EmbedPaginator(disnake.ui.View):
         ctx: Context,
         embeds: List[disnake.Embed],
         *,
-        timeout: float = 180.0
+        timeout: float = 180.0,
+        ref: bool = False
     ):
         super().__init__(timeout=timeout)
         self.ctx: Context = ctx
         self.embeds: List[disnake.Embed] = embeds
+        self.ref = ref
+
         self.current_page = 0
 
     async def interaction_check(self, interaction: MessageInteraction) -> bool:
@@ -441,4 +444,8 @@ class EmbedPaginator(disnake.ui.View):
 
         embed = self.embeds[0]
         embed.set_footer(text=f'Page 1/{len(self.embeds)}')
-        self.message = await self.ctx.send(embed=embed, view=self)
+        if self.ref is False:
+            method = self.ctx.send
+        elif self.ref is True:
+            method = self.ctx.better_reply
+        self.message = await method(embed=embed, view=self)
