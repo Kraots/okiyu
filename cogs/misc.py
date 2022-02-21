@@ -1409,7 +1409,7 @@ class Misc(commands.Cog):
             embeds.append(embed)
             
         paginator = utils.EmbedPaginator(ctx, embeds)
-        await paginator.start()
+        await paginator.start(ref=True)
 
 
 def setup(bot: Okiyu):
