@@ -1389,6 +1389,28 @@ class Misc(commands.Cog):
             )
         )
 
+    @commands.command(name='enlarge', aliases=('ee',))
+    async def enlarge_emoji(self, ctx: Context, emojis: commands.Greedy[disnake.PartialEmoji]):
+        """Enlarges the given emojis. Can be either one or more.
+
+        `emoji` **->** The emojis to enlarge.
+        """
+
+        if len(emojis) == 0:
+            return await ctx.reply('No emojis found.')
+        
+        embeds = []
+        for emoji in emojis:
+            embed = disnake.Embed(
+                title=f'Showing emoji `{emoji.name}`',
+                color=utils.blurple
+            )
+            embed.set_image(emoji.url)
+            embeds.append(embed)
+            
+        paginator = utils.EmbedPaginator(ctx, embeds)
+        await paginator.start()
+
 
 def setup(bot: Okiyu):
     bot.add_cog(Misc(bot))
