@@ -365,13 +365,11 @@ class EmbedPaginator(disnake.ui.View):
         ctx: Context,
         embeds: List[disnake.Embed],
         *,
-        timeout: float = 180.0,
-        ref: bool = False
+        timeout: float = 180.0
     ):
         super().__init__(timeout=timeout)
         self.ctx: Context = ctx
         self.embeds: List[disnake.Embed] = embeds
-        self.ref = ref
 
         self.current_page = 0
 
@@ -436,7 +434,7 @@ class EmbedPaginator(disnake.ui.View):
         await interaction.delete_original_message()
         self.stop()
 
-    async def start(self):
+    async def start(self, *, ref: bool = False):
         """Start paginating over the embeds."""
 
         if len(self.embeds) == 1:
@@ -444,8 +442,8 @@ class EmbedPaginator(disnake.ui.View):
 
         embed = self.embeds[0]
         embed.set_footer(text=f'Page 1/{len(self.embeds)}')
-        if self.ref is False:
+        if ref is False:
             method = self.ctx.send
-        elif self.ref is True:
+        elif ref is True:
             method = self.ctx.better_reply
         self.message = await method(embed=embed, view=self)
