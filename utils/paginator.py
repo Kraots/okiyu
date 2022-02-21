@@ -437,13 +437,14 @@ class EmbedPaginator(disnake.ui.View):
     async def start(self, *, ref: bool = False):
         """Start paginating over the embeds."""
 
-        if len(self.embeds) == 1:
-            return await self.ctx.send(embed=self.embeds[0])
-
-        embed = self.embeds[0]
-        embed.set_footer(text=f'Page 1/{len(self.embeds)}')
         if ref is False:
             method = self.ctx.send
         elif ref is True:
             method = self.ctx.better_reply
+
+        if len(self.embeds) == 1:
+            return await method(embed=self.embeds[0])
+
+        embed = self.embeds[0]
+        embed.set_footer(text=f'Page 1/{len(self.embeds)}')
         self.message = await method(embed=embed, view=self)
