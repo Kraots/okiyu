@@ -1374,7 +1374,7 @@ class Misc(commands.Cog):
 
         if url is None:
             if ctx.replied_reference is not None:
-                reference = await self.bot.reference_to_messsage(ctx.replied_reference)
+                reference = await self.bot.reference_to_message(ctx.replied_reference)
                 if reference:
                     if reference.attachments:
                         url = reference.attachments[0].url
@@ -1414,7 +1414,7 @@ class Misc(commands.Cog):
 
         if len(emojis) == 0:
             if ctx.replied_reference is not None:
-                reference = await self.bot.reference_to_messsage(ctx.replied_reference)
+                reference = await self.bot.reference_to_message(ctx.replied_reference)
                 if reference:
                     _emojis = utils.CUSTOM_EMOJI_REGEX.findall(reference.content)
                     if _emojis:
