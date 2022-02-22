@@ -1366,11 +1366,26 @@ class Misc(commands.Cog):
         await pag.start(ref=True)
 
     @commands.command(name='reverseimagesearch', aliases=('reverseimage', 'reverse', 'imagesearch'))
-    async def reverse_image_search(self, ctx: Context, *, url: str):
+    async def reverse_image_search(self, ctx: Context, *, url: str = None):
         """Do a reverse image search with the google's reverse image search engine from the given url.
 
-        `url` **->** The url with the image to search for.
+        `url` **->** The url with the image to search for. It's optional and if you don't give it but reply to a message instead it will firstly try to get the first attachment from that image, and if not found it will try looking for links in that message.
         """
+
+        if url is None:
+            if ctx.replied_reference is not None:
+                reference = await self.bot.reference_to_messsage(ctx.replied_reference)
+                if reference.attachments:
+                    url = reference.attachments[0].url
+                else:
+                    res = utils.URL_REGEX.findall(reference.content)
+                    if res:
+                        for u in res:
+                            if u.endswith(('.png', '.gif', '.jpeg', '.jpg')):
+                                url = u
+                                break
+            else:
+                return await ctx.reply('You must either give the url or reply to a message.')
 
         search = GoogleSearch(dict(
             engine='google_reverse_image',
@@ -1380,7 +1395,7 @@ class Misc(commands.Cog):
         result = search.get_dict()
         image = result.get('inline_images')
         if image is None:
-            return await ctx.reply('Could not find an image from that url.')
+            return await ctx.reply('Could not find an image.')
         await ctx.reply(
             embed=disnake.Embed(
                 title='Match found',
