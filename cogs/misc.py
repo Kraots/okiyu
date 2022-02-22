@@ -1375,15 +1375,16 @@ class Misc(commands.Cog):
         if url is None:
             if ctx.replied_reference is not None:
                 reference = await self.bot.reference_to_messsage(ctx.replied_reference)
-                if reference.attachments:
-                    url = reference.attachments[0].url
-                else:
-                    res = utils.URL_REGEX.findall(reference.content)
-                    if res:
-                        for u in res:
-                            if u.endswith(('.png', '.gif', '.jpeg', '.jpg')):
-                                url = u
-                                break
+                if reference:
+                    if reference.attachments:
+                        url = reference.attachments[0].url
+                    else:
+                        res = utils.URL_REGEX.findall(reference.content)
+                        if res:
+                            for u in res:
+                                if u.endswith(('.png', '.gif', '.jpeg', '.jpg')):
+                                    url = u
+                                    break
             else:
                 return await ctx.reply('You must either give the url or reply to a message.')
 
@@ -1408,12 +1409,24 @@ class Misc(commands.Cog):
     async def enlarge_emoji(self, ctx: Context, emojis: commands.Greedy[disnake.PartialEmoji]):
         """Enlarges the given emojis. Can be either one or more.
 
-        `emoji` **->** The emojis to enlarge.
+        `emoji` **->** The emojis to enlarge. It's optional and you can also reply to a message with this command to get the emojis from that message.
         """
 
         if len(emojis) == 0:
+            if ctx.replied_reference is not None:
+                reference = await self.bot.reference_to_messsage(ctx.replied_reference)
+                if reference:
+                    _emojis = utils.CUSTOM_EMOJI_REGEX.findall(reference.content)
+                    if _emojis:
+                        for emoji in _emojis:
+                            animated = True if emoji[0] != '' else False
+                            emojis.append(disnake.PartialEmoji(name=emoji[1], id=emoji[2], animated=animated))
+            else:
+                return await ctx.reply('Must either give the emojis either reply to a message that has them.')
+
+        if len(emojis) == 0:
             return await ctx.reply('No emojis found.')
-        
+
         embeds = []
         for emoji in emojis:
             embed = disnake.Embed(
