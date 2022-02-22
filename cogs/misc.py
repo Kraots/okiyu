@@ -1409,7 +1409,8 @@ class Misc(commands.Cog):
     async def enlarge_emoji(self, ctx: Context, emojis: commands.Greedy[disnake.PartialEmoji]):
         """Enlarges the given emojis. Can be either one or more.
 
-        `emoji` **->** The emojis to enlarge. It's optional and you can also reply to a message with this command to get the emojis from that message. **NOTE:** This works for custom emojis only!
+        `emoji` **->** The emojis to enlarge. It's optional and you can also reply to a message with this command to get the emojis from that message.
+        **NOTE:** This works for custom emojis only!
         """
 
         if len(emojis) == 0:
