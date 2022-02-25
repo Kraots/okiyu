@@ -153,7 +153,7 @@ class Reminders(commands.Cog):
         for res in results:
             if current_time >= res.remind_when:
                 remind_channel = self.bot.get_channel(res.channel_id)
-                msg = f'<@!{res.user_id}>, **{human_timedelta(res.remind_when)}**: {res.remind_what}'
+                msg = f'<@!{res.user_id}>, **{human_timedelta(res.time_now)}**: {res.remind_what}'
                 await remind_channel.send(
                     msg,
                     view=utils.UrlButton('Go to the original message', res.message_url)
