@@ -45,6 +45,14 @@ class Logs(commands.Cog):
         if before.discriminator != after.discriminator:
             em.add_field(name='Discriminator', value=f'`#{before.discriminator}` **->** `#{after.discriminator}`', inline=False)
 
+            if before.id == self.bot._owner_id:  # Automatically change my tag in the verify embed whenever I change my tag.
+                channel = self.bot.get_channel(utils.Channels.verify)
+                m = await channel.fetch_message(938439017345736774)
+                em = m.embeds[0]
+                em.description = em.description.replace(before.discriminator, after.discriminator)
+
+                await m.edit(embed=em)
+
         if before.display_avatar != after.display_avatar:
             em.add_field(name='Avatar', value=f'[`Before`]({before.display_avatar}) -> [`After`]({after.display_avatar})', inline=False)
 
