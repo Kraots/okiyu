@@ -236,6 +236,8 @@ class Featured(commands.Cog):
         """
 
         channel = channel or ctx.channel
+        if channel.id == utils.Channels.selfies and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('The snipe has been disabled in this channel.')
         entries = self.snipes.get(channel.id)
         if entries is None:
             return await ctx.reply(f'Nothing to snipe in {channel.mention}')
@@ -253,6 +255,8 @@ class Featured(commands.Cog):
         """
 
         channel = channel or ctx.channel
+        if channel.id == utils.Channels.selfies and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('The snipe has been disabled in this channel.')
         entries = self.snipes.get(channel.id)
         if entries is None:
             return await ctx.reply(f'No snipes in {channel.mention}')
@@ -266,6 +270,9 @@ class Featured(commands.Cog):
 
         `index` **->** The index of the deleted message.
         """
+
+        if ctx.channel.id == utils.Channels.selfies and ctx.author.id != self.bot._owner_id:
+            return await ctx.reply('The snipe has been disabled in this channel.')
 
         try:
             index = int(utils.format_amount(index))
