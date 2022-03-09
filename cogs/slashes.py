@@ -19,25 +19,25 @@ class RecommendModal(Modal):
                 label='Title',
                 placeholder='The World After The End',
                 style=TextInputStyle.short,
-                max_lenght=100
+                max_length=100
             ),
             TextInput(
                 label='Chapters/Episodes Count',
                 placeholder='11',
                 style=TextInputStyle.short,
-                max_lenght=15
+                max_length=15
             ),
             TextInput(
                 label='Source/Website to watch/read it on',
                 placeholder='https://www.asurascans.com/comics/the-world-after-the-end/',
                 style=TextInputStyle.short,
-                max_lenght=300
+                max_length=300
             ),
             TextInput(
                 label='Status',
                 placeholder='Ongoing',
                 style=TextInputStyle.short,
-                max_lenght=15
+                max_length=15
             )
         ]
         super().__init__(
