@@ -244,7 +244,7 @@ class Okiyu(commands.Bot):
         """
 
         async for entry in collection.find():
-            if entry.id not in guild.members:
+            if entry.id not in [m.id for m in guild.members]:
                 await entry.delete()
 
 
