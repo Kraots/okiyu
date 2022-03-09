@@ -51,20 +51,22 @@ class RecommendModal(Modal):
 
     async def callback(self, inter: ModalInteraction):
         channel = inter.guild.get_channel(951210058870558740)
-        values = inter.text_values.copy()
-        return await inter.send(str(values))
+        values_ = inter.text_values.values()
+        fields = ['Title', 'Chapters/Episodes Count', 'Source/Website to watch/read it on', 'Status']
+        values = zip(fields, values_)
         em = Embed(
             color=inter.author.color,
-            title=values['Title']
         )
-        del values['Title']
-
-        for k, v in values.items():
+        for k, v in values:
             em.add_field(
                 k,
                 v,
                 inline=False
             )
+        em.set_footer(
+            text=f'Recommendation by: {utils.format_name(inter.author)}',
+            icon_url=inter.author.display_avatar
+        )
         m = await channel.send(embed=em)
         await inter.send(
             'Recommendation succesfully submitted.',
