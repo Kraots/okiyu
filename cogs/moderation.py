@@ -35,7 +35,7 @@ class Moderation(commands.Cog):
             Channels.intros, Channels.roles, Channels.colours, Channels.birthdays,
             Channels.staff_chat, Channels.logs, Channels.messages_logs, Channels.moderation_logs,
             Channels.github, Channels.bot_commands, Channels.bump, Channels.confesscord,
-            Channels.verify
+            Channels.verify, Channels.recommendations
         )
 
         self.check_mutes.start()
