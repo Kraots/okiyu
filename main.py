@@ -143,6 +143,13 @@ class Okiyu(commands.Bot):
             self.webhooks['message_logs'] = message_logs
             self.webhooks['welcome_webhook'] = welcome_webhook
 
+        # We do this cleanup in case the on_member_remove didn't trigger or
+        # if the bot was offline during the time where the member left.
+        guild = self.get_guild(938115625073639425)
+        await self.collection_cleanup(guild, utils.Intro)
+        await self.collection_cleanup(guild, utils.Level)
+        await self.collection_cleanup(guild, utils.AFK)
+
         print('Bot is ready!')
 
     async def process_commands(self, message):
@@ -218,6 +225,27 @@ class Okiyu(commands.Bot):
 
     async def get_context(self, message, *, cls=utils.Context):
         return await super().get_context(message, cls=cls)
+
+    @staticmethod
+    async def collection_cleanup(guild: disnake.Guild, collection) -> None:
+        """Searches and deletes every single document that is related to a user that isn't in okiyu anymore.
+
+        Parameters
+        ----------
+            guild: :class:`.Guild`
+                The guild to check for.
+
+            collection: :class:`.AsyncIOMotorCollection`
+                The collection object from which to delete.
+
+        Return
+        ------
+            `None`
+        """
+
+        async for entry in collection.find():
+            if entry.id not in guild.members:
+                await entry.delete()
 
 
 Okiyu().run(TOKEN)
