@@ -1,9 +1,8 @@
 from disnake.ext import commands
-from disnake.ui import Modal
+from disnake.ui import Modal, TextInput
 from disnake import (
     AppCmdInter,
     TextInputStyle,
-    TextInput,
     ModalInteraction,
     Embed
 )
