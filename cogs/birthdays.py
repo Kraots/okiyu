@@ -127,7 +127,7 @@ class Birthdays(commands.Cog):
                 f'{ctx.denial} The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
                 'Doing `!help birthday set` will show you the correct format.'
             )
-        if birthday_date.year not in range(2005, 2001):
+        if birthday_date.year not in range(2001, 2006):
             view = utils.ConfirmView(ctx)
             view.message = await ctx.reply(
                 f'Are you sure you were born in the year **{birthday_date.year}**?',
