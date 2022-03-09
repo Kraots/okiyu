@@ -86,6 +86,7 @@ class Channels(NamedTuple):
     photos = 938118803890503700
     videos = 938118818226663445
 
+    recommendations = 951210058870558740
     confesscord = 938135131728785430
     quotes = 940329073656352852
     bump = 938135144848564224
@@ -111,7 +112,8 @@ class Channels(NamedTuple):
         gaming, selfies, artwork, photos, videos,
         confesscord, bump, no_mic_chat, music_commands, music,
         lobby_1, lobby_2, sleep, staff_chat, logs,
-        messages_logs, moderation_logs, github, bot_commands, verify
+        messages_logs, moderation_logs, github, bot_commands, verify,
+        recommendations
     )
 
 
