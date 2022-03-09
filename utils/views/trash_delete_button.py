@@ -1,7 +1,7 @@
 from disnake import PartialEmoji, ButtonStyle, MessageInteraction, HTTPException
 from disnake.ui import Button, View, button
 
-from ..helpers import try_delete
+from ..helpers import try_delete, StaffRoles
 
 __all__ = ('TrashButtonDelete',)
 
@@ -20,4 +20,6 @@ class TrashButtonDelete(View):
             await inter.response.defer()
         except HTTPException:
             pass
-        await try_delete(inter.message)
+        if inter.author.id == self.bot._owner_id or \
+                any(r.id in StaffRoles.all for r in inter.author.roles):
+            await try_delete(inter.message)
