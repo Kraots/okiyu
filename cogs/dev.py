@@ -218,6 +218,16 @@ class Developer(commands.Cog):
             f'that someone must be in order to join the server `{days}` days.'
         )
 
+    @commands.Cog.listener('on_button_click')
+    async def check_for_trash_delete(self, inter: disnake.MessageInteraction):
+        if inter.component.custom_id == 'trash-button-delete':
+            if any(r.id in utils.StaffRoles.all for r in inter.author.roles):
+                try:
+                    await inter.response.defer()
+                except disnake.HTTPException:
+                    pass
+                await utils.try_delete(inter.message)
+
 
 def setup(bot: Okiyu):
     bot.add_cog(Developer(bot))
