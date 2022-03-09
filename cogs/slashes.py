@@ -17,24 +17,28 @@ class RecommendModal(Modal):
         components = [
             TextInput(
                 label='Title',
+                custom_id='recommendation-title',
                 placeholder='The World After The End',
                 style=TextInputStyle.short,
                 max_length=100
             ),
             TextInput(
                 label='Chapters/Episodes Count',
+                custom_id='recommendation-count',
                 placeholder='11',
                 style=TextInputStyle.short,
                 max_length=15
             ),
             TextInput(
                 label='Source/Website to watch/read it on',
+                custom_id='recommendation-source',
                 placeholder='https://www.asurascans.com/comics/the-world-after-the-end/',
                 style=TextInputStyle.short,
                 max_length=300
             ),
             TextInput(
                 label='Status',
+                custom_id='recommendation-status',
                 placeholder='Ongoing',
                 style=TextInputStyle.short,
                 max_length=15
