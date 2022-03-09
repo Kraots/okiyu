@@ -18,28 +18,35 @@ class RecommendModal(Modal):
             TextInput(
                 label='Title',
                 custom_id='recommendation-title',
-                placeholder='The World After The End',
+                placeholder='The title of your recommendation...',
                 style=TextInputStyle.short,
                 max_length=100
             ),
             TextInput(
+                label='Synopsis',
+                custom_id='recommendation-synopsis',
+                placeholder='A short synopsis of your recommendation...',
+                style=TextInputStyle.paragraph,
+                max_length=1024
+            ),
+            TextInput(
                 label='Chapters/Episodes Count',
                 custom_id='recommendation-count',
-                placeholder='11',
+                placeholder='How many chapters does it currently have...',
                 style=TextInputStyle.short,
                 max_length=15
             ),
             TextInput(
                 label='Source/Website to watch/read it on',
                 custom_id='recommendation-source',
-                placeholder='https://www.asurascans.com/comics/the-world-after-the-end/',
+                placeholder='The link to a website where to watch/read this recommendation...',
                 style=TextInputStyle.short,
                 max_length=300
             ),
             TextInput(
                 label='Status',
                 custom_id='recommendation-status',
-                placeholder='Ongoing',
+                placeholder='Ongoing/Canceled/Hiatus...',
                 style=TextInputStyle.short,
                 max_length=15
             )
@@ -52,7 +59,7 @@ class RecommendModal(Modal):
     async def callback(self, inter: ModalInteraction):
         channel = inter.guild.get_channel(951210058870558740)
         values_ = inter.text_values.values()
-        fields = ['Title', 'Chapters/Episodes Count', 'Source/Website to watch/read it on', 'Status']
+        fields = ['Title', 'Synopsis', 'Chapters/Episodes Count', 'Source/Website to watch/read it on', 'Status']
         values = zip(fields, values_)
         em = Embed(
             color=inter.author.color,
