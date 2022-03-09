@@ -57,7 +57,7 @@ class RecommendModal(Modal):
         )
 
     async def callback(self, inter: ModalInteraction):
-        channel = inter.guild.get_channel(951210058870558740)
+        channel = inter.guild.get_channel(utils.Channels.recommendations)
         values_ = inter.text_values.values()
         fields = ['Type', 'Title', 'Synopsis', 'Source/Website to watch/read it on', 'Status']
         values = zip(fields, values_)
