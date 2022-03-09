@@ -16,6 +16,13 @@ class RecommendModal(Modal):
     def __init__(self):
         components = [
             TextInput(
+                label='Type',
+                custom_id='recommendation-type',
+                placeholder='Anime/Webtoon/Manga/Manhwa/Manhua...',
+                style=TextInputStyle.short,
+                max_length=30
+            ),
+            TextInput(
                 label='Title',
                 custom_id='recommendation-title',
                 placeholder='The title of your recommendation...',
@@ -28,13 +35,6 @@ class RecommendModal(Modal):
                 placeholder='A short synopsis of your recommendation...',
                 style=TextInputStyle.paragraph,
                 max_length=1024
-            ),
-            TextInput(
-                label='Chapters/Episodes Count',
-                custom_id='recommendation-count',
-                placeholder='How many chapters does it currently have...',
-                style=TextInputStyle.short,
-                max_length=15
             ),
             TextInput(
                 label='Source/Website to watch/read it on',
@@ -59,7 +59,7 @@ class RecommendModal(Modal):
     async def callback(self, inter: ModalInteraction):
         channel = inter.guild.get_channel(951210058870558740)
         values_ = inter.text_values.values()
-        fields = ['Title', 'Synopsis', 'Chapters/Episodes Count', 'Source/Website to watch/read it on', 'Status']
+        fields = ['Type', 'Title', 'Synopsis', 'Source/Website to watch/read it on', 'Status']
         values = zip(fields, values_)
         em = Embed(
             color=inter.author.color,
