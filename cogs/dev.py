@@ -221,11 +221,12 @@ class Developer(commands.Cog):
     @commands.Cog.listener('on_button_click')
     async def check_for_trash_delete(self, inter: disnake.MessageInteraction):
         if inter.component.custom_id == 'trash-button-delete':
-            if any(r.id in utils.StaffRoles.all for r in inter.author.roles):
-                try:
-                    await inter.response.defer()
-                except disnake.HTTPException:
-                    pass
+            try:
+                await inter.response.defer()
+            except disnake.HTTPException:
+                pass
+            if inter.author.id == self.bot._owner_id or \
+                    any(r.id in utils.StaffRoles.all for r in inter.author.roles):
                 await utils.try_delete(inter.message)
 
 
