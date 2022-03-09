@@ -20,3 +20,4 @@ from .quit_button import *  # noqa
 from .link_button import *  # noqa
 from .intro_edit_fields import *  # noqa
 from .select import *  # noqa
+from .trash_delete_button import *  # noqa
