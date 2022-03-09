@@ -1,10 +1,12 @@
 from disnake.ext import commands
-from disnake.ui import Modal, TextInput
+from disnake.ui import Modal, TextInput, Button, View
 from disnake import (
     AppCmdInter,
     TextInputStyle,
     ModalInteraction,
-    Embed
+    Embed,
+    ButtonStyle,
+    PartialEmoji
 )
 
 import utils
@@ -67,7 +69,14 @@ class RecommendModal(Modal):
             text=f'Recommendation by: {utils.format_name(inter.author)}',
             icon_url=inter.author.display_avatar
         )
-        m = await channel.send(embed=em)
+        btn = Button(
+            style=ButtonStyle.red,
+            emoji=PartialEmoji(name='trash', id=938412197967724554),
+            custom_id='trash-emoji-delete'
+        )
+        view = View(timeout=None)
+        view.add_item(btn)
+        m = await channel.send(embed=em, view=view)
         await inter.send(
             'Recommendation succesfully submitted.',
             ephemeral=True,
