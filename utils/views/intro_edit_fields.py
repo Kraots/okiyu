@@ -104,11 +104,11 @@ class IntroField(disnake.ui.Select['IntroFields']):
             except (ValueError, TypeError):
                 return await inter.send(f'{self.view.ctx.denial} Must be a number.', ephemeral=True)
             else:
-                if new_data < 14 or new_data > 19:
+                if new_data < 16 or new_data > 20:
                     await self.delete_intro_message(data)
                     await utils.try_dm(
                         inter.author,
-                        f'{self.view.ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.'
+                        f'{self.view.ctx.denial} Sorry! This dating server is only for people between the ages of 16-20.'
                     )
                     await inter.author.ban(reason='User does not match age requirements.')
                     await utils.log(

@@ -90,9 +90,9 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
                 except disnake.Forbidden:
                     return
             else:
-                if age < 14 or age > 19:
+                if age < 16 or age > 20:
                     mem = guild.get_member(user_id)
-                    await ctx.send(f'{ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.')
+                    await ctx.send(f'{ctx.denial} Sorry! This dating server is only for people between the ages of 16-20.')
                     try:
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
