@@ -52,6 +52,7 @@ class RecommendModal(Modal):
     async def callback(self, inter: ModalInteraction):
         channel = inter.guild.get_channel(951210058870558740)
         values = inter.text_values.copy()
+        return await inter.send(str(values))
         em = Embed(
             color=inter.author.color,
             title=values['Title']
