@@ -8,7 +8,7 @@ psutil==5.8.0
 parsedatetime==2.6
 numpy==1.21.4
 Pillow==8.4.0
-disnake==2.2.2
+disnake==2.4.0
 disnake-jishaku==2.6.5
 disnake-ext-menus==0.0.3
 pymongo==3.12.1
