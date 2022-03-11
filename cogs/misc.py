@@ -566,17 +566,13 @@ class Misc(commands.Cog):
                         if data2.sexuality.lower() not in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual', 'lesbian'):
                             return choices
 
-            if data1.age == 14 and data2.age == 15:
+            if data1.age == 16 and data2.age in (16, 17, 18):
                 choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 15 and data2.age in (14, 16):
+            elif data1.age == 17 and data2.age in (16, 17, 18, 19):
                 choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 16 and data2.age in (15, 17):
+            elif data1.age == 18 and data2.age in (17, 18, 19, 20):
                 choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 17 and data2.age in (16, 18):
-                choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 18 and data2.age in (17, 19):
-                choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 19 and data2.age == 18:
+            elif data1.age == 19 and data2.age in (18, 19, 20):
                 choices.append(self.bot.get_user(data2.id))
 
         return choices
@@ -1370,7 +1366,7 @@ class Misc(commands.Cog):
         """Do a reverse image search with the google's reverse image search engine from the given url.
 
         `url` **->** The url with the image to search for. It's optional and if you don't give it but reply to a message instead it will firstly try to get the first attachment from that image, and if not found it will try looking for links in that message.
-        """
+        """  # noqa
 
         if url is None:
             if ctx.replied_reference is not None:
@@ -1436,7 +1432,7 @@ class Misc(commands.Cog):
             )
             embed.set_image(emoji.url)
             embeds.append(embed)
-            
+
         paginator = utils.EmbedPaginator(ctx, embeds)
         await paginator.start(ref=True)
 
