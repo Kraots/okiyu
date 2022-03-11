@@ -65,6 +65,15 @@ class RecommendModal(Modal):
             color=inter.author.color,
         )
         for k, v in values:
+            if k == 'Source/Website to watch/read it on':
+                match = utils.URL_REGEX.findall(v)
+                if not match:
+                    return await inter.send(
+                        'You must give a valid url for where to watch/read this! '
+                        '(Not the name or the site or just the site itself, but the '
+                        'full url to this specific recommendation)',
+                        ephemeral=True
+                    )
             em.add_field(
                 k,
                 v,
