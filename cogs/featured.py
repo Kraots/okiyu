@@ -315,6 +315,9 @@ class Featured(commands.Cog):
             return await ctx.reply('Not a valid url.')
         else:
             url = match[0]
+            if utils.INVITE_REGEX.findall(url) and \
+                    ctx.author.id != self.bot._owner_id:
+                return
 
         res = await self.bot.session.request(
             'POST',
