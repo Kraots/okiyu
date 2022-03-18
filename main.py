@@ -45,6 +45,7 @@ class Okiyu(commands.Bot):
         self.calc_ternary = False
 
         self.serpapi_key = os.getenv('SERPAPI_KEY')
+        self.bitly_key = os.getenv('BITLY_KEY')
 
         self.load_extension('jishaku')
         os.environ['JISHAKU_NO_DM_TRACEBACK'] = '1'

@@ -302,6 +302,48 @@ class Featured(commands.Cog):
         else:
             await ctx.reraise(error)
 
+    @commands.command(name='shorten')
+    @commands.cooldown(5, 86400.0, commands.BucketType.user)
+    async def bitly_shorten(self, ctx: Context, url: str):
+        """Shortens a normal url to a bitly url.
+
+        `url` **->** The url to shorten. Cooldown is 5 links per day per person.
+        """
+
+        match = utils.URL_REGEX.findall(url)
+        if not match:
+            return await ctx.reply('Not a valid url.')
+        else:
+            url = match[0]
+
+        res = await self.bot.session.request(
+            'POST',
+            'https://api-ssl.bitly.com/v4/shorten',
+            headers={
+                'Authorization': f'Bearer {self.bot.bitly_key}',
+                'Content-Type': 'application/json'
+            },
+            data='{"long_url": "' + url + '"}'
+        )
+
+        if res.status == 200:
+            js = await res.json()
+            em = disnake.Embed(color=utils.blurple)
+            em.add_field('Long URL', url, inline=False)
+            em.add_field('Shortened URL', js['link'], inline=False)
+        else:
+            em = disnake.Embed(
+                color=utils.red,
+                title='Limit Exceeded',
+                description='The limit for shortening bitly links for '
+                            'this month has reached its maximum of 100. '
+                            'Please come back at the beginning of next month '
+                            'if you need to shorten more links.'
+            )
+        em.set_footer(text=f'Requested By: {utils.format_name(ctx.author)}')
+
+        await ctx.reply(embed=em)
+
 
 def setup(bot: Okiyu):
     bot.add_cog(Featured(bot))
