@@ -566,13 +566,17 @@ class Misc(commands.Cog):
                         if data2.sexuality.lower() not in ('bi', 'bisexual', 'pans', 'pansexual', 'omni', 'omnisexual', 'lesbian'):
                             return choices
 
-            if data1.age == 16 and data2.age in (16, 17, 18):
+            if data1.age == 14 and data2.age in (14, 15):
                 choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 17 and data2.age in (16, 17, 18, 19):
+            elif data1.age == 15 and data2.age in (14, 15, 16):
                 choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 18 and data2.age in (17, 18, 19, 20):
+            elif data1.age == 16 and data2.age in (15, 16, 17):
                 choices.append(self.bot.get_user(data2.id))
-            elif data1.age == 19 and data2.age in (18, 19, 20):
+            elif data1.age == 17 and data2.age in (16, 17, 18):
+                choices.append(self.bot.get_user(data2.id))
+            elif data1.age == 18 and data2.age in (17, 18, 19):
+                choices.append(self.bot.get_user(data2.id))
+            elif data1.age == 19 and data2.age in (18, 19):
                 choices.append(self.bot.get_user(data2.id))
 
         return choices

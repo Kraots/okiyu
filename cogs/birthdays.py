@@ -127,7 +127,7 @@ class Birthdays(commands.Cog):
                 f'{ctx.denial} The format in which you gave your birthday date does not match the one you\'re supposed to give it in. '
                 'Doing `!help birthday set` will show you the correct format.'
             )
-        if birthday_date.year not in range(2001, 2006):
+        if birthday_date.year not in range(2002, 2008):  # Bump these by 1y at the beginning of 2023.
             view = utils.ConfirmView(ctx)
             view.message = await ctx.reply(
                 f'Are you sure you were born in the year **{birthday_date.year}**?',
@@ -138,7 +138,7 @@ class Birthdays(commands.Cog):
                 await utils.try_dm(
                     ctx.author,
                     f'{ctx.denial} You have been kicked from `Okiyu` for not meeting the age requirements. \n'
-                    'This server is only for people between **16-20**'
+                    'This server is only for people between **14-19**'
                 )
                 await ctx.author.kick(reason='User does not match age requirements.')
             await utils.try_delete((view.message, ctx.message))
