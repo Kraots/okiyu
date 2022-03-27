@@ -92,6 +92,7 @@ class Welcome(commands.Cog):
             await member.add_roles(role, reason=f'[{action.title()} EVASION] user joined but was still {fmt} in the database')
             em = disnake.Embed(title=f'You have been {fmt}!', color=utils.red)
             em.description = f'**{fmt.title()} By:** {self.bot.user}\n' \
+                             f'**Originally {fmt.title()} By:** {mem.mention}' \
                              f'**Reason:** {action.title} Evasion.\n' \
                              f'**Expire Date:** {utils.format_dt(mute.muted_until, "F")}\n' \
                              f'**Remaining:** `{utils.human_timedelta(mute.muted_until, suffix=False, accuracy=6)}`'
@@ -109,7 +110,8 @@ class Welcome(commands.Cog):
                     ('Reason', f'{action.title()} Evasion.'),
                     ('Expires At', utils.format_dt(mute.muted_until, 'F')),
                     ('Remaining', f'`{utils.human_timedelta(mute.muted_until, suffix=False)}`'),
-                    ('By', f'{mem.mention} (`{mem.id}`)'),
+                    ('By', f'{self.bot.user.mention} (`{self.bot.user.id}`)'),
+                    ('Originally By', f'{mem.mention} (`{mem.id}`)'),
                     ('At', utils.format_dt(datetime.now(), 'F')),
                 ],
                 view=view
