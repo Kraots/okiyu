@@ -33,15 +33,15 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
                 pass
             return
         else:
-            view = utils.ConfirmView
+            confirm_view = utils.ConfirmView
     else:
-        view = utils.ConfirmViewDMS
+        confirm_view = utils.ConfirmViewDMS
 
     data = await utils.Intro.get(user_id)
     to_update = False
     if data:
         to_update = True
-        view = view(ctx)
+        view = confirm_view(ctx)
         view.message = await ctx.send('You already have an intro, do you want to edit it?', view=view)
         await view.wait()
         if view.response is False:
@@ -205,6 +205,34 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
             except (IndexError, ValueError):
                 pass
             return await _sexuality.reply(f'{ctx.denial} You did not say what your sexuality is! Type `!intro` to redo.')
+
+        view = confirm_view(ctx)
+        view.message = await _sexuality.reply(
+            'By any chance, are you poly? If you are please press yes, if not then press no.',
+            view=view
+        )
+        await view.wait()
+        if view.response is True:
+            mem = ctx.okiyu.get_member(user_id)
+            await mem.send(
+                'You have been banned from the server since you are poly. '
+                'Goodbye retarded ass cheater that has no idea what a '
+                'relationship means!'
+            )
+            await mem.ban(reason='Poly retard.')
+            await utils.log(
+                webhook,
+                title='[BAN]',
+                fields=[
+                    ('Member', f'{mem} (`{mem.id}`)'),
+                    ('Reason', 'Poly retard.'),
+                    ('By', f'{bot.user.mention} (`{bot.user.id}`)'),
+                    ('At', utils.format_dt(datetime.datetime.now(), 'F')),
+                ]
+            )
+            return
+        else:
+            await view.message.delete()
 
         await _sexuality.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
         while True:
