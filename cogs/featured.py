@@ -184,7 +184,26 @@ class Featured(commands.Cog):
 
         if message.content:
             bad_words = self.bot.bad_words or None
+            unicode_emojis_count = len(utils.UNICODE_REGEX.findall(message.content))
+            custom_emojis_count = len(utils.CUSTOM_EMOJI_REGEX.findall(message.content))
+            total_emojis_count = unicode_emojis_count + custom_emojis_count
+            content = utils.remove_zalgos(message.content.replace(' ', '').replace('\\', ''))
+            matches = utils.INVITE_REGEX.findall(content)
+
             if utils.check_profanity(message.content, bad_words=bad_words) is True:
+                return
+            elif matches:
+                guild = self.bot.get_guild(938115625073639425)
+                okiyu_invites = [inv.code for inv in await guild.invites()]
+                try:
+                    okiyu_invites.append((await guild.vanity_invite()).code)
+                except disnake.HTTPException:
+                    pass
+                if any(inv for inv in matches if inv not in okiyu_invites):
+                    return
+            elif message.content.count('\n') > 15:
+                return
+            elif total_emojis_count > 15:
                 return
 
         if not message.content:
