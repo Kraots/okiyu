@@ -220,6 +220,12 @@ class AutoMod(commands.Cog):
 
         for coro in self.coros.copy():
             if await coro(self, message):
+                try:
+                    c = self.bot.get_cog('Featured')
+                    messages: list = c.snipes[message.channel.id]
+                    messages.remove(message)
+                except (KeyError, ValueError):
+                    pass
                 break
 
     @commands.Cog.listener()
@@ -232,6 +238,12 @@ class AutoMod(commands.Cog):
 
         for coro in self.coros.copy():
             if await coro(self, after):
+                try:
+                    c = self.bot.get_cog('Featured')
+                    messages: list = c.snipes[after.channel.id]
+                    messages.remove(after)
+                except (KeyError, ValueError):
+                    pass
                 break
 
     coros = [anti_bad_words, anti_invites, anti_raid, anti_newlines, anti_emojis]
