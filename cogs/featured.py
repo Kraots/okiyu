@@ -182,6 +182,11 @@ class Featured(commands.Cog):
                 message.author.bot is True:
             return
 
+        if message.content:
+            bad_words = self.bot.bad_words or None
+            if utils.check_profanity(message.content, bad_words=bad_words) is True:
+                return
+
         if not message.content:
             if not message.attachments:
                 return
