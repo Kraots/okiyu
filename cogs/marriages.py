@@ -149,7 +149,7 @@ class Marriages(commands.Cog):
                 e = f'You did not divorce {usr.mention}'
                 return await msg.edit(content=e, view=view)
 
-    @commands.command()
+    @commands.command(aliases=('marriedwho', 'marriedsince'))
     async def marriage(self, ctx: Context, *, member: disnake.Member = None):
         """See who, who, the date and how much it's been since the member married their partner if they have one.
 
