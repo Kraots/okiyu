@@ -208,7 +208,7 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
 
         view = confirm_view(ctx)
         view.message = await _sexuality.reply(
-            'By any chance, are you poly? If you are please press yes, if not then press no.',
+            'By any chance, are you poly(polyamorous)? If you are please press yes, if not then press no.',
             view=view
         )
         await view.wait()
