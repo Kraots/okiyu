@@ -243,7 +243,11 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
             else:
                 break
 
-        await _status.reply('What do you like?')
+        await _status.reply(
+            'What do you like?'
+            '(e.g: ice-cream, music, gaming, etc.)'
+            '\n*Can\'t believe people need an example for this shit*'
+        )
         _likes = await bot.wait_for('message', timeout=180.0, check=check)
         likes = _likes.content
         if len(likes) > 1024:
