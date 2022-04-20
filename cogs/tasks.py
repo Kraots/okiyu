@@ -29,4 +29,4 @@ class Tasks(commands.Cog):
 
 
 def setup(bot: Okiyu):
-    bot.add_cog(Tasks(bot))
+    bot.remove_cog(Tasks(bot))

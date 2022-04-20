@@ -306,13 +306,13 @@ class Marriages(commands.Cog):
             data2: Marriage = await Marriage.get(data.married_to)
             view = utils.ConfirmView(ctx, react_user=mem)
             view.message = await ctx.send(
-                f'{mem.mention} your partner wants to adopt {member.mention}. Do you agree?',
+                f'{mem.mention} your partner wants to unadopt {member.mention}. Do you agree?',
                 view=view
             )
             await view.wait()
             if view.response is False:
                 return await view.message.edit(
-                    content=f'{ctx.author.mention} It seems like your partner did not want to adopt {member.mention}.'
+                    content=f'{ctx.author.mention} It seems like your partner did not want to unadopt {member.mention}.'
                 )
             else:
                 data2.adoptions.remove(member.id)
