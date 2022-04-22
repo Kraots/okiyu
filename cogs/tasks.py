@@ -10,7 +10,7 @@ from main import Okiyu
 class Tasks(commands.Cog):
     def __init__(self, bot: Okiyu):
         self.bot = bot
-        self.send_random_question.start()
+        #  self.send_random_question.start()
 
     @tasks.loop(hours=3)
     async def send_random_question(self):
