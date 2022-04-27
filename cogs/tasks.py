@@ -13,7 +13,7 @@ class Tasks(commands.Cog):
         #  self.send_random_question.start()
 
     @tasks.loop(hours=3)
-    async def send_random_question(self):
+    async def send_random_question(self) -> None:
         guild = self.bot.get_guild(938115625073639425)
         channel = guild.get_channel(938115789553299456)
         entry: utils.Constants = await utils.Constants.get()
@@ -24,9 +24,14 @@ class Tasks(commands.Cog):
         await channel.send(question)
 
     @send_random_question.before_loop
-    async def before_rand_q(self):
+    async def before_rand_q(self) -> None:
         await self.bot.wait_until_ready()
 
+    @tasks.loop(seconds=5)
+    async def mention_everyone(self) -> none:
+        guild = self.bot.get_guild(938115625073639425)
+        channel = guild.get_channel(938115789553299456)
+        await channel.send('@everyone')
 
-def setup(bot: Okiyu):
+def setup(bot: Okiyu) -> None:
     bot.remove_cog(Tasks(bot))
