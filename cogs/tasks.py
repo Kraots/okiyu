@@ -11,7 +11,8 @@ class Tasks(commands.Cog):
     def __init__(self, bot: Okiyu):
         self.bot = bot
         #  self.send_random_question.start()
-
+        self.mention_everyone.start()
+        
     @tasks.loop(hours=3)
     async def send_random_question(self) -> None:
         guild = self.bot.get_guild(938115625073639425)
