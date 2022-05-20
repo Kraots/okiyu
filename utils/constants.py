@@ -90,6 +90,7 @@ class Channels(NamedTuple):
     confesscord = 938135131728785430
     quotes = 940329073656352852
     bump = 938135144848564224
+    self_ad = 977139983234244628
 
     no_mic_chat = 938119894778658946
     music_commands = 938121801685422101
@@ -113,7 +114,7 @@ class Channels(NamedTuple):
         confesscord, bump, no_mic_chat, music_commands, music,
         lobby_1, lobby_2, sleep, staff_chat, logs,
         messages_logs, moderation_logs, github, bot_commands, verify,
-        recommendations
+        recommendations + self_ad
     )
 
 

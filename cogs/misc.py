@@ -28,13 +28,13 @@ from main import Okiyu
 
 SERVER_AD = """
 ☞ Okiyu ☜
-✯ Looking for a great partner or friendship? This is the perfect server!! ✯
+✯ Looking for a friendship or a place to just chill? This is the perfect server!! ✯
 
 ⇨ This server:
 ➢ Amazing owner, admins and mods ☺︎
 ➢ Exclusive bot ☻︎
 ➢ Roles and intros ☺︎
-➢ Possible relationships ☻︎
+➢ Possible friendships ☻︎
 ➢ An active and fun server ☺︎
 ➢ Exclusive emotes ☻︎
 ➢ And over all an inclusive server for everyone ☺︎

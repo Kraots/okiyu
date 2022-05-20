@@ -165,8 +165,10 @@ class AutoMod(commands.Cog):
                 return await self.apply_action(message, 'bad words')
 
     async def anti_invites(self, message: disnake.Message):
-        current = message.created_at.timestamp()
+        if message.channel.id == utils.Channels.self_ad:
+            return
 
+        current = message.created_at.timestamp()
         content = utils.remove_zalgos(message.content.replace(' ', '').replace('\\', ''))
         matches = utils.INVITE_REGEX.findall(content)
         if matches:
@@ -178,6 +180,10 @@ class AutoMod(commands.Cog):
                 pass
             if any(inv for inv in matches if inv not in okiyu_invites):
                 await utils.try_delete(message)
+                await utils.try_dm(
+                    message.author,
+                    'For advertisements please only use the <#977140289397489664> channel.'
+                )
                 invite_bucket = self.invite_cooldown.get_bucket(message)
                 if invite_bucket.update_rate_limit(current):
                     invite_bucket.reset()

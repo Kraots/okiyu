@@ -90,9 +90,18 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
                 except disnake.Forbidden:
                     return
             else:
-                if age < 14 or age > 19:
+                if age < 13 or age > 35:
                     mem = guild.get_member(user_id)
-                    await ctx.send(f'{ctx.denial} Sorry! This dating server is only for people between the ages of 14-19.')
+                    if age < 13:
+                        await utils.try_dm(
+                            ctx.author,
+                            f'{ctx.denial} Sorry! Discord can only be used by people that are at least 13.'
+                        )
+                    elif age > 35:
+                        await utils.try_dm(
+                            ctx.author,
+                            f'{ctx.denial} Sorry! You\'re too old for this server.'
+                        )
                     try:
                         bot.verifying.pop(bot.verifying.index(user_id))
                     except (IndexError, ValueError):
@@ -205,34 +214,6 @@ async def create_intro(webhook: disnake.Webhook, ctx: utils.Context, bot: Okiyu,
             except (IndexError, ValueError):
                 pass
             return await _sexuality.reply(f'{ctx.denial} You did not say what your sexuality is! Type `!intro` to redo.')
-
-        view = confirm_view(ctx)
-        view.message = await _sexuality.reply(
-            'By any chance, are you poly(polyamorous)? If you are please press yes, if not then press no.',
-            view=view
-        )
-        await view.wait()
-        if view.response is True:
-            mem = ctx.okiyu.get_member(user_id)
-            await mem.send(
-                'You have been banned from the server since you are poly. '
-                'Goodbye retarded ass cheater that has no idea what a '
-                'relationship means!'
-            )
-            await mem.ban(reason='Poly retard.')
-            await utils.log(
-                webhook,
-                title='[BAN]',
-                fields=[
-                    ('Member', f'{mem} (`{mem.id}`)'),
-                    ('Reason', 'Poly retard.'),
-                    ('By', f'{bot.user.mention} (`{bot.user.id}`)'),
-                    ('At', utils.format_dt(datetime.datetime.now(), 'F')),
-                ]
-            )
-            return
-        else:
-            await view.message.delete()
 
         await _sexuality.reply('What\'s your current relationship status? `single` | `taken` | `complicated`')
         while True:
