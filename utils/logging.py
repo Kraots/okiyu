@@ -9,8 +9,8 @@ import utils
 async def log(
     channel: disnake.TextChannel | disnake.Webhook,
     *,
-    title: Optional[str] = disnake.embeds.EmptyEmbed,
-    description: Optional[str] = disnake.embeds.EmptyEmbed,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
     fields: Optional[list[tuple[str, str]]] = [],
     timestamp: Optional[bool] = False,
     view: Optional[disnake.ui.View] = None
@@ -52,11 +52,11 @@ async def log(
         )
     elif not isinstance(title, (str, disnake.embeds._EmptyEmbed)):
         raise TypeError(
-            "Argument 'title' must be of type 'str' or 'disnake.embeds.EmptyEmbed', "
+            "Argument 'title' must be of type 'str' or 'None', "
             f"not {title.__class__}")
     elif not isinstance(description, (str, disnake.embeds._EmptyEmbed)):
         raise TypeError(
-            "Argument 'description' must be of type 'str' or 'disnake.embeds.EmptyEmbed', "
+            "Argument 'description' must be of type 'str' or 'None', "
             f"not {description.__class__}")
     elif not isinstance(fields, (list, tuple)):
         raise TypeError(
@@ -71,13 +71,13 @@ async def log(
             "Argument 'view' must be of type 'disnake.ui.View', "
             f"not {view.__class__}")
     elif (
-        (description == disnake.embeds.EmptyEmbed) and
-        (title == disnake.embeds.EmptyEmbed)
+        (description is None) and
+        (title is None)
     ):
         raise utils.MissingArgument(
             "'title' or 'description' not given. Please specify at least one of them."
         )
-    if title != disnake.embeds.EmptyEmbed:
+    if title is not None:
         title = f'`{title}`'
 
     em = disnake.Embed(

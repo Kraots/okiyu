@@ -200,7 +200,7 @@ class Misc(commands.Cog):
 
         if rule is None:
             for index, rule in enumerate(rules.rules):
-                if em.description == disnake.embeds.EmptyEmbed:
+                if em.description is None:
                     em.description = f'`{index + 1}.` {rule}'
                 else:
                     em.description += f'\n\n`{index + 1}.` {rule}'
