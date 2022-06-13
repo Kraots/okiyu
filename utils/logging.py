@@ -50,11 +50,11 @@ async def log(
             "Argument 'channel' must be of type 'disnake.TextChannel' or 'disnake.Webhook', "
             f"not {channel.__class__}"
         )
-    elif not isinstance(title, (str, disnake.embeds._EmptyEmbed)):
+    elif not isinstance(title, (str, type(None))):
         raise TypeError(
             "Argument 'title' must be of type 'str' or 'None', "
             f"not {title.__class__}")
-    elif not isinstance(description, (str, disnake.embeds._EmptyEmbed)):
+    elif not isinstance(description, (str, type(None))):
         raise TypeError(
             "Argument 'description' must be of type 'str' or 'None', "
             f"not {description.__class__}")
